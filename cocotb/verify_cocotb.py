@@ -167,6 +167,10 @@ class RunTest:
         else: 
             macroslist.append(f'VCS')
 
+        if fnmatch(os.getenv('PDK'),"sky*"):
+            macroslist.append(f'sky')
+
+
         if not is_vcs:
             macros = ' -D'.join(macroslist)
             macros = f'-D{macros}'
