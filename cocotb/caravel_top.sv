@@ -3,7 +3,7 @@
 `ifndef GL
 	`include "includes.v" // in case of RTL coverage is needed and it doesn't work correctly without include files by this way
 `endif // ~ GL
-
+`ifdef sky
 `ifndef ENABLE_SDF
 	`include "libs.ref/sky130_fd_io/verilog/sky130_fd_io.v"
 	`include "libs.ref/sky130_fd_io/verilog/sky130_ef_io.v"
@@ -19,7 +19,15 @@
 	`include "cvc-pdk/primitives_hvl.v"
 	`include "cvc-pdk/sky130_fd_sc_hvl.v"
 `endif // ~ ENABLE_SDF
+`else // sky
+	`include "libs.ref/gf180mcu_fd_io/verilog/gf180mcu_fd_io.v"
+	`include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/gf180mcu_fd_sc_mcu7t5v0.v"
+	// `include "libs.ref/gf180mcu_sc7_hv/verilog/GF018hv5v_mcu_sc7.v"
+	`include "libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1.v"
+`endif //sky
 `endif // VCS
+
+`include "debug_regs.v"
 
 module caravel_top ;
 
@@ -85,6 +93,7 @@ caravan uut (
 `else
 caravel uut (
 `endif
+		`ifdef sky
 		.vddio	  (vddio_tb),
 		.vddio_2  (vddio_2_tb),		
 		.vssio	  (vssio_tb),
@@ -103,6 +112,10 @@ caravel uut (
 		.vccd2	  (vccd2_tb),
 		.vssd1	  (vssd1_tb),
 		.vssd2	  (vssd2_tb),
+		`else 
+		.VDD (vddio_tb),
+		.VSS (vssio_tb),
+		`endif // sky
 		.clock	  (clock_tb),
 		.gpio     (gpio_tb),
 		.mprj_io  (mprj_io_tb),

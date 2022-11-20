@@ -20,6 +20,7 @@ import socket
 import logging 
 import xml.etree.ElementTree as ET
 
+COCOTB_PATH = os.getcwd()
 iverilog = True
 vcs = False
 coverage = False
@@ -69,7 +70,7 @@ def change_str(str,new_str,file_path):
 
 class RunTest:
     def __init__(self,test_name,sim,corner) -> None:
-        self.cocotb_path = f"{os.getenv('CARAVEL_ROOT')}/verilog/dv/cocotb"
+        self.cocotb_path = COCOTB_PATH
         self.test_name = test_name
         self.sim_type  = sim
         self.corner  = corner
@@ -260,7 +261,7 @@ class RunTest:
             user_project = f"-v {CARAVEL_PATH}/rtl/__user_analog_project_wrapper.v"
         os.system(f"vlogan -full64  -sverilog +error+30 caravel_top.sv {user_project} {dirs}  {self.caravel_macros(True)}   -l {self.sim_path}/analysis.log -o {self.sim_path} ")
 
-        os.system(f"vcs +lint=TFIPC-L {coverage_command} +error+30 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.sim_path}/test.log  caravel_top -Mdir={self.sim_path}/csrc -o {self.sim_path}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)")
+        os.system(f"vcs +lint=TFIPC-L {coverage_command} +error+100 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.sim_path}/test.log  caravel_top -Mdir={self.sim_path}/csrc -o {self.sim_path}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)")
         self.passed = search_str(self.test_log.name,"Test passed with (0)criticals (0)errors")
         Path(f'{self.sim_path}/{self.passed}').touch()
         os.system("rm -rf AN.DB ucli.key core") # delete vcs additional files
@@ -316,8 +317,8 @@ class RunTest:
                  f"--strip-debug -ffreestanding -nostdlib -o {elf_out} {SOURCE_FILES} {c_file}")
         hex_command = f"{GCC_PATH}/{GCC_PREFIX}-objcopy -O verilog {elf_out} {hex_file} "
         sed_command = f"sed -ie 's/@10/@00/g' {hex_file}"
-       
-        hex_gen_state = os.system(f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {go_up(self.cocotb_path,4)}:{go_up(self.cocotb_path,4)}  efabless/dv:latest sh -c 'cd {test_dir} && {elf_command} && {hex_command} && {sed_command} '")
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {self.cocotb_path}:{self.cocotb_path} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} efabless/dv:latest sh -c 'cd {test_dir} && {elf_command} && {hex_command} && {sed_command} '"
+        hex_gen_state = os.system(docker_command)
         self.full_terminal.write("elf file generation command:\n% ")
         self.full_terminal.write(os.path.expandvars(elf_command)+"\n")
         self.full_terminal.write("hex file generation command:\n% ")
@@ -355,7 +356,7 @@ class RunTest:
 
 class RunRegression: 
     def __init__(self,regression,test,type_arg,testlist,corner) -> None:
-        self.cocotb_path = f"{os.getenv('CARAVEL_ROOT')}/verilog/dv/cocotb"
+        self.cocotb_path = COCOTB_PATH
         self.regression_arg = regression
         self.test_arg = test
         self.testlist_arg = testlist
@@ -579,7 +580,7 @@ class main():
         if os.getenv('CARAVEL_ROOT') is None or os.getenv('MCW_ROOT') is None:
             print(f"Fatal: CARAVEL_ROOT or MCW_ROOT are not defined")
             sys.exit()
-        cocotb_path = f"{os.getenv('CARAVEL_ROOT')}/verilog/dv/cocotb"
+        cocotb_path = COCOTB_PATH
         os.environ["CARAVEL_VERILOG_PATH"] = f"{os.getenv('CARAVEL_ROOT')}/verilog"
         os.environ["VERILOG_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog"
         os.environ["CARAVEL_PATH"] = f"{os.getenv('CARAVEL_VERILOG_PATH')}"
@@ -589,14 +590,14 @@ class main():
         if SEED != None:
             os.environ["RANDOM_SEED"] = f"{SEED}"
     def set_rerun_script(self):
-        new_config_path = f'{os.getenv("CARAVEL_ROOT")}/verilog/dv/cocotb/sim/{self.TAG}/configs.py'
-        shutil.copyfile(f'{os.getenv("CARAVEL_ROOT")}/verilog/dv/cocotb/scripts/config_script_tamplate.py', new_config_path)
+        new_config_path = f'{COCOTB_PATH}/sim/{self.TAG}/configs.py'
+        shutil.copyfile(f'{COCOTB_PATH}/scripts/config_script_tamplate.py', new_config_path)
         change_str(str="replace by clock",new_str=self.clk,file_path=new_config_path)
         change_str(str="replace by max number of errer",new_str=self.maxerr,file_path=new_config_path)
 
     def send_mail(self,mails):
         #get commits 
-        showlog = f"{os.getenv('CARAVEL_ROOT')}/verilog/dv/cocotb/sim/{self.TAG}/git_show.log"
+        showlog = f"{COCOTB_PATH}/sim/{self.TAG}/git_show.log"
         with open(showlog, 'rb') as fp:
             first_commit = True
             for line in fp:
@@ -609,7 +610,7 @@ class main():
                     first_commit = False
 
 
-        tag = f"{os.getenv('CARAVEL_ROOT')}/verilog/dv/cocotb/sim/{self.TAG}"
+        tag = f"{COCOTB_PATH}/sim/{self.TAG}"
         mail_sub = ("<html><head><style>table {border-collapse: collapse;width: 50%;} th, td {text-align: left;padding: 8px;} tr:nth-child(even) {background-color: #D6EEEE;}"
                     f"</style></head><body><h2>Run info:</h2> <table border=2 bgcolor=#D6EEEE> "
                     f"<th>location</th> <th><strong>{socket.gethostname()}</strong>:{tag}</th> <tr>  "
