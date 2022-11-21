@@ -204,11 +204,11 @@ class RunTest:
         elif(self.sim_type=="GLSDF"): 
             print(f"iverilog can't run SDF for test {self.test_name} Please use anothor simulator like cvc" )
             return
-        user_project = f"{CARAVEL_PATH}/rtl/__user_project_wrapper.v {CARAVEL_PATH}/rtl/__user_project_gpio_example.v {CARAVEL_PATH}/rtl/__user_project_la_example.v {CARAVEL_PATH}/rtl/__user_project_addr_space_project.v"
+        user_project = f"RTL/__user_project_wrapper.v RTL/__user_project_gpio_example.v RTL/__user_project_la_example.v RTL/__user_project_addr_space_project.v"
         if caravan:
-            user_project = f"{CARAVEL_PATH}/rtl/__user_analog_project_wrapper.v"
+            user_project = f"RTL/__user_analog_project_wrapper.v"
         iverilog_command = (f"iverilog -Ttyp {self.caravel_macros()} {includes}  -o {self.sim_path}/sim.vvp"
-                            f" {user_project}  caravel_top.sv"
+                            f" {user_project}  RTL/caravel_top.sv"
                             f" && TESTCASE={self.test_name} MODULE=caravel_tests vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.sim_path}/sim.vvp")
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} -v {os.getenv('PDK_ROOT')}:{os.getenv('PDK_ROOT')}   efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && {iverilog_command}' >> {self.full_file}"
         self.full_terminal = open(self.full_file, "a")
@@ -256,10 +256,10 @@ class RunTest:
         os.environ["TESTCASE"] = f"{self.test_name}"
         os.environ["MODULE"] = f"caravel_tests"
         os.environ["SIM"] = self.sim_type
-        user_project = f"-v {CARAVEL_PATH}/rtl/__user_project_wrapper.v -v {CARAVEL_PATH}/rtl/__user_project_addr_space_project.v"
+        user_project = f"-v RTL/__user_project_wrapper.v -v RTL/__user_project_addr_space_project.v"
         if caravan:
-            user_project = f"-v {CARAVEL_PATH}/rtl/__user_analog_project_wrapper.v"
-        os.system(f"vlogan -full64  -sverilog +error+30 caravel_top.sv {user_project} {dirs}  {self.caravel_macros(True)}   -l {self.sim_path}/analysis.log -o {self.sim_path} ")
+            user_project = f"-v RTL/__user_analog_project_wrapper.v"
+        os.system(f"vlogan -full64  -sverilog +error+30 RTL/caravel_top.sv {user_project} {dirs}  {self.caravel_macros(True)}   -l {self.sim_path}/analysis.log -o {self.sim_path} ")
 
         os.system(f"vcs +lint=TFIPC-L {coverage_command} +error+100 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.sim_path}/test.log  caravel_top -Mdir={self.sim_path}/csrc -o {self.sim_path}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)")
         self.passed = search_str(self.test_log.name,"Test passed with (0)criticals (0)errors")
@@ -531,9 +531,10 @@ class RunRegression:
         file_name=f"sim/{self.tag}/git_show.log"
         f = open(file_name, "w")
         # status, output = commands.getstatusoutput("git show")
-        f.write( f"Repo: {run('basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
-        f.write( f"Branch name: {run('git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
-        f.write( run('git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
+        CARAVEL_ROOT = f"CARAVEL_ROOT"
+        f.write( f"\n\nRepo: {run(f'cd {os.getenv(CARAVEL_ROOT)};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+        f.write( f"Branch name: {run(f'cd {os.getenv(CARAVEL_ROOT)};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+        f.write( run(f'cd {os.getenv(CARAVEL_ROOT)};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
         MCW_ROOT = f"MCW_ROOT"
 
         f.write( f"\n\nRepo: {run(f'cd {os.getenv(MCW_ROOT)};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
