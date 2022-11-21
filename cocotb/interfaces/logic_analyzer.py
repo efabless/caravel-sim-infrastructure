@@ -29,7 +29,7 @@ class LA:
     def __init__(self,dut:SimHandleBase):
         self.dut         = dut
         self.clk         = dut.clock_tb
-        self.core_hdl = dut.uut.soc.core
+        self.core_hdl = dut.uut.chip_core.soc.core
 
     
     """ Configure the value of LA probes [0:127] 
@@ -76,7 +76,7 @@ class LA:
 
     """return the value of LA data output from user project tp cpu"""
     def check_la_ctrl_reg(self):
-        LA_out = self.dut.uut.la_oenb_mprj.value
+        LA_out = self.dut.uut.chip_core.la_oenb_mprj.value
         if(LA_out.is_resolvable):
             cocotb.log.info(f' [LA] Monitor : reg_la_data_out from user = {hex(LA_out)}')
         else:

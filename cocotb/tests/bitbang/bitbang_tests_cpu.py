@@ -61,7 +61,7 @@ async def bitbang_cpu_all_i(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut
+    uut = dut.uut.chip_core
     await wait_reg1(cpu,caravelEnv,0xAA)
     cocotb.log.info(f"[TEST] configuration finished")
     data_in = 0x8F66FD7B

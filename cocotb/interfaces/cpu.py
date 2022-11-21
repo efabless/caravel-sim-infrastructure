@@ -31,10 +31,10 @@ class RiskV:
         self.dut         = dut
         self.clk         = dut.clock_tb
         if not Macros['GL']:
-            self.cpu_hdl     = dut.uut.soc.core.VexRiscv
+            self.cpu_hdl     = dut.uut.chip_core.soc.core.VexRiscv
         else:
-            self.cpu_hdl     = dut.uut.soc
-        self.debug_hdl   = dut.uut.mprj.debug
+            self.cpu_hdl     = dut.uut.chip_core.soc
+        self.debug_hdl   = dut.uut.chip_core.mprj.debug
         self.force_reset = 0
         if not Macros['GL']:
             cocotb.scheduler.add(self.force_reset_fun())
