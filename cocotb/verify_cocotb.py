@@ -32,6 +32,7 @@ tests_pass = "Pass:"
 SEED = None
 wave_gen = True
 sdf_setup = False
+LINT = False
 def go_up(path, n):
     for i in range(n):
         path = os.path.dirname(path)
@@ -166,6 +167,10 @@ class RunTest:
         else: 
             macroslist.append(f'VCS')
 
+        if fnmatch(os.getenv('PDK'),"sky*"):
+            macroslist.append(f'sky')
+
+
         if not is_vcs:
             macros = ' -D'.join(macroslist)
             macros = f'-D{macros}'
@@ -210,7 +215,7 @@ class RunTest:
         iverilog_command = (f"iverilog -Ttyp {self.caravel_macros()} {includes}  -o {self.sim_path}/sim.vvp"
                             f" {user_project}  RTL/caravel_top.sv"
                             f" && TESTCASE={self.test_name} MODULE=caravel_tests vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.sim_path}/sim.vvp")
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} -v {os.getenv('PDK_ROOT')}:{os.getenv('PDK_ROOT')}   efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && {iverilog_command}' >> {self.full_file}"
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {COCOTB_PATH}:{COCOTB_PATH}  -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} -v {os.getenv('PDK_ROOT')}:{os.getenv('PDK_ROOT')}   efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && {iverilog_command}' >> {self.full_file}"
         self.full_terminal = open(self.full_file, "a")
         self.full_terminal.write(f"docker command for running iverilog and cocotb:\n% ")
         self.full_terminal.write(os.path.expandvars(docker_command)+"\n")
@@ -261,10 +266,25 @@ class RunTest:
             user_project = f"-v RTL/__user_analog_project_wrapper.v"
         os.system(f"vlogan -full64  -sverilog +error+30 RTL/caravel_top.sv {user_project} {dirs}  {self.caravel_macros(True)}   -l {self.sim_path}/analysis.log -o {self.sim_path} ")
 
-        os.system(f"vcs +lint=TFIPC-L {coverage_command} +error+100 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.sim_path}/test.log  caravel_top -Mdir={self.sim_path}/csrc -o {self.sim_path}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)")
+        lint = ""
+        if LINT: 
+            lint = "+lint=all"
+        os.system(f"vcs {lint} {coverage_command} +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.sim_path}/test.log  caravel_top -Mdir={self.sim_path}/csrc -o {self.sim_path}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)")
         self.passed = search_str(self.test_log.name,"Test passed with (0)criticals (0)errors")
         Path(f'{self.sim_path}/{self.passed}').touch()
         os.system("rm -rf AN.DB ucli.key core") # delete vcs additional files
+        if LINT: 
+            lint_file = open(f'{self.sim_path}/lint.log', "w")
+            lint_line = False
+            with open(f'{self.sim_path}/test.log', 'r') as f:
+                for line in f.readlines():
+                    if 'Lint' in line:
+                        lint_file.write(line)
+                        lint_line=True
+                    elif lint_line:
+                        lint_file.write(line)
+                        if line.strip() == "": # line emptry
+                            lint_line = False
         #delete wave when passed
         if self.passed == "passed" and zip_waves:
             os.chdir(f'{self.cocotb_path}/{self.sim_path}')
@@ -656,6 +676,7 @@ parser.add_argument('-seed' ,help='run with specific seed')
 parser.add_argument('-no_wave',action='store_true', help='disable dumping waves')
 parser.add_argument('-sdf_setup',action='store_true', help='targeting setup violations by taking the sdf mamximum values')
 parser.add_argument('-clk', help='define the clock period in ns default = 25 ns')
+parser.add_argument('-lint',action='store_true', help='generate lint log -v must be used')
 args = parser.parse_args()
 if (args.vcs) : 
     iverilog = False
@@ -683,6 +704,8 @@ if args.clk == None:
     args.clk = "25"
 if args.maxerr == None:
     args.maxerr ="3"
+if args.lint: 
+    LINT = True
 print(f"regression:{args.regression}, test:{args.test}, testlist:{args.testlist} sim: {args.sim}")
 main(args)
 
