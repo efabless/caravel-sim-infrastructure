@@ -2,6 +2,8 @@ from cocotb.handle import SimHandleBase
 from cocotb.binary import BinaryValue
 from enum import Enum
 import cocotb
+from importlib import import_module
+import os
 """return the value and the size of the signal"""
 def signal_value_size(path:SimHandleBase):
     value = path.value
@@ -38,21 +40,36 @@ def drive_hdl(path,bits,data):
         cocotb.log.debug(f' [common] drive { path._path }  with {hdl}')   
 
 """Enum for GPIO modes valus used to configured the pins"""
-class GPIO_MODE(Enum):
-    GPIO_MODE_MGMT_STD_INPUT_NOPULL    = 0x0403
-    GPIO_MODE_MGMT_STD_INPUT_PULLDOWN  = 0x0c01
-    GPIO_MODE_MGMT_STD_INPUT_PULLUP	   = 0x0801
-    GPIO_MODE_MGMT_STD_OUTPUT	       = 0x1809
-    GPIO_MODE_MGMT_STD_BIDIRECTIONAL   = 0x1801
-    GPIO_MODE_MGMT_STD_ANALOG   	   = 0x000b
-    GPIO_MODE_USER_STD_INPUT_NOPULL	   = 0x0402
-    GPIO_MODE_USER_STD_INPUT_PULLDOWN  = 0x0c00
-    GPIO_MODE_USER_STD_INPUT_PULLUP	   = 0x0800
-    GPIO_MODE_USER_STD_OUTPUT	       = 0x1808
-    GPIO_MODE_USER_STD_BIDIRECTIONAL   = 0x1800
-    GPIO_MODE_USER_STD_OUT_MONITORED   = 0x1802
-    GPIO_MODE_USER_STD_ANALOG   	   = 0x000a
+config_file = f"sim.{os.getenv('RUNTAG')}.configs"
+sky = import_module(config_file).sky
+if sky:
+    class GPIO_MODE(Enum):
+        GPIO_MODE_MGMT_STD_INPUT_NOPULL    = 0x0403
+        GPIO_MODE_MGMT_STD_INPUT_PULLDOWN  = 0x0c01
+        GPIO_MODE_MGMT_STD_INPUT_PULLUP	   = 0x0801
+        GPIO_MODE_MGMT_STD_OUTPUT	       = 0x1809
+        GPIO_MODE_MGMT_STD_BIDIRECTIONAL   = 0x1801
+        GPIO_MODE_MGMT_STD_ANALOG   	   = 0x000b
+        GPIO_MODE_USER_STD_INPUT_NOPULL	   = 0x0402
+        GPIO_MODE_USER_STD_INPUT_PULLDOWN  = 0x0c00
+        GPIO_MODE_USER_STD_INPUT_PULLUP	   = 0x0800
+        GPIO_MODE_USER_STD_OUTPUT	       = 0x1808
+        GPIO_MODE_USER_STD_BIDIRECTIONAL   = 0x1800
+        GPIO_MODE_USER_STD_OUT_MONITORED   = 0x1802
+        GPIO_MODE_USER_STD_ANALOG   	   = 0x000a
 
+else: 
+    class GPIO_MODE(Enum):
+        GPIO_MODE_MGMT_STD_INPUT_NOPULL    = 0x007
+        GPIO_MODE_MGMT_STD_INPUT_PULLDOWN  = 0x047
+        GPIO_MODE_MGMT_STD_INPUT_PULLUP	   = 0x087
+        GPIO_MODE_MGMT_STD_OUTPUT	       = 0x00b
+        GPIO_MODE_MGMT_STD_BIDIRECTIONAL   = 0x009
+        GPIO_MODE_USER_STD_INPUT_NOPULL	   = 0x006
+        GPIO_MODE_USER_STD_INPUT_PULLDOWN  = 0x046
+        GPIO_MODE_USER_STD_INPUT_PULLUP	   = 0x086
+        GPIO_MODE_USER_STD_OUTPUT	       = 0x00a
+        GPIO_MODE_USER_STD_BIDIRECTIONAL   = 0x008
 class MASK_GPIO_CTRL(Enum):
     MASK_GPIO_CTRL_MGMT_EN   = 0
     MASK_GPIO_CTRL_OUT_DIS   = 1

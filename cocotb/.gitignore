@@ -10,3 +10,4 @@ __pycache__
 *.elf
 AN.DB
 includes.v
+*.lst

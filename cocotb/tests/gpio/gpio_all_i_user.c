@@ -49,7 +49,6 @@ void main(){
     reg_mprj_io_2  = GPIO_MODE_USER_STD_INPUT_NOPULL;
     reg_mprj_io_1  = GPIO_MODE_USER_STD_INPUT_NOPULL;
     reg_mprj_io_0  = GPIO_MODE_USER_STD_INPUT_NOPULL;
-    reg_mprj_io_0  = GPIO_MODE_USER_STD_INPUT_NOPULL;
     reg_mprj_xfer = 1;
     while (reg_mprj_xfer == 1);
 

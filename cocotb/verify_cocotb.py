@@ -317,6 +317,7 @@ class RunTest:
         if not os.path.exists(f"{self.cocotb_path}/hex_files"):
             os.makedirs(f"{self.cocotb_path}/hex_files") # Create a new hex_files directory because it does not exist 
         elf_out = f"{self.cocotb_path}/hex_files/{self.test_name}.elf"
+        lst_out = f"{self.cocotb_path}/hex_files/{self.test_name}.lst"
         c_file = f"{test_path}/{self.test_name}.c"
         hex_file = f"{self.cocotb_path}/hex_files/{self.test_name}.hex"
         GCC_PATH = "/foss/tools/riscv-gnu-toolchain-rv32i/217e7f3debe424d61374d31e33a091a630535937/bin/"
@@ -335,9 +336,10 @@ class RunTest:
         elf_command = (f"{GCC_PATH}/{GCC_PREFIX}-gcc -g -I{verilog_path}/dv/firmware -I{verilog_path}/dv/generated  -I{verilog_path}/dv/ "
                  f"-I{verilog_path}/common {CPUFLAGS} -Wl,-Bstatic,-T,{LINKER_SCRIPT},"
                  f"--strip-debug -ffreestanding -nostdlib -o {elf_out} {SOURCE_FILES} {c_file}")
+        lst_command = f"{GCC_PATH}/{GCC_PREFIX}-objdump -d -S {elf_out} > {lst_out} "
         hex_command = f"{GCC_PATH}/{GCC_PREFIX}-objcopy -O verilog {elf_out} {hex_file} "
         sed_command = f"sed -ie 's/@10/@00/g' {hex_file}"
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {self.cocotb_path}:{self.cocotb_path} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} efabless/dv:latest sh -c 'cd {test_dir} && {elf_command} && {hex_command} && {sed_command} '"
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {self.cocotb_path}:{self.cocotb_path} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} efabless/dv:latest sh -c 'cd {test_dir} && {elf_command} && {lst_command} && {hex_command} && {sed_command} '"
         hex_gen_state = os.system(docker_command)
         self.full_terminal.write("elf file generation command:\n% ")
         self.full_terminal.write(os.path.expandvars(elf_command)+"\n")
@@ -574,7 +576,7 @@ class main():
         self.check_valid_args()
         self.set_tag()
         self.def_env_vars()
-        self.set_rerun_script()
+        self.set_config_script()
         RunRegression(self.regression,self.test,self.sim,self.testlist,self.corner)
         if args.emailto is not None:
             self.send_mail(args.emailto)
@@ -610,11 +612,12 @@ class main():
         os.environ["ERRORMAX"] = f"{self.maxerr}"
         if SEED != None:
             os.environ["RANDOM_SEED"] = f"{SEED}"
-    def set_rerun_script(self):
+    def set_config_script(self):
         new_config_path = f'{COCOTB_PATH}/sim/{self.TAG}/configs.py'
         shutil.copyfile(f'{COCOTB_PATH}/scripts/config_script_tamplate.py', new_config_path)
         change_str(str="replace by clock",new_str=self.clk,file_path=new_config_path)
         change_str(str="replace by max number of errer",new_str=self.maxerr,file_path=new_config_path)
+        change_str(str="replace sky enable",new_str=f"{fnmatch(os.getenv('PDK'),'sky*')}",file_path=new_config_path)
 
     def send_mail(self,mails):
         #get commits 

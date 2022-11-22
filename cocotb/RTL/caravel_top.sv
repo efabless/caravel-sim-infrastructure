@@ -28,7 +28,7 @@
 `endif //sky
 `endif // VCS
 
-`include "debug_regs.v"
+`include "RTL/debug_regs.v"
 
 module caravel_top ;
 

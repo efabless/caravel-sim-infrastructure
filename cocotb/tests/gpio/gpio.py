@@ -166,7 +166,7 @@ async def gpio_all_i_pu(dut):
     await caravelEnv.release_csb()
     # monitor the output of padframe module it suppose to be all ones  when no input is applied
     await ClockCycles(caravelEnv.clk,100) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "1":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 1 while configured as input pullup and float")
@@ -175,7 +175,7 @@ async def gpio_all_i_pu(dut):
     data_in =  0x0
     caravelEnv.drive_gpio_in((37,0),data_in)
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "0":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pullup and drived with 0")
@@ -184,7 +184,7 @@ async def gpio_all_i_pu(dut):
     data_in =  0x3FFFFFFFFF
     caravelEnv.drive_gpio_in((37,0),data_in)
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "1":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 1 while configured as input pullup and drived with 1")
@@ -195,7 +195,7 @@ async def gpio_all_i_pu(dut):
     for i in range(0,38,2):
         caravelEnv.release_gpio(i) # release even gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if i%2 ==1: #odd
             if gpio[i]!="1":
@@ -209,7 +209,7 @@ async def gpio_all_i_pu(dut):
     for i in range(1,38,2):
         caravelEnv.release_gpio(i) # release odd gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if i%2 ==1: #odd
             if gpio[i] != "0":
@@ -224,7 +224,7 @@ async def gpio_all_i_pu(dut):
     for i in range(0,38,2):
         caravelEnv.release_gpio(i) # release even gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i]!="1":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 1 while configured as input pullup and drived with odd half with 1")
@@ -235,7 +235,7 @@ async def gpio_all_i_pu(dut):
     for i in range(1,38,2):
         caravelEnv.release_gpio(i) # release odd gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "1":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 1 while configured as input pullup and drived with even half with 1")
@@ -248,7 +248,7 @@ async def gpio_all_i_pu(dut):
     await ClockCycles(caravelEnv.clk,1000) 
     caravelEnv.release_gpio((37,0))
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "1":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 1 while configured as input pullup and all released")
@@ -268,7 +268,7 @@ async def gpio_all_i_pd(dut):
     await caravelEnv.release_csb()
     # monitor the output of padframe module it suppose to be all ones  when no input is applied
     await ClockCycles(caravelEnv.clk,100) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "0":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pulldown and float")
@@ -277,7 +277,7 @@ async def gpio_all_i_pd(dut):
     data_in =  0x0
     caravelEnv.drive_gpio_in((37,0),data_in)
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "0":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pulldown and drived with 0")
@@ -286,7 +286,7 @@ async def gpio_all_i_pd(dut):
     data_in =  0x3FFFFFFFFF
     caravelEnv.drive_gpio_in((37,0),data_in)
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "1":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 1 while configured as input pulldown and drived with 1")
@@ -297,7 +297,7 @@ async def gpio_all_i_pd(dut):
     for i in range(0,38,2):
         caravelEnv.release_gpio(i) # release even gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i]!="0":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pulldown and drived with odd half with 0")
@@ -308,7 +308,7 @@ async def gpio_all_i_pd(dut):
     for i in range(1,38,2):
         caravelEnv.release_gpio(i) # release odd gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i]!="0":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pulldown and drived with even half with 0")
@@ -319,7 +319,7 @@ async def gpio_all_i_pd(dut):
     for i in range(0,38,2):
         caravelEnv.release_gpio(i) # release even gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if i%2 ==0: #even
             if gpio[i]!="1":
@@ -334,7 +334,7 @@ async def gpio_all_i_pd(dut):
     for i in range(1,38,2):
         caravelEnv.release_gpio(i) # release odd gpios
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if i%2 ==1: #odd
             if gpio[i]!="1":
@@ -351,7 +351,7 @@ async def gpio_all_i_pd(dut):
     await ClockCycles(caravelEnv.clk,1000) 
     caravelEnv.release_gpio((37,0))
     await ClockCycles(caravelEnv.clk,1000) 
-    gpio = dut.uut.chip_core.padframe.mprj_io_in.value.binstr
+    gpio = dut.uut.padframe.mprj_io_in.value.binstr
     for i in range(38):
         if gpio[i] != "0":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pulldown and all released")

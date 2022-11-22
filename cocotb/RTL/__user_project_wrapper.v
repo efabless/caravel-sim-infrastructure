@@ -126,7 +126,11 @@ assign wbs_ack_o_user = 0;
 `else
 user_project_gpio_example gpio_testing(
     .wb_clk_i(wb_clk_i),
+   `ifdef sky
     .wb_rst_i(wb_rst_i),
+   `else
+    .wb_rst_i(~wb_rst_i),
+    `endif //sky
     .wbs_cyc_i(wbs_cyc_i_user),
     .wbs_stb_i(wbs_stb_i),
     .wbs_we_i(wbs_we_i),
@@ -143,7 +147,11 @@ user_project_gpio_example gpio_testing(
 `ifdef ADDR_SPACE_TESTING
 user_project_addr_space_example addr_space_testing(
     .wb_clk_i(wb_clk_i),
+   `ifdef sky
     .wb_rst_i(wb_rst_i),
+   `else
+    .wb_rst_i(~wb_rst_i),
+    `endif //sky
     .wbs_cyc_i(wbs_cyc_i),
     .wbs_stb_i(wbs_stb_i),
     .wbs_we_i(wbs_we_i),
@@ -157,7 +165,11 @@ user_project_addr_space_example addr_space_testing(
 `ifdef COCOTB_SIM
 debug_regs debug(
     .wb_clk_i(wb_clk_i),
+   `ifdef sky
     .wb_rst_i(wb_rst_i),
+   `else
+    .wb_rst_i(~wb_rst_i),
+    `endif //sky
     .wbs_cyc_i(wbs_cyc_i_debug),
     .wbs_stb_i(wbs_stb_i),
     .wbs_we_i(wbs_we_i),
