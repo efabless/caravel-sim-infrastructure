@@ -27,7 +27,7 @@ async def spi_master_rd(dut):
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     cocotb.log.info (f"[TEST] start spi_master_rd test")
-    file_name = f"{os.getenv('CARAVEL_VERILOG_PATH')}/dv/cocotb/tests/spi_master/test_data"
+    file_name = f"{os.getenv('COCOTB_PATH')}/tests/spi_master/test_data"
     mem = read_mem(file_name)
     await  cocotb.start(SPI_VIP(dut.bin33_monitor,dut.bin32_monitor,dut.bin35_monitor,(dut.bin34_en,dut.bin34),mem)) # fork for SPI 
 

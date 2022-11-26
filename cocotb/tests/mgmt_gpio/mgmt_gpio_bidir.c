@@ -28,14 +28,20 @@
 void main()
 {
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    bool sky = reg_debug_1;
     reg_debug_1  = 0x0;
     reg_debug_2  = 0x0;
 
     reg_gpio_mode1 = 1;
     reg_gpio_mode0 = 0; // for full swing
 
-    reg_gpio_ien = 1;
-    reg_gpio_oe = 0;
+    if (sky){
+        reg_gpio_ien = 1;
+        reg_gpio_oe = 0;
+    }else{
+        reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
+        reg_gpio_oe = 1;
+    }
     int num_blinks = 0;
     reg_debug_1 = 0xAA; // start of the test
     int z = reg_debug_1;
@@ -48,8 +54,14 @@ void main()
         if (reg_debug_1 == 0xFF)
             break;
 	}
-    reg_gpio_ien = 0;
-    reg_gpio_oe = 1;
+
+    if (sky){
+        reg_gpio_ien = 0;
+        reg_gpio_oe = 1;
+    }else{
+        reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
+        reg_gpio_oe = 0;
+    }
 	for (int i = 0; i < num_blinks; i++) {
 		/* Fast blink for simulation */
 		reg_gpio_out = 1;

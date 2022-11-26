@@ -56,7 +56,7 @@ async def timer0_oneshot(dut):
 @cocotb.test()
 @repot_test
 async def timer0_periodic(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=52016)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=53500)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

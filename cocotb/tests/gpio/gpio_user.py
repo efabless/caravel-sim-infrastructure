@@ -361,7 +361,7 @@ async def gpio_all_i_pd_user(dut):
 @cocotb.test()
 @repot_test
 async def gpio_all_bidir_user(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=266662)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1266662)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

@@ -62,7 +62,7 @@ void main()
     // should be outputs.
 
     reg_mprj_io_34  = GPIO_MODE_MGMT_STD_INPUT_NOPULL;	// SDI
-    reg_mprj_io_35  = GPIO_MODE_MGMT_STD_BIDIRECTIONAL;	// SDO
+    reg_mprj_io_35  = GPIO_MODE_MGMT_STD_OUTPUT;	// SDO
     reg_mprj_io_33  = GPIO_MODE_MGMT_STD_OUTPUT;	// CSB
     reg_mprj_io_32  = GPIO_MODE_MGMT_STD_OUTPUT;	// SCK
 

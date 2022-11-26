@@ -7,7 +7,7 @@
                 "0x00":            [["SPI status",null,0,8,"undefined",0,0,0]],
                 "0x06":            [["Manufacturer ID",["mfgr_id",11,8],0,4,"RO",4,4,1]],
                 "0x05":            [["Manufacturer ID",["mfgr_id",7,0],0,8,"RO",86,86,2]],
-                "0x04":            [["Manufacturer ID",["prod_id",7,0],0,8,"RO",17,17,3]],
+                "0x04":            [["Product ID",["prod_id",7,0],0,8,"RO",17,17,3]],
                 "0x0b":            [["User project ID",["mask_rev",31,24],0,8,"RO",0,0,4]],
                 "0x0a":            [["User project ID",["mask_rev",23,16],0,8,"RO",0,0,5]],
                 "0x09":            [["User project ID",["mask_rev",15,8],0,8,"RO",0,0,6]],

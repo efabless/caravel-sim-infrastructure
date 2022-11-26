@@ -23,6 +23,7 @@ import interfaces.common as common
 from interfaces.common import GPIO_MODE
 from interfaces.common import MASK_GPIO_CTRL
 from interfaces.common import Macros
+from interfaces.common import sky
 
 def gpio_mode(gpios_values:list):
     gpios=[]
@@ -58,13 +59,15 @@ class Caravel_env:
     async def power_up(self):
         cocotb.log.info(f' [caravel] start powering up')
         self.set_vdd(0)
-        self.set_vcc(0)
+        if sky:
+            self.set_vcc(0)
         await ClockCycles(self.clk, 10)
         cocotb.log.info(f' [caravel] power up -> connect vdd' )
         self.set_vdd(1)
         # await ClockCycles(self.clk, 10)
         cocotb.log.info(f' [caravel] power up -> connect vcc' )
-        self.set_vcc(1)
+        if sky:
+            self.set_vcc(1)
         await ClockCycles(self.clk, 10)
 
     """"reset caravel"""
@@ -80,16 +83,17 @@ class Caravel_env:
     def set_vdd(self,value:bool):
         self.dut.vddio_tb.value   = value
         self.dut.vssio_tb.value   = 0
-        self.dut.vddio_2_tb.value = value
-        self.dut.vssio_2_tb.value = 0
-        self.dut.vdda_tb.value    = value
-        self.dut.vssa_tb.value    = 0
-        self.dut.vdda1_tb.value   = value
-        self.dut.vssa1_tb.value   = 0
-        self.dut.vdda1_2_tb.value = value
-        self.dut.vssa1_2_tb.value = 0
-        self.dut.vdda2_tb.value   = value
-        self.dut.vssa2_tb.value   = 0
+        if sky:
+            self.dut.vddio_2_tb.value = value
+            self.dut.vssio_2_tb.value = 0
+            self.dut.vdda_tb.value    = value
+            self.dut.vssa_tb.value    = 0
+            self.dut.vdda1_tb.value   = value
+            self.dut.vssa1_tb.value   = 0
+            self.dut.vdda1_2_tb.value = value
+            self.dut.vssa1_2_tb.value = 0
+            self.dut.vdda2_tb.value   = value
+            self.dut.vssa2_tb.value   = 0
 
     def set_vcc(self , value:bool):
         self.dut.vccd_tb.value    = value

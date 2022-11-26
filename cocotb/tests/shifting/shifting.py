@@ -9,19 +9,27 @@ from tests.common_functions.test_functions import *
 from tests.bitbang.bitbang_functions import *
 from interfaces.caravel import GPIO_MODE
 from cocotb.binary import BinaryValue
-
+from interfaces.common import sky
 reg = Regs()
        
+bit_size = 13
+if not sky: 
+    bit_size = 10 
 
 def shift(gpio,shift_type):
     if shift_type: 
         bits = "0101010101010"
+        if not sky: 
+            bits = "1010101010"
     else: 
         bits = "1010101010101"
+        if not sky: 
+            bits = "0101010101"
     fail = False
+   
     if not Macros['GL']:
         cocotb.log.info(f"[TEST] gpio {gpio} shift {gpio._id(f'shift_register',False).value} expected {bits}")
-    for i in range(13):
+    for i in range(bit_size):
         if not Macros['GL']:
             shift_register = gpio._id(f"shift_register",False).value.binstr[i]
         else:  
@@ -167,21 +175,29 @@ async def serial_shifting_1100(dut):
 def shift_2(gpio,shift_type):
     if shift_type == 0: 
         bits = "0011001100110"
+        if not sky: 
+            bits = "1001100110"
     elif shift_type == 1: 
         bits = "0110011001100"
+        if not sky: 
+            bits = "0011001100"
     elif shift_type == 2: 
         bits = "1100110011001"
+        if not sky: 
+            bits = "0110011001"
     elif shift_type == 3: 
         bits = "1001100110011"
+        if not sky: 
+            bits = "1100110011"
     fail = False
     if not Macros['GL']:
         cocotb.log.info(f"[TEST] gpio {gpio} shift {hex(int(gpio._id(f'shift_register',False).value.binstr,2))}({gpio._id(f'shift_register',False).value.binstr}) expected {hex(int(bits,2))}({bits})")
     else :
         shift_reg =''
-        for i in range(13):
+        for i in range(bit_size):
             shift_reg +=  gpio._id(f"\\shift_register[{i}] ",False).value.binstr
         cocotb.log.info(f"[TEST] gpio {gpio} shift {shift_reg} expected {bits}")
-    for i in range(13):
+    for i in range(bit_size):
         if not Macros['GL']:
             shift_register = gpio._id(f"shift_register",False).value.binstr[i]
         else:  

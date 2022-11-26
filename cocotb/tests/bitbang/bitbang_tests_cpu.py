@@ -114,25 +114,25 @@ async def bitbang_spi_o(dut):
 
     await wait_reg1(cpu,caravelEnv,0xFF) # wait for housekeeping registers configured
     #Configure all as output except reg_mprj_io_3
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 18	and 19	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 17	and 20	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 16	and 21	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 15	and 22	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 14	and 23	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 13	and 24	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 12	and 25	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 11	and 26	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 10	and 27	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 9	and 28	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 8	and 29	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 7	and 30	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 6	and 31	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 5	and 32	
-    await clock_in_right_o_left_i_standard_spi(caravelEnv,0) # 4	and 33	
-    await clock_in_right_o_left_i_standard_spi(caravelEnv,0) # 3	and 34	
-    await clock_in_right_o_left_i_standard_spi(caravelEnv,0) # 2	and 35	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 1	and 36	
-    await clock_in_right_o_left_o_standard_spi(caravelEnv,0) # 0	and 37	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 18	and 19	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 17	and 20	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 16	and 21	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 15	and 22	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 14	and 23	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 13	and 24	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 12	and 25	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 11	and 26	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 10	and 27	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 9	and 28	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 8	and 29	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 7	and 30	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 6	and 31	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 5	and 32	
+    await clock_in_right_o_left_i_standard_spi(caravelEnv) # 4	and 33	
+    await clock_in_right_o_left_i_standard_spi(caravelEnv) # 3	and 34	
+    await clock_in_right_o_left_i_standard_spi(caravelEnv) # 2	and 35	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 1	and 36	
+    await clock_in_right_o_left_o_standard_spi(caravelEnv) # 0	and 37	
     await load_spi(caravelEnv)		                         # load
 
     cpu.write_debug_reg2_backdoor(0xFF)
@@ -179,25 +179,25 @@ async def bitbang_spi_i(dut):
 
     await wait_reg1(cpu,caravelEnv,0xFF) # wait for housekeeping registers configured
     #Configure all as output except reg_mprj_io_3
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 18	and 19	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 17	and 20	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 16	and 21	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 15	and 22	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 14	and 23	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 13	and 24	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 12	and 25	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 11	and 26	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 10	and 27	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 9	and 28	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 8	and 29	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 7	and 30	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 6	and 31	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 5	and 32	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 4	and 33	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 3	and 34	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 2	and 35	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 1	and 36	
-    await clock_in_right_i_left_i_standard_spi(caravelEnv,0) # 0	and 37	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 18	and 19	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 17	and 20	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 16	and 21	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 15	and 22	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 14	and 23	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 13	and 24	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 12	and 25	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 11	and 26	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 10	and 27	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 9	and 28	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 8	and 29	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 7	and 30	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 6	and 31	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 5	and 32	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 4	and 33	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 3	and 34	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 2	and 35	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 1	and 36	
+    await clock_in_right_i_left_i_standard_spi(caravelEnv) # 0	and 37	
     await load_spi(caravelEnv)		                         # load
     cpu.write_debug_reg2_backdoor(0xDD)
     await wait_reg1(cpu,caravelEnv,0xAA)

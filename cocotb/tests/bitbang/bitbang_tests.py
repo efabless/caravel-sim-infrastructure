@@ -60,25 +60,26 @@ async def bitbang_no_cpu_all_o(dut):
 
     #Configure all as output except reg_mprj_io_3
     await clear_registers(cpu)
-    await clock_in_right_o_left_o_standard(cpu,0) # 18	and 19	
-    await clock_in_right_o_left_o_standard(cpu,0) # 17	and 20	
-    await clock_in_right_o_left_o_standard(cpu,0) # 16	and 21	
-    await clock_in_right_o_left_o_standard(cpu,0) # 15	and 22	
-    await clock_in_right_o_left_o_standard(cpu,0) # 14	and 23	
-    await clock_in_right_o_left_o_standard(cpu,0) # 13	and 24	
-    await clock_in_right_o_left_o_standard(cpu,0) # 12	and 25	
-    await clock_in_right_o_left_o_standard(cpu,0) # 11	and 26	
-    await clock_in_right_o_left_o_standard(cpu,0) # 10	and 27	
-    await clock_in_right_o_left_o_standard(cpu,0) # 9	and 28	
-    await clock_in_right_o_left_o_standard(cpu,0) # 8	and 29	
-    await clock_in_right_o_left_o_standard(cpu,0) # 7	and 30	
-    await clock_in_right_o_left_o_standard(cpu,0) # 6	and 31	
-    await clock_in_right_o_left_o_standard(cpu,0) # 5	and 32	
-    await clock_in_right_o_left_o_standard(cpu,0) # 4	and 33	
-    await clock_in_right_o_left_i_standard(cpu,0) # 3	and 34	
-    await clock_in_right_o_left_i_standard(cpu,0) # 2	and 35	
-    await clock_in_right_o_left_i_standard(cpu,0) # 1	and 36	
-    await clock_in_end_output(cpu)		          # 0   and 37 and load
+    await clock_in_right_o_left_o_standard(cpu) # 18	and 19	
+    await clock_in_right_o_left_o_standard(cpu) # 17	and 20	
+    await clock_in_right_o_left_o_standard(cpu) # 16	and 21	
+    await clock_in_right_o_left_o_standard(cpu) # 15	and 22	
+    await clock_in_right_o_left_o_standard(cpu) # 14	and 23	
+    await clock_in_right_o_left_o_standard(cpu) # 13	and 24	
+    await clock_in_right_o_left_o_standard(cpu) # 12	and 25	
+    await clock_in_right_o_left_o_standard(cpu) # 11	and 26	
+    await clock_in_right_o_left_o_standard(cpu) # 10	and 27	
+    await clock_in_right_o_left_o_standard(cpu) # 9	and 28	
+    await clock_in_right_o_left_o_standard(cpu) # 8	and 29	
+    await clock_in_right_o_left_o_standard(cpu) # 7	and 30	
+    await clock_in_right_o_left_o_standard(cpu) # 6	and 31	
+    await clock_in_right_o_left_o_standard(cpu) # 5	and 32	
+    await clock_in_right_o_left_o_standard(cpu) # 4	and 33	
+    await clock_in_right_o_left_i_standard(cpu) # 3	and 34	
+    await clock_in_right_o_left_i_standard(cpu) # 2	and 35	
+    await clock_in_right_o_left_i_standard(cpu) # 1	and 36	
+    await clock_in_right_o_left_i_standard(cpu) # 0	and 37	
+    await load(cpu)		                        # load
 
     await caravelEnv.release_csb()
     await cpu.drive_data2address(reg.get_addr('reg_mprj_datal'),0x0) 
@@ -87,7 +88,7 @@ async def bitbang_no_cpu_all_o(dut):
     i= 0x20
     for j in range(5):
         await cpu.drive_data2address(reg.get_addr('reg_mprj_datah'),i) 
-        cocotb.log.info(f'[Test] gpio out = {caravelEnv.monitor_gpio((37,4))} int {caravelEnv.monitor_gpio((37,4)).integer} i = {i}')
+        # cocotb.log.info(f'[Test] gpio out = {caravelEnv.monitor_gpio((37,4))} int {caravelEnv.monitor_gpio((37,4)).integer} i = {i}')
         if caravelEnv.monitor_gpio((37,4)).integer != i << 28:
             cocotb.log.error(f'[TEST] Wrong gpio high bits output {caravelEnv.monitor_gpio((37,4))} instead of {bin(i << 28)}')
         # for k in range(250):
@@ -174,25 +175,25 @@ async def bitbang_no_cpu_all_i(dut):
 
     #Configure all as input except reg_mprj_io_3
     await clear_registers(cpu)
-    await clock_in_right_i_left_i_standard(cpu,0) # 18	and 19	
-    await clock_in_right_i_left_i_standard(cpu,0) # 17	and 20	
-    await clock_in_right_i_left_i_standard(cpu,0) # 16	and 21	
-    await clock_in_right_i_left_i_standard(cpu,0) # 15	and 22	
-    await clock_in_right_i_left_i_standard(cpu,0) # 14	and 23	
-    await clock_in_right_i_left_i_standard(cpu,0) # 13	and 24	
-    await clock_in_right_i_left_i_standard(cpu,0) # 12	and 25	
-    await clock_in_right_i_left_i_standard(cpu,0) # 11	and 26	
-    await clock_in_right_i_left_i_standard(cpu,0) # 10	and 27	
-    await clock_in_right_i_left_i_standard(cpu,0) # 9	and 28	
-    await clock_in_right_i_left_i_standard(cpu,0) # 8	and 29	
-    await clock_in_right_i_left_i_standard(cpu,0) # 7	and 30	
-    await clock_in_right_i_left_i_standard(cpu,0) # 6	and 31	
-    await clock_in_right_i_left_i_standard(cpu,0) # 5	and 32	
-    await clock_in_right_i_left_i_standard(cpu,0) # 4	and 33	
-    await clock_in_right_i_left_i_standard(cpu,0) # 3	and 34	
-    await clock_in_right_i_left_i_standard(cpu,0) # 2	and 35	
-    await clock_in_right_i_left_i_standard(cpu,0) # 1	and 36	
-    await clock_in_right_i_left_i_standard(cpu,0) # 0	and 37	
+    await clock_in_right_i_left_i_standard(cpu) # 18	and 19	
+    await clock_in_right_i_left_i_standard(cpu) # 17	and 20	
+    await clock_in_right_i_left_i_standard(cpu) # 16	and 21	
+    await clock_in_right_i_left_i_standard(cpu) # 15	and 22	
+    await clock_in_right_i_left_i_standard(cpu) # 14	and 23	
+    await clock_in_right_i_left_i_standard(cpu) # 13	and 24	
+    await clock_in_right_i_left_i_standard(cpu) # 12	and 25	
+    await clock_in_right_i_left_i_standard(cpu) # 11	and 26	
+    await clock_in_right_i_left_i_standard(cpu) # 10	and 27	
+    await clock_in_right_i_left_i_standard(cpu) # 9	and 28	
+    await clock_in_right_i_left_i_standard(cpu) # 8	and 29	
+    await clock_in_right_i_left_i_standard(cpu) # 7	and 30	
+    await clock_in_right_i_left_i_standard(cpu) # 6	and 31	
+    await clock_in_right_i_left_i_standard(cpu) # 5	and 32	
+    await clock_in_right_i_left_i_standard(cpu) # 4	and 33	
+    await clock_in_right_i_left_i_standard(cpu) # 3	and 34	
+    await clock_in_right_i_left_i_standard(cpu) # 2	and 35	
+    await clock_in_right_i_left_i_standard(cpu) # 1	and 36	
+    await clock_in_right_i_left_i_standard(cpu) # 0	and 37	
     await load(cpu)		                          # load
 
     caravelEnv.drive_gpio_in((31,0),0x8F66FD7B)

@@ -33,6 +33,7 @@ SEED = None
 wave_gen = True
 sdf_setup = False
 LINT = False
+sky =fnmatch(os.getenv('PDK'),'sky*')
 def go_up(path, n):
     for i in range(n):
         path = os.path.dirname(path)
@@ -407,6 +408,13 @@ class RunRegression:
             for test,test_elements in self.tests_json.items():
                 if fnmatch(test,"_*"):
                         continue
+                if sky:
+                    if "sky" not in test_elements["PDK"]:
+                        continue # test is not valid for sky pdk 
+                else: 
+                    if "gf" not in test_elements["PDK"]:
+                        continue # test is not valid for gf pdk 
+
                 for sim_type in sim_types:
                     if sim_type =="GL_SDF": 
                         for corner in self.corners: 
@@ -603,13 +611,13 @@ class main():
         if os.getenv('CARAVEL_ROOT') is None or os.getenv('MCW_ROOT') is None:
             print(f"Fatal: CARAVEL_ROOT or MCW_ROOT are not defined")
             sys.exit()
-        cocotb_path = COCOTB_PATH
         os.environ["CARAVEL_VERILOG_PATH"] = f"{os.getenv('CARAVEL_ROOT')}/verilog"
         os.environ["VERILOG_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog"
         os.environ["CARAVEL_PATH"] = f"{os.getenv('CARAVEL_VERILOG_PATH')}"
         os.environ["FIRMWARE_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog/dv/firmware"
         os.environ["RUNTAG"] = f"{self.TAG}"
         os.environ["ERRORMAX"] = f"{self.maxerr}"
+        os.environ["COCOTB_PATH"] = f"{COCOTB_PATH}"
         if SEED != None:
             os.environ["RANDOM_SEED"] = f"{SEED}"
     def set_config_script(self):
@@ -617,7 +625,7 @@ class main():
         shutil.copyfile(f'{COCOTB_PATH}/scripts/config_script_tamplate.py', new_config_path)
         change_str(str="replace by clock",new_str=self.clk,file_path=new_config_path)
         change_str(str="replace by max number of errer",new_str=self.maxerr,file_path=new_config_path)
-        change_str(str="replace sky enable",new_str=f"{fnmatch(os.getenv('PDK'),'sky*')}",file_path=new_config_path)
+        change_str(str="replace sky enable",new_str=f"{sky}",file_path=new_config_path)
 
     def send_mail(self,mails):
         #get commits 

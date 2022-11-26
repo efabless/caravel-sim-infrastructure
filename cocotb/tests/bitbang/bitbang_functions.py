@@ -1,4 +1,5 @@
 from interfaces.defsParser import Regs
+from interfaces.common import sky
 
 reg = Regs()
 
@@ -110,72 +111,80 @@ async def clock_in_left_standard(cpu,ddhold):
     await clock10(cpu)
 
 """right output left input"""
-async def clock_in_right_o_left_i_standard(cpu,ddhold):
-    await clock11(cpu)
-    await clock11(cpu)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock01(cpu)
-            ddhold -=1
-        else:
+async def clock_in_right_o_left_i_standard(cpu):
+    if sky: 
+        await clock11(cpu)
+        await clock11(cpu)
+        for i in range(7):
             await clock00(cpu)
-    
-    await clock10(cpu)
-    await clock00(cpu)    
-    await clock01(cpu)
-    await clock11(cpu)    
+        await clock10(cpu)
+        await clock00(cpu)    
+        await clock01(cpu)
+        await clock11(cpu)  
+    else: 
+        for i in range(6):
+            await clock00(cpu)
+        await clock10(cpu)    
+        await clock01(cpu)
+        await clock11(cpu)
+        await clock11(cpu)
 
 """right input left output"""
-async def clock_in_right_i_left_o_standard(cpu,ddhold):
-    await clock11(cpu)
-    await clock11(cpu)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock10(cpu)
-            ddhold -=1
-        else:
+async def clock_in_right_i_left_o_standard(cpu):
+    if sky:
+        await clock11(cpu)
+        await clock11(cpu)
+        for i in range(7):
             await clock00(cpu)
-    
-    await clock01(cpu)
-    await clock00(cpu)    
-    await clock10(cpu)
-    await clock11(cpu)
+        await clock01(cpu)
+        await clock00(cpu)    
+        await clock10(cpu)
+        await clock11(cpu)
+    else: 
+        for i in range(6):
+            await clock00(cpu)
+        await clock01(cpu)
+        await clock10(cpu)    
+        await clock11(cpu)
+        await clock11(cpu)
 
 """right input left output"""
-async def clock_in_right_i_left_i_standard(cpu,ddhold):
-    await clock11(cpu)
-    await clock11(cpu)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock01(cpu)
-            ddhold -=1
-        else:
+async def clock_in_right_i_left_i_standard(cpu):
+    if sky:
+        await clock11(cpu)
+        await clock11(cpu)
+        for i in range(7):
             await clock00(cpu)
-    
-    await clock00(cpu)
-    await clock00(cpu)    
-    await clock11(cpu)
-    await clock11(cpu)
+        await clock00(cpu)
+        await clock00(cpu)    
+        await clock11(cpu)
+        await clock11(cpu)
+    else: 
+        for i in range(6):
+            await clock00(cpu)
+        await clock00(cpu)
+        await clock11(cpu)    
+        await clock11(cpu)
+        await clock11(cpu)
 
 """right output left output"""
-async def clock_in_right_o_left_o_standard(cpu,ddhold):
-    await clock11(cpu)
-    await clock11(cpu)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock01(cpu)
-            ddhold -=1
-        else:
+async def clock_in_right_o_left_o_standard(cpu):
+    if sky:
+        await clock11(cpu)
+        await clock11(cpu)
+        for i in range(7):
             await clock00(cpu)
-    
-    await clock11(cpu)
-    await clock00(cpu)    
-    await clock00(cpu)
-    await clock11(cpu)
+        await clock11(cpu)
+        await clock00(cpu)    
+        await clock00(cpu)
+        await clock11(cpu)
+    else: 
+        for i in range(6):
+            await clock00(cpu)
+        await clock11(cpu)    
+        await clock00(cpu)
+        await clock11(cpu)
+        await clock11(cpu)
 
 async def clock_in_end_output(cpu):
     # Right side:  GPIO 0 configured disabled
@@ -269,72 +278,80 @@ async def load_spi(caravelEnv):
     await caravelEnv.disable_csb()
 
 """right output left input"""
-async def clock_in_right_o_left_i_standard_spi(caravelEnv,ddhold):
-    await clock11_spi(caravelEnv)
-    await clock11_spi(caravelEnv)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock01_spi(caravelEnv)
-            ddhold -=1
-        else:
+async def clock_in_right_o_left_i_standard_spi(caravelEnv):
+    if sky:
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+        for i in range(7):
             await clock00_spi(caravelEnv)
-    
-    await clock10_spi(caravelEnv)
-    await clock00_spi(caravelEnv)    
-    await clock01_spi(caravelEnv)
-    await clock11_spi(caravelEnv)    
+        await clock10_spi(caravelEnv)
+        await clock00_spi(caravelEnv)    
+        await clock01_spi(caravelEnv)
+        await clock11_spi(caravelEnv)    
+    else: 
+        for i in range(6):
+            await clock00_spi(caravelEnv)
+        await clock10_spi(caravelEnv)
+        await clock01_spi(caravelEnv)    
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
 
 """right input left output"""
-async def clock_in_right_i_left_o_standard_spi(caravelEnv,ddhold):
-    await clock11_spi(caravelEnv)
-    await clock11_spi(caravelEnv)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock10_spi(caravelEnv)
-            ddhold -=1
-        else:
+async def clock_in_right_i_left_o_standard_spi(caravelEnv):
+    if sky:
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+        for i in range(7):
             await clock00_spi(caravelEnv)
-    
-    await clock01_spi(caravelEnv)
-    await clock00_spi(caravelEnv)    
-    await clock10_spi(caravelEnv)
-    await clock11_spi(caravelEnv)
+        await clock01_spi(caravelEnv)
+        await clock00_spi(caravelEnv)    
+        await clock10_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+    else:
+        for i in range(6):
+            await clock00_spi(caravelEnv)
+        await clock01_spi(caravelEnv)
+        await clock10_spi(caravelEnv)    
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
 
 """right input left output"""
-async def clock_in_right_i_left_i_standard_spi(caravelEnv,ddhold):
-    await clock11_spi(caravelEnv)
-    await clock11_spi(caravelEnv)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock01_spi(caravelEnv)
-            ddhold -=1
-        else:
+async def clock_in_right_i_left_i_standard_spi(caravelEnv):
+    if sky:
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+        for i in range(7):
             await clock00_spi(caravelEnv)
-    
-    await clock00_spi(caravelEnv)
-    await clock00_spi(caravelEnv)    
-    await clock11_spi(caravelEnv)
-    await clock11_spi(caravelEnv)
+        await clock00_spi(caravelEnv)
+        await clock00_spi(caravelEnv)    
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+    else: 
+        for i in range(6):
+            await clock00_spi(caravelEnv)
+        await clock00_spi(caravelEnv)
+        await clock11_spi(caravelEnv)    
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
 
 """right output left output"""
-async def clock_in_right_o_left_o_standard_spi(caravelEnv,ddhold):
-    await clock11_spi(caravelEnv)
-    await clock11_spi(caravelEnv)
-    
-    for i in range(7):
-        if ddhold != 0:
-            await clock01_spi(caravelEnv)
-            ddhold -=1
-        else:
+async def clock_in_right_o_left_o_standard_spi(caravelEnv):
+    if sky:
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+        for i in range(7):
             await clock00_spi(caravelEnv)
-    
-    await clock11_spi(caravelEnv)
-    await clock00_spi(caravelEnv)    
-    await clock00_spi(caravelEnv)
-    await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+        await clock00_spi(caravelEnv)    
+        await clock00_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+    else: 
+        for i in range(6):
+            await clock00_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
+        await clock00_spi(caravelEnv)    
+        await clock11_spi(caravelEnv)
+        await clock11_spi(caravelEnv)
 
 async def clock_in_end_output_spi(caravelEnv):
     # Right side:  GPIO 0 configured disabled

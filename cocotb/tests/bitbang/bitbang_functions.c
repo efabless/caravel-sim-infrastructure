@@ -112,113 +112,123 @@ void clock_in_right_short(uint32_t ddhold)
  * Left side = GPIOs 37 to19
  */
 
-void clock_in_left_standard(uint32_t ddhold){
+// void clock_in_left_standard(uint32_t ddhold){
+//     uint32_t count;
+//     uint32_t holds = ddhold;
+
+//     clock10();
+//     clock10();
+
+//     for (count = 0; count < 7; count++) {
+// 	if (holds != 0) {
+// 	    clock10();
+// 	    holds--;
+// 	}
+// 	else
+// 	    clock00();
+//     }
+
+//     clock10();
+//     clock00();    
+//     clock00();
+//     clock10();
+// }
+void clock_in_right_o_left_o_standard(bool sky){
     uint32_t count;
-    uint32_t holds = ddhold;
-
-    clock10();
-    clock10();
-
-    for (count = 0; count < 7; count++) {
-	if (holds != 0) {
-	    clock10();
-	    holds--;
-	}
-	else
-	    clock00();
+    if (sky){
+        clock11();
+        clock11();
+        for (count = 0; count < 7; count++) {
+            clock00();
+        }
+        clock11();
+        clock00();    
+        clock00();
+        clock11();
+    }else{ 
+        for (count = 0; count < 6; count++) {
+            clock00();
+        }
+        clock11();
+        clock00();    
+        clock11();
+        clock11();
     }
-
-    clock10();
-    clock00();    
-    clock00();
-    clock10();
-}
-void clock_in_right_o_left_o_standard(uint32_t ddhold){
-    uint32_t count;
-    uint32_t holds = ddhold;
-
-    clock11();
-    clock11();
-
-    for (count = 0; count < 7; count++) {
-	if (holds != 0) {
-	    clock11();
-	    holds--;
-	}
-	else
-	    clock00();
-    }
-
-    clock11();
-    clock00();    
-    clock00();
-    clock11();
-}
-
-void clock_in_right_o_left_i_standard(uint32_t ddhold){
-    uint32_t count;
-    uint32_t holds = ddhold;
-
-    clock11();
-    clock11();
-
-    for (count = 0; count < 7; count++) {
-	if (holds != 0) {
-	    clock11();
-	    holds--;
-	}
-	else
-	    clock00();
-    }
-
-    clock10();
-    clock00();    
-    clock01();
-    clock11();
+    
 }
 
-void clock_in_right_i_left_o_standard(uint32_t ddhold){
+void clock_in_right_o_left_i_standard(bool sky){
     uint32_t count;
-    uint32_t holds = ddhold;
-
-    clock11();
-    clock11();
-
-    for (count = 0; count < 7; count++) {
-	if (holds != 0) {
-	    clock11();
-	    holds--;
-	}
-	else
-	    clock00();
+    if (sky){
+        clock11();
+        clock11();
+        for (count = 0; count < 7; count++) {
+            clock00();
+        }
+        clock10();
+        clock00();    
+        clock01();
+        clock11();
+    }else{
+        for (count = 0; count < 6; count++) {
+            clock00();
+        }
+        clock10();
+        clock01();    
+        clock11();
+        clock11();
     }
-
-    clock01();
-    clock00();    
-    clock10();
-    clock11();
 }
 
-void clock_in_right_i_left_i_standard(uint32_t ddhold){
+void clock_in_right_i_left_o_standard(bool sky){
     uint32_t count;
-    uint32_t holds = ddhold;
+    if (sky){
+        clock11();
+        clock11();
 
-    clock11();
-    clock11();
+        for (count = 0; count < 7; count++) {
+            clock00();
+        }
 
-    for (count = 0; count < 7; count++) {
-	if (holds != 0) {
-	    clock11();
-	    holds--;
-	}
-	else
-	    clock00();
+        clock01();
+        clock00();    
+        clock10();
+        clock11();
+    }else{
+        for (count = 0; count < 6; count++) {
+            clock00();
+        }
+        clock01();
+        clock10();    
+        clock11();
+        clock11();
     }
+}
 
-    clock00();
-    clock00();    
-    clock11();
-    clock11();
+void clock_in_right_i_left_i_standard(bool sky){
+    uint32_t count;
+
+
+    if (sky){
+        clock11();
+        clock11();
+        for (count = 0; count < 7; count++) {
+            clock00();
+        }
+
+        clock00();
+        clock00();    
+        clock11();
+        clock11();
+    }else{
+        for (count = 0; count < 6; count++) {
+            clock00();
+        }
+        clock00();
+        clock11();    
+        clock11();
+        clock11();
+    }
 }
 
 /* Clock in data on the right side.  Clock the normal13 times,
@@ -229,49 +239,49 @@ void clock_in_right_i_left_i_standard(uint32_t ddhold){
  * Right side = GPIOs 0 to18
  */
 
-void clock_in_right_standard(uint32_t ddhold){
-    uint32_t count;
-    uint32_t holds = ddhold;
+// void clock_in_right_standard(uint32_t ddhold){
+//     uint32_t count;
+//     uint32_t holds = ddhold;
 
-    clock11();
-    clock11();
+//     clock11();
+//     clock11();
 
-    for (count = 0; count < 7; count++) {
-	if (holds != 0) {
-	    clock01();
-	    holds--;
-	}
-	else
-	    clock00();
-    }
+//     for (count = 0; count < 7; count++) {
+// 	if (holds != 0) {
+// 	    clock01();
+// 	    holds--;
+// 	}
+// 	else
+// 	    clock00();
+//     }
 
-    clock10();
-    clock00();
-    clock01();
-    clock11();
-}
+//     clock10();
+//     clock00();
+//     clock01();
+//     clock11();
+// }
 
-void clock_in_right_i_left_io_standard(uint32_t ddhold){
-    uint32_t count;
-    uint32_t holds = ddhold;
+// void clock_in_right_i_left_io_standard(uint32_t ddhold){
+//     uint32_t count;
+//     uint32_t holds = ddhold;
 
-    clock11();
-    clock11();
+//     clock11();
+//     clock11();
 
-    for (count = 0; count < 7; count++) {
-	if (holds != 0) {
-	    clock11();
-	    holds--;
-	}
-	else
-	    clock00();
-    }
+//     for (count = 0; count < 7; count++) {
+// 	if (holds != 0) {
+// 	    clock11();
+// 	    holds--;
+// 	}
+// 	else
+// 	    clock00();
+//     }
 
-    clock01();
-    clock00();    
-    clock11();
-    clock11();
-}
+//     clock01();
+//     clock00();    
+//     clock11();
+//     clock11();
+// }
 // --------------------------------------------------------
 // Clock in data for GPIO 0 and 37 (fixed) and apply load.
 // --------------------------------------------------------

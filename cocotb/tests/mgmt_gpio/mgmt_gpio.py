@@ -49,7 +49,7 @@ async def mgmt_gpio_out(dut):
                         cocotb.log.error("[TEST] error failing to catch all blinking ")
                         return
                     await ClockCycles(caravelEnv.clk,10) 
-            cocotb.log.info("[TEST] passing sending {reg1} blinks ")
+            cocotb.log.info(f"[TEST] passing sending {reg1} blinks ")
             phases_fails -=1
             phases_passes +=1
         await ClockCycles(caravelEnv.clk,10) 
@@ -63,7 +63,7 @@ async def mgmt_gpio_out(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_in(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=277033)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=281094)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

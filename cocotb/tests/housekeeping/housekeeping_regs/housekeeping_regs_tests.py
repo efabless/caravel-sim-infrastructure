@@ -10,6 +10,7 @@ from tests.common_functions.test_functions import *
 from tests.bitbang.bitbang_functions import *
 from interfaces.caravel import GPIO_MODE
 from tests.housekeeping.housekeeping_spi.spi_access_functions import *
+from interfaces.common import sky
 import json
 reg = Regs()
 
@@ -21,7 +22,10 @@ async def hk_regs_wr_wb(dut):
     caravelEnv,clock = await test_configure(dut,timeout_cycles=678,num_error=INFINITY)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
-    with open('wb_models/housekeepingWB/HK_regs.json') as f:
+    hk_file = 'wb_models/housekeepingWB/HK_regs.json'
+    if not sky: 
+        hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
+    with open(hk_file) as f:
         regs = json.load(f)
     await ClockCycles(caravelEnv.clk, 10)
     # write then read
@@ -99,8 +103,10 @@ async def hk_regs_wr_wb_cpu(dut):
 @repot_test
 async def hk_regs_wr_spi(dut):
     caravelEnv,clock = await test_configure(dut,timeout_cycles=11851,num_error=INFINITY)
-
-    with open('wb_models/housekeepingWB/HK_regs.json') as f:
+    hk_file = 'wb_models/housekeepingWB/HK_regs.json'
+    if not sky: 
+        hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
+    with open(hk_file) as f:
         regs = json.load(f)
     # write then read single byte 
     # for i in range(random.randint(40, 70)):
@@ -159,8 +165,10 @@ async def hk_regs_wr_spi(dut):
 @repot_test
 async def hk_regs_rst_spi(dut):
     caravelEnv,clock = await test_configure(dut,timeout_cycles=2879,num_error=INFINITY)
-
-    with open('wb_models/housekeepingWB/HK_regs.json') as f:
+    hk_file = 'wb_models/housekeepingWB/HK_regs.json'
+    if not sky: 
+        hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
+    with open(hk_file) as f:
         regs = json.load(f)
     # read 
     bits_num = 8 # byte testing

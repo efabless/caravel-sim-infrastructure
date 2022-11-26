@@ -27,14 +27,20 @@
 void main()
 {
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    bool sky = reg_debug_1;
     reg_debug_1  = 0x0;
     reg_debug_2  = 0x0;
 
     reg_gpio_mode1 = 1;
     reg_gpio_mode0 = 0; // for full swing
-
-    reg_gpio_ien = 1;
-    reg_gpio_oe = 1;
+    if (sky){
+        reg_gpio_ien = 0;
+        reg_gpio_oe = 1;
+    }else{
+        reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
+        reg_gpio_oe = 0;
+    }
+    
 
     reg_debug_1 = 10;
 	for (int i = 0; i < 10; i++) {

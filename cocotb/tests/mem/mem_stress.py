@@ -151,5 +151,83 @@ async def mem_dff_B(dut):
                 cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
                 break 
         await ClockCycles(caravelEnv.clk,1000) 
+       
+@cocotb.test()
+@repot_test
+async def mem_sram_W(dut):
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=8083081)
+    cpu = RiskV(dut)
+    cpu.cpu_force_reset()
+    cpu.cpu_release_reset()
+    cocotb.log.info(f"[TEST] Start sram word access stress test")   
+    pass_list = [0x1B]
+    fail_list = [0x1E]
+    reg1 =0 # buffer
+    reg2 =0
+    while True: 
+        if reg1 != cpu.read_debug_reg1():
+            reg1 = cpu.read_debug_reg1()
+            if reg1 in pass_list:  # pass phase
+                cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
+                break 
+            elif reg1 in fail_list:  # pass phase
+                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                break 
+        if reg2 != cpu.read_debug_reg2():
+            reg2 = cpu.read_debug_reg2()
+            cocotb.log.info(f"[TEST] iterator = {hex(reg2)} ")
+        await ClockCycles(caravelEnv.clk,1000) 
+                     
+@cocotb.test()
+@repot_test
+async def mem_sram_HW(dut):
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=16274181)
+    cpu = RiskV(dut)
+    cpu.cpu_force_reset()
+    cpu.cpu_release_reset()
+    cocotb.log.info(f"[TEST] Start sram halfword access stress test")   
+    pass_list = [0x1B]
+    fail_list = [0x1E]
+    reg1 =0 # buffer
+    reg2 = 0
+    while True: 
+        if reg1 != cpu.read_debug_reg1():
+            reg1 = cpu.read_debug_reg1()
+            if reg1 in pass_list:  # pass phase
+                cocotb.log.info(f"[TEST] pass writing and reading all srram memory ")  
+                break 
+            elif reg1 in fail_list:  # pass phase
+                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                break 
+        # if reg2 != cpu.read_debug_reg2():
+        #     reg2 = cpu.read_debug_reg2()
+        #     cocotb.log.info(f"[TEST] iterator = {hex(reg2)} ")  
+        await ClockCycles(caravelEnv.clk,1000) 
+           
+@cocotb.test()
+@repot_test
+async def mem_sram_B(dut):
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=28500231)
+    cpu = RiskV(dut)
+    cpu.cpu_force_reset()
+    cpu.cpu_release_reset()
+    cocotb.log.info(f"[TEST] Start sram byte access stress test")   
+    pass_list = [0x1B]
+    fail_list = [0x1E]
+    reg1 =0 # buffer
+    reg2 =0
+    while True: 
+        if reg1 != cpu.read_debug_reg1():
+            reg1 = cpu.read_debug_reg1()
+            if reg1 in pass_list:  # pass phase
+                cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
+                break 
+            elif reg1 in fail_list:  # pass phase
+                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                break 
+        # if reg2 != cpu.read_debug_reg2():
+        #     reg2 = cpu.read_debug_reg2()
+        #     cocotb.log.info(f"[TEST] iterator = {hex(reg2)} ")  
+        await ClockCycles(caravelEnv.clk,1000) 
     
    

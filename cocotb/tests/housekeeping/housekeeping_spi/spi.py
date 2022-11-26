@@ -27,13 +27,13 @@ async def spi_rd_wr_nbyte(dut):
     for j in range(3):
         address = random.randint(0x26 , 0x67-nbytes_limits)
         n_bytes = random.randint(1,nbytes_limits)
-        await write_reg_spi_nbytes(caravelEnv,address,[0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F,0x1F],nbytes_limits)
+        await write_reg_spi_nbytes(caravelEnv,address,[0x3,0x3,0x3,0x3,0x3,0x3,0x3,0x3],nbytes_limits)
         await write_reg_spi_nbytes(caravelEnv,address,[0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0],n_bytes)
         data = await read_reg_spi_nbytes(caravelEnv,address,nbytes_limits)
         for i in range(nbytes_limits):
             if i >= n_bytes: 
-                if data[i] != 0x1F:
-                    cocotb.log.error(f"[TEST] register {i} has returned value {data[i]} while it should return value 0x1F n_bytes = {n_bytes}")
+                if data[i] != 0x3:
+                    cocotb.log.error(f"[TEST] register {i} has returned value {data[i]} while it should return value 0x3 n_bytes = {n_bytes}")
                 else: cocotb.log.info(f"[TEST] successful read 0 from register {i} n_bytes = {n_bytes}")
             else: 
                 if data[i] != 0: 
