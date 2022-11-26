@@ -40,7 +40,8 @@ def drive_hdl(path,bits,data):
         cocotb.log.debug(f' [common] drive { path._path }  with {hdl}')   
 
 """Enum for GPIO modes valus used to configured the pins"""
-config_file = f"sim.{os.getenv('RUNTAG')}.configs"
+tag = os.getenv('RUNTAG')
+config_file = f"sim.{tag.replace('/','.')}.configs"
 sky = import_module(config_file).sky
 if sky:
     class GPIO_MODE(Enum):
@@ -69,7 +70,7 @@ else:
         GPIO_MODE_USER_STD_INPUT_PULLDOWN  = 0x046
         GPIO_MODE_USER_STD_INPUT_PULLUP	   = 0x086
         GPIO_MODE_USER_STD_OUTPUT	       = 0x00a
-        GPIO_MODE_USER_STD_BIDIRECTIONAL   = 0x008
+        GPIO_MODE_USER_STD_BIDIRECTIONAL   = 0x00C
 class MASK_GPIO_CTRL(Enum):
     MASK_GPIO_CTRL_MGMT_EN   = 0
     MASK_GPIO_CTRL_OUT_DIS   = 1
