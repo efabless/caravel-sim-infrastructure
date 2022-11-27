@@ -30,19 +30,21 @@ void main()
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
     reg_debug_1  = 0x0;
 
-    // pull up
     reg_gpio_mode1 = 1;
-    reg_gpio_mode0 = 0; 
+    reg_gpio_mode0 = 0;
+    reg_gpio_ien = 1;
+    reg_gpio_oe = 1; 
+
+    // pull up
+    reg_gpio_out = 1;
     reg_debug_1 = 0x1B;
 
     // pull down
-    reg_gpio_mode1 = 1;
-    reg_gpio_mode0 = 1; 
+    reg_gpio_out = 0;
     reg_debug_1 = 0x2B;
 
     // no pull
-    reg_gpio_mode1 = 0;
-    reg_gpio_mode0 = 1; 
+    reg_gpio_oe = 0; 
     reg_debug_1 = 0x3B;
 
 

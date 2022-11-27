@@ -160,27 +160,27 @@ async def mgmt_gpio_bidir(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_pu_pd(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=12477)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=12487)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     cocotb.log.info(f"[TEST] Start mgmt_gpio_pu_pd test")  
 
     await wait_reg1(cpu,caravelEnv,0X1B)
-    caravelEnv.drive_mgmt_gpio('z')
+    # caravelEnv.drive_mgmt_gpio('z')
     await ClockCycles(caravelEnv.clk,1) 
-    gpio_in = dut.uut.gpio_in_core
+    gpio_in = dut.uut.chip_core.soc.core.gpio_in_pad
     if gpio_in.value.binstr != '1': 
         cocotb.log.error(f"[TEST] mgmt gpio pull up didn't work correctly reading {gpio_in} instead of 1")
 
     await wait_reg1(cpu,caravelEnv,0X2B)
-    caravelEnv.drive_mgmt_gpio('z')
+    # caravelEnv.drive_mgmt_gpio('z')
     await ClockCycles(caravelEnv.clk,1) 
     if gpio_in.value.binstr != '0': 
         cocotb.log.error(f"[TEST] mgmt gpio pull down didn't work correctly reading {gpio_in} instead of 0")
 
     await wait_reg1(cpu,caravelEnv,0X3B)
-    caravelEnv.drive_mgmt_gpio('z')
+    # caravelEnv.drive_mgmt_gpio('z')
     await ClockCycles(caravelEnv.clk,1) 
     if gpio_in.value.binstr != 'x': 
         cocotb.log.error(f"[TEST] mgmt gpio no pull didn't work correctly reading {gpio_in} instead of x")

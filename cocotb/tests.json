@@ -402,7 +402,7 @@
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
             "description":"Memory stress for all space of sram byte for gf design"}
         ,"mgmt_gpio_pu_pd" :{"level":2, 
-            "PDK":["gf","sky"],
+            "PDK":["sky"],
             "RTL":["r_rtl","r_caravan_rtl","nightly","weekly","tape_out"],
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
