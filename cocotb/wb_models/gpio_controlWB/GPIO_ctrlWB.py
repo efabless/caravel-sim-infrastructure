@@ -20,7 +20,7 @@ class GPIO_ctrlWB:
         self.dut         = dut
         self.caravel_hdl = dut.uut.chip_core
         self.clk         = self.dut.uut.chip_core.mprj_clock
-        self.reset       = self.dut.uut.chip_core.resetb
+        self.reset       = self.dut.uut.resetb
         self.gpio_num    = gpio_num
         self.logger      = loggers
         self.checkers    = checkers
@@ -72,7 +72,7 @@ class GPIOs_ctrlWB:
         self.dut         = dut
         self.caravel_hdl = dut.uut.chip_core
         self.clk         = self.dut.uut.chip_core.mprj_clock
-        self.reset       = self.dut.uut.chip_core.resetb
+        self.reset       = self.dut.uut.resetb
         self.logger      = loggers
         self.checkers    = checkers
         if is_caravan: 

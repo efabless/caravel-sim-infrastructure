@@ -104,7 +104,7 @@ class HK_models():
             output["SDO"]["val"] = self._getReadData()
             self.exp_out_spi.append(output)
         elif self.spi_mode[0] == "read/write": 
-            output["SDO"]["val"] = self._ReadWriteMode()
+            output["SDO"]["val"] = self._ReadWriteMode(0)
             self.exp_out_spi.append(output)
         elif self.spi_mode[0] == "noOP": 
             self._setWriteData(trans['SDI']['val'].binstr)

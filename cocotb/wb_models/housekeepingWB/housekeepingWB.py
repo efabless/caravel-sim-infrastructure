@@ -23,7 +23,7 @@ class HK_whiteBox:
         self.hk_hdl      = dut.uut.chip_core.housekeeping
         # self.hkspi_hdl   = dut.uut.chip_core.housekeeping.hkspi
         self.clk         = self.dut.uut.chip_core.mprj_clock
-        self.reset       = self.dut.uut.chip_core.resetb
+        self.reset       = self.dut.uut.resetb
         self.logger      = loggers
         self.checkers    = checkers
         self.load_js()
@@ -50,7 +50,7 @@ class HK_whiteBox:
             wishbone_sb    = Scoreboard(SB_name("wishbone_sb"),fail_immediately=False)
             wishbone_sb.add_interface(wishbone_mon_o, self.wb_models.exp_out_wb)
         # system
-        system_mon_i   = HKmonitor(f"HKinputsMonitorsystem",self.hk_hdl,inputs['system'],self.clk,self.reset,self.logger,callback=self.wb_models.system_model)
+        # system_mon_i   = HKmonitor(f"HKinputsMonitorsystem",self.hk_hdl,inputs['system'],self.clk,self.reset,self.logger,callback=self.wb_models.system_model)
         # UART
         UART_mon_i     = HKmonitor(f"HKinputsMonitorUART",self.hk_hdl,inputs['UART'],self.clk,self.reset,self.logger,callback=self.wb_models.UART_model)
         UART_mon_o     = HKmonitor(f"HKoutputsMonitorUART",self.hk_hdl,outputs['UART'],self.clk,self.reset,self.logger)
