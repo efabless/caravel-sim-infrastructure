@@ -141,7 +141,7 @@ class Caravel_env:
 
     """return the value of management gpio"""
     def monitor_mgmt_gpio(self):
-        data = self.dut.gpio_tb.value
+        data = self.dut.gpio_tb.value.binstr
         cocotb.log.debug(f' [caravel] Monitor mgmt gpio = {data}')
         return data
 
@@ -332,7 +332,7 @@ class Caravel_env:
     """drive the value of  gpio management"""
     def drive_mgmt_gpio(self,data):
         mgmt_io = self.dut.gpio_tb
-        mgmt_io.value  =  data
+        mgmt_io.value  =  BinaryValue(value = data,n_bits=1)
         cocotb.log.info(f' [caravel] drive_mgmt_gpio through management area mprj with {data}')
 
     """update the value of mprj bits with spicific data then after certain number of cycle drive z to free the signal"""
