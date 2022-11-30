@@ -248,7 +248,10 @@ class RunTest:
             change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{VERILOG_PATH}",file_path=f"{self.cocotb_path}/includes.v")
             change_str(str="\"caravel/verilog",new_str=f"\"{CARAVEL_PATH}",file_path=f"{self.cocotb_path}/includes.v")
         else: 
-            dirs = f' {dirs} -f \\\"{VERILOG_PATH}/includes/gl_caravel_vcs.list\\\" '      
+            shutil.copyfile(f'{VERILOG_PATH}/includes/gl_caravel_vcs.v', f"{self.cocotb_path}/includes.v")
+            change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{VERILOG_PATH}",file_path=f"{self.cocotb_path}/includes.v")
+            change_str(str="\"caravel/verilog",new_str=f"\"{CARAVEL_PATH}",file_path=f"{self.cocotb_path}/includes.v")     
+            
         # shutil.copyfile(f'{self.test_full_dir}/{self.test_name}.hex',f'{self.sim_path}/{self.test_name}.hex')
         # if os.path.exists(f'{self.test_full_dir}/test_data'):
         #     shutil.copyfile(f'{self.test_full_dir}/test_data',f'{self.sim_path}/test_data')

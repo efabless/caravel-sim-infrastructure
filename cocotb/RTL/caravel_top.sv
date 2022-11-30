@@ -1,8 +1,6 @@
 `timescale 1 ns / 1 ps
 `ifdef VCS
-`ifndef GL
 	`include "includes.v" // in case of RTL coverage is needed and it doesn't work correctly without include files by this way
-`endif // ~ GL
 `ifdef sky
 `ifndef ENABLE_SDF
 	`include "libs.ref/sky130_fd_io/verilog/sky130_fd_io.v"

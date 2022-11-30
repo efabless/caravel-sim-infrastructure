@@ -33,12 +33,16 @@ def shift(gpio,shift_type):
         if not Macros['GL']:
             shift_register = gpio._id(f"shift_register",False).value.binstr[i]
         else:  
-            shift_register = gpio._id(f"\\shift_register[{i}] ",False).value.binstr
+            shift_register = gpio[0]._id(f"\\{gpio[1]}.shift_register[{9-i}] ",False).value.binstr
         if shift_register != bits[i]:
             fail = True
             cocotb.log.error(f"[TEST] wrong shift register {i} in {gpio}")
     if not fail: 
-        cocotb.log.info(f"[TEST] gpio {gpio} passed")
+        if not Macros['GL']:
+            cocotb.log.info(f"[TEST] gpio {gpio} passed")
+        else: 
+            cocotb.log.info(f"[TEST] gpio {gpio[1]} passed")
+
 
 
 @cocotb.test()
@@ -63,14 +67,14 @@ async def serial_shifting_10(dut):
         if not Macros['GL']:
             shift(uut._id(gpio,False),type)
         else: 
-            shift(uut._id(f'\\{gpio} ',False),type)
+            shift((uut,gpio),type)
         type = not type
     type = True # type of shifting 01 or 10
     for gpio in reversed(gpios_h):
         if not Macros['GL']:
             shift(uut._id(gpio,False),type)
         else: 
-            shift(uut._id(f'\\{gpio} ',False),type)
+            shift((uut,gpio),type)
         type = not type
 
 
@@ -96,14 +100,14 @@ async def serial_shifting_01(dut):
         if not Macros['GL']:
             shift(uut._id(gpio,False),type)
         else: 
-            shift(uut._id(f'\\{gpio} ',False),type)
+            shift((uut,gpio),type)
         type = not type
     type = False # type of shifting 01 or 10
     for gpio in reversed(gpios_h):
         if not Macros['GL']:
             shift(uut._id(gpio,False),type)
         else: 
-            shift(uut._id(f'\\{gpio} ',False),type)
+            shift((uut,gpio),type)
         type = not type
 
     
@@ -131,14 +135,14 @@ async def serial_shifting_0011(dut):
         if not Macros['GL']:
             shift_2(uut._id(gpio,False),type)
         else: 
-            shift_2(uut._id(f'\\{gpio} ',False),type)
+            shift_2((uut,gpio),type)
         type = (type + 1) %4
     type = 2 # type of shifting 01 or 10
     for gpio in reversed(gpios_h):
         if not Macros['GL']:
             shift_2(uut._id(gpio,False),type)
         else: 
-            shift_2(uut._id(f'\\{gpio} ',False),type)
+            shift_2((uut,gpio),type)
         type = (type + 1) %4
 
 @cocotb.test()
@@ -162,14 +166,14 @@ async def serial_shifting_1100(dut):
         if not Macros['GL']:
             shift_2(uut._id(gpio,False),type)
         else: 
-            shift_2(uut._id(f'\\{gpio} ',False),type)
+            shift_2((uut,gpio),type)
         type = (type + 1) %4
     type = 0 # type of shifting 01 or 10
     for gpio in reversed(gpios_h):
         if not Macros['GL']:
             shift_2(uut._id(gpio,False),type)
         else: 
-            shift_2(uut._id(f'\\{gpio} ',False),type)
+            shift_2((uut,gpio),type)
         type = (type + 1) %4
 
 def shift_2(gpio,shift_type):
@@ -195,15 +199,18 @@ def shift_2(gpio,shift_type):
     else :
         shift_reg =''
         for i in range(bit_size):
-            shift_reg +=  gpio._id(f"\\shift_register[{i}] ",False).value.binstr
+            shift_reg +=  gpio[0]._id(f"\\{gpio[1]}.shift_register[{9-i}] ",False).value.binstr
         cocotb.log.info(f"[TEST] gpio {gpio} shift {shift_reg} expected {bits}")
     for i in range(bit_size):
         if not Macros['GL']:
             shift_register = gpio._id(f"shift_register",False).value.binstr[i]
         else:  
-            shift_register = gpio._id(f"\\shift_register[{12-i}] ",False).value.binstr
+            shift_register = gpio[0]._id(f"\\{gpio[1]}.shift_register[{9-i}] ",False).value.binstr
         if shift_register != bits[i]:
             fail = True
             cocotb.log.error(f"[TEST] wrong shift register {12-i} in {gpio}")
     if not fail: 
-        cocotb.log.info(f"[TEST] gpio {gpio} passed")
+        if not Macros['GL']:
+            cocotb.log.info(f"[TEST] gpio {gpio} passed")
+        else: 
+            cocotb.log.info(f"[TEST] gpio {gpio[1]} passed")

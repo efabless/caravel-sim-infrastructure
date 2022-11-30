@@ -18,7 +18,7 @@
         ,"hk_disable" :{"level":0, 
             "PDK":["sky","gf"],
             "RTL":["r_rtl","r_caravan_rtl","setup","push","nightly","weekly","tape_out"],
-            "GL":["r_gl","r_caravan_gl","push_gl","nightly","weekly","tape_out"],
+            "GL":["r_caravan_gl","push_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
             "description":"check Housekeeping SPI disable register is working"}
         ,"uart_rx" :{"level":0, 
@@ -114,7 +114,7 @@
         ,"hk_regs_wr_wb_cpu" :{"level":0, 
             "PDK":["sky","gf"],
             "RTL":["r_rtl","r_caravan_rtl","setup","push","nightly","weekly","tape_out"],
-            "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
+            "GL":["r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
             "description":"bit bash test for housekeeping registers"}
 
@@ -230,7 +230,7 @@
         ,"clock_redirect" :{"level":0, 
             "PDK":["sky","gf"],
             "RTL":["r_rtl","setup","push","nightly","weekly","tape_out"],
-            "GL":["r_gl","nightly","weekly","tape_out"],
+            "GL":["nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","weekly","tape_out"],
             "description":"check clock redirect is working as expected"}
 
@@ -251,7 +251,7 @@
         ,"pll" :{"level":0, 
             "PDK":["sky","gf"],
             "RTL":["r_rtl","setup","push","nightly","weekly","tape_out"],
-            "GL":["r_gl","nightly","weekly","tape_out"],
+            "GL":["nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","weekly","tape_out"],
             "description":"Check pll diffrent configuration"}
             

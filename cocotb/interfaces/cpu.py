@@ -33,7 +33,7 @@ class RiskV:
         if not Macros['GL']:
             self.cpu_hdl     = dut.uut.chip_core.soc.core.VexRiscv
         else:
-            self.cpu_hdl     = dut.uut.chip_core.soc
+            self.cpu_hdl     = dut.uut
         self.debug_hdl   = dut.uut.chip_core.mprj.debug
         self.force_reset = 0
         if not Macros['GL']:
