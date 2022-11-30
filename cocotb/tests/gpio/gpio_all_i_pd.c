@@ -6,7 +6,6 @@ void main(){
     unsigned int i, j, k;
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
     reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
     reg_hkspi_disable = 1;
     reg_mprj_io_37 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
     reg_mprj_io_36 = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
@@ -45,7 +44,6 @@ void main(){
     reg_mprj_io_3  = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
     reg_mprj_io_2  = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
     reg_mprj_io_1  = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
-    reg_mprj_io_0  = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
     reg_mprj_io_0  = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 
     reg_mprj_xfer = 1;

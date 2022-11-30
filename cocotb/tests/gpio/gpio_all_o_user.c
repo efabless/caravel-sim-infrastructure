@@ -50,7 +50,6 @@ void main(){
         reg_mprj_io_2  = GPIO_MODE_USER_STD_OUTPUT;
         reg_mprj_io_1  = GPIO_MODE_USER_STD_OUTPUT;
         reg_mprj_io_0  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_0  = GPIO_MODE_USER_STD_OUTPUT;
 
         reg_mprj_xfer = 1;
         while (reg_mprj_xfer == 1);
@@ -82,10 +81,10 @@ void main(){
         
         // try to give input 
         reg_debug_1 = 0XBB; // configuration done wait environment to send 0x8F66FD7B to reg_mprj_userl
-        int timeout = 100;
+        int timeout = 30;
         while (reg_mprj_userl != 0x8F66FD7B){
                 timeout--;
-                if (timeout==0){
+                if (timeout<=0){
                         break;
                 }
         }
