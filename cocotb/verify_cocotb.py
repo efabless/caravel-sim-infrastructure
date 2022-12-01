@@ -134,6 +134,7 @@ class RunTest:
     def caravel_macros(self,is_vcs=False):
         macroslist = ["FUNCTIONAL",f'SIM=\\\"{self.sim_type}\\\"',"USE_POWER_PINS","UNIT_DELAY=#1",f'MAIN_PATH=\\\"{self.cocotb_path}\\\"']
         macroslist.extend([f'TESTNAME=\\\"{self.test_name}\\\"',f'TAG=\\\"{os.getenv("RUNTAG")}\\\"',"COCOTB_SIM",f'FTESTNAME=\\\"{self.full_test_name}\\\"'])
+        macroslist.extend([f'CARAVEL_ROOT=\\\"{os.getenv("CARAVEL_ROOT")}\\\"'])
         
         if self.test_name == "la":
             macroslist.append ('LA_TESTING')
@@ -147,7 +148,7 @@ class RunTest:
             macroslist.append('GL')
         elif(self.sim_type=="GL_SDF"):
             macroslist.extend(['ENABLE_SDF','GL_SDF','GL',f'SDF_POSTFIX=\\\"{self.corner[-1]}{self.corner[-1]}\\\"',f'CORNER=\\\"{self.corner[0:3]}\\\"'])
-        
+            macroslist.remove("FUNCTIONAL") # functional need to be removed so specify blocks are seen in SDF sim
         if caravan:
             print ("Use caravan")
             macroslist.append(f'CARAVAN') 

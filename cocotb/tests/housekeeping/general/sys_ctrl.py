@@ -33,15 +33,15 @@ async def clock_redirect(dut):
     #user clock
     clock_name = "user clock"
     await write_reg_spi(caravelEnv,0x1b,0x0) # disable user clock output redirect
-    await  cocotb.start(calculate_clk_period(dut.bin14_monitor,clock_name))  
+    await  cocotb.start(calculate_clk_period(dut.bin15_monitor,clock_name))  
     await ClockCycles(caravelEnv.clk,110)
     if user_clock  != 0:
         cocotb.log.error(f"[TEST] Error: {clock_name} is directed while clk2_output_dest is disabled")
     else: 
         cocotb.log.info(f"[TEST] Pass: {clock_name} has not directed when reg clk2_output_dest is disabled")
 
-    await write_reg_spi(caravelEnv,0x1b,0x4) # enable user clock output redirect
-    await  cocotb.start(calculate_clk_period(dut.bin14_monitor,clock_name))  
+    await write_reg_spi(caravelEnv,0x1b,0x2) # enable user clock output redirect
+    await  cocotb.start(calculate_clk_period(dut.bin15_monitor,clock_name))  
     await ClockCycles(caravelEnv.clk,110)   
     if  abs(user_clock - core_clock) > (error_margin*core_clock):
         cocotb.log.error(f"[TEST] Error: {clock_name} is directed with wrong value {clock_name} period = {user_clock} and core clock = {core_clock}")
