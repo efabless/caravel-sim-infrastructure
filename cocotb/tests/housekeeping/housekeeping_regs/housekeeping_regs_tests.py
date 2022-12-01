@@ -74,7 +74,7 @@ async def hk_regs_wr_wb(dut):
 @cocotb.test()
 @repot_test
 async def hk_regs_wr_wb_cpu(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=182983,num_error=INFINITY)    
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=209454)    
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
