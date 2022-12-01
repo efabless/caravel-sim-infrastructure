@@ -383,6 +383,12 @@
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
             "description":"Memory stress for all space of dff byte access"}
+        ,"mem_sram_smoke" :{"level":2, 
+            "PDK":["gf"],
+            "RTL":["r_rtl","r_caravan_rtl","nightly","weekly","tape_out"],
+            "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
+            "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
+            "description":"Memory stress for all space of sram word access for gf design"}
         ,"mem_sram_W" :{"level":2, 
             "PDK":["gf"],
             "RTL":["r_rtl","r_caravan_rtl","nightly","weekly","tape_out"],
