@@ -39,7 +39,7 @@ async def read_reg_spi_nbytes(caravelEnv,address,n_bytes):
 
 async def reg_spi_user_pass_thru(caravelEnv,command,address):
     await caravelEnv.enable_csb()
-    await caravelEnv.hk_write_byte(0xc2) # Apply user pass-thru command to housekeeping SPI
+    await caravelEnv.hk_write_byte(0x02) # Apply user pass-thru command to housekeeping SPI
     await caravelEnv.hk_write_byte(command) # read command
     address = address.to_bytes(3,'big')
     await caravelEnv.hk_write_byte(address[0]) # high byte 
