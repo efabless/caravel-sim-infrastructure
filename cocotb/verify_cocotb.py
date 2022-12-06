@@ -172,6 +172,7 @@ class RunTest:
         if fnmatch(os.getenv('PDK'),"sky*"):
             macroslist.append(f'sky')
 
+        macroslist.append(f'CORNER_{self.corner[0:3]}')
 
         if not is_vcs:
             macros = ' -D'.join(macroslist)

@@ -19,7 +19,8 @@
 `endif // ~ ENABLE_SDF
 `else // sky
 	`include "libs.ref/gf180mcu_fd_io/verilog/gf180mcu_fd_io.v"
-	`include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/GF018hv5v_mcu_sc7_udp.v"
+	// `include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/GF018hv5v_mcu_sc7_udp.v"
+	`include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/primitives.v"
 	`include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/gf180mcu_fd_sc_mcu7t5v0.v"
 	// `include "libs.ref/gf180mcu_sc7_hv/verilog/GF018hv5v_mcu_sc7.v"
 	`include "libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1.v"
