@@ -631,6 +631,10 @@ class main():
         change_str(str="replace by clock",new_str=self.clk,file_path=new_config_path)
         change_str(str="replace by max number of errer",new_str=self.maxerr,file_path=new_config_path)
         change_str(str="replace sky enable",new_str=f"{sky}",file_path=new_config_path)
+        change_str(str="replace CARAVEL_ROOT",new_str=f"\"{os.getenv('CARAVEL_ROOT')}\"",file_path=new_config_path)
+        change_str(str="replace MCW_ROOT",new_str=f"\"{os.getenv('MCW_ROOT')}\"",file_path=new_config_path)
+        change_str(str="replace PDK_ROOT",new_str=f"\"{os.getenv('PDK_ROOT')}\"",file_path=new_config_path)
+        change_str(str="replace PDK",new_str=f"\"{os.getenv('PDK')}\"",file_path=new_config_path)
 
     def send_mail(self,mails):
         #get commits 
