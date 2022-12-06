@@ -4,7 +4,7 @@ async def write_reg_spi(caravelEnv,address,data):
     await caravelEnv.enable_csb()
     await caravelEnv.hk_write_byte(0x80) # Write stream command
     await caravelEnv.hk_write_byte(address) # Address (register 19 = GPIO bit-bang control)
-    await caravelEnv.hk_write_byte(data) # Data = 0x01 (enable bit-bang mode)
+    await caravelEnv.hk_write_byte(data) # Data 
     await caravelEnv.disable_csb()
 
 
@@ -12,7 +12,15 @@ async def read_reg_spi(caravelEnv,address):
     await caravelEnv.enable_csb()
     await caravelEnv.hk_write_byte(0x40) # read stream command
     await caravelEnv.hk_write_byte(address) # Address 
-    data = await caravelEnv.hk_read_byte() # Data = 0x01 (enable bit-bang mode)
+    data = await caravelEnv.hk_read_byte() # Data 
+    await caravelEnv.disable_csb()
+    return data
+
+async def read_write_reg_spi(caravelEnv,address,data):
+    await caravelEnv.enable_csb()
+    await caravelEnv.hk_write_byte(0xC0) # Write stream command
+    await caravelEnv.hk_write_byte(address) 
+    data = await caravelEnv.hk_write_read_byte(data) 
     await caravelEnv.disable_csb()
     return data
 
@@ -23,7 +31,7 @@ async def write_reg_spi_nbytes(caravelEnv,address,data,n_bytes):
     await caravelEnv.hk_write_byte(write_command) # Write n byte command
     await caravelEnv.hk_write_byte(address) # Address (register 19 = GPIO bit-bang control)
     for byte in data:
-        await caravelEnv.hk_write_byte(byte) # Data = 0x01 (enable bit-bang mode)
+        await caravelEnv.hk_write_byte(byte) # Data
     await caravelEnv.disable_csb()
 
 
@@ -33,7 +41,7 @@ async def read_reg_spi_nbytes(caravelEnv,address,n_bytes):
     await caravelEnv.hk_write_byte(0x40) # read stream command
     await caravelEnv.hk_write_byte(address) # Address 
     for i in range(n_bytes):
-        data.append(await caravelEnv.hk_read_byte()) # Data = 0x01 (enable bit-bang mode)
+        data.append(await caravelEnv.hk_read_byte()) # Data 
     await caravelEnv.disable_csb()
     return data
 

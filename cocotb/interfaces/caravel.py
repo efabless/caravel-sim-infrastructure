@@ -370,6 +370,25 @@ class Caravel_env:
             await RisingEdge(self.clk)
             self.drive_gpio_in((4,4),1)
         await FallingEdge(self.clk)
+
+    async def hk_write_read_byte(self, data):
+        read_data =''
+        self.path = self.dut.mprj_io_tb
+        data_bit = BinaryValue(value = data , n_bits = 8,bigEndian=False)
+        for i in range(7,-1,-1):
+            #  for j in range(4):
+            #     await FallingEdge(self.clk)
+            # await Timer(7, units='ns')
+            await FallingEdge(self.clk)
+            #common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
+            self.drive_gpio_in((2,2),int(data_bit[i]))
+            self.drive_gpio_in((4,4),0)
+
+            await RisingEdge(self.clk)
+            read_data= f'{read_data}{self.dut.mprj_io_tb.value[37-1]}'
+            self.drive_gpio_in((4,4),1)
+        await FallingEdge(self.clk)
+        return int(read_data,2)
         
     """ read byte using housekeeping spi 
         when writing to SCK we can't use mprj[4] as there is a limitation in cocotb for accessing pack array #2587
