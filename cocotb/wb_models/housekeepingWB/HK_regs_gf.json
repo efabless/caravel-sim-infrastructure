@@ -30,7 +30,7 @@
                                     ["bit bang reset","serial_bb_resetn",2,1,"RW",0,0,19],["bit bang load","serial_bb_load",3,1,"RW",0,0,19],
                                     ["bit bang clock","serial_bb_clock",4,1,"RW",0,0,19],["bit bang data1","serial_bb_data_1",5,1,"RW",0,0,19],
                                     ["bit bang data1","serial_bb_data_2",6,1,"RW",0,0,19]],
-                "0x04":            [["GPIO power control (reg_mprj_pwr)","pwr_ctrl_out",0,4,"RW",0,0,110]],
+                "0x04":            [["GPIO power control (reg_mprj_pwr)","pwr_ctrl_out",0,1,"RW",0,0,110]],
                 "0x0c":            [["GPIO data low(reg_mprj_datal)",["mgmt_gpio_data",7,0],0,8,"RW",0,0,109]],
                 "0x0d":            [["GPIO data low(reg_mprj_datal)",["mgmt_gpio_data",15,8],0,8,"RW",0,0,108]],
                 "0x0e":            [["GPIO data low(reg_mprj_datal)",["mgmt_gpio_data",23,16],0,8,"RW",0,0,107]],
