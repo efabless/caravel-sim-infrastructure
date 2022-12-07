@@ -363,12 +363,15 @@ class Caravel_env:
             #     await FallingEdge(self.clk)
             # await Timer(7, units='ns')
             await FallingEdge(self.clk)
+            await FallingEdge(self.clk)
             #common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
             self.drive_gpio_in((2,2),int(data_bit[i]))
             self.drive_gpio_in((4,4),0)
 
             await RisingEdge(self.clk)
+            await RisingEdge(self.clk)
             self.drive_gpio_in((4,4),1)
+        await FallingEdge(self.clk)
         await FallingEdge(self.clk)
 
     async def hk_write_read_byte(self, data):
@@ -380,13 +383,16 @@ class Caravel_env:
             #     await FallingEdge(self.clk)
             # await Timer(7, units='ns')
             await FallingEdge(self.clk)
+            await FallingEdge(self.clk)
             #common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
             self.drive_gpio_in((2,2),int(data_bit[i]))
             self.drive_gpio_in((4,4),0)
 
             await RisingEdge(self.clk)
+            await RisingEdge(self.clk)
             read_data= f'{read_data}{self.dut.mprj_io_tb.value[37-1]}'
             self.drive_gpio_in((4,4),1)
+        await FallingEdge(self.clk)
         await FallingEdge(self.clk)
         return int(read_data,2)
         
@@ -398,9 +404,12 @@ class Caravel_env:
         for i in range(8,0,-1):
             self.drive_gpio_in((4,4),1)# SCK
             await FallingEdge(self.clk)
+            await FallingEdge(self.clk)
             self.drive_gpio_in((4,4),0)# SCK
             await RisingEdge(self.clk)
+            await RisingEdge(self.clk)
             read_data= f'{read_data}{self.dut.mprj_io_tb.value[37-1]}'
+        await FallingEdge(self.clk)
         await FallingEdge(self.clk)
         self.drive_gpio_in((4,4),0) # SCK
         # if (last_read):
