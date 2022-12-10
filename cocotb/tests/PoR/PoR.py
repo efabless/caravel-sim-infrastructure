@@ -27,9 +27,9 @@ async def PoR(dut):
     clock = Clock(caravelEnv.clk, clk, units="ns")  # Create a 25ns period clock on port clk
     cocotb.start_soon(clock.start())  # Start the clock
     # drive reset with 1 
-    caravelEnv.dut.resetb_tb.value = BinaryValue(value = 1, n_bits =1)
     await caravelEnv.power_up()
     await caravelEnv.disable_csb() # 
+    caravelEnv.dut.resetb_tb.value = BinaryValue(value = 1, n_bits =1)
     await Timer(530, "ns")
     # await caravelEnv.reset() # 
     await caravelEnv.disable_bins()
@@ -78,11 +78,3 @@ async def PoR(dut):
         cocotb.log.info(f"[TEST] recieved the correct number of blinks {num_blinks}")
     else: 
         cocotb.log.error(f"[TEST] recieved the incorrect number of blinks recieved = {recieved_blinks} expected = {num_blinks}")
-
-
-
-async def reset_z(caravelEnv):
-    cocotb.log.info(f' [caravel] start resetting with Z')
-    
-    await ClockCycles(caravelEnv.clk, 1)
-    cocotb.log.info(f' [caravel] finish resetting with Z ')

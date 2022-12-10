@@ -72,6 +72,7 @@ class Caravel_env:
 
     """"reset caravel"""
     async def reset(self):
+        # initial value of reset is x
         cocotb.log.info(f' [caravel] start resetting')
         self.dut.resetb_tb.value = 0
         await ClockCycles(self.clk, 20)

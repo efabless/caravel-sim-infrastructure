@@ -249,7 +249,7 @@
             "description":"check logic analyzer input and output enable"}
 
         ,"pll" :{"level":0, 
-            "PDK":["sky","gf"],
+            "PDK":[],
             "RTL":["r_rtl","setup","push","nightly","weekly","tape_out"],
             "GL":["nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","weekly","tape_out"],
