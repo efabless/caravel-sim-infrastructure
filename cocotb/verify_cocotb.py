@@ -396,6 +396,7 @@ class RunRegression:
         self.type_arg = type_arg
         self.write_command_log()
         self.write_git_log()
+        self.test_name_size = 30
         with open('tests.json') as f:
             self.tests_json = json.load(f)
             self.tests_json = self.tests_json["Tests"]
@@ -534,7 +535,7 @@ class RunRegression:
         html_mail =f"<h2>Tests Table:</h2><table border=2 bgcolor=#D6EEEE>"
         file_name=f"sim/{self.tag}/runs.log"
         f = open(file_name, "w")
-        f.write(f"{'Test':<33} {'status':<10} {'start':<15} {'end':<15} {'duration':<13} {'p/f':<8} {'seed':<10} \n")
+        f.write(f"{'Test':<{self.test_name_size}} {'status':<10} {'start':<15} {'end':<15} {'duration':<13} {'p/f':<8} {'seed':<10} \n")
         html_mail += f"<th>Test</th> <th>duration</th> <th>status</th> <th>seed</th> <tr> "
         for test,sim_types in self.tests.items():
             for sim_type,corners in sim_types.items():
@@ -542,7 +543,9 @@ class RunRegression:
                     new_test_name= f"{sim_type}-{test}"
                     if sim_type =="GL_SDF":
                         new_test_name= f"{sim_type}-{test}-{corner}"
-                    f.write(f"{new_test_name:<33} {status['status']:<10} {status['starttime']:<15} {status['endtime']:<15} {status['duration']:<13} {status['pass']:<8} {status['seed']:<10}\n")
+                    if len(new_test_name) > self.test_name_size:
+                        self.test_name_size = len(new_test_name) +4
+                    f.write(f"{new_test_name:<{self.test_name_size}} {status['status']:<10} {status['starttime']:<15} {status['endtime']:<15} {status['duration']:<13} {status['pass']:<8} {status['seed']:<10}\n")
                     if status['pass'] == "passed":
                         html_mail += f"<th>{new_test_name}</th><th>{status['duration']}</th> <th style='background-color:#16EC0C'> {status['pass']} </th><th>{status['seed']}</th><tr>"
                     else:
