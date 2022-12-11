@@ -102,7 +102,7 @@ async def hk_regs_wr_wb_cpu(dut):
 @cocotb.test()
 @repot_test
 async def hk_regs_wr_spi(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=16330,num_error=INFINITY)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=116330,num_error=INFINITY)
     hk_file = 'wb_models/housekeepingWB/HK_regs.json'
     if not sky: 
         hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
@@ -164,7 +164,7 @@ async def hk_regs_wr_spi(dut):
 @cocotb.test()
 @repot_test
 async def hk_regs_rst_spi(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=8030,num_error=INFINITY)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=8730,num_error=INFINITY)
     hk_file = 'wb_models/housekeepingWB/HK_regs.json'
     if not sky: 
         hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
