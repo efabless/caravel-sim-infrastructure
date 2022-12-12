@@ -397,13 +397,13 @@
             "description":"Memory stress for all space of sram word access for gf design"}
         ,"mem_sram_HW" :{"level":2, 
             "PDK":["gf"],
-            "RTL":["r_rtl","nightly","weekly","tape_out"],
+            "RTL":["nightly","weekly","tape_out"],
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["weekly","tape_out"],
             "description":"Memory stress for all space of sram half word access for gf design"}
         ,"mem_sram_B" :{"level":2, 
             "PDK":["gf"],
-            "RTL":["r_rtl","nightly","weekly","tape_out"],
+            "RTL":["nightly","weekly","tape_out"],
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["weekly","tape_out"],
             "description":"Memory stress for all space of sram byte for gf design"}

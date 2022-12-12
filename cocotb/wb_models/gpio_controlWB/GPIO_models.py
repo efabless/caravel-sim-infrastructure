@@ -9,6 +9,7 @@ import sys
 from cocotb_coverage.coverage import *
 from itertools import groupby, product
 from interfaces.common import GPIO_MODE
+from interfaces.common import sky
 
     
 class GPIO_models():
@@ -25,11 +26,15 @@ class GPIO_models():
         reset = trans["reset"]["val"]
         load = trans["load"]["val"]
         if reset == 0: 
-            self.shift_array = deque([0]*13,  maxlen=13)
+            if sky:
+                self.shift_array = deque([0]*13,  maxlen=13)
+            else: 
+                self.shift_array = deque([0]*10,  maxlen=10)
+
         else:
             if load == "1": 
                 self.gpio_configuration =  self.shift_array
-                cocotb.log.debug(f"[GPIO_models][serial_model][{self.name}] loaded value = {self.gpio_configuration} string {''.join(self.gpio_configuration)} hex = {hex(int(''.join(self.gpio_configuration),2))}")
+                cocotb.log.info(f"[GPIO_models][serial_model][{self.name}] loaded value = {self.gpio_configuration} string {''.join(self.gpio_configuration)} hex = {hex(int(''.join(self.gpio_configuration),2))}")
                 
                 self.gpio_config_cov(self.gpio_configuration)
             else: 
@@ -49,8 +54,12 @@ class GPIO_models():
     """model for the default inside gpio_control_block"""
     def default_model(self,trans):
         defaults = trans["defaults"]["val"]
-        self.shift_array = deque([0]*13,  maxlen=13)
-        self.gpio_configuration = deque(defaults,  maxlen=13)
+        if sky:
+            self.shift_array = deque([0]*13,  maxlen=13)
+            self.gpio_configuration = deque(defaults,  maxlen=13)
+        else: 
+            self.shift_array = deque([0]*10,  maxlen=10)
+            self.gpio_configuration = deque(defaults,  maxlen=10)
         cocotb.log.debug(f"[GPIO_models][default_model][{self.name}] default value = {self.gpio_configuration}")
         self.gpio_config_cov(["0","0","0","0"]) # buffer value to initalize the coverages
         # sys.exit()
@@ -88,6 +97,7 @@ class GPIO_models():
         xf = lambda gpio_config:(gpio_config),
         bins = self.gpio_config_bins)
         def cov_config(gpio_config):
+            cocotb.log.info(f"[COV] xf = {gpio_config}")
             pass
         cov_config(gpio_config)
         @CoverPoint(f"top.caravel.gpio_controls.{self.name}.data_transfer.mgmt_gpio", 
