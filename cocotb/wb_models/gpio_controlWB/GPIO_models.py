@@ -34,7 +34,7 @@ class GPIO_models():
         else:
             if load == "1": 
                 self.gpio_configuration =  self.shift_array
-                cocotb.log.info(f"[GPIO_models][serial_model][{self.name}] loaded value = {self.gpio_configuration} string {''.join(self.gpio_configuration)} hex = {hex(int(''.join(self.gpio_configuration),2))}")
+                cocotb.log.debug(f"[GPIO_models][serial_model][{self.name}] loaded value = {self.gpio_configuration} string {''.join(self.gpio_configuration)} hex = {hex(int(''.join(self.gpio_configuration),2))}")
                 
                 self.gpio_config_cov(self.gpio_configuration)
             else: 
@@ -97,7 +97,6 @@ class GPIO_models():
         xf = lambda gpio_config:(gpio_config),
         bins = self.gpio_config_bins)
         def cov_config(gpio_config):
-            cocotb.log.info(f"[COV] xf = {gpio_config}")
             pass
         cov_config(gpio_config)
         @CoverPoint(f"top.caravel.gpio_controls.{self.name}.data_transfer.mgmt_gpio", 
