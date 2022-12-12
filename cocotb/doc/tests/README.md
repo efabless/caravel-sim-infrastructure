@@ -31,6 +31,10 @@
 ```tests blinking of mgmt gpio bit as an output``` 
 ### mgmt_gpio_bidir 
 ```send random number of blinks through mgmt_gpio and expect to recieve the same number back ``` 
+### mgmt_gpio_pu_pd 
+```Test the modes of mgmt gpio as pull up and pull down ``` 
+### mgmt_gpio_disable 
+```test disabling input and outputs of mgmt gpio``` 
 # housekeeping
 ### hk_disable 
 ```check Housekeeping SPI disable register is working``` 
@@ -95,6 +99,16 @@
 ```Memory stress for all space of dff2 byte access``` 
 ### mem_dff_B 
 ```Memory stress for all space of dff byte access``` 
+### mem_sram_smoke 
+```Memory stress for all space of sram word access for gf design``` 
+### mem_sram_W 
+```Memory stress for all space of sram word access for gf design``` 
+### mem_sram_HW 
+```Memory stress for all space of sram half word access for gf design``` 
+### mem_sram_B 
+```Memory stress for all space of sram byte for gf design``` 
+### PoR 
+```Check power on reset``` 
 # housekeeping_spi
 ### spi_master_rd 
 ```using SPI master for reading from external memory``` 
@@ -104,6 +118,10 @@
 ```To be deleted``` 
 ### spi_rd_wr_nbyte 
 ```try housekeeping spi Write and Read in n-byte mode ``` 
+### user_pass_thru_connection 
+```test the connection between the housekeeping spi and the output seen at user output pins``` 
+### spi_rd_wr_stream 
+```try housekeeping spi Simultaneous Read/Write in streaming mode``` 
 # la
 ### la 
 ```check logic analyzer input and output enable``` 

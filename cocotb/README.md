@@ -50,11 +50,30 @@ run a test
 
   -cov                  enable code coverage
 
+  -checkers_en          enable whitebox models checkers and coverage no need
+                        to use -cov
+  
   -corner CORNER [CORNER ...], -c CORNER [CORNER ...]
                         Corner type in case of GL_SDF run has to be provided
 
   -keep_pass_unzip      Normally the waves and logs of passed tests would be
                         zipped. Using this option they wouldn't be zipped
+
+  -caravan              simulate caravan instead of caravel
+
+  -emailto EMAILTO [EMAILTO ...], -mail EMAILTO [EMAILTO ...]
+                        mails to send results to when results finish
+
+  -seed SEED            run with specific seed
+
+  -no_wave              disable dumping waves
+
+  -sdf_setup            targeting setup violations by taking the sdf mamximum
+                        values
+
+  -clk CLK              define the clock period in ns default = 25 ns
+  
+  -lint                 generate lint log -v must be used
                         
 ```
 Refer to [examples](doc/commands_example/README.md) 
