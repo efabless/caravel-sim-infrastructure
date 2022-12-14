@@ -27,9 +27,9 @@ async def PoR(dut):
     clock = Clock(caravelEnv.clk, clk, units="ns")  # Create a 25ns period clock on port clk
     cocotb.start_soon(clock.start())  # Start the clock
     # drive reset with 1 
-    await caravelEnv.power_up()
     await caravelEnv.disable_csb() # 
     caravelEnv.dut.resetb_tb.value = BinaryValue(value = 1, n_bits =1)
+    await caravelEnv.power_up()
     await Timer(530, "ns")
     # await caravelEnv.reset() # 
     await caravelEnv.disable_bins()
