@@ -47,7 +47,7 @@ module user_project_wrapper #(
     inout vss,	
     `endif //sky
 `endif
-
+    `ifndef AHB
     // Wishbone Slave ports (WB MI A)
     input wb_clk_i,
     input wb_rst_i,
@@ -59,7 +59,19 @@ module user_project_wrapper #(
     input [31:0] wbs_adr_i,
     output wbs_ack_o,
     output [31:0] wbs_dat_o,
-
+    `else // not AHB
+    input  wire            HCLK,
+    input  wire            HRESETn,
+    input  wire            HSEL,
+    input  wire [31:0]     HADDR,
+    input  wire [31:0]     HWDATA,
+    input  wire            HREADY,
+    input  wire            HWRITE,
+    input  wire [1:0]      HTRANS,
+    input  wire [2:0]      HSIZE,
+    output wire [31:0]     HRDATA,
+    output wire            HREADYOUT,
+    `endif // not AHB
     // Logic Analyzer Signals
     input  [127:0] la_data_in,
     output [127:0] la_data_out,
@@ -82,14 +94,13 @@ module user_project_wrapper #(
     // User maskable interrupt signals
     output [2:0] user_irq
 );
-
 // Dummy assignments so that we can take it through the openlane flow
 `ifndef GPIO_TESTING
 `ifdef SIM
 // Needed for running GL simulation
 assign io_out = 0;
 assign io_oeb = 0;
-`else
+`else // SIM
 assign io_out = io_in;
 `endif
 `endif // GPIO_TESTING
@@ -97,6 +108,7 @@ assign io_out = io_in;
 `ifdef LA_TESTING
 user_project_la_example la_testing(la_data_in,la_data_out,la_oenb);
 `endif // LA_TESTING
+`ifndef AHB
 
 // splitting the address space to user address space and debug address space 
 // debug address space are the last 2 registers of user_project_wrapper address space
@@ -168,5 +180,45 @@ debug_regs debug(
     .wbs_dat_o(wbs_dat_o_debug)
 );
 `endif // COCOTB_SIM
+`else // not AHB 
+wire [31:0] HRDATA_user;
+wire [31:0] HRDATA_debug;
+wire [31:0] HADDR_valid;
 
+`ifdef COCOTB_SIM
+AHB_DEBUG_REGS debug(
+    .HCLK(HCLK),
+    .HRESETn(HRESETn),
+    .HSEL(HSEL),
+    .HADDR(HADDR),
+    .HTRANS(HTRANS),
+    .HWDATA(HWDATA),
+    .HWRITE(HWRITE),
+    .HREADY(HREADY),
+    .HRDATA(HRDATA_debug)
+);
+`endif // COCOTB_SIM
+
+`ifndef GPIO_TESTING
+`else
+user_project_gpio_example gpio_testing(
+    .HCLK(HCLK),
+    .HRESETn(HRESETn),
+    .HSEL(HSEL),
+    .HADDR(HADDR),
+    .HTRANS(HTRANS),
+    .HWDATA(HWDATA),
+    .HWRITE(HWRITE),
+    .HREADY(HREADY),
+    .HRDATA(HRDATA_user),
+    .io_in(io_in),
+    .io_out(io_out),
+    .io_oeb(io_oeb));
+`endif // GPIO_TESTING
+
+assign HREADYOUT = 1'b1;
+assign HADDR_valid = (HSEL) ? HADDR : HADDR_valid;
+assign HRDATA = (HADDR_valid[23:0] == 24'hFFFFFC || HADDR_valid[23:0] == 24'hFFFFF8) ? HRDATA_debug : HRDATA_user; 
+
+`endif // not ARM
 endmodule	// user_project_wrapper

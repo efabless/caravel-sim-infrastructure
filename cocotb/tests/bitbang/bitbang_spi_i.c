@@ -6,7 +6,11 @@
 void main()
 {
 	int i,j;
-	reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+	#ifdef ARM // ARM use dirrent location 
+    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
+    #else 
+    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    #endif
     reg_debug_1  = 0x0;
     reg_debug_2  = 0x0;
     reg_mprj_io_37 = GPIO_MODE_MGMT_STD_INPUT_NOPULL;

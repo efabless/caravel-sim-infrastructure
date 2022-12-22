@@ -30,6 +30,7 @@ config_file = f"sim.{os.getenv('RUNTAG')}.configs"
 clk = import_module(config_file).clock
 max_error = import_module(config_file).max_err
 
+active_gpios_num = 37 # number of active gpios
 async def test_configure(dut,timeout_cycles=1000000,clk=clk,timeout_precision=0.2,num_error=max_error):
     caravelEnv = caravel.Caravel_env(dut)
     Timeout(caravelEnv.clk,timeout_cycles,timeout_precision)
@@ -48,6 +49,9 @@ async def test_configure(dut,timeout_cycles=1000000,clk=clk,timeout_precision=0.
     elif coverage: 
         HK_whiteBox(dut)
         GPIOs_ctrlWB(dut)
+    if  Macros['ARM']:
+        global active_gpios_num
+        active_gpios_num = 34 # with ARM the last 3 gpios are not configurable
     return caravelEnv,clock
     
 class CallCounted:

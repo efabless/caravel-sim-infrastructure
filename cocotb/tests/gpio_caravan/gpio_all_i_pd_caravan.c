@@ -4,7 +4,11 @@
 
 void main(){
     unsigned int i, j, k;
+    #ifdef ARM // ARM use dirrent location 
+    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
+    #else 
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    #endif
     reg_debug_1  = 0x0;
     reg_debug_2  = 0x0;
     reg_hkspi_disable = 1;
@@ -49,10 +53,11 @@ void main(){
     reg_mprj_io_0  = GPIO_MODE_MGMT_STD_INPUT_PULLDOWN;
 
     reg_mprj_xfer = 1;
-    while (reg_mprj_xfer == 1);
+    while ((reg_mprj_xfer&0x1) == 1);
 
     reg_debug_1 = 0XAA; // configuration done 
 
-    print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
+    //print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
+    for(int i=0; i<100000000; i++);
     while (true);
 }

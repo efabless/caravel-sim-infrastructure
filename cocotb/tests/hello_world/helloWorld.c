@@ -1,7 +1,11 @@
 #include <defs.h>
 
 int main(){
+    #ifdef ARM // ARM use dirrent location 
+    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
+    #else 
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    #endif
     unsigned int j = 0x77;
     reg_debug_1  = 0x66;
     reg_debug_1  = j;

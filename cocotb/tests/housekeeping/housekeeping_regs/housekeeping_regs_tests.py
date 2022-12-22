@@ -173,14 +173,17 @@ async def hk_regs_rst_spi(dut):
     # read 
     bits_num = 8 # byte testing
     mems = ['GPIO','SPI','sys']
-
+    addr_to_skip = [0x69,0x6A,0x6B,0x6C,0x6D,0x1A]# skip testing reg_mprj_datal, reg_mprj_datah and usr2_vdd_pwrgood because when reading them it's getting the gpio input value
+    if Macros['ARM']:
+        addr_to_skip.append(0x0c) #trap signal isn't used 
     for mem in mems:
         keys = [k for k in regs[mem].keys()]
         for key in keys:
             if key == 'base_addr':
                 continue
             address = regs[mem][key][0][7]
-            if  address in [0x69,0x6A,0x6B,0x6C,0x6D,0x1A]: # skip testing reg_mprj_datal, reg_mprj_datah and usr2_vdd_pwrgood because when reading them it's getting the gpio input value
+            
+            if  address in addr_to_skip: # skip testing reg_mprj_datal, reg_mprj_datah and usr2_vdd_pwrgood because when reading them it's getting the gpio input value
                 continue
             #calculate the expected value for each bit for reset value
             data_exp = ''
@@ -194,7 +197,7 @@ async def hk_regs_rst_spi(dut):
                 i_temp = bits_num -1 #-i
                 # if field_shift <= i_temp and i_temp <= (field_shift + field_size-1):    
                 data_exp = bin(reset_val)[2:].zfill(field_size) + data_exp
-                print (f'reset = {bin(reset_val)[2:].zfill(bits_num)} data exp = {data_exp} i temp = {i_temp} shift {field_shift} size {field_size}')
+                # print (f'reset = {bin(reset_val)[2:].zfill(bits_num)} data exp = {data_exp} i temp = {i_temp} shift {field_shift} size {field_size}')
                 # bit_exist = True
                 # break
             # if not bit_exist:

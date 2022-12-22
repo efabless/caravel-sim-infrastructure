@@ -46,4 +46,48 @@ module debug_regs (
         end
     end
 endmodule
+
+// model used for ARM AHB interface only
+`ifdef AHB 
+module AHB_DEBUG_REGS ( 
+    input   wire            HCLK,
+    input   wire            HRESETn,
+    input   wire            HSEL,
+    input   wire [31:0]     HADDR,
+    input   wire [1:0]      HTRANS,
+    input   wire [31:0]     HWDATA,
+    input   wire            HWRITE,
+    input   wire            HREADY,
+    output  wire [31:0]     HRDATA);
+    
+    // regs offset
+    localparam [23:0]       DEBUG_REG1_OFF      = 24'hFFFFFC,
+                            DEBUG_REG2_OFF      = 24'hFFFFF8;
+
+    `AHB_SLAVE_EPILOGUE()
+
+    // AHB Register
+    `define AHB_DEBUG_REG(name, size, offset, init, prefix)   \
+        reg [size-1:0] name; \
+        wire ``name``_sel = wr_enable & (last_HADDR[23:0] == offset); \
+        always @(posedge HCLK or negedge HRESETn) \
+            if (~HRESETn) \
+                ``name`` <= 'h``init``; \
+            else if (``name``_sel) \
+                ``name`` <= ``prefix``HWDATA[``size``-1:0];\
+
+    `define AHB_DEBUG_REG_READ(name, offset) (last_HADDR[23:0] == offset) ? name : 
+
+    // AHB_REG(name, size, offset, init, prefix);
+    `AHB_DEBUG_REG(debug_reg_1, 32, DEBUG_REG1_OFF, 0, )
+    `AHB_DEBUG_REG(debug_reg_2, 32, DEBUG_REG2_OFF, 0, )
+
+    assign HREADYOUT = 1'b1;
+
+    assign HRDATA[31:0] =   `AHB_DEBUG_REG_READ(debug_reg_1, DEBUG_REG1_OFF) 
+                            `AHB_DEBUG_REG_READ(debug_reg_2, DEBUG_REG2_OFF) 
+                            32'h0 ;
+endmodule
+
+`endif
 `default_nettype wire

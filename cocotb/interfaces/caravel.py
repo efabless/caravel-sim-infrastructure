@@ -38,8 +38,8 @@ class Caravel_env:
     def __init__(self,dut:SimHandleBase):
         self.dut         = dut
         self.clk         = dut.clock_tb
-        self.caravel_hdl = dut.uut.chip_core
-        self.hk_hdl      = dut.uut.chip_core.housekeeping
+        self.caravel_hdl = dut.uut
+        self.hk_hdl      = dut.uut.housekeeping
 
     """start carvel by insert power then reset"""
     async def start_up(self):

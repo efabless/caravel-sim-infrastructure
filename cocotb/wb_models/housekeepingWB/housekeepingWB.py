@@ -20,9 +20,9 @@ from interfaces.common import Macros
 class HK_whiteBox:
     def __init__(self,dut,loggers=False,checkers=False):
         self.dut         = dut
-        self.hk_hdl      = dut.uut.chip_core.housekeeping
-        # self.hkspi_hdl   = dut.uut.chip_core.housekeeping.hkspi
-        self.clk         = self.dut.uut.chip_core.mprj_clock
+        self.hk_hdl      = dut.uut.housekeeping
+        # self.hkspi_hdl   = dut.uut.housekeeping.hkspi
+        self.clk         = self.dut.uut.mprj_clock
         self.reset       = self.dut.uut.resetb
         self.logger      = loggers
         self.checkers    = checkers

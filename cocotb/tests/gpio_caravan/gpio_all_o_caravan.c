@@ -4,7 +4,11 @@
 
 void main(){
         unsigned int i, j, k;
-        reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+        #ifdef ARM // ARM use dirrent location 
+    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
+    #else 
+    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    #endif
         reg_debug_1  = 0x0;
         reg_debug_2  = 0x0;
         reg_hkspi_disable = 1;
@@ -49,7 +53,7 @@ void main(){
         reg_mprj_io_0  = GPIO_MODE_MGMT_STD_OUTPUT;
 
         reg_mprj_xfer = 1;
-        while (reg_mprj_xfer == 1);
+        while ((reg_mprj_xfer&0x1) == 1);
 
         reg_debug_1 = 0xAA; // finish configuration 
         reg_mprj_datal = 0x0;

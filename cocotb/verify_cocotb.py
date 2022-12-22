@@ -33,6 +33,7 @@ SEED = None
 wave_gen = True
 sdf_setup = False
 LINT = False
+ARM = False
 sky =fnmatch(os.getenv('PDK'),'sky*')
 def go_up(path, n):
     for i in range(n):
@@ -173,6 +174,8 @@ class RunTest:
             macroslist.append(f'sky')
 
         macroslist.append(f'CORNER_{self.corner[0:3]}')
+        if ARM: 
+            macroslist.extend(['ARM','AHB'])
 
         if not is_vcs:
             macros = ' -D'.join(macroslist)
@@ -328,25 +331,42 @@ class RunTest:
         hex_file = f"{self.cocotb_path}/hex_files/{self.test_name}.hex"
         GCC_PATH = "/foss/tools/riscv-gnu-toolchain-rv32i/217e7f3debe424d61374d31e33a091a630535937/bin/"
         GCC_PREFIX = "riscv32-unknown-linux-gnu"
-        SOURCE_FILES = f"{os.getenv('FIRMWARE_PATH')}/crt0_vex.S {os.getenv('FIRMWARE_PATH')}/isr.c"
-        LINKER_SCRIPT = f"{os.getenv('FIRMWARE_PATH')}/sections.lds"
-        CPUFLAGS = f"-march=rv32i -mabi=ilp32 -D__vexriscv__ "
+        if ARM: 
+            GCC_COMPILE = "arm-none-eabi"
+        else:
+            GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
+        if ARM:
+            SOURCE_FILES = f"{os.getenv('FIRMWARE_PATH')}/cm0_start.s"
+        else:
+            SOURCE_FILES = f"{os.getenv('FIRMWARE_PATH')}/crt0_vex.S {os.getenv('FIRMWARE_PATH')}/isr.c"
+        if ARM:
+            LINKER_SCRIPT = f"-T {os.getenv('FIRMWARE_PATH')}/link.ld"
+        else:
+            LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{os.getenv('FIRMWARE_PATH')}/sections.lds,--strip-debug "
+        if ARM:
+            CPUFLAGS = f"-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
+        else:
+            CPUFLAGS = f"-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         verilog_path = f"{os.getenv('VERILOG_PATH')}"
         test_dir = f"{os.getenv('VERILOG_PATH')}/dv/tests-caravel/mem" # linker script include // TODO: to fix this in the future from the mgmt repo
+        if ARM:
+            includes = f"-I{os.getenv('FIRMWARE_PATH')}/"
+        else: 
+            includes = f"-I{verilog_path}/dv/firmware -I{verilog_path}/dv/generated  -I{verilog_path}/dv/ -I{verilog_path}/common"
         #change linker script to for mem tests 
         if self.test_name in tests_use_dff2:
            LINKER_SCRIPT = self.linkerScript_for_mem("dff2",LINKER_SCRIPT)
         elif self.test_name in tests_use_dff:
            LINKER_SCRIPT = self.linkerScript_for_mem("dff",LINKER_SCRIPT)
-
-        elf_command = (f"{GCC_PATH}/{GCC_PREFIX}-gcc -g -I{verilog_path}/dv/firmware -I{verilog_path}/dv/generated  -I{verilog_path}/dv/ "
-                 f"-I{verilog_path}/common {CPUFLAGS} -Wl,-Bstatic,-T,{LINKER_SCRIPT},"
-                 f"--strip-debug -ffreestanding -nostdlib -o {elf_out} {SOURCE_FILES} {c_file}")
-        lst_command = f"{GCC_PATH}/{GCC_PREFIX}-objdump -d -S {elf_out} > {lst_out} "
-        hex_command = f"{GCC_PATH}/{GCC_PREFIX}-objcopy -O verilog {elf_out} {hex_file} "
+        elf_command = (f"{GCC_COMPILE}-gcc  {includes}"
+                 f" {CPUFLAGS} {LINKER_SCRIPT}"
+                 f" -o {elf_out} {SOURCE_FILES} {c_file}")
+        lst_command = f"{GCC_COMPILE}-objdump -d -S {elf_out} > {lst_out} "
+        hex_command = f"{GCC_COMPILE}-objcopy -O verilog {elf_out} {hex_file} "
         sed_command = f"sed -ie 's/@10/@00/g' {hex_file}"
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {self.cocotb_path}:{self.cocotb_path} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} efabless/dv:latest sh -c 'cd {test_dir} && {elf_command} && {lst_command} && {hex_command} && {sed_command} '"
-        hex_gen_state = os.system(docker_command)
+        # hex_gen_state = os.system(docker_command)
+        hex_gen_state = os.system(f" {elf_command} && {lst_command} && {hex_command} && {sed_command}")
         self.full_terminal.write("elf file generation command:\n% ")
         self.full_terminal.write(os.path.expandvars(elf_command)+"\n")
         self.full_terminal.write("hex file generation command:\n% ")
@@ -377,7 +397,10 @@ class RunTest:
         return new_LINKER_SCRIPT
 
     def cd_make(self):
-        os.chdir(f"{os.getenv('VERILOG_PATH')}/dv/make")
+        if ARM:
+            os.chdir(f"{os.getenv('VERILOG_PATH')}/dv")
+        else:
+            os.chdir(f"{os.getenv('VERILOG_PATH')}/dv/make")
         
     def cd_cocotb(self):
         os.chdir(self.cocotb_path)
@@ -622,7 +645,10 @@ class main():
         os.environ["CARAVEL_VERILOG_PATH"] = f"{os.getenv('CARAVEL_ROOT')}/verilog"
         os.environ["VERILOG_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog"
         os.environ["CARAVEL_PATH"] = f"{os.getenv('CARAVEL_VERILOG_PATH')}"
-        os.environ["FIRMWARE_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog/dv/firmware"
+        if ARM:
+            os.environ["FIRMWARE_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog/dv/fw"
+        else:
+            os.environ["FIRMWARE_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog/dv/firmware"
         os.environ["RUNTAG"] = f"{self.TAG}"
         os.environ["ERRORMAX"] = f"{self.maxerr}"
         os.environ["COCOTB_PATH"] = f"{COCOTB_PATH}"
@@ -700,6 +726,7 @@ parser.add_argument('-no_wave',action='store_true', help='disable dumping waves'
 parser.add_argument('-sdf_setup',action='store_true', help='targeting setup violations by taking the sdf mamximum values')
 parser.add_argument('-clk', help='define the clock period in ns default = 25 ns')
 parser.add_argument('-lint',action='store_true', help='generate lint log -v must be used')
+parser.add_argument('-arm',action='store_true', help='generate lint log -v must be used')
 args = parser.parse_args()
 if (args.vcs) : 
     iverilog = False
@@ -729,6 +756,8 @@ if args.maxerr == None:
     args.maxerr ="3"
 if args.lint: 
     LINT = True
+if args.arm: 
+    ARM = True
 print(f"regression:{args.regression}, test:{args.test}, testlist:{args.testlist} sim: {args.sim}")
 main(args)
 

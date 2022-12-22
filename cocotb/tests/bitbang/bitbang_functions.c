@@ -56,10 +56,10 @@ void clear_registers()
  * Left side = GPIOs 37 to19
  */
 
-void clock_in_left_short(uint32_t ddhold)
+void clock_in_left_short(unsigned int ddhold)
 {
-    uint32_t count;
-    uint32_t holds = ddhold;
+    unsigned int count;
+    unsigned int holds = ddhold;
 
     clock10();
     clock10();
@@ -84,10 +84,10 @@ void clock_in_left_short(uint32_t ddhold)
  * Right side = GPIOs 0 to18
  */
 
-void clock_in_right_short(uint32_t ddhold)
+void clock_in_right_short(unsigned int ddhold)
 {
-    uint32_t count;
-    uint32_t holds = ddhold;
+    unsigned int count;
+    unsigned int holds = ddhold;
 
     clock01();
     clock01();
@@ -112,9 +112,9 @@ void clock_in_right_short(uint32_t ddhold)
  * Left side = GPIOs 37 to19
  */
 
-// void clock_in_left_standard(uint32_t ddhold){
-//     uint32_t count;
-//     uint32_t holds = ddhold;
+// void clock_in_left_standard(unsigned int ddhold){
+//     unsigned int count;
+//     unsigned int holds = ddhold;
 
 //     clock10();
 //     clock10();
@@ -133,9 +133,9 @@ void clock_in_right_short(uint32_t ddhold)
 //     clock00();
 //     clock10();
 // }
-void clock_in_right_o_left_o_standard(bool sky){
-    uint32_t count;
-    if (sky){
+void clock_in_right_o_left_o_standard(){
+    unsigned int count;
+    #ifdef SKY
         clock11();
         clock11();
         for (count = 0; count < 7; count++) {
@@ -145,7 +145,7 @@ void clock_in_right_o_left_o_standard(bool sky){
         clock00();    
         clock00();
         clock11();
-    }else{ 
+    #else
         for (count = 0; count < 6; count++) {
             clock00();
         }
@@ -153,13 +153,13 @@ void clock_in_right_o_left_o_standard(bool sky){
         clock00();    
         clock11();
         clock11();
-    }
+    #endif
     
 }
 
-void clock_in_right_o_left_i_standard(bool sky){
-    uint32_t count;
-    if (sky){
+void clock_in_right_o_left_i_standard(){
+    unsigned int count;
+    #ifdef SKY
         clock11();
         clock11();
         for (count = 0; count < 7; count++) {
@@ -169,7 +169,7 @@ void clock_in_right_o_left_i_standard(bool sky){
         clock00();    
         clock01();
         clock11();
-    }else{
+    #else
         for (count = 0; count < 6; count++) {
             clock00();
         }
@@ -177,12 +177,13 @@ void clock_in_right_o_left_i_standard(bool sky){
         clock01();    
         clock11();
         clock11();
-    }
+    #endif
+
 }
 
-void clock_in_right_i_left_o_standard(bool sky){
-    uint32_t count;
-    if (sky){
+void clock_in_right_i_left_o_standard(){
+    unsigned int count;
+    #ifdef SKY
         clock11();
         clock11();
 
@@ -194,7 +195,7 @@ void clock_in_right_i_left_o_standard(bool sky){
         clock00();    
         clock10();
         clock11();
-    }else{
+    #else
         for (count = 0; count < 6; count++) {
             clock00();
         }
@@ -202,14 +203,13 @@ void clock_in_right_i_left_o_standard(bool sky){
         clock10();    
         clock11();
         clock11();
-    }
+    #endif
+
 }
 
-void clock_in_right_i_left_i_standard(bool sky){
-    uint32_t count;
-
-
-    if (sky){
+void clock_in_right_i_left_i_standard(){
+    unsigned int count;
+    #ifdef SKY
         clock11();
         clock11();
         for (count = 0; count < 7; count++) {
@@ -220,7 +220,7 @@ void clock_in_right_i_left_i_standard(bool sky){
         clock00();    
         clock11();
         clock11();
-    }else{
+    #else
         for (count = 0; count < 6; count++) {
             clock00();
         }
@@ -228,7 +228,8 @@ void clock_in_right_i_left_i_standard(bool sky){
         clock11();    
         clock11();
         clock11();
-    }
+    #endif
+    
 }
 
 /* Clock in data on the right side.  Clock the normal13 times,
@@ -239,9 +240,9 @@ void clock_in_right_i_left_i_standard(bool sky){
  * Right side = GPIOs 0 to18
  */
 
-// void clock_in_right_standard(uint32_t ddhold){
-//     uint32_t count;
-//     uint32_t holds = ddhold;
+// void clock_in_right_standard(unsigned int ddhold){
+//     unsigned int count;
+//     unsigned int holds = ddhold;
 
 //     clock11();
 //     clock11();
@@ -261,9 +262,9 @@ void clock_in_right_i_left_i_standard(bool sky){
 //     clock11();
 // }
 
-// void clock_in_right_i_left_io_standard(uint32_t ddhold){
-//     uint32_t count;
-//     uint32_t holds = ddhold;
+// void clock_in_right_i_left_io_standard(unsigned int ddhold){
+//     unsigned int count;
+//     unsigned int holds = ddhold;
 
 //     clock11();
 //     clock11();

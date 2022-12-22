@@ -1,94 +1,42 @@
-#include <defs.h>
-#include <stub.c>
-#include "../bitbang/bitbang_functions.c"
-// Debug reg DEBUG_ON
-#define reg_mprj_userl (*(volatile uint32_t*)0x300FFFF0)
-#define reg_mprj_userh (*(volatile uint32_t*)0x300FFFF4)
-#define reg_oeb_userl (*(volatile uint32_t*)0x300FFFEC)
-#define reg_oeb_userh (*(volatile uint32_t*)0x300FFFE8)
-void main(){
-        unsigned int i, j, k;
-        reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-        reg_debug_1  = 0x0;
-        reg_debug_2  = 0x0;
-        reg_hkspi_disable = 1;
-        reg_mprj_io_37 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_36 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_35 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_34 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_33 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_32 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_31 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_30 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_29 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_28 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_27 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_26 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_25 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_24 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_23 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_22 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_21 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_20 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_19 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_18 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_17 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_16 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_15 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_14 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_13 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_12 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_11 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_10 = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_9  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_8  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_7  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_6  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_5  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_4  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_3  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_2  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_1  = GPIO_MODE_USER_STD_OUTPUT;
-        reg_mprj_io_0  = GPIO_MODE_USER_STD_OUTPUT;
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 
-        reg_mprj_xfer = 1;
-        while (reg_mprj_xfer == 1);
-        reg_oeb_userl = 0x0;
-        reg_oeb_userh = 0x0;
-        reg_debug_1 = 0xAA; // finish configuration 
-        reg_mprj_userl = 0x0;
-        reg_mprj_userh = 0x0;
-        i = 0x20;
-        for (j = 0; j < 5; j++) {
-                reg_mprj_userh = i;
-                reg_debug_2 = 37-j;
-                reg_mprj_userh = 0x00000000;
-                reg_debug_2 = 0;
+void main(){
+        unsigned int i,i_temp, j, active_gpio_num,num_high_gpio;
+        enable_debug();
+        hk_spi_disable();
+        configure_all_gpios(GPIO_MODE_USER_STD_OUTPUT);        
+        set_debug_reg1(0xAA); // finish configuration 
+        output_enable_all_gpio_user(1);
+        set_gpio_user_l(0x0);
+        set_gpio_user_h(0x0);
+        active_gpio_num = get_active_gpios_num();
+        num_high_gpio = (active_gpio_num - 32);
+        i = 0x1 << num_high_gpio;
+        i_temp = i;
+        for (j = 0; j < num_high_gpio; j++) {
+                set_gpio_user_h(i);
+                set_debug_reg2(active_gpio_num-j);
+                wait_debug_reg1(0xD1); // wait until wait until test read 1
+                set_gpio_user_h(0x0);
+                set_debug_reg2(0);
+                wait_debug_reg1(0xD0);// wait until test read 0
                 i >>=1;
-                i |= 0x20;
+                i |= i_temp;
         }
         i = 0x80000000;
         for (j = 0; j < 32; j++) {
-                reg_mprj_userh = 0x3f;
-                reg_mprj_userl = i;
-                reg_debug_2 = 32-j;
-                reg_mprj_userh = 0x00;
-                reg_mprj_userl = 0x00000000;
-                reg_debug_2 = 0;
+                set_gpio_user_h(0x3f);
+                set_gpio_user_l(i);
+                set_debug_reg2(32-j);
+                wait_debug_reg1(0xD1); // wait until test read 1
+                set_gpio_user_h(0x00);
+                set_gpio_user_l(0x0);
+                set_debug_reg2(0);
+                wait_debug_reg1(0xD0);// wait until test read 0
                 i >>=1;
                 i |= 0x80000000;
         }
-        
-        // try to give input 
-        reg_debug_1 = 0XBB; // configuration done wait environment to send 0x8F66FD7B to reg_mprj_userl
-        int timeout = 30;
-        while (reg_mprj_userl != 0x8F66FD7B){
-                timeout--;
-                if (timeout<=0){
-                        break;
-                }
-        }
-        reg_debug_2 = reg_mprj_userl;
-        reg_debug_1 = 0XFF; // configuration done wait environment to send 0xFFA88C5A to reg_mprj_userl
+        set_debug_reg1(0XFF); // configuration done wait environment to send 0xFFA88C5A to reg_mprj_datal
 }
 

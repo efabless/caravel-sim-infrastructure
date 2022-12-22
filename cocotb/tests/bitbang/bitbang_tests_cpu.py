@@ -61,7 +61,7 @@ async def bitbang_cpu_all_i(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut.chip_core
+    uut = dut.uut
     await wait_reg1(cpu,caravelEnv,0xAA)
     cocotb.log.info(f"[TEST] configuration finished")
     data_in = 0x8F66FD7B
@@ -200,6 +200,7 @@ async def bitbang_spi_i(dut):
     await clock_in_right_i_left_i_standard_spi(caravelEnv) # 0	and 37	
     await load_spi(caravelEnv)		                         # load
     cpu.write_debug_reg2_backdoor(0xDD)
+    caravelEnv.drive_gpio_in((31,0),0)
     await wait_reg1(cpu,caravelEnv,0xAA)
     cocotb.log.info(f"[TEST] configuration finished")
     data_in = 0x8F66FD7B

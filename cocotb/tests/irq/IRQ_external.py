@@ -37,7 +37,7 @@ async def IRQ_external(dut):
                 break
             if reg2 == 0xAA:  # assert mprj 7 
                 await write_reg_spi(caravelEnv,0x1c,1)
-                cocotb.log.info(f"irq 1 = {dut.uut.chip_core.housekeeping.irq_1_inputsrc.value}")
+                cocotb.log.info(f"irq 1 = {dut.uut.housekeeping.irq_1_inputsrc.value}")
                 caravelEnv.drive_gpio_in((7,7),0)
                 await ClockCycles(caravelEnv.clk,10)
                 caravelEnv.drive_gpio_in((7,7),1)

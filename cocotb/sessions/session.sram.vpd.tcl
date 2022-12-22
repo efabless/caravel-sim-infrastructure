@@ -6,7 +6,7 @@
 # Toplevel windows open: 2
 # 	TopLevel.1
 # 	TopLevel.2
-#   Source.1: caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00
+#   Source.1: caravel_top.uut.soc.core.sram.ram512x32.RAM00
 #   Wave.1: 53 signals
 #   Group count = 10
 #   Group Group1 signal count = 12
@@ -18,7 +18,7 @@
 #   Group Group7 signal count = 1
 #   Group Group8 signal count = 1
 #   Group Group9 signal count = 6
-#   Group Drivers: V1:caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q[7:0]@240436000 signal count = 10
+#   Group Drivers: V1:caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q[7:0]@240436000 signal count = 10
 # End_DVE_Session_Save_Info
 
 # DVE version: T-2022.06_Full64
@@ -261,33 +261,33 @@ gui_set_time_units 1ns
 # Global: Signal Compare
 
 # Global: Signal Groups
-gui_load_child_values {caravel_top.uut.chip_core.soc.core.sram}
-gui_load_child_values {caravel_top.uut.chip_core.soc.core.sram.ram512x32}
+gui_load_child_values {caravel_top.uut.soc.core.sram}
+gui_load_child_values {caravel_top.uut.soc.core.sram.ram512x32}
 
 
 set _session_group_70 Group1
 gui_sg_create "$_session_group_70"
 set Group1 "$_session_group_70"
 
-gui_sg_addsignal -group "$_session_group_70" { caravel_top.uut.chip_core.mprj.debug.debug_reg_1 caravel_top.uut.chip_core.soc.core.sram.clk0 caravel_top.uut.chip_core.soc.core.sram.csb0 caravel_top.uut.chip_core.soc.core.sram.web0 caravel_top.uut.chip_core.soc.core.sram.wmask0 caravel_top.uut.chip_core.soc.core.sram.addr0 caravel_top.uut.chip_core.soc.core.sram.din0 caravel_top.uut.chip_core.soc.core.sram.dout0 caravel_top.uut.chip_core.soc.core.slave_sel caravel_top.uut.chip_core.soc.core.slave_sel_r caravel_top.uut.chip_core.soc.core.VexRiscv.dBusWishbone_ADR caravel_top.uut.chip_core.soc.core.VexRiscv.dBusWishbone_DAT_MOSI }
+gui_sg_addsignal -group "$_session_group_70" { caravel_top.uut.mprj.debug.debug_reg_1 caravel_top.uut.soc.core.sram.clk0 caravel_top.uut.soc.core.sram.csb0 caravel_top.uut.soc.core.sram.web0 caravel_top.uut.soc.core.sram.wmask0 caravel_top.uut.soc.core.sram.addr0 caravel_top.uut.soc.core.sram.din0 caravel_top.uut.soc.core.sram.dout0 caravel_top.uut.soc.core.slave_sel caravel_top.uut.soc.core.slave_sel_r caravel_top.uut.soc.core.VexRiscv.dBusWishbone_ADR caravel_top.uut.soc.core.VexRiscv.dBusWishbone_DAT_MOSI }
 
 set _session_group_71 Group2
 gui_sg_create "$_session_group_71"
 set Group2 "$_session_group_71"
 
-gui_sg_addsignal -group "$_session_group_71" { caravel_top.uut.chip_core.soc.core.sram.ram512x32.CLK caravel_top.uut.chip_core.soc.core.sram.ram512x32.CEN caravel_top.uut.chip_core.soc.core.sram.ram512x32.GWEN caravel_top.uut.chip_core.soc.core.sram.ram512x32.WEN caravel_top.uut.chip_core.soc.core.sram.ram512x32.A caravel_top.uut.chip_core.soc.core.sram.ram512x32.D caravel_top.uut.chip_core.soc.core.sram.ram512x32.Q caravel_top.uut.chip_core.soc.core.sram.ram512x32.VDD caravel_top.uut.chip_core.soc.core.sram.ram512x32.VSS caravel_top.uut.chip_core.soc.core.sram.ram512x32.Q0 caravel_top.uut.chip_core.soc.core.sram.ram512x32.Q1 caravel_top.uut.chip_core.soc.core.sram.ram512x32.sel_0 caravel_top.uut.chip_core.soc.core.sram.ram512x32.gwen_0 caravel_top.uut.chip_core.soc.core.sram.ram512x32.wen_0 caravel_top.uut.chip_core.soc.core.sram.ram512x32.wen_1 caravel_top.uut.chip_core.soc.core.sram.ram512x32.wen_2 caravel_top.uut.chip_core.soc.core.sram.ram512x32.wen_3 }
+gui_sg_addsignal -group "$_session_group_71" { caravel_top.uut.soc.core.sram.ram512x32.CLK caravel_top.uut.soc.core.sram.ram512x32.CEN caravel_top.uut.soc.core.sram.ram512x32.GWEN caravel_top.uut.soc.core.sram.ram512x32.WEN caravel_top.uut.soc.core.sram.ram512x32.A caravel_top.uut.soc.core.sram.ram512x32.D caravel_top.uut.soc.core.sram.ram512x32.Q caravel_top.uut.soc.core.sram.ram512x32.VDD caravel_top.uut.soc.core.sram.ram512x32.VSS caravel_top.uut.soc.core.sram.ram512x32.Q0 caravel_top.uut.soc.core.sram.ram512x32.Q1 caravel_top.uut.soc.core.sram.ram512x32.sel_0 caravel_top.uut.soc.core.sram.ram512x32.gwen_0 caravel_top.uut.soc.core.sram.ram512x32.wen_0 caravel_top.uut.soc.core.sram.ram512x32.wen_1 caravel_top.uut.soc.core.sram.ram512x32.wen_2 caravel_top.uut.soc.core.sram.ram512x32.wen_3 }
 
 set _session_group_72 Group3
 gui_sg_create "$_session_group_72"
 set Group3 "$_session_group_72"
 
-gui_sg_addsignal -group "$_session_group_72" { caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.clk_dly caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.write_flag caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.no_st_viol caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.read_flag caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.write_flag_dly caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.cen_fell caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.CEN caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.GWEN caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.WEN caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.cd5 caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.A caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.marked_a caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.qo_reg }
+gui_sg_addsignal -group "$_session_group_72" { caravel_top.uut.soc.core.sram.ram512x32.RAM00.clk_dly caravel_top.uut.soc.core.sram.ram512x32.RAM00.write_flag caravel_top.uut.soc.core.sram.ram512x32.RAM00.no_st_viol caravel_top.uut.soc.core.sram.ram512x32.RAM00.read_flag caravel_top.uut.soc.core.sram.ram512x32.RAM00.write_flag_dly caravel_top.uut.soc.core.sram.ram512x32.RAM00.cen_fell caravel_top.uut.soc.core.sram.ram512x32.RAM00.CEN caravel_top.uut.soc.core.sram.ram512x32.RAM00.GWEN caravel_top.uut.soc.core.sram.ram512x32.RAM00.WEN caravel_top.uut.soc.core.sram.ram512x32.RAM00.cd5 caravel_top.uut.soc.core.sram.ram512x32.RAM00.A caravel_top.uut.soc.core.sram.ram512x32.RAM00.marked_a caravel_top.uut.soc.core.sram.ram512x32.RAM00.qo_reg }
 
 set _session_group_73 Group4
 gui_sg_create "$_session_group_73"
 set Group4 "$_session_group_73"
 
-gui_sg_addsignal -group "$_session_group_73" { caravel_top.uut.chip_core.soc.core.shared_dat_w caravel_top.uut.chip_core.soc.core.shared_dat_r }
+gui_sg_addsignal -group "$_session_group_73" { caravel_top.uut.soc.core.shared_dat_w caravel_top.uut.soc.core.shared_dat_r }
 
 set _session_group_74 Group5
 gui_sg_create "$_session_group_74"
@@ -298,31 +298,31 @@ set _session_group_75 Group6
 gui_sg_create "$_session_group_75"
 set Group6 "$_session_group_75"
 
-gui_sg_addsignal -group "$_session_group_75" { caravel_top.uut.chip_core.soc.core.mgmtsoc_dbus_dbus_dat_r }
+gui_sg_addsignal -group "$_session_group_75" { caravel_top.uut.soc.core.mgmtsoc_dbus_dbus_dat_r }
 
 set _session_group_76 Group7
 gui_sg_create "$_session_group_76"
 set Group7 "$_session_group_76"
 
-gui_sg_addsignal -group "$_session_group_76" { caravel_top.uut.chip_core.soc.core.VexRiscv.writeBack_MEMORY_READ_DATA }
+gui_sg_addsignal -group "$_session_group_76" { caravel_top.uut.soc.core.VexRiscv.writeBack_MEMORY_READ_DATA }
 
 set _session_group_77 Group8
 gui_sg_create "$_session_group_77"
 set Group8 "$_session_group_77"
 
-gui_sg_addsignal -group "$_session_group_77" { caravel_top.uut.chip_core.soc.core.VexRiscv.writeBack_MEMORY_ADDRESS_LOW }
+gui_sg_addsignal -group "$_session_group_77" { caravel_top.uut.soc.core.VexRiscv.writeBack_MEMORY_ADDRESS_LOW }
 
 set _session_group_78 Group9
 gui_sg_create "$_session_group_78"
 set Group9 "$_session_group_78"
 
-gui_sg_addsignal -group "$_session_group_78" { caravel_top.uut.chip_core.soc.core.VexRiscv.writeBack_DBusSimplePlugin_rspShifted caravel_top.uut.chip_core.soc.core.VexRiscv._zz_writeBack_DBusSimplePlugin_rspFormated caravel_top.uut.chip_core.soc.core.VexRiscv.writeBack_DBusSimplePlugin_rspFormated caravel_top.uut.chip_core.soc.core.VexRiscv.dBusWishbone_ACK caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.qo_reg caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q }
+gui_sg_addsignal -group "$_session_group_78" { caravel_top.uut.soc.core.VexRiscv.writeBack_DBusSimplePlugin_rspShifted caravel_top.uut.soc.core.VexRiscv._zz_writeBack_DBusSimplePlugin_rspFormated caravel_top.uut.soc.core.VexRiscv.writeBack_DBusSimplePlugin_rspFormated caravel_top.uut.soc.core.VexRiscv.dBusWishbone_ACK caravel_top.uut.soc.core.sram.ram512x32.RAM00.qo_reg caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q }
 
-set _session_group_79 {Drivers: V1:caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q[7:0]@240436000}
+set _session_group_79 {Drivers: V1:caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q[7:0]@240436000}
 gui_sg_create "$_session_group_79"
-set {Drivers: V1:caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q[7:0]@240436000} "$_session_group_79"
+set {Drivers: V1:caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q[7:0]@240436000} "$_session_group_79"
 
-gui_sg_addsignal -group "$_session_group_79" { caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.qo_reg caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.cdx caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.no_st_viol caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.marked_a caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.A caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.read_flag caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.write_flag caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.ntf_twh caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.write_flag_dly }
+gui_sg_addsignal -group "$_session_group_79" { caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q caravel_top.uut.soc.core.sram.ram512x32.RAM00.qo_reg caravel_top.uut.soc.core.sram.ram512x32.RAM00.cdx caravel_top.uut.soc.core.sram.ram512x32.RAM00.no_st_viol caravel_top.uut.soc.core.sram.ram512x32.RAM00.marked_a caravel_top.uut.soc.core.sram.ram512x32.RAM00.A caravel_top.uut.soc.core.sram.ram512x32.RAM00.read_flag caravel_top.uut.soc.core.sram.ram512x32.RAM00.write_flag caravel_top.uut.soc.core.sram.ram512x32.RAM00.ntf_twh caravel_top.uut.soc.core.sram.ram512x32.RAM00.write_flag_dly }
 
 # Global: Highlighting
 
@@ -360,14 +360,14 @@ gui_hier_list_init -id ${Hier.1}
 gui_change_design -id ${Hier.1} -design V1
 catch {gui_list_expand -id ${Hier.1} caravel_top}
 catch {gui_list_expand -id ${Hier.1} caravel_top.uut}
-catch {gui_list_select -id ${Hier.1} {caravel_top.uut.chip_core}}
+catch {gui_list_select -id ${Hier.1} {caravel_top.uut}}
 gui_view_scroll -id ${Hier.1} -vertical -set 0
 gui_view_scroll -id ${Hier.1} -horizontal -set 0
 
 # Data 'Data.1'
 gui_list_set_filter -id ${Data.1} -list { {Buffer 1} {Input 1} {Others 1} {Linkage 1} {Output 1} {LowPower 1} {Parameter 1} {All 1} {Aggregate 1} {LibBaseMember 1} {Event 1} {Assertion 1} {Constant 1} {Interface 1} {BaseMembers 1} {Signal 1} {$unit 1} {Inout 1} {Variable 1} }
 gui_list_set_filter -id ${Data.1} -text {dBusWishbone_ACK}
-gui_list_show_data -id ${Data.1} {caravel_top.uut.chip_core}
+gui_list_show_data -id ${Data.1} {caravel_top.uut}
 gui_view_scroll -id ${Data.1} -vertical -set 0
 gui_view_scroll -id ${Data.1} -horizontal -set 0
 gui_view_scroll -id ${Hier.1} -vertical -set 0
@@ -376,7 +376,7 @@ gui_view_scroll -id ${Hier.1} -horizontal -set 0
 # Source 'Source.1'
 gui_src_value_annotate -id ${Source.1} -switch false
 gui_set_env TOGGLE::VALUEANNOTATE 0
-gui_open_source -id ${Source.1}  -replace -active caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00 /home/rady/caravel/files4vcs/pdk/gf180mcuC/libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1.v
+gui_open_source -id ${Source.1}  -replace -active caravel_top.uut.soc.core.sram.ram512x32.RAM00 /home/rady/caravel/files4vcs/pdk/gf180mcuC/libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1.v
 gui_src_value_annotate -id ${Source.1} -switch true
 gui_set_env TOGGLE::VALUEANNOTATE 1
 gui_view_scroll -id ${Source.1} -vertical -set 1248
@@ -406,8 +406,8 @@ gui_list_collapse -id ${Wave.1} Group4
 gui_list_collapse -id ${Wave.1} Group6
 gui_list_collapse -id ${Wave.1} Group7
 gui_list_collapse -id ${Wave.1} Group8
-gui_list_expand -id ${Wave.1} caravel_top.uut.chip_core.soc.core.slave_sel
-gui_list_select -id ${Wave.1} {caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q }
+gui_list_expand -id ${Wave.1} caravel_top.uut.soc.core.slave_sel
+gui_list_select -id ${Wave.1} {caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q }
 gui_seek_criteria -id ${Wave.1} {Value...}
 
 
@@ -430,38 +430,38 @@ gui_view_scroll -id ${Wave.1} -vertical -set 0
 gui_show_grid -id ${Wave.1} -enable false
 
 # DriverLoad 'DriverLoad.1'
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.slave_sel[2]} -time 308821 -starttime 308821
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv._zz_dBus_cmd_payload_data[31:0]} -time 305161 -starttime 305191
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.execute_RS2[31:0]} -time 305161 -starttime 305191
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.decode_to_execute_RS2[31:0]} -time 305161 -starttime 305191
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.decode_RS2[31:0]} -time 305131 -starttime 305191
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.decode_RegFilePlugin_rs2Data[31:0]} -time 305131 -starttime 305191
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv._zz_RegFilePlugin_regFile_port1[31:0]} -time 305131 -starttime 305191
-gui_get_drivers -session -id ${DriverLoad.1} -signal caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.write_flag -time 0 -starttime 250613.199
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.mprj.debug.debug_reg_1[31:0]} -time 272881 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.mprj.debug.wbs_dat_i[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.mgmt_buffers.mprj_dat_o_core[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.mprj_dat_w[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.shared_dat_w[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.comb_array_muxed1[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.mgmtsoc_dbus_dbus_dat_w[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.dBus_cmd_halfPipe_payload_data[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.dBus_cmd_rData_data[31:0]} -time 272851 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.dBus_cmd_payload_data[31:0]} -time 272821 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.execute_RS2[31:0]} -time 272821 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.decode_to_execute_RS2[31:0]} -time 272821 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.decode_RS2[31:0]} -time 272791 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.decode_RegFilePlugin_rs2Data[31:0]} -time 272791 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv._zz_RegFilePlugin_regFile_port1[31:0]} -time 272791 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.RegFilePlugin_regFile[0:31][31:0]} -time 272881 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.VexRiscv.lastStageRegFileWrite_payload_data[31:0]} -time 272881 -starttime 272881
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.sram.dout0[31:0]} -time 272746 -starttime 272746
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.sram.ram512x32.Q[31:0]} -time 272746 -starttime 272746
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.sram.ram512x32.Q0[31:0]} -time 272746 -starttime 272746
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q[7:0]} -time 272746 -starttime 272746
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.Q[7:0]} -time 240436 -starttime 272701.1
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.qo_reg[7:0]} -time 272701.1 -starttime 272716
-gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.chip_core.soc.core.sram.ram512x32.RAM00.qo_reg[7:0]} -time 272701.1 -starttime 272701.1
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.slave_sel[2]} -time 308821 -starttime 308821
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv._zz_dBus_cmd_payload_data[31:0]} -time 305161 -starttime 305191
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.execute_RS2[31:0]} -time 305161 -starttime 305191
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.decode_to_execute_RS2[31:0]} -time 305161 -starttime 305191
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.decode_RS2[31:0]} -time 305131 -starttime 305191
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.decode_RegFilePlugin_rs2Data[31:0]} -time 305131 -starttime 305191
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv._zz_RegFilePlugin_regFile_port1[31:0]} -time 305131 -starttime 305191
+gui_get_drivers -session -id ${DriverLoad.1} -signal caravel_top.uut.soc.core.sram.ram512x32.RAM00.write_flag -time 0 -starttime 250613.199
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.mprj.debug.debug_reg_1[31:0]} -time 272881 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.mprj.debug.wbs_dat_i[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.mgmt_buffers.mprj_dat_o_core[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.mprj_dat_w[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.shared_dat_w[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.comb_array_muxed1[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.mgmtsoc_dbus_dbus_dat_w[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.dBus_cmd_halfPipe_payload_data[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.dBus_cmd_rData_data[31:0]} -time 272851 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.dBus_cmd_payload_data[31:0]} -time 272821 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.execute_RS2[31:0]} -time 272821 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.decode_to_execute_RS2[31:0]} -time 272821 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.decode_RS2[31:0]} -time 272791 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.decode_RegFilePlugin_rs2Data[31:0]} -time 272791 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv._zz_RegFilePlugin_regFile_port1[31:0]} -time 272791 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.RegFilePlugin_regFile[0:31][31:0]} -time 272881 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.VexRiscv.lastStageRegFileWrite_payload_data[31:0]} -time 272881 -starttime 272881
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.sram.dout0[31:0]} -time 272746 -starttime 272746
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.sram.ram512x32.Q[31:0]} -time 272746 -starttime 272746
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.sram.ram512x32.Q0[31:0]} -time 272746 -starttime 272746
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q[7:0]} -time 272746 -starttime 272746
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.sram.ram512x32.RAM00.Q[7:0]} -time 240436 -starttime 272701.1
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.sram.ram512x32.RAM00.qo_reg[7:0]} -time 272701.1 -starttime 272716
+gui_get_drivers -session -id ${DriverLoad.1} -signal {caravel_top.uut.soc.core.sram.ram512x32.RAM00.qo_reg[7:0]} -time 272701.1 -starttime 272701.1
 # Restore toplevel window zorder
 # The toplevel window could be closed if it has no view/pane
 if {[gui_exist_window -window ${TopLevel.1}]} {

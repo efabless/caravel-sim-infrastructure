@@ -88,7 +88,11 @@ void main()
 {
     int n;
     int B[10];
+    #ifdef ARM // ARM use dirrent location 
+    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
+    #else 
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    #endif
     reg_debug_1  = 0x0;
     reg_debug_2  = 0x0;
     // start test

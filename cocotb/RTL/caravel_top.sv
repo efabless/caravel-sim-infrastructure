@@ -86,13 +86,15 @@ end
     wire flash_clk_tb;
     wire flash_io0_tb;
     wire flash_io1_tb;
-
-
+`ifdef ARM 
+swift_caravel uut (
+`else //ARM
 `ifdef CARAVAN
 caravan uut (
-`else
+`else // caravan
 caravel uut (
-`endif
+`endif // caravan
+`endif // ARM
 		`ifdef sky
 		.vddio	  (vddio_tb),
 		.vddio_2  (vddio_2_tb),		
@@ -125,7 +127,26 @@ caravel uut (
 		.flash_io1(flash_io1_tb),
 		.resetb	  (resetb_tb)
 	);
-
+	
+	`ifdef ARM 
+	sst26wf080b flash(
+		.SCK (flash_clk_tb),
+		.SIO ({mprj_io_tb[37], mprj_io_tb[36], flash_io1_tb, flash_io0_tb} ),
+		.CEb (flash_csb_tb)
+	);
+	initial begin
+	$display("Reading %s",  FILENAME);
+	#1 $readmemh(FILENAME, flash.I0.memory);
+	//$display("Memory 5 bytes = 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x",
+	//	memory[0], memory[1], memory[2],
+	//	memory[3], memory[4]);
+	$display("%s loaded into memory", FILENAME);
+	$display("Memory 5 bytes = 0x%02x 0x%02x 0x%02x 0x%02x 0x%02x",
+		flash.I0.memory[0], flash.I0.memory[1], flash.I0.memory[2],
+		flash.I0.memory[3], flash.I0.memory[4]);
+	end
+ 	
+	`else
 	spiflash #(
 		FILENAME
 	) spiflash (
@@ -136,7 +157,7 @@ caravel uut (
 		.io2(),			// not used
 		.io3()			// not used
 	);
-
+	`endif // ARM
 	mac macros();
 
 
@@ -384,7 +405,7 @@ reg [7:0] CLK_DIV = `ifdef CLK_DIV `CLK_DIV `else 0 `endif;
 // Most I/Os set to be user bidirectional pins on power-up.
 reg [7:0] MGMT_INIT = `ifdef MGMT_INIT `MGMT_INIT `else 0 `endif;
 reg [7:0] OENB_INIT = `ifdef OENB_INIT `OENB_INIT `else 0 `endif;
-reg [7:0] DM_INIT = `ifdef DM_INIT `DM_INIT `else 0 `endif;
+reg [7:0] DM_INIT   = `ifdef DM_INIT   `DM_INIT `else 0 `endif;
 
 // GL
 
@@ -394,4 +415,5 @@ reg CARAVAN = `ifdef CARAVAN 1 `else 0 `endif;
 
 reg CHECKERS = `ifdef CHECKERS 1 `else 0 `endif;
 reg COVERAGE = `ifdef COVERAGE 1 `else 0 `endif;
+reg ARM      = `ifdef ARM      1 `else 0 `endif;
 endmodule

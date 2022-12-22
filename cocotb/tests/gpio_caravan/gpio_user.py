@@ -159,7 +159,7 @@ async def gpio_all_i_pu_user(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut.chip_core
+    uut = dut.uut
 
     await wait_reg1(cpu,caravelEnv,0xAA)
     await caravelEnv.release_csb()
@@ -261,7 +261,7 @@ async def gpio_all_i_pd_user(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut.chip_core
+    uut = dut.uut
     
     await wait_reg1(cpu,caravelEnv,0xAA)
     await caravelEnv.release_csb()
@@ -365,7 +365,7 @@ async def gpio_all_bidir_user(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut.chip_core
+    uut = dut.uut
     await wait_reg1(cpu,caravelEnv,0x1A)
     await caravelEnv.release_csb()
     cocotb.log.info("[TEST] finish configuring ")

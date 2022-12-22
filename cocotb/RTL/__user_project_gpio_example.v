@@ -23,7 +23,7 @@
  *
  *-------------------------------------------------------------
  */
-
+`ifndef AHB
 module user_project_gpio_example (
     // Wishbone Slave ports (WB MI A)
     input wb_clk_i,
@@ -90,5 +90,44 @@ module user_project_gpio_example (
     assign io_oeb = {oeb_h,oeb_l};
 
 endmodule
+`else // not AHB 
+module user_project_gpio_example (    
+    input   wire            HCLK,
+    input   wire            HRESETn,
+    input   wire            HSEL,
+    input   wire [31:0]     HADDR,
+    input   wire [1:0]      HTRANS,
+    input   wire [31:0]     HWDATA,
+    input   wire            HWRITE,
+    input   wire            HREADY,
+    output  wire [31:0]     HRDATA,
+    // IOs
+    input  [`MPRJ_IO_PADS-1:0] io_in,
+    output [`MPRJ_IO_PADS-1:0] io_out,
+    output [`MPRJ_IO_PADS-1:0] io_oeb
+);
+    // regs offset
+    localparam [23:0]       GPIO_LOW_OFF      = 24'hFFFFF4,
+                            GPIO_HIGH_OFF     = 24'hFFFFF0,
+                            GPIO_LOW_OEB_OFF  = 24'hFFFFEC,
+                            GPIO_HIGH_OEB_OFF = 24'hFFFFE8;
+    `AHB_SLAVE_EPILOGUE()
+   
+    // initial value is outbut disable
+    `AHB_DEBUG_REG(gpio_low,32,GPIO_LOW_OFF,0,)
+    `AHB_DEBUG_REG(gpio_low_oeb,32,GPIO_LOW_OEB_OFF,FFFFFFFF,)
+    `AHB_DEBUG_REG(gpio_high,6,GPIO_HIGH_OFF,0,)
+    `AHB_DEBUG_REG(gpio_high_oeb,6,GPIO_HIGH_OEB_OFF,3F,) 
 
+    
+    assign HRDATA[31:0] =   `AHB_DEBUG_REG_READ(io_in[32:0], GPIO_LOW_OFF) 
+                            `AHB_DEBUG_REG_READ(gpio_low_oeb, GPIO_LOW_OEB_OFF) 
+                            `AHB_DEBUG_REG_READ(io_in[37:32], GPIO_HIGH_OFF) 
+                            `AHB_DEBUG_REG_READ(gpio_high_oeb, GPIO_HIGH_OEB_OFF) 
+                            32'h0;           
+    assign io_out = {gpio_high,gpio_low};
+    assign io_oeb = {gpio_high_oeb,gpio_low_oeb};
+
+endmodule
+`endif
 `default_nettype wire

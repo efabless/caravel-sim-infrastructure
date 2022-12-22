@@ -3,7 +3,11 @@
 
 void main(){
     unsigned int i, j, k;
+    #ifdef ARM // ARM use dirrent location 
+    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
+    #else 
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
+    #endif
     reg_debug_1  = 0x0;
     reg_debug_2  = 0x0;
 
@@ -49,7 +53,7 @@ void main(){
     reg_mprj_io_19 = 0xAAA;
 
     reg_mprj_xfer = 1;
-    while (reg_mprj_xfer == 1);
+    while ((reg_mprj_xfer&0x1) == 1);
     reg_debug_1 = 0x0; // delay asserted
     reg_debug_1 = 0x0; // delay asserted 
     reg_debug_1 = 0xFF; // finish configuration  
