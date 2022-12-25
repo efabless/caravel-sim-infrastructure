@@ -318,19 +318,19 @@
             "description":"stress the cpu with heavy processing"}
         ,"bitbang_no_cpu_all_o" :{"level":0, 
             "PDK":["sky","gf"],
-            "RTL":["r_rtl","setup","gpio_rtl","push","nightly","weekly","tape_out"],
+            "RTL":[],
             "GL":[],
             "GL_SDF":[],
             "description":"test disable CPU and control the wishbone to configure gpio[4:37] as mgmt output using bitbang and check them"}
         ,"bitbang_no_cpu_all_i" :{"level":0, 
             "PDK":["sky","gf"],
-            "RTL":["r_rtl","setup","push","nightly","weekly","tape_out"],
+            "RTL":[],
             "GL":[],
             "GL_SDF":[],
             "description":"test disable CPU and control the wishbone to configure gpio[0:31] as mgmt input using bitbang and check them"}
         ,"hk_regs_wr_wb" :{"level":0, 
             "PDK":["sky","gf"],
-            "RTL":["r_rtl","setup","push","nightly","weekly","tape_out"],
+            "RTL":[],
             "GL":[],
             "GL_SDF":[],
             "description":"write then read (the written value) from random housekeeping registers through the firmware but without using CPU, the SPI and system regs can't be read using firmware so the test only GPIO regs inside housekeeping "}

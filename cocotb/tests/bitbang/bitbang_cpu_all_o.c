@@ -1,64 +1,39 @@
-#include <defs.h>
-#include <stub.c>
-#include "bitbang_functions.c"
-
+#include "../common_functions/common.c"
+#include "../common_functions/bitbang.c"
 void main(){
-        unsigned int i, j, k;
-        #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-        bool sky = reg_debug_1;
-        reg_debug_1  = 0x0;
-        reg_debug_2  = 0x0;
-        reg_hkspi_disable = 1;
-        // bitbang
-        // Configure all as output except reg_mprj_io_3
-        clock_in_right_o_left_o_standard(sky); // 18	and 19	
-        clock_in_right_o_left_o_standard(sky); // 17	and 20	
-        clock_in_right_o_left_o_standard(sky); // 16	and 21	
-        clock_in_right_o_left_o_standard(sky); // 15	and 22	
-        clock_in_right_o_left_o_standard(sky); // 14	and 23	
-        clock_in_right_o_left_o_standard(sky); // 13	and 24	
-        clock_in_right_o_left_o_standard(sky); // 12	and 25	
-        clock_in_right_o_left_o_standard(sky); // 11	and 26	
-        clock_in_right_o_left_o_standard(sky); // 10	and 27	
-        clock_in_right_o_left_o_standard(sky); // 9	and 28	
-        clock_in_right_o_left_o_standard(sky); // 8	and 29	
-        clock_in_right_o_left_o_standard(sky); // 7	and 30	
-        clock_in_right_o_left_o_standard(sky); // 6	and 31	
-        clock_in_right_o_left_o_standard(sky); // 5	and 32	
-        clock_in_right_o_left_o_standard(sky); // 4	and 33	
-        clock_in_right_o_left_o_standard(sky); // 3	and 34	
-        clock_in_right_o_left_o_standard(sky); // 2	and 35	
-        clock_in_right_o_left_o_standard(sky); // 1	and 36	
-        clock_in_right_o_left_o_standard(sky); // 0 and 37	
-        load();
-        reg_debug_1 = 0xFF; // finish configuration 
-        reg_mprj_datal = 0x0;
-        reg_mprj_datah = 0x0;
-        i = 0x20;
-        for (j = 0; j < 5; j++) {
-                reg_mprj_datah = i;
-                reg_debug_2 = 37-j;
-                reg_mprj_datah = 0x00000000;
-                reg_debug_2 = 0;
+        unsigned int i,i_temp, j, active_gpio_num,num_high_gpio;
+        enable_debug();
+        hk_spi_disable();
+        bb_configure_all_gpios(GPIO_MODE_MGMT_STD_OUTPUT);        
+        set_debug_reg1(0xAA); // finish configuration 
+        set_gpio_l(0x0);
+        set_gpio_h(0x0);
+        active_gpio_num = get_active_gpios_num();
+        num_high_gpio = (active_gpio_num - 32);
+        i = 0x1 << num_high_gpio;
+        i_temp = i;
+        for (j = 0; j < num_high_gpio; j++) {
+                set_gpio_h(i);
+                set_debug_reg2(active_gpio_num-j);
+                wait_debug_reg1(0xD1); // wait until wait until test read 1
+                set_gpio_h(0x0);
+                set_debug_reg2(0);
+                wait_debug_reg1(0xD0);// wait until test read 0
                 i >>=1;
-                i |= 0x20;
+                i |= i_temp;
         }
         i = 0x80000000;
         for (j = 0; j < 32; j++) {
-                reg_mprj_datah = 0x3f;
-                reg_mprj_datal = i;
-                reg_debug_2 = 32-j;
-                reg_mprj_datah = 0x00;
-                reg_mprj_datal = 0x00000000;
-                reg_debug_2 = 0;
+                set_gpio_h(0x3f);
+                set_gpio_l(i);
+                set_debug_reg2(32-j);
+                wait_debug_reg1(0xD1); // wait until test read 1
+                set_gpio_h(0x00);
+                set_gpio_l(0x0);
+                set_debug_reg2(0);
+                wait_debug_reg1(0xD0);// wait until test read 0
                 i >>=1;
                 i |= 0x80000000;
         }
-
+        set_debug_reg1(0XFF); // configuration done wait environment to send 0xFFA88C5A to reg_mprj_datal
 }
-
-

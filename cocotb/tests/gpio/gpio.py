@@ -15,20 +15,24 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def gpio_all_o(dut):
-    await gpio_all_o_seq(dut,538624)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=538624)
+    await gpio_all_o_seq(dut,caravelEnv,clock)
 
 @cocotb.test()
 @repot_test
 async def gpio_all_i(dut):
-    await gpio_all_i_seq(dut,56837)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=56837)
+    await gpio_all_i_seq(dut,caravelEnv,clock)
 
 @cocotb.test()
 @repot_test
 async def gpio_all_i_pu(dut):
-    await gpio_all_i_pu_seq(dut,54138)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=54138)
+    await gpio_all_i_pu_seq(dut,caravelEnv,clock)
     
 @cocotb.test()
 @repot_test
 async def gpio_all_i_pd(dut):
-    await gpio_all_i_pd_seq(dut,54138)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=54138)
+    await gpio_all_i_pd_seq(dut,caravelEnv,clock)
     

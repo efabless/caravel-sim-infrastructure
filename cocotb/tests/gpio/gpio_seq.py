@@ -10,8 +10,7 @@ from tests.bitbang.bitbang_functions import *
 from interfaces.caravel import GPIO_MODE
 from cocotb.binary import BinaryValue
 
-async def gpio_all_i_seq(dut,timeout):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=timeout)
+async def gpio_all_i_seq(dut,caravelEnv,clock,after_config_callback=None):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -19,6 +18,8 @@ async def gpio_all_i_seq(dut,timeout):
     caravelEnv.drive_gpio_in((active_gpios_num,0),0)
     await wait_reg1(cpu,caravelEnv,0xAA)
     cocotb.log.info(f"[TEST] configuration finished")
+    if after_config_callback != None:
+        await after_config_callback(caravelEnv,cpu)
     data_in = 0xFFFFFFFF
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[31:0]")
     caravelEnv.drive_gpio_in((31,0),data_in)
@@ -95,14 +96,15 @@ async def gpio_all_i_seq(dut,timeout):
         cocotb.log.info(f"[TEST] [TEST] PASS: firmware cannot write to the gpios while they are configured as input_nopull gpio= {caravelEnv.monitor_gpio((active_gpios_num,0))}")
     cocotb.log.info(f"[TEST] finish")
 
-async def gpio_all_o_seq(dut,timeout):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=timeout)
+async def gpio_all_o_seq(dut,caravelEnv,clock,after_config_callback=None):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     
-    await wait_reg1(cpu,caravelEnv,0xAA)
+    await wait_reg1(cpu,caravelEnv,0xAA)    
+    if after_config_callback != None:
+        await after_config_callback(caravelEnv,cpu)
     await caravelEnv.release_csb()
     cocotb.log.info("[TEST] finish configuring as user output")
     i= 0x1 << (active_gpios_num-32)
@@ -142,8 +144,7 @@ async def gpio_all_o_seq(dut,timeout):
     await wait_reg1(cpu,caravelEnv,0XFF)
     await ClockCycles(caravelEnv.clk, 10)
 
-async def gpio_all_i_pd_seq(dut,timeout):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=timeout)
+async def gpio_all_i_pd_seq(dut,caravelEnv,clock):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -253,8 +254,7 @@ async def gpio_all_i_pd_seq(dut,timeout):
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pulldown and all released")
     await ClockCycles(caravelEnv.clk,100) 
 
-async def gpio_all_i_pu_seq(dut,timeout):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=timeout)
+async def gpio_all_i_pu_seq(dut,caravelEnv,clock):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()

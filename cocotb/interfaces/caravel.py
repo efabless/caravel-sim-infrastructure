@@ -121,6 +121,7 @@ class Caravel_env:
     """set the spi vsb signal high impedance """
     async def release_csb(self ):
         cocotb.log.info(f' [caravel] release housekeeping spi transmission')
+        self.release_gpio(2)
         self.release_gpio(3)
         self.release_gpio(4)
         await ClockCycles(self.clk, 1)

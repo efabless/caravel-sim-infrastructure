@@ -84,6 +84,22 @@ class MASK_GPIO_CTRL(Enum):
     MASK_GPIO_CTRL_TRIP      = 9
     MASK_GPIO_CTRL_DGTL_MODE = 10
 
+class SPI_COMMAND(Enum):
+    NO_OP          = 0x0
+    WRITE_STREAM   = 0x80
+    READ_STREAM    = 0x40
+    READ_WRITE     = 0xC0
+    USER_PASS_THRU = 0xC6
+    MGMT_PATH_THRU = 0xC4
+
+def get_gpio_num_bit():
+    if sky:
+        return 13
+    else:
+        return 10
+
+
+
 Macros= {}
 
 def fill_macros(macros_hdl):

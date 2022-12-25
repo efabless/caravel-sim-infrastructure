@@ -215,7 +215,7 @@ class RunTest:
         elif(self.sim_type=="GLSDF"): 
             print(f"iverilog can't run SDF for test {self.test_name} Please use anothor simulator like cvc" )
             return
-        user_project = f"RTL/__user_project_wrapper.v RTL/__user_project_gpio_example.v RTL/__user_project_la_example.v RTL/__user_project_addr_space_project.v"
+        user_project = f"RTL/debug_regs.v RTL/__user_project_wrapper.v RTL/__user_project_gpio_example.v RTL/__user_project_la_example.v RTL/__user_project_addr_space_project.v"
         if caravan:
             user_project = f"RTL/__user_analog_project_wrapper.v"
         iverilog_command = (f"iverilog -Ttyp {self.caravel_macros()} {includes}  -o {self.sim_path}/sim.vvp"
@@ -270,7 +270,7 @@ class RunTest:
         os.environ["TESTCASE"] = f"{self.test_name}"
         os.environ["MODULE"] = f"caravel_tests"
         os.environ["SIM"] = self.sim_type
-        user_project = f"-v RTL/__user_project_wrapper.v -v RTL/__user_project_addr_space_project.v  RTL/__user_project_gpio_example.v RTL/__user_project_la_example.v "
+        user_project = f"-v RTL/debug_regs.v  -v RTL/__user_project_wrapper.v -v RTL/__user_project_addr_space_project.v  RTL/__user_project_gpio_example.v RTL/__user_project_la_example.v "
         if caravan:
             user_project = f"-v RTL/__user_analog_project_wrapper.v"
         os.system(f"vlogan -full64  -sverilog +error+30 RTL/caravel_top.sv {user_project} {dirs}  {self.caravel_macros(True)}   -l {self.sim_path}/analysis.log -o {self.sim_path} ")

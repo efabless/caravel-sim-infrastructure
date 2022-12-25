@@ -48,6 +48,14 @@ unsigned int get_active_gpios_num(){
     return 37;
     #endif
 }
+unsigned int get_gpio_num_bit(){
+    #ifdef SKY 
+    return 13;
+    #elif GF
+    return 10;
+    #endif
+}
+
 // user project registers
 #ifndef ARM
 #define reg_mprj_userl (*(volatile unsigned int*)0x300FFFF0)
