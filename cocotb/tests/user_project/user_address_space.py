@@ -6,7 +6,7 @@ from interfaces.cpu import RiskV
 from interfaces.defsParser import Regs
 from cocotb.result import TestSuccess
 from tests.common_functions.test_functions import *
-from tests.bitbang.bitbang_functions import *
+
 from interfaces.caravel import GPIO_MODE
 from interfaces.common import Macros
 

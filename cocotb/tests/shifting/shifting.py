@@ -6,7 +6,6 @@ from interfaces.cpu import RiskV
 from interfaces.defsParser import Regs
 from cocotb.result import TestSuccess
 from tests.common_functions.test_functions import *
-from tests.bitbang.bitbang_functions import *
 from interfaces.caravel import GPIO_MODE
 from cocotb.binary import BinaryValue
 from interfaces.common import sky
@@ -26,7 +25,14 @@ def shift(gpio,shift_type):
         if not sky: 
             bits = "0101010101"
     fail = False
-   
+    gpio_to_skip = None 
+
+    if Macros['ARM']:
+        gpio_to_skip = ("gpio_control_bidir_2[0]","gpio_control_bidir_2[1]","gpio_control_bidir_2[2]")
+    
+    if str(gpio).split(".")[-1] in gpio_to_skip:
+        return
+
     if not Macros['GL']:
         cocotb.log.info(f"[TEST] gpio {gpio} shift {gpio._id(f'shift_register',False).value} expected {bits}")
     for i in range(bit_size):
@@ -193,6 +199,13 @@ def shift_2(gpio,shift_type):
         bits = "1001100110011"
         if not sky: 
             bits = "1100110011"
+
+    if Macros['ARM']:
+        gpio_to_skip = ("gpio_control_bidir_2[0]","gpio_control_bidir_2[1]","gpio_control_bidir_2[2]")
+    
+    if str(gpio).split(".")[-1] in gpio_to_skip:
+        return
+
     fail = False
     if not Macros['GL']:
         cocotb.log.info(f"[TEST] gpio {gpio} shift {hex(int(gpio._id(f'shift_register',False).value.binstr,2))}({gpio._id(f'shift_register',False).value.binstr}) expected {hex(int(bits,2))}({bits})")

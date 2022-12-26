@@ -1,62 +1,37 @@
-#include <defs.h>
-#include <stub.c>
-
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 void main(){
-    unsigned int i, j, k;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-
-    reg_mprj_io_0  = 0x1999;
-    reg_mprj_io_1  = 0x1333;
-    reg_mprj_io_2  = 0x666;
-    reg_mprj_io_3  = 0xCCC;
-    reg_mprj_io_4  = 0x1999;
-    reg_mprj_io_5  = 0x1333;
-    reg_mprj_io_6  = 0x666;
-    reg_mprj_io_7  = 0xCCC;
-    reg_mprj_io_8  = 0x1999;
-    reg_mprj_io_9  = 0x1333;
-    reg_mprj_io_10 = 0x666;
-    reg_mprj_io_11 = 0xCCC;
-    reg_mprj_io_12 = 0x1999;
-    reg_mprj_io_13 = 0x1333;
-    reg_mprj_io_14 = 0x666;
-    reg_mprj_io_15 = 0xCCC;
-    reg_mprj_io_16 = 0x1999;
-    reg_mprj_io_17 = 0x1333;
-    reg_mprj_io_18 = 0x666;
-
-
-    reg_mprj_io_37 = 0x1999;
-    reg_mprj_io_36 = 0x1333;
-    reg_mprj_io_35 = 0x666;
-    reg_mprj_io_34 = 0xCCC;
-    reg_mprj_io_33 = 0x1999;
-    reg_mprj_io_32 = 0x1333;
-    reg_mprj_io_31 = 0x666;
-    reg_mprj_io_30 = 0xCCC;
-    reg_mprj_io_29 = 0x1999;
-    reg_mprj_io_28 = 0x1333;
-    reg_mprj_io_27 = 0x666;
-    reg_mprj_io_26 = 0xCCC;
-    reg_mprj_io_25 = 0x1999;
-    reg_mprj_io_24 = 0x1333;
-    reg_mprj_io_23 = 0x666;
-    reg_mprj_io_22 = 0xCCC;
-    reg_mprj_io_21 = 0x1999;
-    reg_mprj_io_20 = 0x1333;
-    reg_mprj_io_19 = 0x666;
-
-    reg_mprj_xfer = 1;
-    while ((reg_mprj_xfer&0x1) == 1);
-    reg_debug_1 = 0x0; // delay asserted
-    reg_debug_1 = 0x0; // delay asserted 
-    reg_debug_1 = 0x0; // delay asserted 
-    reg_debug_1 = 0xFF; // finish configuration  
+    enable_debug();
+    hk_spi_disable();
+    int counter = 0;
+    for (int i =0;i<19;i++){
+        if(counter == 0)
+           configure_gpio(i,0x1999);
+        else if (counter == 1)
+           configure_gpio(i,0x1333); 
+        else if (counter == 2)
+           configure_gpio(i,0x666); 
+        else if (counter == 3)
+           configure_gpio(i,0xCCC); 
+        counter++; 
+        counter %= 4;
+    }
+    counter =0;
+    for (int i =37;i>=19;i--){
+        if(counter == 0)
+           configure_gpio(i,0x1999);
+        else if (counter == 1)
+           configure_gpio(i,0x1333); 
+        else if (counter == 2)
+           configure_gpio(i,0x666); 
+        else if (counter == 3)
+           configure_gpio(i,0xCCC); 
+        counter++; 
+        counter %= 4;
+    }
+    gpio_load();
+    dummy_delay(10);
+    set_debug_reg1(0XFF); // finish configuration 
+    dummy_delay(10000); 
 }
 

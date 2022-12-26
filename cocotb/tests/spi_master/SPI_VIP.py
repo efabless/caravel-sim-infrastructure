@@ -5,7 +5,7 @@ import cocotb
 from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles,Timer
 import cocotb.log
 from tests.common_functions.test_functions import *
-from tests.bitbang.bitbang_functions import *
+
 
 
 #VIP for SPI 
