@@ -15,7 +15,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 
 // --------------------------------------------------------
 
@@ -26,43 +27,26 @@
 
 void main()
 {
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    bool sky = reg_debug_1;
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-
-    reg_gpio_mode1 = 1;
-    reg_gpio_mode0 = 0; // for full swing
-    if (sky){
-        reg_gpio_ien = 0;
-        reg_gpio_oe = 1;
-    }else{
-        reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 0;
-    }
-    
-
-    reg_debug_1 = 10;
+    enable_debug();
+    hk_spi_disable();
+    mgmt_gpio_o_enable();
+    set_debug_reg1(10);
 	for (int i = 0; i < 10; i++) {
 		/* Fast blink for simulation */
-		reg_gpio_out = 1;
-		reg_gpio_out = 0;
+		mgmt_gpio_wr(1);
+		mgmt_gpio_wr(0);
 	}
-    reg_debug_1 = 20;
+    set_debug_reg1(20);
 	for (int i = 0; i < 20; i++) {
 		/* Fast blink for simulation */
-		reg_gpio_out = 1;
-		reg_gpio_out = 0;
+		mgmt_gpio_wr(1);
+		mgmt_gpio_wr(0);
 	}
-    reg_debug_1 = 0;
-    reg_debug_1 = 0; // for more delay
-    reg_debug_1 = 0;
+    set_debug_reg1(0);
+    set_debug_reg1(0); // for more delay
+    set_debug_reg1(0);
 
-    reg_debug_2 = 0xFF; //finish test
+    set_debug_reg2(0xFF); //finish test
 
 
 }

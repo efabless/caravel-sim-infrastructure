@@ -15,9 +15,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-#include <stub.c>
 
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 // --------------------------------------------------------
 
 /*
@@ -27,63 +27,30 @@
 
 void main()
 {
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    bool sky = reg_debug_1;
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-    reg_gpio_mode1 = 1;
-    reg_gpio_mode0 = 0; // for full swing
+    enable_debug();
+    hk_spi_disable();
     // enable input
-    if (sky){
-        reg_gpio_ien = 1;
-        reg_gpio_oe = 1;
-    }else{
-        reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 0;
-    }
-    if (reg_gpio_in == 1)
-        reg_debug_2 =0x1B; 
+    mgmt_gpio_i_enable();
+    if (mgmt_gpio_rd() == 1)
+        set_debug_reg2(0x1B); 
     else 
-        reg_debug_2 =0x1E; 
+        set_debug_reg2(0x1E); 
     // disable input
-    if (sky){
-        reg_gpio_ien = 0;
-        reg_gpio_oe = 0;
-    }else{
-        reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 1;
-    }
-    if (reg_gpio_in == 0)
-        reg_debug_2 =0x2B; 
+    mgmt_gpio_io_disable();
+    if (mgmt_gpio_rd() == 0)
+        set_debug_reg2(0x2B); 
     else 
-        reg_debug_2 =0x2E; 
-    reg_debug_2 = 0xFF;
+        set_debug_reg2(0x2E); 
+    set_debug_reg2(0xFF);
 
     // enable output
-    if (sky){
-        reg_gpio_ien = 0;
-        reg_gpio_oe = 1;
-    }else{
-        reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 0;
-    }
-    reg_gpio_out = 1;
-    reg_debug_1  = 0x1A;
+    mgmt_gpio_o_enable();
+    mgmt_gpio_wr(1);
+    set_debug_reg1(0x1A);
 
-    // enable output
-    if (sky){
-        reg_gpio_ien = 1;
-        reg_gpio_oe = 0;
-    }else{
-        reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 1;
-    }
-    reg_gpio_out = 1;
-    reg_debug_1  = 0x2A;
-
+    // disable output
+    mgmt_gpio_i_enable();
+    mgmt_gpio_wr(1);
+    set_debug_reg1(0x2A);
 }
 

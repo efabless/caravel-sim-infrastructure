@@ -103,6 +103,58 @@ void output_enable_all_gpio_user(char is_enable){
 
 }
 
-void dummy_delay(int num){
-    for (int i=0;i < num;i++);
+// managment gpio 
+void mgmt_gpio_i_enable(){
+    reg_gpio_mode1 = 1;
+    reg_gpio_mode0 = 0; // for full swing
+    #ifndef REG_GPIO_INVERTED 
+    reg_gpio_ien = 1;
+    reg_gpio_oe = 0;
+    #else
+    reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
+    reg_gpio_oe = 1;
+    #endif
 }
+void mgmt_gpio_o_enable(){
+    reg_gpio_mode1 = 1;
+    reg_gpio_mode0 = 0; // for full swing
+    #ifndef REG_GPIO_INVERTED 
+    reg_gpio_ien = 0;
+    reg_gpio_oe = 1;
+    #else
+    reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
+    reg_gpio_oe = 0;
+    #endif
+}
+
+void mgmt_gpio_io_enable(){
+    reg_gpio_mode1 = 1;
+    reg_gpio_mode0 = 0; // for full swing
+    #ifndef REG_GPIO_INVERTED 
+    reg_gpio_ien = 1;
+    reg_gpio_oe = 1;
+    #else
+    reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
+    reg_gpio_oe = 0;
+    #endif
+}
+
+void mgmt_gpio_io_disable(){
+    reg_gpio_mode1 = 1;
+    reg_gpio_mode0 = 0; // for full swing
+    #ifndef REG_GPIO_INVERTED 
+    reg_gpio_ien = 0;
+    reg_gpio_oe = 0;
+    #else
+    reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
+    reg_gpio_oe = 1;
+    #endif
+}
+void mgmt_gpio_wr(int data){reg_gpio_out = data;}
+
+int  mgmt_gpio_rd(){return reg_gpio_in;}
+
+void wait_on_gpio_mgmt(unsigned int data){while (reg_gpio_in == data);}
+
+
+void dummy_delay(int num){for (int i=0;i < num;i++);}

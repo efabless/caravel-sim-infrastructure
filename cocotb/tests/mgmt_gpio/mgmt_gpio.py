@@ -38,17 +38,17 @@ async def mgmt_gpio_out(dut):
                     if caravelEnv.monitor_mgmt_gpio() == '0': 
                         break
                     if reg1 != cpu.read_debug_reg1(): 
-                        cocotb.log.error("[TEST] error failing to catch all blinking ")
+                        cocotb.log.error(f"[TEST] error failing to catch all blinking received: {i} expected: {reg1}")
                         return
-                    await ClockCycles(caravelEnv.clk,10) 
+                    await ClockCycles(caravelEnv.clk,1) 
 
                 while (True):
                     if caravelEnv.monitor_mgmt_gpio() == '1': 
                         break
                     if reg1 != cpu.read_debug_reg1(): 
-                        cocotb.log.error("[TEST] error failing to catch all blinking ")
+                        cocotb.log.error(f"[TEST] error failing to catch all blinking received: {i} expected: {reg1}")
                         return
-                    await ClockCycles(caravelEnv.clk,10) 
+                    await ClockCycles(caravelEnv.clk,1) 
             cocotb.log.info(f"[TEST] passing sending {reg1} blinks ")
             phases_fails -=1
             phases_passes +=1
@@ -123,12 +123,15 @@ async def mgmt_gpio_bidir(dut):
     cocotb.log.info (f"[TEST] start send {num_blinks} blinks")
     for i in range(num_blinks):
         if i == num_blinks-1: #last iteration
-            # await cpu.drive_data2address(reg.get_addr('reg_debug_1'),0xFF)
             cpu.write_debug_reg1_backdoor(0xFF) 
         caravelEnv.drive_mgmt_gpio(1)
         await ClockCycles(caravelEnv.clk,3000) 
         caravelEnv.drive_mgmt_gpio(0)
-        await ClockCycles(caravelEnv.clk,3000) 
+        if i != num_blinks-1: # not last iteration
+            await ClockCycles(caravelEnv.clk,3000) 
+        else: 
+            await ClockCycles(caravelEnv.clk,1) 
+
     cocotb.log.info(f"[TEST] finish sending {num_blinks} blinks ")
 
     cocotb.log.info(f"[TEST] waiting for {num_blinks} blinks ")
@@ -141,14 +144,14 @@ async def mgmt_gpio_bidir(dut):
                 break
             if cpu.read_debug_reg2() == 0xFF:  #test finish
                 break
-            await ClockCycles(caravelEnv.clk,10) 
+            await ClockCycles(caravelEnv.clk,1) 
         while (True):
             if caravelEnv.monitor_mgmt_gpio() == '1': 
                 recieved_blinks +=1
                 break
             if cpu.read_debug_reg2() == 0xFF:  #test finish
                 break
-            await ClockCycles(caravelEnv.clk,10) 
+            await ClockCycles(caravelEnv.clk,1) 
         await ClockCycles(caravelEnv.clk,1) 
         
 
@@ -194,7 +197,7 @@ async def mgmt_gpio_disable(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    cocotb.log.info(f"[TEST] Start mgmt_gpio_pu_pd test")  
+    cocotb.log.info(f"[TEST] Start mgmt_gpio_disable test")  
     phases_fails = 2
     phases_passes = 0 
     pass_list = (0x1B,0x2B)
@@ -203,7 +206,9 @@ async def mgmt_gpio_disable(dut):
     caravelEnv.drive_mgmt_gpio(1)
     
     while True: 
+        caravelEnv.drive_mgmt_gpio(1)
         if reg2 != cpu.read_debug_reg2():
+            cocotb.log.info  (f"[TEST] reg2 = {hex(reg2)}")
             reg2 = cpu.read_debug_reg2()
             if reg2 == 0xFF:  # test finish 
                     break

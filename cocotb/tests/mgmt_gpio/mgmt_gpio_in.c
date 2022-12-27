@@ -15,8 +15,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 // --------------------------------------------------------
 
 /*
@@ -24,54 +24,32 @@
  *		Tests writing to the GPIO pin.
  */
 
-void main()
-{
-    int temp_in;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    bool sky = reg_debug_1;
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-
-    reg_gpio_mode1 = 1;
-    reg_gpio_mode0 = 0; // for full swing
-
-    if (sky){
-        reg_gpio_ien = 1;
-        reg_gpio_oe = 0;
-    }else{
-        reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 1;
-    }
-
-    reg_debug_1 = 10; // wait for 10 blinks
+void main(){
+    enable_debug();
+    hk_spi_disable();
+    mgmt_gpio_i_enable();
+    set_debug_reg1(10); // wait for 10 blinks
 	for (int i = 0; i < 10; i++) {
-		while(reg_gpio_in == 0);
-        reg_debug_2 = 0XAA; //  1 is recieved
-		while(reg_gpio_in == 1);
-        reg_debug_2 = 0XBB; // 0 is recieved
+        wait_on_gpio_mgmt(0);
+        set_debug_reg2(0XAA); //  1 is recieved
+        wait_on_gpio_mgmt(1);
+        set_debug_reg2(0XBB); // 0 is recieved
 	}
-    reg_debug_2 = 0x1B;
-    reg_debug_1 = 20;
+    set_debug_reg2(0x1B);
+    set_debug_reg1(20);
 	for (int i = 0; i < 20; i++) {
-		while(reg_gpio_in == 0);
-        reg_debug_2 = 0XAA; // 1 is recieved
-		while(reg_gpio_in == 1);
-        reg_debug_2 = 0XBB; // 0 is recieved
+        wait_on_gpio_mgmt(0);
+        set_debug_reg2(0XAA); // 1 is recieved
+        wait_on_gpio_mgmt(1);
+        set_debug_reg2(0XBB); // 0 is recieved
 	}
-    reg_debug_2 = 0x2B;
-    temp_in = reg_gpio_in;
-    reg_debug_1 = 0;
+    set_debug_reg2(0x2B);
+    int temp_in = mgmt_gpio_rd();
+    set_debug_reg1(0);
     for (int i =0; i<50;i++){ // timeout
-        if (temp_in != reg_gpio_in)
-            reg_debug_2 = 0xEE; //finish test
-
+        if (temp_in != mgmt_gpio_rd())
+            set_debug_reg2(0xEE); //finish test
     }
-    reg_debug_2 = 0xFF; //finish test
-
-
+    set_debug_reg2(0xFF); //finish test
 }
 

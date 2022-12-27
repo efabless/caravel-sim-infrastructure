@@ -15,8 +15,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-#include <stub.c>
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 
 // --------------------------------------------------------
 
@@ -27,29 +27,25 @@
 
 void main()
 {
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-
-    reg_gpio_mode1 = 1;
-    reg_gpio_mode0 = 0;
-    reg_gpio_ien = 1;
-    reg_gpio_oe = 1; 
+    enable_debug();
+    hk_spi_disable();
+    mgmt_gpio_io_enable();
 
     // pull up
-    reg_gpio_out = 1;
-    reg_debug_1 = 0x1B;
+    mgmt_gpio_wr(1);
+    set_debug_reg1(0x1B);
 
     // pull down
-    reg_gpio_out = 0;
-    reg_debug_1 = 0x2B;
+    mgmt_gpio_wr(0);
+    set_debug_reg1(0x2B);
 
     // no pull
+    #ifndef REG_GPIO_INVERTED 
     reg_gpio_oe = 0; 
-    reg_debug_1 = 0x3B;
+    #else
+    reg_gpio_oe = 1; 
+    #endif
+    set_debug_reg1(0x3B);
 
 
 

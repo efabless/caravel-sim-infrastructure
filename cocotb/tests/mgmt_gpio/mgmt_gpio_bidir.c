@@ -14,9 +14,8 @@
  * limitations under the License.
  * SPDX-License-Identifier: Apache-2.0
  */
-
-#include <defs.h>
-#include <stub.c>
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 
 // --------------------------------------------------------
 
@@ -25,56 +24,28 @@
  *		Tests writing to the GPIO pin.
  */
 
-void main()
-{
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    bool sky = reg_debug_1;
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-
-    reg_gpio_mode1 = 1;
-    reg_gpio_mode0 = 0; // for full swing
-
-    if (sky){
-        reg_gpio_ien = 1;
-        reg_gpio_oe = 0;
-    }else{
-        reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 1;
-    }
+void main(){
+    enable_debug();
+    hk_spi_disable();
+    mgmt_gpio_i_enable();
     int num_blinks = 0;
-    reg_debug_1 = 0xAA; // start of the test
-    int z = reg_debug_1;
-	while (true) {
-        // reg_debug_2 = z;
-        // z= reg_debug_1;
-		while(reg_gpio_in == 0);
-		while(reg_gpio_in == 1);
+    set_debug_reg1(0XAA); // start of the test
+	while (1) {
+        wait_on_gpio_mgmt(0);
+        wait_on_gpio_mgmt(1);
         num_blinks++;
-        if (reg_debug_1 == 0xFF)
+        if (get_debug_reg1() == 0xFF)
             break;
 	}
-
-    if (sky){
-        reg_gpio_ien = 0;
-        reg_gpio_oe = 1;
-    }else{
-        reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
-        reg_gpio_oe = 0;
-    }
+    mgmt_gpio_o_enable();
 	for (int i = 0; i < num_blinks; i++) {
 		/* Fast blink for simulation */
-		reg_gpio_out = 1;
-		reg_gpio_out = 0;
+        mgmt_gpio_wr(1);
+        dummy_delay(10);
+        mgmt_gpio_wr(0);
+        dummy_delay(10);
 	}
-    reg_debug_2 = 0xFF; //finish test
-    //print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
-    for(int i=0; i<100000000; i++);
-
-
+    set_debug_reg2(0XFF); //finish test
+    dummy_delay(10000000);
 }
 
