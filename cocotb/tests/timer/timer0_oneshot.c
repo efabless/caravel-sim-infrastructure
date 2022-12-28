@@ -16,59 +16,45 @@
  */
 
 
-#include <defs.h>
-
-/*
-Testing timer interrupts 
-Enable interrupt for timer0 and configure it as countdown 1 shot wait for interrupt
-*/
+#include "../common_functions/common.c"
 
 
 void main(){
-    uint32_t value;
-    uint32_t old_value;
-
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
+    unsigned int value;
+    unsigned int old_value;
+    enable_debug();
+    hk_spi_disable();
 
     /* Configure timer for a single-shot countdown */
-	reg_timer0_config = 0; // disable
-	reg_timer0_data = 0xF3000;
-    reg_timer0_config = 1; // enable
+    timer0_oneshot_configure(0xF3000);
 
-    // Loop, waiting for the interrupt to change reg_mprj_datah
     // test path if counter value stop updated after reach 0 and also the value is always decrementing
-    reg_timer0_update = 1; // update reg_timer0_value with new counter value
-    old_value = reg_timer0_value;
+    update_timer0_val(); // update reg_timer0_value with new counter value
+    old_value = get_timer0_val();
     // value us decrementing until it reachs zero
     while (1) {
-        reg_timer0_update = 1; // update reg_timer0_value with new counter value
-        value = reg_timer0_value;
+        update_timer0_val(); // update reg_timer0_value with new counter value
+        value = get_timer0_val();
         if (value < old_value && value != 0){
-            reg_debug_1 = 0x1B; // value decrease
+            set_debug_reg1(0x1B); // value decrease
         }
         else if (value == 0){
-            reg_debug_1 = 0x2B; // value reach 0
+            set_debug_reg1(0x2B); // value reach 0
             break;
         }else{
-            reg_debug_1 = 0x1F; // value updated incorrectly
+            set_debug_reg1(0x1F); // value updated incorrectly
         }
 	    old_value = value;
     }
     // check 10 times that value don't change from 0
-	for (int i = 0; i < 10; i++);
-        reg_timer0_update = 1; // update reg_timer0_value with new counter value
+	dummy_delay(10);
+    update_timer0_val(); // update reg_timer0_value with new counter value
 
-    if (reg_timer0_value == 0){
-        reg_debug_1 = 0x3B; //timer updated correctly
+    if (get_timer0_val() == 0){
+        set_debug_reg1(0x3B); //timer updated correctly
     }else{
-        reg_debug_1 = 0x2F; //timer updated incorrectly
+        set_debug_reg1(0x2F); //timer updated incorrectly
     }
-    reg_debug_2 = 0xFF; // finish test
+    set_debug_reg2(0xFF); // finish test
 }
 

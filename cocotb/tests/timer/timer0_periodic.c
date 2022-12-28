@@ -15,63 +15,49 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-
-/*
-Testing timer interrupts 
-Enable interrupt for timer0 and configure it as countdown 1 shot 
-wait for interrupt
-
-*/
+#include "../common_functions/common.c"
 
 
 void main(){
-    uint32_t value;
-    uint32_t old_value;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-    /* Configure timer for a single-shot countdown */
-	reg_timer0_config = 0; // disable
-	reg_timer0_data = 0;
-    reg_timer0_data_periodic  = 0x300;
-    reg_timer0_config = 1; // enable
+    unsigned int value;
+    unsigned int old_value;
+    enable_debug();
+    hk_spi_disable();
+
+    /* Configure timer for a periodic countdown */
+	timer0_periodic_configure(0x300);
 
     // Loop, waiting for the interrupt to change reg_mprj_datah
     // test path if counter value stop updated after reach 0 and also the value is always decrementing
-    reg_timer0_update = 1; // update reg_timer0_value with new counter value
-    old_value = reg_timer0_value;
-    // value us decrementing until it reachs zero
+    update_timer0_val(); // update reg_timer0_value with new counter value
+    old_value = get_timer0_val();
+    // value us decrementing until it reachs zero and rollover to 0x300 (initial value)
     int rollover = 0;
     int timeout = 400; 
     for (int i = 0; i < timeout; i++){
-        reg_timer0_update = 1; // update reg_timer0_value with new counter value
-        value = reg_timer0_value;
+        update_timer0_val(); // update reg_timer0_value with new counter value
+        value = get_timer0_val();
         if (value > old_value){
             rollover++;
             if (rollover==1)
-                reg_debug_1 = 0x1B; // timer rollover
+                set_debug_reg1(0x1B); // timer rollover
             else if (rollover==2)
-                reg_debug_1 = 0x2B; //timer rollover second time
+                set_debug_reg1(0x2B); //timer rollover second time
             else if (rollover==3){
-                reg_debug_1 = 0x3B; //timer rollover second time
+                set_debug_reg1(0x3B); //timer rollover third time
                 break;
             }
         }
         if (value < old_value){
-            reg_debug_1 = 0x4B; // value decreases
+            set_debug_reg1(0x4B); // value decreases
         }
 	    old_value = value;
     }
 
     if (rollover ==0){
-        reg_debug_1 = 0xEE; //  counter didn't rollover
+        set_debug_reg1(0xEE); //  counter didn't rollover
     }
-    reg_debug_2 = 0xFF; // finish test
+    set_debug_reg2(0xFF); // finish test
 
 }
 

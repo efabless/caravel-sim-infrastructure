@@ -156,5 +156,35 @@ int  mgmt_gpio_rd(){return reg_gpio_in;}
 
 void wait_on_gpio_mgmt(unsigned int data){while (reg_gpio_in == data);}
 
-
+// 
 void dummy_delay(int num){for (int i=0;i < num;i++);}
+
+// timer 
+
+void timer0_oneshot_configure(unsigned int count){
+	reg_timer0_config = 0; // disable
+	reg_timer0_data = count;
+    reg_timer0_config = 1; // enable
+}
+void timer0_periodic_configure(unsigned int count){
+	reg_timer0_config = 0; // disable
+	reg_timer0_data = 0;
+    reg_timer0_data_periodic  = count;
+    reg_timer0_config = 1; // enable
+}
+
+void update_timer0_val(){
+    #ifdef ARM // arm update the register automatically 
+    return;
+    #else
+    reg_timer0_update = 1;
+    #endif
+}
+
+unsigned int get_timer0_val(){
+    #ifdef ARM 
+    return reg_timer0_data;
+    #else
+    return reg_timer0_value;
+    #endif
+    }
