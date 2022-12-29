@@ -15,40 +15,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-#include <stub.c>
-#include <uart.h>
+// --------------------------------------------------------
+
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 // --------------------------------------------------------
 
 void wait_for_char(char *c){
-    while (uart_rxempty_read() == 1);
-    if (reg_uart_data == *c){
-        reg_debug_1 = 0x1B; // recieved the correct character
+    
+    if (uart_getc() == *c){
+        set_debug_reg2(0x1B); // recieved the correct character
     }else{
-        reg_debug_1 = 0x1E; // timeout didn't recieve the character
+        set_debug_reg2(0x1E); // timeout didn't recieve the character
     }
-    reg_debug_1 =0;
-    uart_ev_pending_write(UART_EV_RX);
+    uart_read_pop();
+    set_debug_reg2(0);
 }
 
 void main(){
-    int j;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-
-    reg_mprj_io_6 = GPIO_MODE_MGMT_STD_OUTPUT;
-    reg_mprj_io_5 = GPIO_MODE_MGMT_STD_INPUT_NOPULL;
+    enable_debug();
+    hk_spi_disable();
+    configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
+    configure_gpio(5,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
     // Now, apply the configuration
-    reg_mprj_xfer = 1;
-    while ((reg_mprj_xfer&0x1) == 1);
+    gpio_load();
 
-    reg_uart_enable = 1;
+    uart_RX_enable();
+    uart_TX_enable();
 
     print("M");
     wait_for_char("M");

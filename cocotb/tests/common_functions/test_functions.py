@@ -105,12 +105,12 @@ async def wait_reg1(cpu,caravelEnv,data):
     while (True):
         if cpu.read_debug_reg1() == data: 
             return
-        await ClockCycles(caravelEnv.clk,10)
+        await ClockCycles(caravelEnv.clk,1)
         
             
 async def wait_reg2(cpu,caravelEnv,data):
     while (True):
         if cpu.read_debug_reg2() == data: 
             return
-        await ClockCycles(caravelEnv.clk,10)
+        await ClockCycles(caravelEnv.clk,1)
         

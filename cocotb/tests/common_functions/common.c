@@ -188,3 +188,55 @@ unsigned int get_timer0_val(){
     return reg_timer0_value;
     #endif
     }
+void mgmt_uart_enable(){reg_wb_enable = reg_wb_enable | 0x40;}
+// uart 
+void uart_TX_enable(){
+    #ifdef ARM 
+    // 0x08 RW    CTRL[3:0]   TxIntEn, RxIntEn, TxEn, RxEn
+    //              [6] High speed test mode Enable
+    //              [5] RX overrun interrupt enable
+    //              [4] TX overrun interrupt enable
+    //              [3] RX Interrupt Enable
+    //              [2] TX Interrupt Enable
+    //              [1] RX Enable
+    //              [0] TX Enable
+    mgmt_uart_enable();
+    reg_uart_ctrl = reg_uart_ctrl | 0x1;
+    reg_uart_clkdiv=0x3C0; // set default to 9600
+    #else
+    reg_uart_enable = 1;
+    #endif
+}
+void uart_RX_enable(){
+    #ifdef ARM 
+    // 0x08 RW    CTRL[3:0]   TxIntEn, RxIntEn, TxEn, RxEn
+    //              [6] High speed test mode Enable
+    //              [5] RX overrun interrupt enable
+    //              [4] TX overrun interrupt enable
+    //              [3] RX Interrupt Enable
+    //              [2] TX Interrupt Enable
+    //              [1] RX Enable
+    //              [0] TX Enable
+    mgmt_uart_enable();
+    reg_uart_ctrl = reg_uart_ctrl | 0x2;
+    reg_uart_clkdiv=0x3C0; // set default to 9600
+    #else
+    reg_uart_enable = 1;
+    #endif
+}
+
+char uart_getc(){
+    #ifdef ARM 
+    while ((reg_uart_stat &2) == 0); // RX is empty
+    #else 
+    while (uart_rxempty_read() == 1);
+    #endif
+    return reg_uart_data;
+}
+
+void uart_read_pop(){
+    #ifndef ARM
+    uart_ev_pending_write(UART_EV_RX);
+    #endif
+    return;
+}

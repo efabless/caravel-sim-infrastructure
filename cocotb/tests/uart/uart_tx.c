@@ -15,23 +15,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-#include <stub.c>
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 
 // --------------------------------------------------------
 
-void main()
-{
-    int j;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-
-    reg_mprj_io_6 = GPIO_MODE_MGMT_STD_OUTPUT;
+void main(){
+    enable_debug();
+    hk_spi_disable();
+    configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
 
     // Set clock to 64 kbaud and enable the UART.  It is important to do this
     // before applying the configuration, or else the Tx line initializes as
@@ -39,13 +31,13 @@ void main()
 
 
     // Now, apply the configuration
-    reg_mprj_xfer = 1;
-    while ((reg_mprj_xfer&0x1) == 1);
+    gpio_load();
 
 //    reg_uart_clkdiv = 625;
-    reg_uart_enable = 1;
+    uart_TX_enable();
 
-    reg_debug_1 = 0xAA;
+    set_debug_reg1(0xAA);
+
     // This should appear at the output, received by the testbench UART.
     // (Makes simulation time long.)
 //    print("test msg\n");
@@ -53,5 +45,5 @@ void main()
 
     // Allow transmission to complete before signalling that the program
     // has ended.
-    for (j = 0; j < 160; j++);
+    dummy_delay(160);
 }
