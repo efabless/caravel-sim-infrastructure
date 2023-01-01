@@ -29,7 +29,12 @@ async def spi_master_rd(dut):
     cocotb.log.info (f"[TEST] start spi_master_rd test")
     file_name = f"{os.getenv('COCOTB_PATH')}/tests/spi_master/test_data"
     mem = read_mem(file_name)
-    await  cocotb.start(SPI_VIP(dut.bin33_monitor,dut.bin32_monitor,dut.bin35_monitor,(dut.bin34_en,dut.bin34),mem)) # fork for SPI 
+    CSB = dut.bin33_monitor
+    SCK = dut.bin32_monitor
+    SDO = dut.uut.spi_sdo
+    # SDO = dut.bin35_monitor
+    SDI = (dut.bin34_en,dut.bin34)
+    await  cocotb.start(SPI_VIP(CSB,SCK,SDO,SDI,mem)) # fork for SPI 
 
     addresses_to_read = (0x04,0x05,0x06,0x8,0x9,0xa,0xb,0xc,0xd,0xe,0xf) # the addresses that the firmware read from mem file 
     await wait_reg2(cpu,caravelEnv,0XAA) 
@@ -67,32 +72,37 @@ async def spi_master_temp(dut):
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     cocotb.log.info (f"[TEST] start spi_master_temp test")
-    await FallingEdge(dut.bin33_monitor)
-    await RisingEdge(dut.bin32_monitor) 
+    CSB = dut.bin33_monitor
+    SCK = dut.bin32_monitor
+    SDO = dut.uut.spi_sdo
+    # SDO = dut.bin35_monitor
+    SDI = (dut.bin34_en,dut.bin34)
+    await FallingEdge(CSB)
+    await RisingEdge(SCK) 
     a = ''
     b = ''
     # first value 
     for i in range(8): 
-        a = a + dut.bin35_monitor.value.binstr
-        await RisingEdge(dut.bin32_monitor)
+        a = a + SDO.value.binstr
+        await RisingEdge(SCK)
     cocotb.log.info (f" [TEST] a = {a} = {int(a,2)}")
 
     # second val
     for i in range(8): 
-        b = b + dut.bin35_monitor.value.binstr
+        b = b + SDO.value.binstr
         if i != 7: # skip last cycle wait
-            await RisingEdge(dut.bin32_monitor)
+            await RisingEdge(SCK)
     cocotb.log.info (f" [TEST] b = {b} = {int(b,2)}")
 
     s = int(a,2) + int(b,2)
     s_bin = bin(s)[2:].zfill(8)
     cocotb.log.info (f" [TEST] sending sum of {int(a,2)} + {int(b,2)} = {s} = {s_bin}")
-    await FallingEdge(dut.bin32_monitor)
+    await FallingEdge(SCK)
     for i in range(8):
         dut.bin34_en.value = 1
         dut.bin34.value = int(s_bin[i],2) # bin 
         cocotb.log.debug (f"[SPI_VIP] [SPI_op] SDO = {s_bin[i]} ")
-        await FallingEdge(dut.bin32_monitor)
+        await FallingEdge(SCK)
     dut.bin34_en.value = 0 # enable 
     while True: 
         if cpu.read_debug_reg1() == 0xBB:

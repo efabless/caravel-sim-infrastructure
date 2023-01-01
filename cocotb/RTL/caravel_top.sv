@@ -415,4 +415,6 @@ reg CARAVAN = `ifdef CARAVAN 1 `else 0 `endif;
 reg CHECKERS = `ifdef CHECKERS 1 `else 0 `endif;
 reg COVERAGE = `ifdef COVERAGE 1 `else 0 `endif;
 reg ARM      = `ifdef ARM      1 `else 0 `endif;
+
+reg LA_SIZE  = `ifdef LA_SIZE `LA_SIZE `else 0 `endif;
 endmodule

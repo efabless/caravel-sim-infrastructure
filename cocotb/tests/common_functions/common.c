@@ -240,3 +240,102 @@ void uart_read_pop(){
     #endif
     return;
 }
+
+// spi 
+void spi_go(){reg_spimaster_control = reg_spimaster_control | 0x1;}
+void spi_stop(){reg_spimaster_control = reg_spimaster_control & 0x2;}
+char spi_busy(){return reg_spimaster_status & 0x2;}
+char spi_done(){return reg_spimaster_status & 0x1;}
+void spi_write(char c){
+    reg_spimaster_wdata = (unsigned long) c;
+    #ifndef ARM
+    reg_spimaster_control = 0x0801;
+    #else
+    spi_go();
+    spi_stop();
+    while(spi_busy());
+    #endif
+}
+char spi_read(){
+    spi_write(0x00);
+    while (reg_spimaster_status != 1);
+    return reg_spimaster_rdata;
+}
+void mgmt_spi_enable(){reg_wb_enable = reg_wb_enable | 0x20;}
+
+void spi_en(){
+    #ifndef ARM
+    reg_spi_enable = 1;
+    #else
+    mgmt_spi_enable();
+    #endif
+}
+void CS_en(){
+    #ifndef ARM
+    reg_spimaster_cs = 0x10001; // select chip 0
+    #else
+    reg_spimaster_control = reg_spimaster_control | 0x2; //bit 1
+    #endif
+}
+void CS_dis(){
+     #ifndef ARM
+    reg_spimaster_cs = 0;
+    #else
+    reg_spimaster_control = reg_spimaster_control & 0x1; //bit 1
+    spi_stop();
+    #endif
+}
+
+// LA 
+void set_la_ien(char number , unsigned int data){
+    switch(number){
+        #if LA_SIZE >= 64
+        case 0 : reg_la0_iena = data; break;
+        case 1 : reg_la1_iena = data; break;
+        #endif 
+        #if LA_SIZE >= 128
+        case 2 : reg_la2_iena = data; break;
+        case 3 : reg_la3_iena = data; break;
+        #endif
+        default: break;
+    }
+}
+void set_la_oenb(char number , unsigned int data){
+    switch(number){
+        #if LA_SIZE >= 64
+        case 0 : reg_la0_oenb = data; break;
+        case 1 : reg_la1_oenb = data; break;
+        #endif 
+        #if LA_SIZE >= 128
+        case 2 : reg_la2_oenb = data; break;
+        case 3 : reg_la3_oenb = data; break;
+        #endif
+        default: break;
+    }
+}
+void set_la_reg(char number , unsigned int data){
+    switch(number){
+        #if LA_SIZE >= 64
+        case 0 : reg_la0_data = data; break;
+        case 1 : reg_la1_data = data; break;
+        #endif 
+        #if LA_SIZE >= 128
+        case 2 : reg_la2_data = data; break;
+        case 3 : reg_la3_data = data; break;
+        #endif
+        default: break;
+    }
+}
+unsigned int get_la_reg(char number){
+    switch(number){
+        #if LA_SIZE >= 64
+        case 0 : return reg_la0_data_in;
+        case 1 : return reg_la1_data_in;
+        #endif 
+        #if LA_SIZE >= 128
+        case 2 : return reg_la2_data_in;
+        case 3 : return reg_la3_data_in;
+        #endif
+        default: break;
+    }
+}

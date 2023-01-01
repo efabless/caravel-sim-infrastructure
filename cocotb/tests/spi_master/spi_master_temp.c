@@ -15,9 +15,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-#include <csr.h>
-#include <stub.c>
+
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 
 // --------------------------------------------------------
 
@@ -27,56 +27,20 @@
  *	- Uses SPI master to talk to external SPI module
  */
 
- void spi_write(char c)
-{
-    reg_spimaster_wdata = (unsigned long) c;
-//    reg_spimaster_wdata = c;
-//    spi_master_control_length_write(8);
-//    spi_master_control_start_write(1);
-//    reg_spimaster_control = 0x0800;
-    reg_spimaster_control = 0x0801;
-}
- char spi_read()
-{
-//    reg_spimaster_wdata = c;
-//    spi_master_control_length_write(8);
-//    spi_master_control_start_write(1);
-//    reg_spimaster_control = 0x0800;
-//    spi_write(0x00);
-//    reg_spimaster_rdata = 0x00;
-//    reg_spimaster_control = 0x0801;
-    spi_write(0x00);
-    while (reg_spimaster_status != 1);
-    return reg_spimaster_rdata;
-}
 
-void main()
-{
-    int i;
-    uint32_t value;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
+void main(){
+    enable_debug();
+    hk_spi_disable();
 
-    // For SPI operation, GPIO 1 should be an input, and GPIOs 2 to 4
-    // should be outputs.
+    configure_gpio(34,GPIO_MODE_MGMT_STD_INPUT_NOPULL); // SDI
+    configure_gpio(35,GPIO_MODE_MGMT_STD_OUTPUT);       // SDO
+    configure_gpio(33,GPIO_MODE_MGMT_STD_OUTPUT);       // CSB
+    configure_gpio(32,GPIO_MODE_MGMT_STD_OUTPUT);       // SCK
 
-    reg_mprj_io_34  = GPIO_MODE_MGMT_STD_INPUT_NOPULL;	// SDI
-    reg_mprj_io_35  = GPIO_MODE_MGMT_STD_OUTPUT;	// SDO
-    reg_mprj_io_33  = GPIO_MODE_MGMT_STD_OUTPUT;	// CSB
-    reg_mprj_io_32  = GPIO_MODE_MGMT_STD_OUTPUT;	// SCK
-
-    /* Apply configuration */
-    reg_mprj_xfer = 1;
-    while ((reg_mprj_xfer&0x1) == 1);
-
-    reg_debug_2 =0xAA;
-
-    reg_spi_enable = 1;
+    // Now, apply the configuration
+    gpio_load();
+    set_debug_reg2(0xAA);
+    spi_en();
 
 
     // For SPI operation, GPIO 1 should be an input, and GPIOs 2 to 4
@@ -97,22 +61,21 @@ void main()
     // bit 15:		(unused)
 
 
-    reg_spimaster_cs = 0x10001;  // sel=0, manual CS
+    CS_en();  // sel=0, manual CS
 
     spi_write(0x08);        // Write 0x03 (read mode)
     spi_write(0x05);        // Write 0x00 (start address high byte)
-    value = spi_read(); // 0x93
+    unsigned int value = spi_read(); // 0x93
     if (value == 0xD)
-        reg_debug_1 = 0xBB; // get correct value
+        set_debug_reg1(0xBB); // get correct value
     else {
-        reg_debug_2 = value;
-        reg_debug_1 = 0xEE; // get wrong value
+        set_debug_reg2(value);
+        set_debug_reg1(0xEE); // get wrong value
     }
 
-    reg_spimaster_cs = 0x0000;  // release CS
-    reg_spimaster_cs = 0x10001;  // sel=0, manual CS
+    CS_dis();  // release CS
+    CS_en();  // sel=0, manual CS
 
-    //print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
-    for(int i=0; i<100000000; i++);
+    dummy_delay(100000000);
 }
 

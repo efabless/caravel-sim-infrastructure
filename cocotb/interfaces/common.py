@@ -111,6 +111,7 @@ def fill_macros(macros_hdl):
     Macros['CHECKERS']       = macros_hdl.CHECKERS.value.integer
     Macros['COVERAGE']       = macros_hdl.COVERAGE.value.integer
     Macros['ARM']            = macros_hdl.ARM.value.integer
+    Macros['LA_SIZE']        = macros_hdl.LA_SIZE.value.integer
 
 
 

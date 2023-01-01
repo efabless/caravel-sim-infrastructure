@@ -1,124 +1,125 @@
 
-#include <defs.h>
-#include <stub.c>
-
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
+/*
+user exmple
+assign la0 to la1 if la0 output enable
+assign la1 to la0 if la1 output enable
+assign la2 to la3 if la2 output enable
+assign la3 to la2 if la3 output enable
+*/
 void main(){
-    unsigned int i, j, k;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    bool sky = reg_debug_1; //  sky has diffrent width for sky (127) than gf (64)
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-    reg_hkspi_disable = 1;
+    enable_debug();
+    hk_spi_disable();
 
     // Configure LA probes [63:32] and [127:96] as inputs to the cpu 
 	// Configure LA probes [31:0] and [63:32] as outputs from the cpu
-    reg_la0_oenb = reg_la0_iena = 0xFFFFFFFF;    // [31:0]
-	reg_la1_oenb = reg_la1_iena = 0x00000000;    // [63:32]
-	reg_la2_oenb = reg_la2_iena = 0xFFFFFFFF;    // [95:64]
-	reg_la3_oenb = reg_la3_iena = 0x00000000;    // [127:96]
+    // 0 as input
+    set_la_ien(0,0xFFFFFFFF);
+    set_la_oenb(0,0xFFFFFFFF);
+    // 1 as output 
+    set_la_ien(1,0x0);
+    set_la_oenb(1,0x0);
+    // 2 as input
+    set_la_ien(2,0xFFFFFFFF);
+    set_la_oenb(2,0xFFFFFFFF);
+    // 3 as output 
+    set_la_ien(3,0x0);
+    set_la_oenb(3,0x0);
+    // set LA 0,2
+    set_la_reg(0,0xAAAAAAAA);
+    set_la_reg(2,0xAAAAAAAA);
 
-    reg_la0_data = 0xAAAAAAAA;
-    reg_la2_data = 0xAAAAAAAA;
-    
-    if (sky){
-        reg_debug_2 = reg_la1_data_in;
-        if (reg_la1_data_in != 0xAAAAAAAA)
-            reg_debug_1 = 0x1E;
-        else 
-            reg_debug_1 = 0x1B;
-    }
-    reg_debug_2 = reg_la3_data_in;
-    if (reg_la3_data_in != 0xAAAAAAAA)
-        reg_debug_1 = 0x2E;
+    #if LA_SIZE >= 64
+    set_debug_reg2(get_la_reg(1));
+    if (get_la_reg(1) != 0xAAAAAAAA)
+        set_debug_reg1(0x1E);
     else 
-        reg_debug_1 = 0x2B;    
-   
-    
-    reg_la0_data = 0x55555555;
-    reg_la2_data = 0x55555555;
-    
-    if (sky){
-        reg_debug_2 = reg_la1_data_in;
-        if (reg_la1_data_in != 0x55555555)
-            reg_debug_1 = 0x3E;
-        else 
-            reg_debug_1 = 0x3B;
-    }
-    reg_debug_2 = reg_la3_data_in;
-    if (reg_la3_data_in != 0x55555555)
-        reg_debug_1 = 0x4E;
+        set_debug_reg1(0x1B);
+    #endif
+
+    #if LA_SIZE >= 128
+    set_debug_reg2(get_la_reg(3));
+    if (get_la_reg(3) != 0xAAAAAAAA)
+        set_debug_reg1(0x2E);
     else 
-        reg_debug_1 = 0x4B;    
+        set_debug_reg1(0x2B);   
+    #endif
+
+    // set LA 0,2
+    set_la_reg(0,0x55555555);
+    set_la_reg(2,0x55555555);
+    
+    #if LA_SIZE >= 64
+    set_debug_reg2(get_la_reg(1));
+    if (get_la_reg(1) != 0x55555555)
+        set_debug_reg1(0x3E);
+    else 
+        set_debug_reg1(0x3B);
+    #endif
+
+    #if LA_SIZE >= 128
+    set_debug_reg2(get_la_reg(3));
+    if (get_la_reg(3) != 0x55555555)
+        set_debug_reg1(0x4E);
+    else 
+        set_debug_reg1(0x4B);    
+    #endif
     // Configure LA probes [31:0] and [63:32] as inputs to the cpu 
 	// Configure LA probes [63:32] and [127:96] as outputs from the cpu
-    reg_la0_oenb = reg_la0_iena = 0x00000000;    // [31:0]
-	reg_la1_oenb = reg_la1_iena = 0xFFFFFFFF;    // [63:32]
-	reg_la2_oenb = reg_la2_iena = 0x00000000;    // [95:64]
-	reg_la3_oenb = reg_la3_iena = 0xFFFFFFFF;    // [127:96]
+    // 0 as output
+    set_la_ien(0,0x0);
+    set_la_oenb(0,0x0);
+    // 1 as input 
+    set_la_ien(1,0xFFFFFFFF);
+    set_la_oenb(1,0xFFFFFFFF);
+    // 2 as output
+    set_la_ien(2,0x0);
+    set_la_oenb(2,0x0);
+    // 3 as input 
+    set_la_ien(3,0xFFFFFFFF);
+    set_la_oenb(3,0xFFFFFFFF);
 
-    reg_la1_data = 0xAAAAAAAA;
-    reg_la3_data = 0xAAAAAAAA;
+    // set LA 1,3
+    set_la_reg(1,0xAAAAAAAA);
+    set_la_reg(3,0xAAAAAAAA);
 
-    if (sky){
-        reg_debug_2 = reg_la0_data_in;
-        if (reg_la0_data_in != 0xAAAAAAAA)
-            reg_debug_1 = 0x5E;
-        else 
-            reg_debug_1 = 0x5B;
-    }
-    reg_debug_2 = reg_la2_data_in;
-    if (reg_la2_data_in != 0xAAAAAAAA)
-        reg_debug_1 = 0x6E;
+    #if LA_SIZE >= 64
+    set_debug_reg2(get_la_reg(0));
+    if (get_la_reg(0) != 0xAAAAAAAA)
+        set_debug_reg1(0x5E);
     else 
-        reg_debug_1 = 0x6B;    
-
-    reg_la1_data = 0x55555555;
-    reg_la3_data = 0x55555555;
-
-    if (sky){
-        reg_debug_2 = reg_la0_data_in;
-        if (reg_la0_data_in != 0x55555555)
-            reg_debug_1 = 0x7E;
-        else 
-            reg_debug_1 = 0x7B;
-    }
-
-    reg_debug_2 = reg_la2_data_in;
-    if (reg_la2_data_in != 0x55555555)
-        reg_debug_1 = 0x8E;
+        set_debug_reg1(0x5B);
+    #endif
+    #if LA_SIZE >= 128
+    set_debug_reg2(get_la_reg(2));
+    if (get_la_reg(2) != 0xAAAAAAAA)
+        set_debug_reg1(0x6E);
     else 
-        reg_debug_1 = 0x8B;    
-    // Configure LA probes [31:0] and [63:32] as inputs to the cpu 
-	// Configure LA probes [63:32] and [127:96] as disabled input and output
-    reg_la0_oenb = reg_la0_iena = 0x00000000;    // [31:0]
-	reg_la1_oenb = reg_la1_iena = 0xFFFFFFFF;    // [63:32]
-	reg_la2_oenb = reg_la2_iena = 0x00000000;    // [95:64]
-	reg_la3_oenb = reg_la3_iena = 0xFFFFFFFF;    // [127:96]
+        set_debug_reg1(0x6B);    
+    #endif
 
-    reg_la1_iena = reg_la3_iena = 0x00000000; // disable input for la1 and la3
-
-    reg_la1_data = 0xAAAAAAAA;
-    reg_la3_data = 0xAAAAAAAA;
-
-    if (sky){
-        // reg_debug_2 = reg_la0_data_in;
-        if (reg_la0_data == 0xAAAAAAAA)
-            reg_debug_1 = 0x9E;
-        else 
-            reg_debug_1 = 0x9B;
-    }
-
-    // reg_debug_2 = reg_la2_data_in;
-    if (reg_la2_data == 0xAAAAAAAA)
-        reg_debug_1 = 0xaE;
+    set_la_reg(1,0x55555555);
+    set_la_reg(3,0x55555555);
+    #if LA_SIZE >= 64
+    set_debug_reg2(get_la_reg(0));
+    if (get_la_reg(0) != 0x55555555)
+        set_debug_reg1(0x7E);
     else 
-        reg_debug_1 = 0xaB;    
-    reg_debug_2 = 0xFF;
+        set_debug_reg1(0x7B);
+    #endif
+
+    #if LA_SIZE >= 128
+    set_debug_reg2(get_la_reg(2));
+    if (get_la_reg(2) != 0x55555555)
+        set_debug_reg1(0x8E);
+    else 
+        set_debug_reg1(0x8B);    
+    #endif
+
     
-    //print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
-    for(int i=0; i<100000000; i++);
+    set_debug_reg2(0xFF);
+    
+    dummy_delay(100000000);
+    
 }
