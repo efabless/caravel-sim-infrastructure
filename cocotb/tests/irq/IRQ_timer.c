@@ -15,78 +15,56 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <csr.h>
-#include <soc.h>
-#include <irq_vex.h>
-#include <uart.h>
-
-#include <defs.h>
-
-
-extern uint16_t flag;
+#include "../common_functions/common.c"
 
 void main(){
-    uint16_t data;
-    int i;
-    
+    enable_debug();
 
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
+    set_debug_reg2(0xAA); //wait for timer to send irq
 
-    irq_setmask(0);
-	irq_setie(1);
-
-
-	irq_setmask(irq_getmask() | (1 << TIMER0_INTERRUPT));
-    reg_debug_2 = 0xAA; //wait for timer to send irq
-
-    flag = 0;
+    clear_flag();
     /* Configure timer for a single-shot countdown */
-	reg_timer0_config = 0;
-	reg_timer0_data = 30;
-    reg_timer0_irq_en = 1;
-    reg_timer0_config = 1;
-
+    enable_timer0_irq();
+    timer0_oneshot_configure(500);
     // Loop, waiting for the interrupt to change reg_mprj_datah
-    bool is_pass = false;
+    char is_pass = 0;
     int timeout = 40; 
-
-    for (int i = 0; i < timeout; i++){
-        if (flag == 1){
-            reg_debug_1 = 0x1B; //test pass irq sent at timer0
-            is_pass = true;
+    set_debug_reg1(0x44); //test pass irq sent at timer0
+    unsigned int x;
+    set_debug_reg1(0x55); //test pass irq sent at timer0
+    for (x = 0; x < 40; x++){
+        set_debug_reg1(0x88); //test pass irq sent at timer0
+        if (get_flag() == 1){
+            set_debug_reg1(0x1B); //test pass irq sent at timer0
+            is_pass = 1;
             break;
         }
+        set_debug_reg1(0x99); //test pass irq sent at timer0
     }
     if (!is_pass){
-        reg_debug_1 = 0x1E; // timeout
+        set_debug_reg1(0x1E); // timeout
     }
-    flag = 0;
-     // test interrupt doesn't happened when timer isnt used
-    reg_debug_2 = 0xBB;
-    reg_timer0_config = 0; // disable counter
-    flag = 0;
+    clear_flag();
+    // test interrupt doesn't happened when timer isnt used
+    set_debug_reg2(0xBB);
+    timer0_disable(); // disable counter
+    clear_flag();
     // Loop, waiting for the interrupt to change reg_mprj_datah
-    is_pass = false;
+    is_pass = 0;
 
     for (int i = 0; i < timeout; i++){
-        if (flag == 1){
-            reg_debug_1 = 0x2E; //test fail interrupt isn't suppose to happened
-            is_pass = true;
+        if (get_flag() == 1){
+            set_debug_reg1(0x2E); //test fail interrupt isn't suppose to happened
+            is_pass = 1;
             break;
         }
     }
     if (!is_pass){
-        reg_debug_1 = 0x2B; // test pass
+        set_debug_reg1(0x2B); // test pass
     }
 
     // test finish 
-    reg_debug_2 = 0xFF;
+    set_debug_reg2(0xFF);
 
 }
 

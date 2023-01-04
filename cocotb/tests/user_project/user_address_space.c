@@ -6,8 +6,7 @@
 
 void main()
 {
-    int j;
-    reg_wb_enable =1; // for enable writing to user space area
+    enable_debug();
     // space from 0x30000000 to 0x30100000 according to current linker script 
     // TODO: fix when issue #107 https://github.com/efabless/caravel_mgmt_soc_litex/issues/107 is resolved
 
@@ -33,8 +32,8 @@ void main()
     temp = (*(volatile uint32_t*) 0x300602EC ); 
 
     // addresses outside user space - injecting error if user project ack is affected
-    reg_mprj_io_15 = GPIO_MODE_MGMT_STD_OUTPUT;
-    reg_mprj_io_14 = GPIO_MODE_MGMT_STD_OUTPUT;
+    configure_gpio(14,GPIO_MODE_MGMT_STD_OUTPUT);
+    configure_gpio(15,GPIO_MODE_MGMT_STD_OUTPUT);
     
     // finish with writing last address with Fs
     (*(volatile uint32_t*) 0x30100000 ) = 0xFFFFFFFF; 

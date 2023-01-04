@@ -183,7 +183,7 @@ debug_regs debug(
 `else // not AHB 
 wire [31:0] HRDATA_user;
 wire [31:0] HRDATA_debug;
-wire [31:0] HADDR_valid;
+reg [31:0] HADDR_valid;
 
 `ifdef COCOTB_SIM
 AHB_DEBUG_REGS debug(
@@ -216,8 +216,12 @@ user_project_gpio_example gpio_testing(
     .io_oeb(io_oeb));
 `endif // GPIO_TESTING
 
+always @(posedge HCLK) begin
+    if (HSEL)
+        HADDR_valid <= HADDR;
+end
+
 assign HREADYOUT = 1'b1;
-assign HADDR_valid = (HSEL) ? HADDR : HADDR_valid;
 assign HRDATA = (HADDR_valid[23:0] == 24'hFFFFFC || HADDR_valid[23:0] == 24'hFFFFF8) ? HRDATA_debug : HRDATA_user; 
 
 `endif // not ARM

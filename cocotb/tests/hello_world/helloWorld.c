@@ -1,18 +1,14 @@
-#include <defs.h>
+#include "../common_functions/common.c"
 
 int main(){
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
+    enable_debug();
     unsigned int j = 0x77;
-    reg_debug_1  = 0x66;
-    reg_debug_1  = j;
-    // reg_debug_1  = 1;
-    // reg_debug_1  = j;
-    // reg_debug_1  = 1;
-    // reg_debug_1  = j;
+    set_debug_reg1(0x66);
+    set_debug_reg1(j);
+    // set_debug_reg1(1);
+    // set_debug_reg1(j);
+    // set_debug_reg1(1);
+    // set_debug_reg1(j);
     // (*(volatile uint32_t*)0x0 ) = 0x11; 
     // (*(volatile uint32_t*)0x4 ) = 0x17; 
     // (*(volatile uint32_t*)0x4 ) = 0x17; 

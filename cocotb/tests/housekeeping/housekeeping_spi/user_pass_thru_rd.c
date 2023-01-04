@@ -15,8 +15,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <defs.h>
-#include <stub.c>
+#include "../../common_functions/common.c"
+#include "../../common_functions/gpios.c"
 
 
 
@@ -26,41 +26,21 @@ void main()
     // housekeeping SPI is being accessed. to show that the
     // processor is halted while the SPI is accessing the
     // flash SPI in pass-through mode.
-
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
+   enable_debug();
 
     // Management needs to apply output on these pads to access the user area SPI flash
-    reg_mprj_io_11 = GPIO_MODE_MGMT_STD_INPUT_NOPULL; // SDI
-    reg_mprj_io_10 = GPIO_MODE_MGMT_STD_OUTPUT; // SDO
-    reg_mprj_io_9 = GPIO_MODE_MGMT_STD_OUTPUT; // clk
-    reg_mprj_io_8 = GPIO_MODE_MGMT_STD_OUTPUT; // csb
+    configure_gpio(11 ,GPIO_MODE_MGMT_STD_INPUT_NOPULL); // SDI
+    configure_gpio(10 ,GPIO_MODE_MGMT_STD_OUTPUT); // SDO
+    configure_gpio(9  ,GPIO_MODE_MGMT_STD_OUTPUT); // clk
+    configure_gpio(8  ,GPIO_MODE_MGMT_STD_OUTPUT); // csb
+    configure_gpio(1  ,GPIO_MODE_MGMT_STD_OUTPUT); // SDI housekeeping spi
 
+    gpio_load();
 
-    // Apply configuration
-    reg_mprj_xfer = 1;
-    while ((reg_mprj_xfer&0x1) == 1);
 
     // Start test
-    reg_debug_1 = 0xAA;
-    reg_debug_1 = 0xBB;
-    reg_uart_enable = 1;
-
-    // Test in progress
-    reg_mprj_datal = 0xa5000000;
-
-    // Test message
-//    print("Test message\n");
-    print("ABC\n");
-
-    for (int i=0; i<1200; i++);
-
-    // End test
-    reg_debug_1 = 0xFF;
+    set_debug_reg1(0xAA);
+    set_debug_reg1(0xBB);
+    dummy_delay(100000000);
 }
 

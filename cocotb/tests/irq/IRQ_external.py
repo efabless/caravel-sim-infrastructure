@@ -36,14 +36,13 @@ async def IRQ_external(dut):
             if reg2 == 0xFF:  # test finish 
                 break
             if reg2 == 0xAA:  # assert mprj 7 
+                caravelEnv.drive_gpio_in((7,7),0)
                 await write_reg_spi(caravelEnv,0x1c,1)
                 cocotb.log.info(f"irq 1 = {dut.uut.housekeeping.irq_1_inputsrc.value}")
-                caravelEnv.drive_gpio_in((7,7),0)
-                await ClockCycles(caravelEnv.clk,10)
                 caravelEnv.drive_gpio_in((7,7),1)
             
-            if reg2 == 0xBB:  # deassert mprj 7
-                caravelEnv.drive_gpio_in((7,7),0)
+            # if reg2 == 0xBB:  # deassert mprj 7
+            #     caravelEnv.drive_gpio_in((7,7),0)
 
         if reg1 != cpu.read_debug_reg1():
             reg1 = cpu.read_debug_reg1()                
@@ -61,7 +60,7 @@ async def IRQ_external(dut):
                     cocotb.log.error(f"[TEST] Failed interrupt is detected when mprj 7 deasserted") 
             else: 
                 cocotb.log.error(f"[TEST] debug register 1 has illegal value")  
-        await ClockCycles(caravelEnv.clk,10) 
+        await ClockCycles(caravelEnv.clk,1) 
 
     if phases_fails != 0:
         cocotb.log.error(f"[TEST] finish with {phases_passes} phases passes and {phases_fails} phases fails") 

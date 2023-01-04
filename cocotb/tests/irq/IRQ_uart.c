@@ -14,79 +14,49 @@
  * limitations under the License.
  * SPDX-License-Identifier: Apache-2.0
  */
-#include <defs.h>
-
-#include <csr.h>
-#include <soc.h>
-#include <irq_vex.h>
-#include <uart.h>
-#include <stub.c>
-
-
-
-
-extern uint16_t flag;
-
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 void main(){
-    flag = 0;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
+    enable_debug();
+    clear_flag();
+    configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
+    gpio_load();
+    enable_uart_irq();
 
-    reg_mprj_io_6 = GPIO_MODE_MGMT_STD_OUTPUT;
-    reg_mprj_io_5 = 0x1803;
-	 
-    if(1){
-        reg_mprj_xfer = 1;
-        while ((reg_mprj_xfer&0x1) == 1);
-    }
-    reg_uart_enable = 1;
-    reg_uart_irq_en =1;
-    irq_setmask(0);
-	irq_setie(1);
-
-
-	irq_setmask(irq_getmask() | (1 << UART_INTERRUPT));
-
-    reg_debug_2 = 0xAA; //start sending data through the uart
+    set_debug_reg2(0xAA); //start sending data through the uart
     print("M");
 
     // Loop, waiting for the interrupt to change reg_mprj_datah
-    bool is_pass = false;
+    char is_pass = 0;
     int timeout = 100; 
 
     for (int i = 0; i < timeout; i++){
-        if (flag == 1){
-            reg_debug_1 = 0x1B; //test pass irq sent
-            is_pass = true;
+        if (get_flag() == 1){
+            set_debug_reg1(0x1B); //test pass irq sent
+            is_pass = 1;
             break;
         }
     }
     if (!is_pass){
-        reg_debug_1 = 0x1E; // timeout
+        set_debug_reg1(0x1E); // timeout
     }
     // test interrupt doesn't happened nothing sent at uart
-    reg_debug_2 = 0xBB;
-    flag = 0;
+    set_debug_reg2(0xBB);
+    clear_flag();
     // Loop, waiting for the interrupt to change reg_mprj_datah
-    is_pass = false;
+    is_pass = 0;
 
     for (int i = 0; i < timeout; i++){
-        if (flag == 1){
-            reg_debug_1 = 0x2E; //test fail interrupt isn't suppose to happened
-            is_pass = true;
+        if (get_flag() == 1){
+            set_debug_reg1(0x2E); //test fail interrupt isn't suppose to happened
+            is_pass = 1;
             break;
         }
     }
     if (!is_pass){
-        reg_debug_1 = 0x2B; // test pass
+        set_debug_reg1(0x2B); // test pass
     }
     // test finish 
-    reg_debug_2 = 0xFF;
-
+    set_debug_reg2(0xFF);
 }
 

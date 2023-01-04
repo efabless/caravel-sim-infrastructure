@@ -1,6 +1,8 @@
 #include <defs.h>
 #include <stub.c>
-
+#ifdef ARM 
+#include "swift.h"
+#endif
 void enable_debug(){
     #ifdef ARM // ARM use dirrent location 
     reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
@@ -9,18 +11,17 @@ void enable_debug(){
     #endif
     set_debug_reg1(0);
     set_debug_reg2(0);
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
     
 }
 void hk_spi_disable(){reg_hkspi_disable = 1;}
+void hk_spi_enable(){reg_hkspi_disable = 0;}
 // debug regs
 void set_debug_reg1(unsigned int data){reg_debug_1 = data;}
 void set_debug_reg2(unsigned int data){reg_debug_2 = data;}
 unsigned int get_debug_reg1(){return reg_debug_1;}
 unsigned int get_debug_reg2(){return reg_debug_2;}
-void wait_debug_reg1(unsigned int data){while (reg_debug_1 != data);}
-void wait_debug_reg2(unsigned int data){while (reg_debug_2 != data);}
+void wait_debug_reg1(int data){while (get_debug_reg1() != data);}
+void wait_debug_reg2(unsigned int data){while (get_debug_reg2() != data);}
 
 // gpios_mgmt
 void set_gpio_l(unsigned int data){reg_mprj_datal = data;}
@@ -162,15 +163,18 @@ void dummy_delay(int num){for (int i=0;i < num;i++);}
 // timer 
 
 void timer0_oneshot_configure(unsigned int count){
-	reg_timer0_config = 0; // disable
+	reg_timer0_config = reg_timer0_config & 0xFFFFFFFE; // disable
 	reg_timer0_data = count;
-    reg_timer0_config = 1; // enable
+    reg_timer0_config = reg_timer0_config | 1; // enable
 }
 void timer0_periodic_configure(unsigned int count){
-	reg_timer0_config = 0; // disable
+	reg_timer0_config = reg_timer0_config & 0xFFFFFFFE; // disable
 	reg_timer0_data = 0;
     reg_timer0_data_periodic  = count;
-    reg_timer0_config = 1; // enable
+    reg_timer0_config = reg_timer0_config | 1; // enable
+}
+void timer0_disable(){
+    reg_timer0_config = reg_timer0_config & 0xFFFFFFFE; // disable counter
 }
 
 void update_timer0_val(){
@@ -338,4 +342,72 @@ unsigned int get_la_reg(char number){
         #endif
         default: break;
     }
+}
+
+// IRQ 
+#ifndef ARM
+extern unsigned int flag;
+#else 
+unsigned int flag;
+void HK_IRQ0_Handler(void){flag = 1;}
+void HK_IRQ1_Handler(void){flag = 1;}
+void TMR0_Handler(void){flag = 1;}
+void UART0_Handler(void){flag = 1;}
+#endif
+char get_flag(){
+    #ifndef ARM
+    return flag;
+    #else 
+    return flag;
+    if (get_debug_reg2() == 0x4F)
+        return 1;
+    else 
+        return 0;
+    #endif
+}
+
+void clear_flag(){
+    #ifndef ARM
+    flag=0;
+    #else 
+    flag=0;
+    
+    #endif
+}
+void enable_external1_irq(){
+    #ifndef ARM
+    irq_setmask(0);
+	irq_setie(1);
+	irq_setmask(irq_getmask() | (1 << USER_IRQ_4_INTERRUPT));
+    reg_user4_irq_en =1;
+    #else
+    NVIC_EnableIRQ(HK_IRQ0);
+    NVIC_EnableIRQ(HK_IRQ1);
+    __enable_irq();
+    #endif
+}
+void enable_timer0_irq(){
+    #ifndef ARM
+    irq_setmask(0);
+	irq_setie(1);
+	irq_setmask(irq_getmask() | (1 << TIMER0_INTERRUPT));
+    reg_timer0_irq_en = 1;
+    #else
+    NVIC_EnableIRQ(TMR0_IRQn);
+	reg_timer0_config = reg_timer0_config | 0x8; // enable irq
+    __enable_irq();
+    #endif
+}
+void enable_uart_irq(){
+    #ifndef ARM
+    reg_uart_enable = 1;
+    reg_uart_irq_en =1;
+    irq_setmask(0);
+	irq_setie(1);
+	irq_setmask(irq_getmask() | (1 << UART_INTERRUPT));
+    #else
+    NVIC_EnableIRQ(UART0_IRQn);
+    reg_uart_ctrl = reg_uart_ctrl | 0x3; // enable irq TX and RX
+    __enable_irq();
+    #endif
 }

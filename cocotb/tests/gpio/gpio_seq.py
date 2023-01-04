@@ -106,7 +106,7 @@ async def gpio_all_o_seq(dut,caravelEnv,clock,after_config_callback=None):
     if after_config_callback != None:
         await after_config_callback(caravelEnv,cpu)
     await caravelEnv.release_csb()
-    cocotb.log.info("[TEST] finish configuring as user output")
+    cocotb.log.info("[TEST] finish configuring output")
     i= 0x1 << (active_gpios_num-32)
     i_temp = i
     for j in range(active_gpios_num-32):
@@ -361,3 +361,6 @@ async def gpio_all_i_pu_seq(dut,caravelEnv,clock):
         if gpio[i] != "1":
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 1 while configured as input pullup and all released")
     await ClockCycles(caravelEnv.clk,100) 
+
+
+    

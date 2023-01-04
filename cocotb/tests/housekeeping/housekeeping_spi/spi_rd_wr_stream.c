@@ -1,11 +1,11 @@
-#include <defs.h>
-#include <stub.c>
+#include "../../common_functions/common.c"
+
 
 // Empty C code
 
 void main()
 {
-    //print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
-    for(int i=0; i<100000000; i++);
+    dummy_delay(100000000);
 	return;
 }
+

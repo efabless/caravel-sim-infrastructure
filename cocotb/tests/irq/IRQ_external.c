@@ -15,93 +15,70 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <csr.h>
-#include <soc.h>
-#include <irq_vex.h>
-#include <uart.h>
-
-#include <defs.h>
-
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 /*
 Testing timer interrupts 
 Enable interrupt for IRQ external pin mprj_io[7] -> should be drived to 1 by the environment
 **NOTE** housekeeping SPI should used to update register irq_1_inputsrc to 1 see verilog code
 
     @wait for environment to make mprj[7] high
-        send packet size = 1
+        send 0xAA
 
     @received interrupt correctly  test pass
-        send packet size = 5
+        send 0x1B
 
     @ timeout                       test fail
-        send packet size = 9
+        send 0x1E
 
     @ end test 
-        send packet size = 3
-        send packet size = 3
-        send packet size = 3
-
+        send 0xFF
 */
 
-extern uint16_t flag;
 
 void main(){
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
-
+    enable_debug();
     // setting bit 7 as input 
-    reg_mprj_io_7 = GPIO_MODE_MGMT_STD_INPUT_NOPULL;
+    configure_gpio(7,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
-    // automatic bitbang approach
-    if(1){
-        reg_mprj_xfer = 1;
-        while ((reg_mprj_xfer&0x1) == 1);
-    }
-    irq_setmask(0);
-	irq_setie(1);
-	irq_setmask(irq_getmask() | (1 << USER_IRQ_4_INTERRUPT));
-    reg_user4_irq_en =1;
+    gpio_load();
+    enable_external1_irq();
 
     // test interrrupt happen when mprj[7] is asserted
-    reg_debug_2 = 0xAA; //wait for environment to make mprj[7] high 
-    flag = 0;
+    set_debug_reg2(0xAA); //wait for environment to make mprj[7] high 
+    clear_flag();
     // Loop, waiting for the interrupt to change reg_mprj_datah
-    bool is_pass = false;
+    char is_pass = 0;
     int timeout = 40; 
 
     for (int i = 0; i < timeout; i++){
-        if (flag == 1){
-            reg_debug_1 = 0x1B; //test pass irq sent at mprj 7 
-            is_pass = true;
+        if (get_flag() == 1){
+            set_debug_reg1(0x1B); //test pass irq sent at mprj 7 
+            is_pass = 1;
             break;
         }
     }
     if (!is_pass){
-        reg_debug_1 = 0x1E; // timeout
+        set_debug_reg1(0x1E); // timeout
     }
 
     // test interrupt doesn't happened when mprj[7] is deasserted
-    reg_debug_2 = 0xBB;
-    flag = 0;
+    set_debug_reg2(0xBB);
+    clear_flag();
     // Loop, waiting for the interrupt to change reg_mprj_datah
-    is_pass = false;
+    is_pass = 0;
 
     for (int i = 0; i < timeout; i++){
-        if (flag == 1){
-            reg_debug_1 = 0x2E; //test fail interrupt isn't suppose to happened
-            is_pass = true;
+        if (get_flag() == 1){
+            set_debug_reg1(0x2E); //test fail interrupt isn't suppose to happened
+            is_pass = 1;
             break;
         }
     }
     if (!is_pass){
-        reg_debug_1 = 0x2B; // test pass
+        set_debug_reg1(0x2B); // test pass
     }
 
     // test finish 
-    reg_debug_2 = 0xFF;
+    // set_debug_reg2(0xFF);
 }

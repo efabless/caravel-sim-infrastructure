@@ -1,20 +1,13 @@
-#include <defs.h>
-#include <stub.c>
+#include "../../common_functions/common.c"
+#include "../../common_functions/gpios.c"
 // --------------------------------------------------------
 
 void main(){
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0xBB;
-
-    while (reg_debug_1 != 0xAA);
-    reg_hkspi_disable = 0;
+    enable_debug();
+    set_debug_reg2(0xBB);
+    wait_debug_reg1(0xAA);
+    hk_spi_enable();
     reg_hkspi_pll_ena =0;
-    reg_debug_1 =0xBB;
-    //print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
-    for(int i=0; i<100000000; i++);
+    set_debug_reg1(0xBB);
+    dummy_delay(100000000);
 }

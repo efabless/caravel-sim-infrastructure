@@ -14,11 +14,8 @@
  * limitations under the License.
  * SPDX-License-Identifier: Apache-2.0
  */
-
-#include <defs.h>
-#include <stub.c>
-
-
+#include "../../common_functions/common.c"
+#include "../../common_functions/gpios.c"
 
 void main()
 {
@@ -27,30 +24,21 @@ void main()
     // processor is halted while the SPI is accessing the
     // flash SPI in pass-through mode.
 
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
+    enable_debug();
 
     // Management needs to apply output on these pads to access the user area SPI flash
-    reg_mprj_io_11 = GPIO_MODE_MGMT_STD_INPUT_NOPULL; // SDI
-    reg_mprj_io_10 = GPIO_MODE_MGMT_STD_OUTPUT; // SDO
-    reg_mprj_io_9 = GPIO_MODE_MGMT_STD_OUTPUT; // clk
-    reg_mprj_io_8 = GPIO_MODE_MGMT_STD_OUTPUT; // csb
-    reg_mprj_io_1 = GPIO_MODE_MGMT_STD_OUTPUT; // SDI housekeeping spi
+    configure_gpio(11 ,GPIO_MODE_MGMT_STD_INPUT_NOPULL); // SDI
+    configure_gpio(10 ,GPIO_MODE_MGMT_STD_OUTPUT); // SDO
+    configure_gpio(9  ,GPIO_MODE_MGMT_STD_OUTPUT); // clk
+    configure_gpio(8  ,GPIO_MODE_MGMT_STD_OUTPUT); // csb
+    configure_gpio(1  ,GPIO_MODE_MGMT_STD_OUTPUT); // SDI housekeeping spi
 
-
-    // Apply configuration
-    reg_mprj_xfer = 1;
-    while ((reg_mprj_xfer&0x1) == 1);
+    gpio_load();
 
     // Start test
-    reg_debug_1 = 0xAA;
-    //print("adding a very very long delay because cpu produces X's when code finish and this break the simulation");
-    for(int i=0; i<100000000; i++);
+    set_debug_reg1(0xAA);
+    dummy_delay(100000000);
+
 
 }
 

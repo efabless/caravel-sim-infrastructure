@@ -1,4 +1,5 @@
-#include <defs.h>
+#include "../common_functions/common.c"
+
 
 int A[]={1, 40, 2, 5, 22, 11, 90, 200, 10, 20, 25};
 
@@ -88,13 +89,8 @@ void main()
 {
     int n;
     int B[10];
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
+    enable_debug();
+
     // start test
     //  reg_mprj_datal = 0xAAAA0000;
 
@@ -106,9 +102,9 @@ void main()
 
     n = fibbonacci(10);
     if(n != 55)
-        reg_debug_1 = 0x1E; // fail pahse 1
+        set_debug_reg1(0x1E); // fail pahse 1
     else
-        reg_debug_1 = 0x1B; // pass pahse 1
+        set_debug_reg1(0x1B); // pass pahse 1
 
     int sumA = 0;
     for(int i=0; i<10; i++){
@@ -117,9 +113,9 @@ void main()
     }
 
     if(sumA != 401)
-        reg_debug_1 = 0x2E; // fail pahse 2
+        set_debug_reg1(0x2E); // fail pahse 2
     else 
-        reg_debug_1 = 0x2B; // pass pahse 2
+        set_debug_reg1(0x2B); // pass pahse 2
 
     recursiveInsertionSort(B, 10);
 
@@ -129,9 +125,9 @@ void main()
     }
 
     if(sumA != sumB)
-        reg_debug_1 = 0x3E;// fail pahse 3
+        set_debug_reg1(0x3E);// fail pahse 3
     else 
-        reg_debug_1 = 0x3B; // pass pahse 3
+        set_debug_reg1(0x3B); // pass pahse 3
 
     for(int i=0; i<10; i++){
         B[i] = A[i];
@@ -144,17 +140,17 @@ void main()
     }
 
     if(sumA != sumB)
-        reg_debug_1 = 0x4E;// fail pahse 4
+        set_debug_reg1(0x4E);// fail pahse 4
     else 
-        reg_debug_1 = 0x4B; // pass pahse 4
+        set_debug_reg1(0x4B); // pass pahse 4
 
     int sum = f8(10, 20, 30, 40, 50, 60, 70, 80);
 
     if(sum != (10+20+30+40+50+60+70+80))
-        reg_debug_1 = 0x5E; // fail pahse 5
+        set_debug_reg1(0x5E); // fail pahse 5
     else 
-        reg_debug_1 = 0x5B; // pass pahse 5
+        set_debug_reg1(0x5B); // pass pahse 5
 
     // test finish 
-    reg_debug_2 = 0xFF;
+    set_debug_reg2(0xFF);
 }

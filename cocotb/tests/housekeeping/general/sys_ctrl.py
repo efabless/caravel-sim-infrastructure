@@ -98,19 +98,19 @@ async def hk_disable(dut):
 
     # check spi working by writing to PLL enables
     old_pll_enable = dut.uut.housekeeping.pll_ena.value.integer
-    cocotb.log.debug(f"[TEST] pll_enable = {old_pll_enable}")
+    cocotb.log.info(f"[TEST] pll_enable = {old_pll_enable}")
     await write_reg_spi(caravelEnv,0x8,1-old_pll_enable)
     pll_enable = dut.uut.housekeeping.pll_ena.value.integer
-    cocotb.log.debug(f"[TEST] pll_enable = {pll_enable}")
+    cocotb.log.info(f"[TEST] pll_enable = {pll_enable}")
     if pll_enable == 1-old_pll_enable: 
         cocotb.log.info(f"[TEST] Pass: SPI swap pll_enable value from {old_pll_enable} to {pll_enable}") 
     else: 
         cocotb.log.error(f"[TEST] Error: SPI isn't working correctly it cant change pll from {old_pll_enable} to {1-old_pll_enable}")
     old_pll_enable = dut.uut.housekeeping.pll_ena.value.integer
-    cocotb.log.debug(f"[TEST] pll_enable = {old_pll_enable}")
+    cocotb.log.info(f"[TEST] pll_enable = {old_pll_enable}")
     await write_reg_spi(caravelEnv,0x8,1-old_pll_enable)
     pll_enable = dut.uut.housekeeping.pll_ena.value.integer
-    cocotb.log.debug(f"[TEST] pll_enable = {pll_enable}")
+    cocotb.log.info(f"[TEST] pll_enable = {pll_enable}")
     if pll_enable == 1-old_pll_enable: 
         cocotb.log.info(f"[TEST] Pass: SPI swap pll_enable value from {old_pll_enable} to {pll_enable}") 
     else: 
