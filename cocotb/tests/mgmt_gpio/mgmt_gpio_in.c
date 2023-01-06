@@ -29,6 +29,7 @@ void main(){
     hk_spi_disable();
     mgmt_gpio_i_enable();
     set_debug_reg1(10); // wait for 10 blinks
+    dummy_delay(250);
 	for (int i = 0; i < 10; i++) {
         wait_on_gpio_mgmt(0);
         set_debug_reg2(0XAA); //  1 is recieved

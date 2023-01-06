@@ -29,17 +29,13 @@ void main(){
     // Loop, waiting for the interrupt to change reg_mprj_datah
     char is_pass = 0;
     int timeout = 40; 
-    set_debug_reg1(0x44); //test pass irq sent at timer0
     unsigned int x;
-    set_debug_reg1(0x55); //test pass irq sent at timer0
     for (x = 0; x < 40; x++){
-        set_debug_reg1(0x88); //test pass irq sent at timer0
         if (get_flag() == 1){
             set_debug_reg1(0x1B); //test pass irq sent at timer0
             is_pass = 1;
             break;
         }
-        set_debug_reg1(0x99); //test pass irq sent at timer0
     }
     if (!is_pass){
         set_debug_reg1(0x1E); // timeout

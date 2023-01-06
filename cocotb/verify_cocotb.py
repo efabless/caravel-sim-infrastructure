@@ -380,6 +380,8 @@ class RunTest:
         
     #change linker script to for mem tests 
     def linkerScript_for_mem(self,ram,LINKER_SCRIPT):
+        if ARM :
+            return LINKER_SCRIPT
         new_LINKER_SCRIPT = f"{self.cocotb_path}/{self.sim_path}/sections.lds"
         shutil.copyfile(LINKER_SCRIPT, new_LINKER_SCRIPT)
         if ram == "dff2":  

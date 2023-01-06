@@ -39,18 +39,24 @@ async def PoR(dut):
 
     # start test
     cpu = RiskV(dut)
-    cocotb.log.info(f"[TEST] Start mgmt_gpio_bidir but depending on PoR test")  
+    cpu.cpu_force_reset()
+    cpu.cpu_release_reset()
+    cocotb.log.info(f"[TEST] Start mgmt_gpio_bidir test")  
+
     await wait_reg1(cpu,caravelEnv,0XAA)
     num_blinks = random.randint(1, 20)
     cocotb.log.info (f"[TEST] start send {num_blinks} blinks")
     for i in range(num_blinks):
         if i == num_blinks-1: #last iteration
-            # await cpu.drive_data2address(reg.get_addr('reg_debug_1'),0xFF)
             cpu.write_debug_reg1_backdoor(0xFF) 
         caravelEnv.drive_mgmt_gpio(1)
         await ClockCycles(caravelEnv.clk,3000) 
         caravelEnv.drive_mgmt_gpio(0)
-        await ClockCycles(caravelEnv.clk,3000) 
+        if i != num_blinks-1: # not last iteration
+            await ClockCycles(caravelEnv.clk,3000) 
+        else: 
+            await ClockCycles(caravelEnv.clk,1) 
+
     cocotb.log.info(f"[TEST] finish sending {num_blinks} blinks ")
 
     cocotb.log.info(f"[TEST] waiting for {num_blinks} blinks ")
@@ -63,14 +69,14 @@ async def PoR(dut):
                 break
             if cpu.read_debug_reg2() == 0xFF:  #test finish
                 break
-            await ClockCycles(caravelEnv.clk,10) 
+            await ClockCycles(caravelEnv.clk,1) 
         while (True):
             if caravelEnv.monitor_mgmt_gpio() == '1': 
                 recieved_blinks +=1
                 break
             if cpu.read_debug_reg2() == 0xFF:  #test finish
                 break
-            await ClockCycles(caravelEnv.clk,10) 
+            await ClockCycles(caravelEnv.clk,1) 
         await ClockCycles(caravelEnv.clk,1) 
         
 

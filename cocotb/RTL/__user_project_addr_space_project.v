@@ -23,7 +23,7 @@
  *
  *-------------------------------------------------------------
  */
-
+`ifndef AHB
 module user_project_addr_space_example (
     // Wishbone Slave ports (WB MI A)
     input wb_clk_i,
@@ -60,5 +60,45 @@ module user_project_addr_space_example (
         end
     end
 endmodule
+`else // not AHB
+module AHB_user_project_addr_space_example (
+    // Wishbone Slave ports (WB MI A)
+    input  wire            HCLK,
+    input  wire            HRESETn,
+    input  wire            HSEL,
+    input  wire [31:0]     HADDR,
+    input  wire [31:0]     HWDATA,
+    input  wire            HREADY,
+    input  wire            HWRITE,
+    input  wire [1:0]      HTRANS,
+    input  wire [2:0]      HSIZE,
+    output reg [31:0]     HRDATA,
+    output reg            HREADYOUT
 
+);
+   
+    // extend project for testing the user project address space 
+    reg [31:0] addr; 
+    reg [31:0] data; 
+    always @(posedge HCLK or posedge HRESETn) begin
+        if (HRESETn) begin
+            addr <=0;
+            data <=0;
+            HRDATA <=0;
+            HREADYOUT <=0;
+        end else if (HSEL && HREADY && HWRITE) begin 
+            addr <= HADDR;
+            data <= HWDATA;
+            HREADYOUT <= 1;
+        end else if (HSEL && HREADY && !HWRITE) begin // read 
+            addr <= HADDR;
+            data <= 32'h777; // arbitrary number
+            HREADYOUT <= 1;
+        end else begin 
+            HREADYOUT <= 1;
+        end
+    end
+endmodule
+
+`endif // not AHB
 `default_nettype wire

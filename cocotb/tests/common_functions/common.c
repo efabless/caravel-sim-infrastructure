@@ -20,7 +20,7 @@ void set_debug_reg1(unsigned int data){reg_debug_1 = data;}
 void set_debug_reg2(unsigned int data){reg_debug_2 = data;}
 unsigned int get_debug_reg1(){return reg_debug_1;}
 unsigned int get_debug_reg2(){return reg_debug_2;}
-void wait_debug_reg1(int data){while (get_debug_reg1() != data);}
+void wait_debug_reg1(unsigned int data){while (get_debug_reg1() != data);}
 void wait_debug_reg2(unsigned int data){while (get_debug_reg2() != data);}
 
 // gpios_mgmt
@@ -158,7 +158,7 @@ int  mgmt_gpio_rd(){return reg_gpio_in;}
 void wait_on_gpio_mgmt(unsigned int data){while (reg_gpio_in == data);}
 
 // 
-void dummy_delay(int num){for (int i=0;i < num;i++);}
+void dummy_delay(int num){for (int i=0;i < num;i++){get_debug_reg1();}}
 
 // timer 
 

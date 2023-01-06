@@ -14,41 +14,30 @@
  * limitations under the License.
  * SPDX-License-Identifier: Apache-2.0
  */
+#include "../common_functions/common.c"
+#include "../common_functions/gpios.c"
 
-#include <defs.h>
-#include <stub.c>
 
 // --------------------------------------------------------
 
 void main()
 {
-    int j;
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-    reg_debug_1  = 0x0;
-    reg_debug_2  = 0x0;
 
+    enable_debug();
+    configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
+    configure_gpio(5,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
+    configure_gpio(0,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
+    gpio_load(); 
+    #ifndef ARM 
 
-    reg_mprj_io_6 = GPIO_MODE_MGMT_STD_OUTPUT;
-    reg_mprj_io_5 = GPIO_MODE_MGMT_STD_INPUT_NOPULL;
-    reg_mprj_io_0 = GPIO_MODE_MGMT_STD_INPUT_NOPULL;
-
-    // Now, apply the configuration
-    reg_mprj_xfer = 1;
-    while ((reg_mprj_xfer&0x1) == 1);
-    
     (*(volatile uint32_t*) CSR_DEBUG_MODE_OUT_ADDR ) = 1; // enable debug mode
+    #endif
 
     // start of the test
-    reg_debug_1 = 0xAA;
+    set_debug_reg1(0xAA);
 
     // very long wait
-    for (j = 0; j < 1600; j++);
-    for (j = 0; j < 1600; j++);
-    for (j = 0; j < 1600; j++);
+    dummy_delay(1500);
 
 
 }

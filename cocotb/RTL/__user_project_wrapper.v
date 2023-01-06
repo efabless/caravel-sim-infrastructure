@@ -185,6 +185,19 @@ wire [31:0] HRDATA_user;
 wire [31:0] HRDATA_debug;
 reg [31:0] HADDR_valid;
 
+`ifdef ADDR_SPACE_TESTING
+AHB_user_project_addr_space_example addr_space_testing(
+    .HCLK(HCLK),
+    .HRESETn(HRESETn),
+    .HSEL(HSEL),
+    .HADDR(HADDR),
+    .HTRANS(HTRANS),
+    .HWDATA(HWDATA),
+    .HWRITE(HWRITE),
+    .HREADY(HREADY),
+    .HRDATA(HRDATA_user));
+`endif// ADDR_SPACE_TESTING
+
 `ifdef COCOTB_SIM
 AHB_DEBUG_REGS debug(
     .HCLK(HCLK),
@@ -224,5 +237,5 @@ end
 assign HREADYOUT = 1'b1;
 assign HRDATA = (HADDR_valid[23:0] == 24'hFFFFFC || HADDR_valid[23:0] == 24'hFFFFF8) ? HRDATA_debug : HRDATA_user; 
 
-`endif // not ARM
+`endif // not AHB
 endmodule	// user_project_wrapper
