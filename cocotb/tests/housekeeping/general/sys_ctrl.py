@@ -24,7 +24,7 @@ async def clock_redirect(dut):
     cpu.cpu_release_reset()
     error_margin = 0.1
     # calculate core clock
-    await  cocotb.start(calculate_clk_period(dut.uut.clock,"core clock"))  
+    await  cocotb.start(calculate_clk_period(dut.uut.chip_core.clock,"core clock"))  
     await ClockCycles(caravelEnv.clk,110)
     cocotb.log.info(f"[TEST]  core clock requency = {round(1000000/core_clock,2)} MHz period = {core_clock}ps")
     await wait_reg1(cpu,caravelEnv,0xAa)
@@ -97,19 +97,19 @@ async def hk_disable(dut):
     cpu.cpu_release_reset()
 
     # check spi working by writing to PLL enables
-    old_pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    old_pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.info(f"[TEST] pll_enable = {old_pll_enable}")
     await write_reg_spi(caravelEnv,0x8,1-old_pll_enable)
-    pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.info(f"[TEST] pll_enable = {pll_enable}")
     if pll_enable == 1-old_pll_enable: 
         cocotb.log.info(f"[TEST] Pass: SPI swap pll_enable value from {old_pll_enable} to {pll_enable}") 
     else: 
         cocotb.log.error(f"[TEST] Error: SPI isn't working correctly it cant change pll from {old_pll_enable} to {1-old_pll_enable}")
-    old_pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    old_pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.info(f"[TEST] pll_enable = {old_pll_enable}")
     await write_reg_spi(caravelEnv,0x8,1-old_pll_enable)
-    pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.info(f"[TEST] pll_enable = {pll_enable}")
     if pll_enable == 1-old_pll_enable: 
         cocotb.log.info(f"[TEST] Pass: SPI swap pll_enable value from {old_pll_enable} to {pll_enable}") 
@@ -120,10 +120,10 @@ async def hk_disable(dut):
     await write_reg_spi(caravelEnv,0x6f,0x1)
 
     # try to change pll_en 
-    old_pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    old_pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.debug(f"[TEST] pll_enable = {old_pll_enable}")
     await write_reg_spi(caravelEnv,0x8,1-old_pll_enable)
-    pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.debug(f"[TEST] pll_enable = {pll_enable}")
     if pll_enable == 1-old_pll_enable: 
         cocotb.log.error(f"[TEST] Error: SPI swap pll_enable value from {old_pll_enable} to {pll_enable} while housekeeping spi is disabled") 
@@ -135,10 +135,10 @@ async def hk_disable(dut):
     cpu.write_debug_reg1_backdoor(0xAA) 
     await wait_reg1(cpu,caravelEnv,0xBB) # enabled the housekeeping
 
-    old_pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    old_pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.debug(f"[TEST] pll_enable = {old_pll_enable}")
     await write_reg_spi(caravelEnv,0x8,1-old_pll_enable)
-    pll_enable = dut.uut.housekeeping.pll_ena.value.integer
+    pll_enable = dut.uut.chip_core.housekeeping.pll_ena.value.integer
     cocotb.log.debug(f"[TEST] pll_enable = {pll_enable}")
     if pll_enable == 1-old_pll_enable: 
         cocotb.log.info(f"[TEST] Pass: Housekeeping SPI has been enabled correctly through firmware") 

@@ -172,7 +172,7 @@ async def mgmt_gpio_pu_pd(dut):
     await wait_reg1(cpu,caravelEnv,0X1B)
     # caravelEnv.drive_mgmt_gpio('z')
     await ClockCycles(caravelEnv.clk,1) 
-    gpio_in = dut.uut.soc.core.gpio_in_pad
+    gpio_in = dut.uut.chip_core.soc.core.gpio_in_pad
     if gpio_in.value.binstr != '1': 
         cocotb.log.error(f"[TEST] mgmt gpio pull up didn't work correctly reading {gpio_in} instead of 1")
 

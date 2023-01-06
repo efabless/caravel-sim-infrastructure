@@ -58,7 +58,7 @@ async def serial_shifting_10(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut
+    uut = dut.uut.chip_core
     await wait_reg1(cpu,caravelEnv,0xFF)
     gpios_l = ("gpio_control_bidir_1[0]","gpio_control_bidir_1[1]","gpio_control_in_1a[0]","gpio_control_in_1a[1]","gpio_control_in_1a[2]","gpio_control_in_1a[3]","gpio_control_in_1a[4]","gpio_control_in_1a[5]","gpio_control_in_1[0]","gpio_control_in_1[1]","gpio_control_in_1[2]","gpio_control_in_1[3]","gpio_control_in_1[4]","gpio_control_in_1[5]","gpio_control_in_1[6]","gpio_control_in_1[7]","gpio_control_in_1[8]","gpio_control_in_1[9]","gpio_control_in_1[10]")
     if  Macros['CARAVAN']:
@@ -91,7 +91,7 @@ async def serial_shifting_01(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut
+    uut = dut.uut.chip_core
     await wait_reg1(cpu,caravelEnv,0xFF)
     gpios_l = ("gpio_control_bidir_1[0]","gpio_control_bidir_1[1]","gpio_control_in_1a[0]","gpio_control_in_1a[1]","gpio_control_in_1a[2]","gpio_control_in_1a[3]","gpio_control_in_1a[4]","gpio_control_in_1a[5]","gpio_control_in_1[0]","gpio_control_in_1[1]","gpio_control_in_1[2]","gpio_control_in_1[3]","gpio_control_in_1[4]","gpio_control_in_1[5]","gpio_control_in_1[6]","gpio_control_in_1[7]","gpio_control_in_1[8]","gpio_control_in_1[9]","gpio_control_in_1[10]")
     if  Macros['CARAVAN']:
@@ -126,7 +126,7 @@ async def serial_shifting_0011(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut
+    uut = dut.uut.chip_core
     await wait_reg1(cpu,caravelEnv,0xFF)
     gpios_l = ("gpio_control_bidir_1[0]","gpio_control_bidir_1[1]","gpio_control_in_1a[0]","gpio_control_in_1a[1]","gpio_control_in_1a[2]","gpio_control_in_1a[3]","gpio_control_in_1a[4]","gpio_control_in_1a[5]","gpio_control_in_1[0]","gpio_control_in_1[1]","gpio_control_in_1[2]","gpio_control_in_1[3]","gpio_control_in_1[4]","gpio_control_in_1[5]","gpio_control_in_1[6]","gpio_control_in_1[7]","gpio_control_in_1[8]","gpio_control_in_1[9]","gpio_control_in_1[10]")
     if  Macros['CARAVAN']:
@@ -158,7 +158,7 @@ async def serial_shifting_1100(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uut = dut.uut
+    uut = dut.uut.chip_core
     await wait_reg1(cpu,caravelEnv,0xFF)
     gpios_l = ("gpio_control_bidir_1[0]","gpio_control_bidir_1[1]","gpio_control_in_1a[0]","gpio_control_in_1a[1]","gpio_control_in_1a[2]","gpio_control_in_1a[3]","gpio_control_in_1a[4]","gpio_control_in_1a[5]","gpio_control_in_1[0]","gpio_control_in_1[1]","gpio_control_in_1[2]","gpio_control_in_1[3]","gpio_control_in_1[4]","gpio_control_in_1[5]","gpio_control_in_1[6]","gpio_control_in_1[7]","gpio_control_in_1[8]","gpio_control_in_1[9]","gpio_control_in_1[10]")
     if  Macros['CARAVAN']:

@@ -19,8 +19,8 @@ class GPIO_ctrlWB:
     def __init__(self,dut,gpio_num,loggers=False,checkers=False):
         self.dut         = dut
         self.caravel_hdl = dut.uut
-        self.clk         = self.dut.uut.mprj_clock
-        self.reset       = self.dut.uut.resetb
+        self.clk         = self.dut.uut.chip_core.mprj_clock
+        self.reset       = self.dut.uut.chip_core.resetb
         self.gpio_num    = gpio_num
         self.logger      = loggers
         self.checkers    = checkers
@@ -71,8 +71,8 @@ class GPIOs_ctrlWB:
     def __init__(self,dut,is_caravan=False,loggers=False,checkers=False):
         self.dut         = dut
         self.caravel_hdl = dut.uut
-        self.clk         = self.dut.uut.mprj_clock
-        self.reset       = self.dut.uut.resetb
+        self.clk         = self.dut.uut.chip_core.mprj_clock
+        self.reset       = self.dut.uut.chip_core.resetb
         self.logger      = loggers
         self.checkers    = checkers
         if is_caravan: 
