@@ -64,6 +64,7 @@ async def mgmt_gpio_out(dut):
 @repot_test
 async def mgmt_gpio_in(dut):
     caravelEnv,clock = await test_configure(dut,timeout_cycles=281094)
+    caravelEnv.drive_mgmt_gpio(0)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
