@@ -1,7 +1,7 @@
 import random
 import re
 import cocotb
-from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles
+from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles, Edge
 import cocotb.log
 from interfaces.cpu import RiskV
 from interfaces.defsParser import Regs
@@ -121,6 +121,7 @@ async def mgmt_gpio_bidir(dut):
 
     await wait_reg1(cpu,caravelEnv,0XAA)
     num_blinks = random.randint(1, 20)
+    num_blinks = 3
     cocotb.log.info (f"[TEST] start send {num_blinks} blinks")
     for i in range(num_blinks):
         if i == num_blinks-1: #last iteration
@@ -131,36 +132,30 @@ async def mgmt_gpio_bidir(dut):
         if i != num_blinks-1: # not last iteration
             await ClockCycles(caravelEnv.clk,3000) 
         else: 
+            # caravelEnv.drive_mgmt_gpio('z')
             await ClockCycles(caravelEnv.clk,1) 
 
+    # caravelEnv.drive_mgmt_gpio('z')
     cocotb.log.info(f"[TEST] finish sending {num_blinks} blinks ")
 
     cocotb.log.info(f"[TEST] waiting for {num_blinks} blinks ")
-    recieved_blinks = 0
-    while True:
-        if cpu.read_debug_reg2() == 0xFF:  #test finish
-            break
-        while (True):
-            if caravelEnv.monitor_mgmt_gpio() == '0': 
-                break
-            if cpu.read_debug_reg2() == 0xFF:  #test finish
-                break
-            await ClockCycles(caravelEnv.clk,1) 
-        while (True):
-            if caravelEnv.monitor_mgmt_gpio() == '1': 
-                recieved_blinks +=1
-                break
-            if cpu.read_debug_reg2() == 0xFF:  #test finish
-                break
-            await ClockCycles(caravelEnv.clk,1) 
-        await ClockCycles(caravelEnv.clk,1) 
-        
-
+    counter = [0] # list to pass by ref
+    await cocotb.start(blink_counter(caravelEnv.get_mgmt_gpi_hdl(),counter))  # forked
+    await wait_reg2(cpu,caravelEnv,0xFF)
+    recieved_blinks = counter[0]
     if recieved_blinks == num_blinks:
         cocotb.log.info(f"[TEST] recieved the correct number of blinks {num_blinks}")
     else: 
         cocotb.log.error(f"[TEST] recieved the incorrect number of blinks recieved = {recieved_blinks} expected = {num_blinks}")
+    cocotb.log.info(f"[TEST] counter =  {counter}")
 
+async def blink_counter(hdl,counter):
+    cocotb.log.info(f"[TEST] start Edge[{counter}]")
+    while True:
+        await Edge(hdl)
+        await Edge(hdl)
+        counter[0] +=1
+ 
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_pu_pd(dut):

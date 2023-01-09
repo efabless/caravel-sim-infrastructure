@@ -115,6 +115,7 @@ void mgmt_gpio_i_enable(){
     reg_gpio_ien = 0; // because in gf the gpio enable regs are inverted
     reg_gpio_oe = 1;
     #endif
+    dummy_delay(25);
 }
 void mgmt_gpio_o_enable(){
     reg_gpio_mode1 = 1;
@@ -126,6 +127,7 @@ void mgmt_gpio_o_enable(){
     reg_gpio_ien = 1; // because in gf the gpio enable regs are inverted
     reg_gpio_oe = 0;
     #endif
+    dummy_delay(25);
 }
 
 void mgmt_gpio_io_enable(){
