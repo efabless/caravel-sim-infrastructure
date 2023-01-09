@@ -11,7 +11,6 @@ from interfaces.caravel import GPIO_MODE
 from interfaces.common import Macros
 
 
-bit_time_ns = 0
 reg = Regs()
 
 
@@ -20,20 +19,16 @@ reg = Regs()
 async def user_address_space(dut):
     caravelEnv,clock = await test_configure(dut,timeout_cycles=117936)
     cocotb.log.info(f"[TEST] Start user_address_space test")
-    if Macros['ARM']: 
-        ack_hdl  = caravelEnv.caravel_hdl.mprj.addr_space_testing.HREADY
-        ack_sel = caravelEnv.caravel_hdl.mprj.addr_space_testing.HSEL
-    else: 
-        ack_hdl  = caravelEnv.caravel_hdl.mprj.addr_space_testing.wbs_ack_o 
+    ack_hdl   = caravelEnv.caravel_hdl.mprj.addr_space_testing.wbs_ack_o 
     addr_hdl  = caravelEnv.caravel_hdl.mprj.addr_space_testing.addr 
     data_hdl  = caravelEnv.caravel_hdl.mprj.addr_space_testing.data 
-    addr_arr = [0x30000000,0x30000004,0x30000008,0x300FFFF8,0x300FFFFC,0x30100000,0x30044078,0x30090A94,0x3005FE2C,0x300F9F44,0x30032E58,0x300602EC,0x30100000]
-    data_arr = [0x97cf0d2d,0xbc748313,0xbfda8146,0x5f5e36b1,0x0c1fe9d9,0x6d12d2b8,0xdcd244d1,0x0da37088,0x7b8e4345,0x00000777,0x00000777,0x00000777,0xFFFFFFFF]
+    start_addr= Macros["USER_SPACE_ADDR"]
+    user_size = Macros["USER_SPACE_SIZE"]
+    addr_arr = (start_addr,start_addr+4,start_addr+8,start_addr +user_size -8,start_addr +user_size -4,start_addr +user_size,start_addr+0x72C,start_addr+0x41198,start_addr+0x7770,start_addr + 0x9F44,start_addr + 0x58,start_addr + 0x3602EC,start_addr + user_size)
+    data_arr = (0x97cf0d2d,0xbc748313,0xbfda8146,0x5f5e36b1,0x0c1fe9d9,0x6d12d2b8,0xdcd244d1,0x0da37088,0x7b8e4345,0x00000777,0x00000777,0x00000777,0xFFFFFFFF)
+    print([hex(i) for i in addr_arr])
     for addr, data in zip(addr_arr, data_arr):
         await RisingEdge(ack_hdl)
-        if Macros['ARM']:
-            if  not ack_sel: 
-                await RisingEdge(ack_sel)
         if addr_hdl.value.integer != addr:
             cocotb.log.error(f"[TEST] seeing unexpected address {hex(addr_hdl.value.integer)} expected {hex(addr)}")
         elif data_hdl.value.integer !=  data:

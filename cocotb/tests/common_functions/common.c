@@ -4,14 +4,17 @@
 #include "swift.h"
 #endif
 void enable_debug(){
+    enable_user_interface();
+    set_debug_reg1(0);
+    set_debug_reg2(0);
+    
+}
+void enable_user_interface(){
     #ifdef ARM // ARM use dirrent location 
     reg_wb_enable =0x8; // for enable writing to reg_debug_1 and reg_debug_2
     #else 
     reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
     #endif
-    set_debug_reg1(0);
-    set_debug_reg2(0);
-    
 }
 void hk_spi_disable(){reg_hkspi_disable = 1;}
 void hk_spi_enable(){reg_hkspi_disable = 0;}

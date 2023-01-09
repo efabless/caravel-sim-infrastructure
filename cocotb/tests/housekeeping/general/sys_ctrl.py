@@ -24,7 +24,7 @@ async def clock_redirect(dut):
     cpu.cpu_release_reset()
     error_margin = 0.1
     # calculate core clock
-    await  cocotb.start(calculate_clk_period(dut.uut.chip_core.clock,"core clock"))  
+    await  cocotb.start(calculate_clk_period(dut.uut.clock,"core clock"))  
     await ClockCycles(caravelEnv.clk,110)
     cocotb.log.info(f"[TEST]  core clock requency = {round(1000000/core_clock,2)} MHz period = {core_clock}ps")
     await wait_reg1(cpu,caravelEnv,0xAa)

@@ -80,21 +80,35 @@ module AHB_user_project_addr_space_example (
     // extend project for testing the user project address space 
     reg [31:0] addr; 
     reg [31:0] data; 
+    reg wbs_ack_o; // indecator that operation has happened
+    reg write;
+    reg read;
     always @(posedge HCLK or posedge HRESETn) begin
-        if (HRESETn) begin
+        if (~HRESETn) begin
             addr <=0;
             data <=0;
             HRDATA <=0;
             HREADYOUT <=0;
+            wbs_ack_o <= 0;
+            read <= 0;
+        end else if (write) begin 
+            write <= 0;
+            data <= HWDATA; // arbitrary number
+            wbs_ack_o <= 1;
+        end else if (read) begin 
+            read <= 0;
+            data <= 32'h777; // arbitrary number
+            wbs_ack_o <= 1;
         end else if (HSEL && HREADY && HWRITE) begin 
             addr <= HADDR;
-            data <= HWDATA;
+            write <= 1;
             HREADYOUT <= 1;
         end else if (HSEL && HREADY && !HWRITE) begin // read 
             addr <= HADDR;
-            data <= 32'h777; // arbitrary number
+            read <= 1;
             HREADYOUT <= 1;
         end else begin 
+            wbs_ack_o <= 0;
             HREADYOUT <= 1;
         end
     end
