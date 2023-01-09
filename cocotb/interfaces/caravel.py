@@ -5,7 +5,7 @@ from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles,Timer
 import cocotb.log
 import cocotb.simulator
 from cocotb.handle import SimHandleBase
-from cocotb.handle import Force , Release
+from cocotb.handle import Force , Release ,Deposit
 from cocotb.binary import BinaryValue
 import enum
 from cocotb.handle import (
@@ -332,14 +332,11 @@ class Caravel_env:
             self.dut._id(f'bin{bits}_en',False).value = 0
             cocotb.log.debug(f'[caravel] [drive_gpio_disable] release driving bin{bits}')
 
-
+    def get_mgmt_gpi_hdl(self):
+        return self.dut.gpio_tb
     """drive the value of  gpio management"""
     def drive_mgmt_gpio(self,data):
-        mgmt_io = self.dut.gpio_tb
-        if data == 'z':
-            mgmt_io.value  =  Release()
-        else:
-            mgmt_io.value  =  Force(data)
+        self.get_mgmt_gpi_hdl().value  =  BinaryValue(value = data,n_bits=1)
         cocotb.log.info(f' [caravel] drive_mgmt_gpio through management area mprj with {data}')
 
     """update the value of mprj bits with spicific data then after certain number of cycle drive z to free the signal"""
