@@ -214,7 +214,7 @@ async def mgmt_gpio_disable(dut):
                 phases_fails  -=1
             if reg2 in fail_list: 
                 cocotb.log.error(f"[TEST] fail = {hex(reg2)}")
-        await ClockCycles(caravelEnv.clk,10) 
+        await ClockCycles(caravelEnv.clk,1) 
     caravelEnv.drive_mgmt_gpio('z')
 
     if phases_fails != 0:
