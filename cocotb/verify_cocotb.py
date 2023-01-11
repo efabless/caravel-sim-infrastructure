@@ -219,7 +219,7 @@ class RunTest:
         if caravan:
             user_project = f"RTL/__user_analog_project_wrapper.v"
         iverilog_command = (f"iverilog -Ttyp {self.caravel_macros()} {includes}  -o {self.sim_path}/sim.vvp"
-                            f" {user_project}  RTL/caravel_top.sv"
+                            f" {user_project}  RTL/caravel_top.sv -s caravel_top"
                             f" && TESTCASE={self.test_name} MODULE=caravel_tests vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.sim_path}/sim.vvp")
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {COCOTB_PATH}:{COCOTB_PATH}  -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} -v {os.getenv('PDK_ROOT')}:{os.getenv('PDK_ROOT')}   efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && {iverilog_command}' >> {self.full_file}"
         self.full_terminal = open(self.full_file, "a")
