@@ -20,8 +20,10 @@ void main(){
     reg_hkspi_status     = data_in;   
     reg_hkspi_chip_id    = data_in;   
     reg_hkspi_user_id    = data_in;    
+    #if PLL_SUP
     reg_hkspi_pll_ena    = data_in;   
     reg_hkspi_pll_bypass = data_in; 
+    #endif //pll sup
     reg_hkspi_irq 	     = data_in; 
     // reg_hkspi_reset   = data_in;   can't write 1 to it cpu would be reset
     #if TRAP_SUP
@@ -43,10 +45,12 @@ void main(){
         set_debug_reg1(0x28);
     if (reg_hkspi_user_id!= old_reg_hkspi_user_id) // RO
         set_debug_reg1(0x29);
+    #if PLL_SUP
     if (reg_hkspi_pll_ena!= 0x1)  // size =2
         set_debug_reg1(0x2a);
     if (reg_hkspi_pll_bypass != 0x1) // size = 1
         set_debug_reg1(0x2b);
+    #endif //pll sup
     if (reg_hkspi_irq!= old_reg_hkspi_irq)  // RO
         set_debug_reg1(0x2c);
     #if TRAP_SUP
@@ -70,13 +74,15 @@ void main(){
     reg_hkspi_status     = data_in;   
     reg_hkspi_chip_id    = data_in;   
     reg_hkspi_user_id    = data_in;    
+    #if PLL_SUP
     reg_hkspi_pll_ena    = data_in;   
     reg_hkspi_pll_bypass = data_in; 
+    #endif // pll sup
     reg_hkspi_irq 	     = data_in; 
     reg_hkspi_reset      = data_in;  
     #if TRAP_SUP
     reg_hkspi_trap 	     = data_in; 
-    #endif
+    #endif // TRAP_SUP
     reg_hkspi_pll_trim   = data_in; 
     reg_hkspi_pll_source = data_in;  
     reg_hkspi_pll_divider= data_in;
@@ -95,12 +101,14 @@ void main(){
         set_debug_reg2(0x28);
     if (reg_hkspi_user_id!= old_reg_hkspi_user_id) // RO
         set_debug_reg2(0x29);
+    #if PLL_SUP
     if (reg_hkspi_pll_ena!= 0x2)  // size =2
         set_debug_reg2(0x2a);
     if (reg_hkspi_pll_bypass != 0x0) // size = 1
         set_debug_reg2(0x2b);
     if (reg_hkspi_irq!= old_reg_hkspi_irq)  // RO
         set_debug_reg2(0x2c);
+    #endif // pll sup
     #if TRAP_SUP
     if (reg_hkspi_trap!= old_reg_hkspi_trap)  // RO
         set_debug_reg2(0x2d);
@@ -115,6 +123,7 @@ void main(){
         set_debug_reg2(0x31);
     if (reg_clk_out_dest!= 0x2) // trap and clocks redirect
         set_debug_reg2(0x32);
+
     set_debug_reg2(0xFF);
 }
 
