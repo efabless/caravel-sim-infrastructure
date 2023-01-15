@@ -39,7 +39,7 @@ def shift(gpio,shift_type):
         if not Macros['GL']:
             shift_register = gpio._id(f"shift_register",False).value.binstr[i]
         else:  
-            shift_register = gpio[0]._id(f"\\{gpio[1]}.shift_register[{9-i}] ",False).value.binstr
+            shift_register = gpio[0]._id(f"\\{gpio[1]}.shift_register[{bit_size-1-i}] ",False).value.binstr
         if shift_register != bits[i]:
             fail = True
             cocotb.log.error(f"[TEST] wrong shift register {i} in {gpio}")
@@ -212,16 +212,16 @@ def shift_2(gpio,shift_type):
     else :
         shift_reg =''
         for i in range(bit_size):
-            shift_reg +=  gpio[0]._id(f"\\{gpio[1]}.shift_register[{9-i}] ",False).value.binstr
-        cocotb.log.info(f"[TEST] gpio {gpio} shift {shift_reg} expected {bits}")
+            shift_reg +=  gpio[0]._id(f"\\{gpio[1]}.shift_register[{bit_size-1-i}] ",False).value.binstr
+        cocotb.log.info(f"[TEST] gpio {gpio[0]}.{gpio[1]}.shift_register shift {hex(int(shift_reg,2))}({shift_reg}) expected {hex(int(bits,2))}({bits})")
     for i in range(bit_size):
         if not Macros['GL']:
             shift_register = gpio._id(f"shift_register",False).value.binstr[i]
         else:  
-            shift_register = gpio[0]._id(f"\\{gpio[1]}.shift_register[{9-i}] ",False).value.binstr
+            shift_register = gpio[0]._id(f"\\{gpio[1]}.shift_register[{bit_size-1-i}] ",False).value.binstr
         if shift_register != bits[i]:
             fail = True
-            cocotb.log.error(f"[TEST] wrong shift register {12-i} in {gpio}")
+            cocotb.log.error(f"[TEST] wrong shift register {i} in {gpio}")
     if not fail: 
         if not Macros['GL']:
             cocotb.log.info(f"[TEST] gpio {gpio} passed")
