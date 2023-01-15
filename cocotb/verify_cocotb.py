@@ -149,7 +149,8 @@ class RunTest:
             macroslist.append('GL')
         elif(self.sim_type=="GL_SDF"):
             macroslist.extend(['ENABLE_SDF','GL_SDF','GL',f'SDF_POSTFIX=\\\"{self.corner[-1]}{self.corner[-1]}\\\"',f'CORNER=\\\"{self.corner[0:3]}\\\"'])
-            macroslist.remove("FUNCTIONAL") # functional need to be removed so specify blocks are seen in SDF sim
+            if fnmatch(os.getenv('PDK'),"GF180*"):
+                macroslist.remove("FUNCTIONAL") # functional need to be removed so specify blocks are seen in SDF sim
         if caravan:
             print ("Use caravan")
             macroslist.append(f'CARAVAN') 
