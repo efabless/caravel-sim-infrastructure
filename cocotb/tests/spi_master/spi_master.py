@@ -32,7 +32,7 @@ async def spi_master_rd(dut):
     CSB = dut.bin33_monitor
     SCK = dut.bin32_monitor
     SDO = dut.uut.chip_core.spi_sdo
-    # SDO = dut.bin35_monitor
+    SDO = dut.bin35_monitor
     SDI = (dut.bin34_en,dut.bin34)
     await  cocotb.start(SPI_VIP(CSB,SCK,SDO,SDI,mem)) # fork for SPI 
 
@@ -74,7 +74,7 @@ async def spi_master_temp(dut):
     cocotb.log.info (f"[TEST] start spi_master_temp test")
     CSB = dut.bin33_monitor
     SCK = dut.bin32_monitor
-    SDO = dut.uut.chip_core.spi_sdo
+    SDO = dut.uut.chip_core.housekeeping.spi_sdo
     # SDO = dut.bin35_monitor
     SDI = (dut.bin34_en,dut.bin34)
     await FallingEdge(CSB)
