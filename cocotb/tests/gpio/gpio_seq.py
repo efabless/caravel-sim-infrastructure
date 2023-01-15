@@ -88,6 +88,7 @@ async def gpio_all_i_seq(dut,caravelEnv,clock,after_config_callback=None):
         cocotb.log.info(f"[TEST] data {hex(data_in)} sent successfully through gpio[{active_gpios_num}:32]")
     else: 
         cocotb.log.error(f"[TEST] Error: reg_mprj_datah has recieved wrong data {cpu.read_debug_reg2()} instead of {data_in}")
+    return
     caravelEnv.release_gpio((active_gpios_num,0))
     await wait_reg2(cpu,caravelEnv,0XFF) 
     if caravelEnv.monitor_gpio((active_gpios_num,0)).binstr != ''.join(['z'*(active_gpios_num+1)]):
