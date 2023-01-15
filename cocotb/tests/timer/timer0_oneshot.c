@@ -26,7 +26,7 @@ void main(){
     hk_spi_disable();
 
     /* Configure timer for a single-shot countdown */
-    timer0_oneshot_configure(0xF3000);
+    timer0_oneshot_configure(0xF300);
 
     // test path if counter value stop updated after reach 0 and also the value is always decrementing
     update_timer0_val(); // update reg_timer0_value with new counter value
