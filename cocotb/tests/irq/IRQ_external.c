@@ -80,5 +80,5 @@ void main(){
     }
 
     // test finish 
-    // set_debug_reg2(0xFF);
+    set_debug_reg2(0xFF);
 }

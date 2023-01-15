@@ -163,7 +163,7 @@ int  mgmt_gpio_rd(){return reg_gpio_in;}
 void wait_on_gpio_mgmt(unsigned int data){while (reg_gpio_in == data);}
 
 // 
-void dummy_delay(int num){for (int i=0;i < num;i++){get_debug_reg1();}}
+void dummy_delay(int num){for (int i=0;i < num;i++){set_debug_reg1(get_debug_reg1());}}
 
 // timer 
 
@@ -356,18 +356,21 @@ extern unsigned int flag;
 unsigned int flag;
 void HK_IRQ0_Handler(void){flag = 1;}
 void HK_IRQ1_Handler(void){flag = 1;}
-void TMR0_Handler(void){flag = 1;}
-void UART0_Handler(void){flag = 1;}
+void TMR0_Handler(void){flag = 1;clear_TMR0_Handler();}
+void UART0_Handler(void){flag = 1;clear_UART0_Handler();}
+void clear_TMR0_Handler(){
+reg_timer0_irq =1;
+}
+void clear_UART0_Handler(){
+reg_uart_isc =0x3;
+}
 #endif
 char get_flag(){
     #ifndef ARM
     return flag;
     #else 
+    dummy_delay(1);
     return flag;
-    if (get_debug_reg2() == 0x4F)
-        return 1;
-    else 
-        return 0;
     #endif
 }
 
@@ -403,7 +406,7 @@ void enable_timer0_irq(){
     __enable_irq();
     #endif
 }
-void enable_uart_irq(){
+void enable_uart_tx_irq(){
     #ifndef ARM
     reg_uart_enable = 1;
     reg_uart_irq_en =1;
@@ -412,7 +415,7 @@ void enable_uart_irq(){
 	irq_setmask(irq_getmask() | (1 << UART_INTERRUPT));
     #else
     NVIC_EnableIRQ(UART0_IRQn);
-    reg_uart_ctrl = reg_uart_ctrl | 0x3; // enable irq TX and RX
+    reg_uart_ctrl = reg_uart_ctrl | 0x5; // enable irq TX 
     __enable_irq();
     #endif
 }

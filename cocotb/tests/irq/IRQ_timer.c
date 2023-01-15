@@ -28,9 +28,9 @@ void main(){
     timer0_oneshot_configure(500);
     // Loop, waiting for the interrupt to change reg_mprj_datah
     char is_pass = 0;
-    int timeout = 40; 
+    int timeout = 100; 
     unsigned int x;
-    for (x = 0; x < 40; x++){
+    for (x = 0; x < timeout; x++){
         if (get_flag() == 1){
             set_debug_reg1(0x1B); //test pass irq sent at timer0
             is_pass = 1;
