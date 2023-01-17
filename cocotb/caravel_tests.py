@@ -49,4 +49,4 @@ from tests.cpu.cpu_reset import *
 from tests.user_project.user_address_space import *
 from tests.shifting.shifting import *
 from tests.PoR.PoR import *
-
+from tests.user_project.user_ram import *

@@ -437,5 +437,12 @@
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
             "description":"Check power on reset"}
+
+        ,"user_ram" :{"level":2, 
+        "PDK":["sky"],
+        "RTL":[],
+        "GL":[],
+        "GL_SDF":[],
+        "description":"user project ram"}
     }
 }
