@@ -45,6 +45,7 @@ from tests.uart.uart import *
 from tests.spi_master.spi_master import *
 from tests.logicAnalyzer.la import *
 from tests.debug.debug import *
+from tests.debug.debug_swd import *
 from tests.cpu.cpu_reset import *
 from tests.user_project.user_address_space import *
 from tests.shifting.shifting import *

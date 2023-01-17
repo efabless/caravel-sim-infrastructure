@@ -419,3 +419,6 @@ void enable_uart_tx_irq(){
     __enable_irq();
     #endif
 }
+
+// debug 
+void mgmt_debug_enable(){reg_wb_enable = reg_wb_enable | 0x10;}
