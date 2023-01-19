@@ -171,7 +171,7 @@
             "RTL":["r_rtl","r_caravan_rtl","setup","push","nightly","weekly","tape_out"],
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
-            "description":"test timer0 interrupt"}     
+            "description":"test uart tx interrupt"}     
          
         ,"mgmt_gpio_in" :{"level":0, 
             "PDK":["sky","gf"],
@@ -464,5 +464,12 @@
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
             "description":"test external interrupt by mprj 12"}  
+                
+        ,"IRQ_uart_rx" :{"level":2, 
+            "PDK":["sky","gf"],
+            "RTL":["r_rtl","r_caravan_rtl","setup","push","nightly","weekly","tape_out"],
+            "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
+            "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
+            "description":"test uart rx interrupt"} 
     }
 }

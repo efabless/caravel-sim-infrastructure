@@ -356,7 +356,7 @@ extern unsigned int flag;
 unsigned int flag;
 void HK_IRQ0_Handler(void){flag = 1;}
 void HK_IRQ1_Handler(void){flag = 1;}
-void HK_IRQ2_Handler(void){flag = 1;set_debug_reg2(0xAAAAAAA);}
+void HK_IRQ2_Handler(void){flag = 1;}
 void TMR0_Handler(void){flag = 1;clear_TMR0_Handler();}
 void UART0_Handler(void){flag = 1;clear_UART0_Handler();}
 void clear_TMR0_Handler(){
@@ -430,6 +430,19 @@ void enable_uart_tx_irq(){
     __enable_irq();
     #endif
 }
+void enable_uart_rx_irq(){
+    #ifndef ARM
+    reg_uart_enable = 1;
+    reg_uart_irq_en =1;
+    irq_setmask(0);
+	irq_setie(1);
+	irq_setmask(irq_getmask() | (1 << UART_INTERRUPT));
+    #else
+    NVIC_EnableIRQ(UART0_IRQn);
+    reg_uart_ctrl = reg_uart_ctrl | 0xA; // enable irq rx 
+    __enable_irq();
+    #endif
+}
 
 void enable_hk_spi_irq(){
     #ifndef ARM
@@ -496,6 +509,19 @@ void disable_hk_spi_irq(){
 	irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
     #else
     NVIC_DisableIRQ(HK_IRQ0);
+    __enable_irq();
+    #endif
+}
+
+void disable_uart_rx_irq(){
+    #ifndef ARM
+    reg_uart_enable = 1;
+    reg_uart_irq_en =1;
+    irq_setmask(0);
+	irq_setie(1);
+	irq_setmask(irq_getmask() | (1 << UART_INTERRUPT));
+    #else
+    reg_uart_ctrl = reg_uart_ctrl & 0xF7; // enable irq rx 
     __enable_irq();
     #endif
 }

@@ -71,25 +71,24 @@ async def uart_rx(dut):
     caravelEnv.drive_gpio_in((5,5),1)
     # calculate bit time
     clk = clock.period/1000
-    global bit_time_ns
     bit_time_ns = round(10**5 * clk / (96))
     cocotb.log.info (f"[TEST] bit_time_ns = {bit_time_ns}ns")
     # send first char
     await wait_reg1(cpu,caravelEnv,0XAA)  
-    await uart_send_char(caravelEnv,"B")
+    await uart_send_char(caravelEnv,"B",bit_time_ns)
     await uart_check_char_recieved(caravelEnv,cpu)
     # send second char  
     await wait_reg1(cpu,caravelEnv,0XBB)  
-    await uart_send_char(caravelEnv,"M")
+    await uart_send_char(caravelEnv,"M",bit_time_ns)
     await uart_check_char_recieved(caravelEnv,cpu)
     # send third char  
     await wait_reg1(cpu,caravelEnv,0XCC)  
-    await uart_send_char(caravelEnv,"A")
+    await uart_send_char(caravelEnv,"A",bit_time_ns)
     await uart_check_char_recieved(caravelEnv,cpu)
 
    
         
-async def uart_send_char(caravelEnv,char):
+async def uart_send_char(caravelEnv,char,bit_time_ns):
     char_bits = [int(x) for x in '{:08b}'.format(ord(char))]
     cocotb.log.info (f"[TEST] start sending on uart {char}")
     #send start bit
