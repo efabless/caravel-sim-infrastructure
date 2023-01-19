@@ -45,8 +45,8 @@ void main(){
     enable_external1_irq();
 
     // test interrrupt happen when mprj[7] is asserted
-    set_debug_reg2(0xAA); //wait for environment to make mprj[7] high 
     clear_flag();
+    set_debug_reg2(0xAA); //wait for environment to make mprj[7] high 
     // Loop, waiting for the interrupt to change reg_mprj_datah
     char is_pass = 0;
     int timeout = 40; 

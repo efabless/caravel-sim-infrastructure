@@ -18,24 +18,42 @@
 #include "../common_functions/common.c"
 #include "../common_functions/gpios.c"
 /*
-Testing spi interrupt
+Testing timer interrupts 
+Enable interrupt for IRQ external pin mprj_io[12] -> should be drived to 1 by the environment
+**NOTE** housekeeping SPI should used to update register irq_1_inputsrc to 1 see verilog code
+
+    @wait for environment to make mprj[12] high
+        send 0xAA
+
+    @received interrupt correctly  test pass
+        send 0x1B
+
+    @ timeout                       test fail
+        send 0x1E
+
+    @ end test 
+        send 0xFF
 */
 
 
 void main(){
     enable_debug();
-    enable_hk_spi_irq();
+    // setting bit 12 as input 
+    configure_gpio(12,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
-    // test interrrupt happen when spi_irq reg got set
+    gpio_load();
+    enable_external2_irq();
+
+    // test interrrupt happen when mprj[12] is asserted
     clear_flag();
-    set_debug_reg2(0xAA); //wait for environment to make spi_irq high 
+    set_debug_reg2(0xAA); //wait for environment to make mprj[12] high 
     // Loop, waiting for the interrupt to change reg_mprj_datah
     char is_pass = 0;
     int timeout = 40; 
 
     for (int i = 0; i < timeout; i++){
         if (get_flag() == 1){
-            set_debug_reg1(0x1B); //test pass irq sent at mprj 7 
+            set_debug_reg1(0x1B); //test pass irq sent at mprj 12 
             is_pass = 1;
             break;
         }
@@ -44,7 +62,7 @@ void main(){
         set_debug_reg1(0x1E); // timeout
     }
 
-    // test interrupt doesn't happened when spi_irq is deasserted
+    // test interrupt doesn't happened when mprj[12] is deasserted
     set_debug_reg2(0xBB);
     clear_flag();
     // Loop, waiting for the interrupt to change reg_mprj_datah

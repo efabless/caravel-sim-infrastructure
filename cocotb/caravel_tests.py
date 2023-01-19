@@ -34,6 +34,7 @@ from tests.hello_world.helloWorld import *
 from tests.cpu.cpu_stress import *
 from tests.mem.mem_stress import *
 from tests.irq.IRQ_external import *
+from tests.irq.IRQ_external2 import *
 from tests.irq.IRQ_timer import *
 from tests.irq.IRQ_uart import *
 from tests.irq.IRQ_spi import *
