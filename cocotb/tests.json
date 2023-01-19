@@ -445,10 +445,17 @@
             "description":"Check power on reset"}
 
         ,"user_ram" :{"level":2, 
-        "PDK":["sky"],
-        "RTL":[],
-        "GL":[],
-        "GL_SDF":[],
-        "description":"user project ram"}
+            "PDK":["sky"],
+            "RTL":[],
+            "GL":[],
+            "GL_SDF":[],
+            "description":"user project ram"}
+
+        ,"IRQ_spi" :{"level":2, 
+            "PDK":["sky","gf"],
+            "RTL":["r_rtl","setup","nightly","push","weekly","tape_out"],
+            "GL":["r_gl","nightly","weekly","tape_out"],
+            "GL_SDF":["r_sdf","weekly","tape_out"],
+            "description":"test spi interrupt"} 
     }
 }

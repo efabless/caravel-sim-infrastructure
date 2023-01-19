@@ -36,6 +36,7 @@ from tests.mem.mem_stress import *
 from tests.irq.IRQ_external import *
 from tests.irq.IRQ_timer import *
 from tests.irq.IRQ_uart import *
+from tests.irq.IRQ_spi import *
 from tests.gpio.gpio import *
 from tests.gpio_caravan.gpio_caravan import *
 from tests.gpio.gpio_user import *

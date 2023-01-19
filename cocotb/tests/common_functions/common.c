@@ -356,6 +356,7 @@ extern unsigned int flag;
 unsigned int flag;
 void HK_IRQ0_Handler(void){flag = 1;}
 void HK_IRQ1_Handler(void){flag = 1;}
+void HK_IRQ2_Handler(void){flag = 1;}
 void TMR0_Handler(void){flag = 1;clear_TMR0_Handler();}
 void UART0_Handler(void){flag = 1;clear_UART0_Handler();}
 void clear_TMR0_Handler(){
@@ -389,7 +390,6 @@ void enable_external1_irq(){
 	irq_setmask(irq_getmask() | (1 << USER_IRQ_4_INTERRUPT));
     reg_user4_irq_en =1;
     #else
-    NVIC_EnableIRQ(HK_IRQ0);
     NVIC_EnableIRQ(HK_IRQ1);
     __enable_irq();
     #endif
@@ -420,5 +420,15 @@ void enable_uart_tx_irq(){
     #endif
 }
 
+void enable_spi_irq(){
+    #ifndef ARM
+    irq_setmask(0);
+	irq_setie(1);
+	irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
+    #else
+    NVIC_EnableIRQ(HK_IRQ0);
+    __enable_irq();
+    #endif
+}
 // debug 
 void mgmt_debug_enable(){reg_wb_enable = reg_wb_enable | 0x10;}
