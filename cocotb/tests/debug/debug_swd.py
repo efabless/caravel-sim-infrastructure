@@ -31,7 +31,7 @@ async def debug_swd(dut):
     caravelEnv.drive_gpio_in(35,0)
 
     await wait_reg1(cpu,caravelEnv,0XAA)
-    swd = SWD_vip(caravelEnv,40)
+    swd = SWD_vip(caravelEnv,100)
     op = Operation(1,0,1,0,0,1,0,1) # read ID 
     await swd.reset_swd()
     await swd.write_op(op)
@@ -89,6 +89,7 @@ class SWD_vip:
     # depends on the design but here it's only 1
     async def turnaround(self):
         cocotb.log.info(f"[SWD_vip] turnaround swd")
+        await Timer(8,"ns")
         self.release_dio()
         await ClockCycles(self.clk, 1)
 

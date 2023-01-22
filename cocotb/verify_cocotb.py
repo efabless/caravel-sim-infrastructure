@@ -276,7 +276,7 @@ class RunTest:
         os.environ["SIM"] = self.sim_type
         user_project = f"-v RTL/debug_regs.v  -v RTL/__user_project_wrapper.v -v RTL/__user_project_addr_space_project.v  -v RTL/__user_project_gpio_example.v -v RTL/__user_project_la_example.v "
         if "user" in self.test_name: 
-            user_project.replace('-v RTL/__user_project_wrapper.v', '')
+            user_project = user_project.replace('-v RTL/__user_project_wrapper.v', '')        
         if caravan:
             user_project = f"-v RTL/__user_analog_project_wrapper.v"
         os.system(f"vlogan -full64  -sverilog +error+30 RTL/caravel_top.sv {user_project} {dirs}  {self.caravel_macros(True)}   -l {self.sim_path}/analysis.log -o {self.sim_path} ")
