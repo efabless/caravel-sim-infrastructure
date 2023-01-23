@@ -56,7 +56,7 @@ async def IRQ_uart(dut):
                     cocotb.log.error(f"[TEST] Failed interrupt is detected uart isnt sending data") 
             else: 
                 cocotb.log.error(f"[TEST] debug register 1 has illegal value")  
-        await ClockCycles(caravelEnv.clk,10) 
+        await ClockCycles(caravelEnv.clk,1) 
 
     if phases_fails != 0:
         cocotb.log.error(f"[TEST] finish with {phases_passes} phases passes and {phases_fails} phases fails") 

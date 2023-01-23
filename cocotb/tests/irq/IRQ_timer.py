@@ -43,7 +43,7 @@ async def IRQ_timer(dut):
                     cocotb.log.error(f"[TEST] Failed interrupt is detected when timer isnt used") 
             else: 
                 cocotb.log.error(f"[TEST] debug register 1 has illegal value")  
-        await ClockCycles(caravelEnv.clk,10) 
+        await ClockCycles(caravelEnv.clk,1) 
 
     if phases_fails != 0:
         cocotb.log.error(f"[TEST] finish with {phases_passes} phases passes and {phases_fails} phases fails") 
