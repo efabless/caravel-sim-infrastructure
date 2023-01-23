@@ -42,7 +42,7 @@ async def IRQ_uart_rx(dut):
                 break
             if reg2 == 0xAA:  
                 cocotb.log.info(f"[TEST] start sending through uart")  
-                await  cocotb.start( uart_send_char(caravelEnv,"B",bit_time_ns,clock.period))
+                await  cocotb.start( uart_send_char(caravelEnv,"B",bit_time_ns,clk))
 
         if reg1 != cpu.read_debug_reg1():
             reg1 = cpu.read_debug_reg1()                
