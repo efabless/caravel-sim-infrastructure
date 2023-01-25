@@ -30,7 +30,7 @@ async def mem_dff2_W(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff2 memory ")   
                 break
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x00000400 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break
         await ClockCycles(caravelEnv.clk,1000) 
 
@@ -54,7 +54,7 @@ async def mem_dff2_HW(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff2 memory ")   
                 break
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x00000400 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break
         await ClockCycles(caravelEnv.clk,1000) 
 
@@ -79,7 +79,7 @@ async def mem_dff2_B(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff2 memory ")   
                 break
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x00000400 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break
         await ClockCycles(caravelEnv.clk,1000) 
 
@@ -102,7 +102,7 @@ async def mem_dff_W(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         await ClockCycles(caravelEnv.clk,1000) 
     
@@ -125,7 +125,7 @@ async def mem_dff_HW(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         await ClockCycles(caravelEnv.clk,1000) 
     
@@ -148,7 +148,7 @@ async def mem_dff_B(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         await ClockCycles(caravelEnv.clk,1000) 
        
@@ -171,7 +171,7 @@ async def mem_sram_W(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         if reg2 != cpu.read_debug_reg2():
             reg2 = cpu.read_debug_reg2()
@@ -197,7 +197,7 @@ async def mem_sram_HW(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all srram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         # if reg2 != cpu.read_debug_reg2():
         #     reg2 = cpu.read_debug_reg2()
@@ -223,7 +223,7 @@ async def mem_sram_B(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         # if reg2 != cpu.read_debug_reg2():
         #     reg2 = cpu.read_debug_reg2()
@@ -250,7 +250,7 @@ async def mem_sram_smoke(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         # if reg2 != cpu.read_debug_reg2():
         #     reg2 = cpu.read_debug_reg2()
