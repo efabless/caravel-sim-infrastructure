@@ -18,7 +18,7 @@ void main(){
         shifting = mask - (0x1 << i%32);
         data_used = data & shifting;
         if (data_used != *(dff_start_address+i)){
-            set_debug_reg2(dff2_start_address+ i);
+            set_debug_reg2(dff_start_address+ i);
             set_debug_reg1(0x1E); 
             return;
         }
@@ -34,7 +34,7 @@ void main(){
         shifting = mask - (0x1 << i%32);
         data_used = data & shifting;
         if (data_used != *(dff_start_address+i)){
-            set_debug_reg2(dff2_start_address+ i);
+            set_debug_reg2(dff_start_address+ i);
             set_debug_reg1(0x1E); 
             return;
         }
