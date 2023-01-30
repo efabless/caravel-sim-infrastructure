@@ -1,0 +1,30 @@
+---
+# Yalm file contain general design information that would mostly need to be updated in the first run only 
+
+#eg CARAVEL_ROOT: "/usr/Desktop/caravel_project/caravel/" 
+#like repo https://github.com/efabless/caravel
+#CARAVEL_ROOT: "/home/rady/caravel/swift/signoff/swift2"
+CARAVEL_ROOT: "/home/rady/caravel/caravel_gf/caravel-gf180mcu/"
+
+#eg MCW_ROOT: "/usr/Desktop/caravel_project/caravel_mgmt_soc_litex/" 
+#like repo https://github.com/efabless/caravel_mgmt_soc_litex 
+MCW_ROOT: "/home/rady/caravel/swift/signoff/swift2"
+#MCW_ROOT: "/home/rady/caravel/caravel_gf/caravel_mgmt_soc_gf180mcu/"
+
+
+#eg PDK_ROOT: "/usr/Desktop/caravel_project/pdk/" 
+#exported by volare
+PDK_ROOT: "/home/rady/caravel/files4vcs/pdk"
+
+#eg PDK: "sky130A"
+PDK: sky130A
+#PDK: gf180mcuC
+
+#clock in ns
+clk: 25  
+
+# true when caravan are simulated instead of caravel
+caravan: false
+
+# optional email address to send the results to 
+emailto: None

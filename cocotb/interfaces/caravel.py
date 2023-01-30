@@ -140,7 +140,7 @@ class Caravel_env:
         if  isinstance(h_bit, Iterable):
             l_bit = h_bit[1]
             h_bit = h_bit[0]
-        if l_bit == None:
+        if l_bit is None:
             l_bit = h_bit 
         mprj_out= self.dut.mprj_io_tb.value[size - h_bit:size - l_bit]
         if(mprj_out.is_resolvable):
