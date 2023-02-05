@@ -345,10 +345,7 @@ class RunTest:
             SOURCE_FILES = f"{os.getenv('FIRMWARE_PATH')}/cm0_start.s"
         else:
             SOURCE_FILES = f"{os.getenv('FIRMWARE_PATH')}/crt0_vex.S {os.getenv('FIRMWARE_PATH')}/isr.c"
-        if ARM:
-            LINKER_SCRIPT = f"-T {os.getenv('FIRMWARE_PATH')}/link.ld"
-        else:
-            LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{os.getenv('FIRMWARE_PATH')}/sections.lds,--strip-debug "
+        
         if ARM:
             CPUFLAGS = f"-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
         else:
@@ -360,10 +357,17 @@ class RunTest:
         else: 
             includes = f"-I{verilog_path}/dv/firmware -I{verilog_path}/dv/generated  -I{verilog_path}/dv/ -I{verilog_path}/common"
         #change linker script to for mem tests 
+        LINKER_SCRIPT = f"{os.getenv('FIRMWARE_PATH')}/sections.lds"
+
         if self.test_name in tests_use_dff2:
            LINKER_SCRIPT = self.linkerScript_for_mem("dff2",LINKER_SCRIPT)
         elif self.test_name in tests_use_dff:
            LINKER_SCRIPT = self.linkerScript_for_mem("dff",LINKER_SCRIPT)
+
+        if ARM:
+            LINKER_SCRIPT = f"-T {os.getenv('FIRMWARE_PATH')}/link.ld"
+        else:
+            LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{LINKER_SCRIPT},--strip-debug "
         elf_command = (f"{GCC_COMPILE}-gcc  {includes}"
                  f" {CPUFLAGS} {LINKER_SCRIPT}"
                  f" -o {elf_out} {SOURCE_FILES} {c_file}")
@@ -371,8 +375,8 @@ class RunTest:
         hex_command = f"{GCC_COMPILE}-objcopy -O verilog {elf_out} {hex_file} "
         sed_command = f"sed -ie 's/@10/@00/g' {hex_file}"
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {self.cocotb_path}:{self.cocotb_path} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} efabless/dv:latest sh -c 'cd {test_dir} && {elf_command} && {lst_command} && {hex_command} && {sed_command} '"
-        # hex_gen_state = os.system(docker_command)
-        hex_gen_state = os.system(f" {elf_command} && {lst_command} && {hex_command} && {sed_command}")
+        hex_gen_state = os.system(docker_command)
+        # hex_gen_state = os.system(f" {elf_command} && {lst_command} && {hex_command} && {sed_command}")
         self.full_terminal.write("elf file generation command:\n% ")
         self.full_terminal.write(os.path.expandvars(elf_command)+"\n")
         self.full_terminal.write("hex file generation command:\n% ")

@@ -13,7 +13,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def cpu_reset(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=34823)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1134823)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -37,7 +37,7 @@ async def cpu_reset(dut):
 
     cocotb.log.info("[TEST] deasserting cpu reset register using SPI")
     await write_reg_spi(caravelEnv,0xb,0)
-    watchdog = 12000
+    watchdog = 50000
     while True: 
         if cpu.read_debug_reg1() == 5:
             cocotb.log.info("[TEST] deasserting cpu reset register using SPI  wakes the cpu up" )

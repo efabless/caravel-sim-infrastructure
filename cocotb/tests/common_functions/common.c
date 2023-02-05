@@ -2,6 +2,10 @@
 #include <stub.c>
 #ifdef ARM 
 #include "swift.h"
+#else 
+#include <uart.h>
+#include <irq_vex.h>
+
 #endif
 void enable_debug(){
     enable_user_interface();
@@ -446,9 +450,10 @@ void enable_uart_rx_irq(){
 
 void enable_hk_spi_irq(){
     #ifndef ARM
+    reg_user3_irq_en =1;
     irq_setmask(0);
 	irq_setie(1);
-	irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
+	irq_setmask(irq_getmask() | (1 << USER_IRQ_3_INTERRUPT));
     #else
     NVIC_EnableIRQ(HK_IRQ0);
     __enable_irq();
@@ -506,7 +511,8 @@ void disable_hk_spi_irq(){
     #ifndef ARM
     irq_setmask(0);
 	irq_setie(1);
-	irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
+	irq_setmask(irq_getmask() | (1 << USER_IRQ_3_INTERRUPT));
+    reg_user3_irq_en =0;
     #else
     NVIC_DisableIRQ(HK_IRQ0);
     __enable_irq();

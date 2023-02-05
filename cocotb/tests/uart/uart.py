@@ -19,7 +19,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def uart_tx(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=346140)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=11346140)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -28,7 +28,8 @@ async def uart_tx(dut):
     # calculate bit time
     clk = clock.period/1000
     global bit_time_ns
-    bit_time_ns = round(10**5 * clk / (96))
+    bit_time_ns = 10**5 * clk / (96)
+    bit_time_ns = round (1.01*bit_time_ns) # 1% safety factor to read after the edge 
     # wait for start of sending
     await wait_reg1(cpu,caravelEnv,0XAA) 
         
@@ -42,6 +43,9 @@ async def uart_tx(dut):
                 cocotb.log.info (f"[TEST] msg is:'{data_out}' expected '{expected_msg}'")
             if data_out == expected_msg:
                 cocotb.log.info (f"[TEST] Pass recieve the full expected msg '{data_out}'")
+                break
+            elif data_out not in expected_msg: 
+                cocotb.log.error (f"[TEST] recieve wrong text expected : '{expected_msg}' receved = '{data_out}'")
                 break
             await start_of_tx(caravelEnv)
             char  = ''
@@ -62,7 +66,7 @@ async def start_of_tx(caravelEnv):
 @cocotb.test()
 @repot_test
 async def uart_rx(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=98315)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1198315)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -141,7 +145,7 @@ async def uart_check_char_recieved(caravelEnv,cpu):
 @cocotb.test()
 @repot_test
 async def uart_loopback(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=199021)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=11199021)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

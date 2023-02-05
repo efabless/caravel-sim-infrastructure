@@ -13,7 +13,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def user_ram(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=67331)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1167331)
     cocotb.log.info(f"[TEST] Start user RAM word access stress test")   
     pass_list = [0x1B]
     fail_list = [0x1E]

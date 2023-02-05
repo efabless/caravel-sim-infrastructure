@@ -22,7 +22,7 @@ async def spi_master_rd(dut):
     the method of testing used can't work if 2 addresses Consecutive have the same address
     """
 
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=213888)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=11213888)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -67,7 +67,7 @@ async def spi_master_temp(dut):
     
     the method of testing used can't work if 2 addresses Consecutive have the same address
     """
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=39554)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1139554)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

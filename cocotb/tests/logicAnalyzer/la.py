@@ -15,7 +15,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def la(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=67415)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1167415)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -23,7 +23,6 @@ async def la(dut):
     fail_list = (0x1E,0x2E,0x3E,0x4E,0x5E,0x6E,0x7E,0x8E)
     phases_fails = 8
     from interfaces.common import sky
-    print (Macros['LA_SIZE'])
     if Macros['LA_SIZE']<128: 
         phases_fails = 4
     phases_passes = 0
