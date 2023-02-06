@@ -13,10 +13,6 @@ from interfaces.common import sky
 from tests.common_functions.Timeout import Timeout
 from tests.housekeeping.housekeeping_spi.spi_access_functions import *
 
-reg = Regs()
-config_file = f"sim.{os.getenv('RUNTAG')}.configs"
-clk = import_module(config_file).clock
-
 @cocotb.test()
 @repot_test
 async def PoR(dut):
@@ -24,7 +20,7 @@ async def PoR(dut):
     caravelEnv = caravel.Caravel_env(dut)
     Timeout(clk=caravelEnv.clk,cycle_num=185972,precision=0.2)
     cocotb.scheduler.add(max_num_error(10,caravelEnv.clk))
-    clock = Clock(caravelEnv.clk, clk, units="ns")  # Create a 25ns period clock on port clk
+    clock = Clock(caravelEnv.clk, read_config_file()["clock"], units="ns")  # Create a 25ns period clock on port clk
     cocotb.start_soon(clock.start())  # Start the clock
     # drive reset with 1 
     await caravelEnv.disable_csb() # 

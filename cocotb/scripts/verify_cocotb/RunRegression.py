@@ -5,10 +5,14 @@ import os
 import sys
 from subprocess import PIPE, run
 import json
-import collections
 from fnmatch import fnmatch
-from collections import namedtuple
 from scripts.verify_cocotb.RunTest import RunTest
+from scripts.verify_cocotb.Test import Test
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
+import socket
+import yaml
 
 class RunRegression: 
     def __init__(self,args,paths) -> None:
@@ -20,8 +24,44 @@ class RunRegression:
         with open(f'{self.paths.COCOTB_PATH}/tests.json') as f:
             self.tests_json = json.load(f)
             self.tests_json = self.tests_json["Tests"]
+        self.set_common_macros()
         self.get_tests()
         self.run_regression()
+        self.send_mail()
+
+    def set_common_macros(self):
+        if self.args.macros is None:
+            self.args.macros =list()
+        simulation_macros = ["USE_POWER_PINS","UNIT_DELAY=#1","COCOTB_SIM"]
+        paths_macros      = [f'MAIN_PATH=\\\"{self.paths.COCOTB_PATH}\\\"',f'TAG=\\\"{self.args.tag}\\\"',f'CARAVEL_ROOT=\\\"{os.getenv("CARAVEL_ROOT")}\\\"']
+        if self.args.pdk is not "gf180":
+            simulation_macros.append("FUNCTIONAL")
+
+        if self.args.caravan:
+            simulation_macros.append(f'CARAVAN') 
+
+        if not self.args.no_wave:
+            simulation_macros.append(f'WAVE_GEN')
+
+        if self.args.sdf_setup:
+            simulation_macros.append(f'MAX_SDF')
+
+        if self.args.cov:
+            simulation_macros.append(f'COVERAGE')
+        if self.args.checkers_en:
+            simulation_macros.append(f'CHECKERS')
+            
+        if self.args.iverilog:
+            simulation_macros.append(f'IVERILOG')
+        elif (self.args.vcs): 
+            simulation_macros.append(f'VCS')
+
+        simulation_macros.append(self.args.pdk)   
+        if self.args.arm: 
+            simulation_macros.extend(['ARM','AHB'])   
+
+        self.args.macros += simulation_macros + paths_macros
+
 
     def get_tests(self):
         self.tests = list()
@@ -72,12 +112,28 @@ class RunRegression:
                         self.add_new_test(test_name=self.args.test,sim_type = self.args.sim,corner = self.args.corner[0])
         # testlist TODO: add logic for test list
         if self.args.testlist is not None:
-            print(f'fatal: code for test list isnt added yet')
-            sys.exit()
+            for testlist in self.args.testlist:
+                
+                self.get_testlist(testlist)
+
         self.update_run_log()
+        # exit()
 
     def add_new_test(self,test_name,sim_type,corner):
-        self.tests.append(Test(test_name,sim_type,corner))
+        self.tests.append(Test(test_name,sim_type,corner,self.args,self.paths))
+
+    def get_testlist(self,testlist_f): 
+        directory = os.path.dirname(testlist_f)
+        testlist_f = open(testlist_f, 'r')
+        testlist = yaml.safe_load(testlist_f)
+        if "includes" in testlist: 
+            for include in testlist["includes"]:
+                if directory == '':
+                    self.get_testlist(f"{include}")
+                else:
+                    self.get_testlist(f"{directory}/{include}")
+        for test in testlist["Tests"]:
+            self.add_new_test(test_name=test["name"],sim_type = test["sim"],corner = self.args.corner[0])
 
     def run_regression(self):
         threads = list()
@@ -124,21 +180,8 @@ class RunRegression:
         f.write(f"{'Test':<{name_size}} {'status':<10} {'start':<15} {'end':<15} {'duration':<13} {'p/f':<8} {'seed':<10} \n")
         for test in self.tests:
             f.write(f"{test.full_name:<{name_size}} {test.status:<10} {test.start_time:<15} {test.endtime:<15} {test.duration:<13} {test.passed:<8} {test.seed:<10}\n")
-        f.write(f"\n\nTotal: ({self.passed_tests})passed ({self.failed_tests})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})time consumed ")
+        f.write(f"\n\nTotal: ({test.passed_count})passed ({test.failed_count})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})time consumed ")
         f.close()
-
-    def update_html_mail(self):
-        html_mail =f"<h2>Tests Table:</h2><table border=2 bgcolor=#D6EEEE>"
-        html_mail += f"<th>Test</th> <th>duration</th> <th>status</th> <th>seed</th> <tr> "
-        for test in self.tests:
-            if test.passed == "passed":
-                html_mail += f"<th>{test.full_name}</th><th>{test.duration}</th> <th style='background-color:#16EC0C'> {test.passed} </th><th>{test.seed}</th><tr>"
-            else:
-                html_mail += f"<th>{test.full_name}</th><th>{test.duration}</th> <th style='background-color:#E50E0E'> {test.passed} </th><th>{test.seed}</th><tr>"
-        html_mail += "</table>"
-        html_mail += (f"<h2>Total status Table:</h2><table border=2 bgcolor=#D6EEEE><th>Passed</th> <th>failed</th> <th>unknown</th> <th>duration</th> <tr>"
-                      f"<th style='background-color:#16EC0C' >{self.passed_tests}</th> <th style='background-color:#E50E0E' >{self.failed_tests} </th> "
-                      f"<th style='background-color:#14E5F2'>{test.unknown_count}</th> <th>{('%.10s' % (datetime.now() - self.total_start_time))}</th> <tr></table>")
 
     def write_command_log(self):
         file_name=f"sim/{self.args.tag}/command.log"
@@ -148,7 +191,7 @@ class RunRegression:
         f.close()
   
     def write_git_log(self):
-        file_name=f"sim/{self.args.tag}/git_show.log"
+        file_name=f"sim/{self.args.tag}/repos_info.log"
         f = open(file_name, "w")
         f.write( f"{'#'*4} Caravel repo info {'#'*4}\n")
         f.write( f"Repo: {run(f'cd {self.paths.CARAVEL_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
@@ -164,40 +207,63 @@ class RunRegression:
         f.write( run(f'cd {self.paths.COCOTB_PATH};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
         f.close()
 
-class Test: 
-    max_name_size=1
-    unknown_count=0
-    passed_count =0
-    failed_count =0
-    def __init__(self,name,sim,corner):
-        self.name = name
-        self.sim = sim
-        self.corner = corner
-        self.init_test()
-    
-    def init_test(self):
-        self.start_time = "-"
-        self.duration = "-"
-        self.status   = "pending"
-        self.endtime   = "-"
-        self.passed   = "-"
-        self.seed   = "-"
-        self.full_name = f"{self.sim}-{self.name}"
-        if self.sim == "GL_SDF":
-            self.full_name = f"{self.sim}-{self.name}-{self.corner}"
-        if len(self.full_name) > Test.max_name_size-4: 
-            Test.max_name_size = len(self.full_name)+4
-        Test.unknown_count +=1 
-            
-    def start_of_test(self):
-        self.start_time_t = datetime.now()
-        self.start_time = self.start_time_t.strftime("%H:%M:%S(%a)")
-        self.status   = "running"
+    def send_mail(self):
+        if self.args.emailto is None: 
+            return
+        #get commits 
+        showlog = f"{self.paths.COCOTB_PATH}/sim/{self.args.tag}/repos_info.log"
+        with open(showlog, 'rb') as fp:
+            first_commit = True
+            for line in fp:
+                if fnmatch(str(line,"utf-8"),"commit*"):
+                    for word in line.split():
+                        if first_commit:
+                            caravel_commit = str(word,"utf-8")
+                        else: 
+                            mgmt_commit = str(word,"utf-8")
+                    first_commit = False
 
-    def end_of_test(self):
-        self.status   = "done"
-        self.endtime   = datetime.now().strftime("%H:%M:%S(%a)")
-        self.duration = ("%.10s" % (datetime.now() - self.start_time_t))
-        Test.unknown_count -=1 
-        #TODO add pass and failed logic counter
+
+        tag = f"{self.paths.COCOTB_PATH}/sim/{self.args.tag}"
+        mail_sub = ("<html><head><style>table {border-collapse: collapse;width: 50%;} th, td {text-align: left;padding: 8px;} tr:nth-child(even) {background-color: #D6EEEE;}"
+                    f"</style></head><body><h2>Run info:</h2> <table border=2 bgcolor=#D6EEEE> "
+                    f"<th>location</th> <th><strong>{socket.gethostname()}</strong>:{tag}</th> <tr>  "
+                    f"<th> caravel commit</th> <th><a href='https://github.com/efabless/caravel/commit/{caravel_commit}'>{caravel_commit}<a></th> <tr>  " 
+                    f"<th>caravel_mgmt_soc_litex commit</th> <th><a href='https://github.com/efabless/caravel_mgmt_soc_litex/commit/{mgmt_commit}'>{mgmt_commit}<a></th> <tr> </table> ") 
+        mail_sub += self.set_html_test_table()
+        mail_sub += f"<p>best regards, </p></body></html>"
+        # print(mail_sub)
+        msg = MIMEMultipart("alternative", None, [ MIMEText(mail_sub,'html')])
+        all_pass = (self.tests[0].failed_count == 0 and self.tests[0].unknown_count == 0)
+        if all_pass:
+            msg['Subject'] = f'Pass: {self.args.tag} run results'
+        else: 
+            msg['Subject'] = f'Fail: {self.args.tag} run results'
+        msg['From'] = "verification@efabless.com"
+        msg['To'] = ", ".join(self.args.emailto)
+        docker = False
+        if docker: 
+            mail_command = f'echo "{mail_sub}" | mail -a "Content-type: text/html;" -s "{msg["Subject"]}" {self.args.emailto[0]}'
+            docker_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) efabless/dv:mail sh -c '{mail_command}'"
+            print(docker_command)
+            os.system(docker_command)
+        else:
+            # Send the message via our own SMTP server.
+            s = smtplib.SMTP('localhost')
+            s.send_message(msg)
+            s.quit()
     
+
+    def set_html_test_table(self):
+        html_test_table =f"<h2>Tests Table:</h2><table border=2 bgcolor=#D6EEEE>"
+        html_test_table += f"<th>Test</th> <th>duration</th> <th>status</th> <th>seed</th> <tr> "
+        for test in self.tests:
+            if test.passed == "passed":
+                html_test_table += f"<th>{test.full_name}</th><th>{test.duration}</th> <th style='background-color:#16EC0C'> {test.passed} </th><th>{test.seed}</th><tr>"
+            else:
+                html_test_table += f"<th>{test.full_name}</th><th>{test.duration}</th> <th style='background-color:#E50E0E'> {test.passed} </th><th>{test.seed}</th><tr>"
+        html_test_table += "</table>"
+        html_test_table += (f"<h2>Total status Table:</h2><table border=2 bgcolor=#D6EEEE><th>Passed</th> <th>failed</th> <th>unknown</th> <th>duration</th> <tr>"
+                      f"<th style='background-color:#16EC0C' >{test.passed_count}</th> <th style='background-color:#E50E0E' >{test.failed_count} </th> "
+                      f"<th style='background-color:#14E5F2'>{test.unknown_count}</th> <th>{('%.10s' % (datetime.now() - self.total_start_time))}</th> <tr></table>")
+        return html_test_table
