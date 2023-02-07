@@ -69,6 +69,7 @@ class Test:
         print(f"Start running test: {bcolors.OKGREEN  } {self.full_name} {bcolors.ENDC}")
         self.start_time_t = datetime.now()
         self.create_logs()
+        self.create_module_trail()
         shutil.copyfile(f'{self.paths.COCOTB_PATH}/pli.tab',f'{self.test_dir}/pli.tab')
         self.set_test_macros()
         self.start_time = self.start_time_t.strftime("%H:%M:%S(%a)")
@@ -182,6 +183,15 @@ class Test:
         change_str(str="replace by orignal rerun script",new_str=f"{self.test_dir}/rerun.py",file_path=f"{self.test_dir}/rerun.py")
         change_str(str="replace by new rerun script",new_str=f"{self.test_dir}/rerun/{self.full_name}/rerun.py",file_path=f"{self.test_dir}/rerun.py")
 
+    def create_module_trail(self):
+            f = open(f"{self.test_dir}/module_trail.py",'w')
+            f.write(f"from os import path\n")
+            f.write(f"import sys\n")
+            if self.args.user_test:
+                f.write(f"sys.path.append(path.abspath('{self.paths.USR_PRJ_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n")
+            else:
+                f.write(f"sys.path.append(path.abspath('{self.paths.COCOTB_PATH}'))\nfrom caravel_tests import *\n")
+
 def remove_argument(to_remove,patt):
     test_name = False
     for arg in sys.argv: 
@@ -193,4 +203,3 @@ def remove_argument(to_remove,patt):
                 test_name =False
             else: 
                 to_remove.append(arg)
-

@@ -133,7 +133,12 @@ class RunRegression:
                 else:
                     self.get_testlist(f"{directory}/{include}")
         for test in testlist["Tests"]:
-            self.add_new_test(test_name=test["name"],sim_type = test["sim"],corner = self.args.corner[0])
+            data = {'test_name':test["name"],'sim_type' :"RTL",'corner':self.args.corner[0]}
+            if "sim" in test: 
+                data['sim_type'] = test["sim"]
+            if "corner" in test: 
+                data["corner"] = test["corner"]
+            self.add_new_test(**data)
 
     def run_regression(self):
         threads = list()

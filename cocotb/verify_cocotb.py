@@ -47,10 +47,15 @@ class main():
 
     def set_paths(self,design_info):
         if not os.path.exists(design_info["CARAVEL_ROOT"])  or not os.path.exists(design_info["MCW_ROOT"]) :
-            raise NotADirectoryError (f"CARAVEL_ROOT or MCW_ROOT are not defined CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}")
+            raise NotADirectoryError (f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}")
         if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
             raise NotADirectoryError (f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}")
-        Paths = namedtuple("Paths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH")
+        self.args.user_test = False 
+        if design_info["USR_PRJ_ROOT"] != "None":
+            self.args.user_test = True 
+            if not os.path.exists(design_info["USR_PRJ_ROOT"]) :
+                raise NotADirectoryError (f"USR_PRJ_ROOT is not a directory USR_PRJ_ROOT:{design_info['USR_PRJ_ROOT']}")
+        Paths = namedtuple("Paths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USR_PRJ_ROOT")
         CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
         VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
         CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
@@ -59,7 +64,7 @@ class main():
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
         COCOTB_PATH = os.getcwd()
-        self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH )
+        self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH,design_info["USR_PRJ_ROOT"] )
 
     def set_args(self,design_info):
         if self.args.clk is None: 

@@ -20,7 +20,7 @@ class RunTest:
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.paths.FIRMWARE_PATH}/sections.lds,--strip-debug "
         CPUFLAGS = f"-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
+        includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
                  f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}")
         lst_command = f"{GCC_COMPILE}-objdump -d -S {self.hex_dir}/{self.test.name}.elf > {self.hex_dir}/{self.test.name}.lst "
@@ -33,7 +33,7 @@ class RunTest:
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/cm0_start.s"
         LINKER_SCRIPT = f"-T {self.paths.FIRMWARE_PATH}/link.ld"
         CPUFLAGS = f"-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
-        includes = f"-I{self.paths.FIRMWARE_PATH}"
+        includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
                  f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}")
         lst_command = f"{GCC_COMPILE}-objdump -d -S {self.hex_dir}/{self.test.name}.elf > {self.hex_dir}/{self.test.name}.lst "
@@ -78,7 +78,11 @@ class RunTest:
         test_name = self.test.name
         test_name += ".c"
         tests_path = os.path.abspath(f"{self.paths.COCOTB_PATH}/tests")
-        test_file =  self.find(test_name,tests_path)
+        tests_path_user = os.path.abspath(f"{self.paths.USR_PRJ_ROOT}")
+        if self.args.user_test:
+            test_file =  self.find(test_name,tests_path_user)
+        else:
+            test_file =  self.find(test_name,tests_path)
         test_path = os.path.dirname(test_file)
         return (test_path)
 
@@ -100,17 +104,17 @@ class RunTest:
         elif(self.test.sim=="GL_SDF"): 
             print(f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc" )
             return
-        user_project = f"RTL/debug_regs.v RTL/__user_project_wrapper.v RTL/__user_project_gpio_example.v RTL/__user_project_la_example.v RTL/__user_project_addr_space_project.v"
+        user_project = f"{self.paths.COCOTB_PATH}/RTL/debug_regs.v {self.paths.COCOTB_PATH}/RTL/__user_project_wrapper.v {self.paths.COCOTB_PATH}/RTL/__user_project_gpio_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_la_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_addr_space_project.v"
         if self.args.caravan:
-            user_project = f"RTL/__user_analog_project_wrapper.v"
+            user_project = f"{self.paths.COCOTB_PATH}/RTL/__user_analog_project_wrapper.v"
         seed = f"" 
         if self.args.seed is not None: 
             seed = f"RANDOM_SEED={self.args.seed}" 
 
         iverilog_command = (f"iverilog -Ttyp {macros} {includes}  -o {self.test.test_dir}/sim.vvp"
-                            f" {user_project}  RTL/caravel_top.sv -s caravel_top "
-                            f" && TESTCASE={self.test.name} MODULE=caravel_tests {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros)}")
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT}  efabless/dv:cocotb sh -c 'cd {self.paths.COCOTB_PATH} && {iverilog_command}' >> {self.test.full_log}"
+                            f" {user_project}  {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
+                            f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros)}")
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT}  efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}' >> {self.test.full_log}"
         self.test.full_terminal = open(self.test.full_log, "a")
         self.test.full_terminal.write(f"docker command for running iverilog and cocotb:\n% ")
         self.test.full_terminal.write(os.path.expandvars(docker_command)+"\n\n")
@@ -121,7 +125,6 @@ class RunTest:
     # vcs function      
     def runTest_vcs(self):
         dirs = f'+incdir+\\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\\" '
-        self.create_module_trail()
         if self.test.sim == "RTL":
             shutil.copyfile(f'{self.paths.VERILOG_PATH}/includes/rtl_caravel_vcs.v', f"{self.paths.COCOTB_PATH}/includes.v")
             change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{self.paths.VERILOG_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
@@ -145,9 +148,6 @@ class RunTest:
             user_project = user_project.replace('-v RTL/__user_project_wrapper.v', '')        
         if self.args.caravan:
             user_project = f"-v RTL/__user_analog_project_wrapper.v"
-
-        self.remove_old_test_data()
-
         os.system(f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} >> {self.test.full_log}")
 
         lint = ""
@@ -156,30 +156,15 @@ class RunTest:
 
         os.system(f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} >> {self.test.full_log}")
         
-        
-        if os.path.exists(f"{self.paths.COCOTB_PATH}/sdfAnnotateInfo"):
-            shutil.move(f"{self.paths.COCOTB_PATH}/sdfAnnotateInfo", f"{self.test.test_dir}/sdfAnnotateInfo")
 
     def find(self,name, path):
         for root, dirs, files in os.walk(path):
             if name in files:
                 return os.path.join(root, name)
         print(f"Test {name} doesn't exist or don't have a C file ")
-        
-    def remove_old_test_data(self):
-        if os.path.exists(f"{self.paths.COCOTB_PATH}/AN.DB"):
-            shutil.rmtree(f"{self.paths.COCOTB_PATH}/AN.DB")
-        if os.path.exists(f"{self.paths.COCOTB_PATH}/ucli.key"):
-            os.remove(f"{self.paths.COCOTB_PATH}/ucli.key")
-        if os.path.exists(f"{self.paths.COCOTB_PATH}/core"):
-            os.remove(f"{self.paths.COCOTB_PATH}/core")
 
-    def create_module_trail(self):
-        f = open(f"{self.test.test_dir}/module_trail.py",'w')
-        f.write(f"from os import path\n")
-        f.write(f"import sys\n")
-        f.write(f"sys.path.append(path.abspath('{self.paths.COCOTB_PATH}'))\n")
-        f.write(f"from caravel_tests import *\n")
+
+    
 
 class bcolors:
     HEADER = '\033[95m'
