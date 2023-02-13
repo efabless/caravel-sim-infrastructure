@@ -54,7 +54,9 @@ class RunTest:
         else: 
             command = self.hex_riscv32_command_gen()
 
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} efabless/dv:latest sh -c 'cd {test_dir} && {command} ' >> {self.test.full_log}"
+        docker_dir = f"-v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} "
+        docker_dir = docker_dir if not self.args.user_test else docker_dir + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} ' >> {self.test.full_log}"
         
         command_slipt = command.split('&&')
         self.test.full_terminal.write("docker for hex command:\n% ")
@@ -78,7 +80,7 @@ class RunTest:
         test_name = self.test.name
         test_name += ".c"
         tests_path = os.path.abspath(f"{self.paths.COCOTB_PATH}/tests")
-        tests_path_user = os.path.abspath(f"{self.paths.USR_PRJ_ROOT}")
+        tests_path_user = os.path.abspath(f"{self.paths.USER_PROJECT_ROOT}")
         if self.args.user_test:
             test_file =  self.find(test_name,tests_path_user)
         else:
@@ -95,7 +97,7 @@ class RunTest:
     # iverilog function
     def runTest_iverilog(self):
         macros = ' -D' + ' -D'.join(self.test.macros)
-        env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK}"
+        env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
 
         if(self.test.sim=="RTL"): 
             includes = f" -f {self.paths.VERILOG_PATH}/includes/includes.rtl.caravel"
@@ -104,17 +106,15 @@ class RunTest:
         elif(self.test.sim=="GL_SDF"): 
             print(f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc" )
             return
-        user_project = f"{self.paths.COCOTB_PATH}/RTL/debug_regs.v {self.paths.COCOTB_PATH}/RTL/__user_project_wrapper.v {self.paths.COCOTB_PATH}/RTL/__user_project_gpio_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_la_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_addr_space_project.v"
-        if self.args.caravan:
-            user_project = f"{self.paths.COCOTB_PATH}/RTL/__user_analog_project_wrapper.v"
-        seed = f"" 
-        if self.args.seed is not None: 
-            seed = f"RANDOM_SEED={self.args.seed}" 
-
+        user_project = self.test.set_user_project()
+        seed = ""  if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (f"iverilog -Ttyp {macros} {includes}  -o {self.test.test_dir}/sim.vvp"
                             f" {user_project}  {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
                             f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros)}")
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT}  efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}' >> {self.test.full_log}"
+        docker_dir = f"-v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} "
+        if self.args.user_test: 
+            docker_dir += f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} {docker_dir} efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}' >> {self.test.full_log}"
         self.test.full_terminal = open(self.test.full_log, "a")
         self.test.full_terminal.write(f"docker command for running iverilog and cocotb:\n% ")
         self.test.full_terminal.write(os.path.expandvars(docker_command)+"\n\n")
@@ -143,11 +143,7 @@ class RunTest:
         os.environ["MODULE"] = f"module_trail"
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
-        user_project = f"-v {self.paths.COCOTB_PATH}/RTL/debug_regs.v  -v {self.paths.COCOTB_PATH}/RTL/__user_project_wrapper.v -v {self.paths.COCOTB_PATH}/RTL/__user_project_addr_space_project.v  -v {self.paths.COCOTB_PATH}/RTL/__user_project_gpio_example.v -v {self.paths.COCOTB_PATH}/RTL/__user_project_la_example.v "
-        if "user_ram" in self.test.name: 
-            user_project = user_project.replace('-v RTL/__user_project_wrapper.v', '')        
-        if self.args.caravan:
-            user_project = f"-v RTL/__user_analog_project_wrapper.v"
+        user_project = self.test.set_user_project()
         os.system(f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} >> {self.test.full_log}")
 
         lint = ""

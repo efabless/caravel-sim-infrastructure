@@ -42,7 +42,7 @@ initial begin
 		`endif
 		$vcdpluson();
 	`else 
-		$dumpfile ({"sim/",`TAG,"/",`SIM,"-",`TESTNAME,"/",`SIM,"-",`TESTNAME,".vcd"});
+		$dumpfile ({`MAIN_PATH,"/sim/",`TAG,"/",`SIM,"-",`TESTNAME,"/",`SIM,"-",`TESTNAME,".vcd"});
 		$dumpvars (0, caravel_top);
 	`endif
 end

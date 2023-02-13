@@ -3,6 +3,7 @@
 #ifdef ARM 
 #include "swift.h"
 #endif
+#include "gpios.c"
 void enable_debug(){
     enable_user_interface();
     set_debug_reg1(0);
@@ -163,7 +164,7 @@ int  mgmt_gpio_rd(){return reg_gpio_in;}
 void wait_on_gpio_mgmt(unsigned int data){while (reg_gpio_in == data);}
 
 // 
-void dummy_delay(int num){for (int i=0;i < num;i++){set_debug_reg1(get_debug_reg1());}}
+void dummy_delay(int num){for (int i=0;i < num;i++){set_gpio_l(get_gpio_l());}}
 
 // timer 
 

@@ -41,7 +41,7 @@ void main(){
     // This should appear at the output, received by the testbench UART.
     // (Makes simulation time long.)
 //    print("test msg\n");
-    print("Monitor: Test UART (RTL) passed");
+    print("Monitor: Test UART (RTL) passed\n");
 
     // Allow transmission to complete before signalling that the program
     // has ended.

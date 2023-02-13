@@ -64,6 +64,24 @@ class Test:
 
         if self.name == "user_address_space":
             self.macros.remove('COCOTB_SIM') # using debug register in this test isn't needed
+    
+    def set_user_project(self):
+        if not self.args.user_test:
+            user_project = f" {self.paths.COCOTB_PATH}/RTL/debug_regs.v {self.paths.COCOTB_PATH}/RTL/__user_project_wrapper.v {self.paths.COCOTB_PATH}/RTL/__user_project_gpio_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_la_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_addr_space_project.v"
+            if self.args.caravan:
+                user_project = f" {self.paths.COCOTB_PATH}/RTL/__user_analog_project_wrapper.v"
+            if self.args.vcs:
+                user_project = user_project.replace("{","-v {")
+        else: 
+            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
+            user_project = f" -f {user_include}"
+            if self.args.vcs:
+                user_project=""
+                lines = open(user_include, 'r').readlines()
+                for line in lines: 
+                    if line.startswith("-v"):
+                        user_project += line.replace("$(USER_PROJECT_VERILOG)",f"{self.paths.USER_PROJECT_ROOT}/verilog")
+        return user_project.replace("\n","")
 
     def start_of_test(self):
         print(f"Start running test: {bcolors.OKGREEN  } {self.full_name} {bcolors.ENDC}")
@@ -188,7 +206,7 @@ class Test:
             f.write(f"from os import path\n")
             f.write(f"import sys\n")
             if self.args.user_test:
-                f.write(f"sys.path.append(path.abspath('{self.paths.USR_PRJ_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n")
+                f.write(f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n")
             else:
                 f.write(f"sys.path.append(path.abspath('{self.paths.COCOTB_PATH}'))\nfrom caravel_tests import *\n")
 

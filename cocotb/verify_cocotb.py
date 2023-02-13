@@ -11,6 +11,7 @@ from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
+import fileinput
 
 def check_valid_mail_addr(address):
     pat = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
@@ -51,11 +52,13 @@ class main():
         if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
             raise NotADirectoryError (f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}")
         self.args.user_test = False 
-        if design_info["USR_PRJ_ROOT"] != "None":
+        if design_info["USER_PROJECT_ROOT"] != "None":
             self.args.user_test = True 
-            if not os.path.exists(design_info["USR_PRJ_ROOT"]) :
-                raise NotADirectoryError (f"USR_PRJ_ROOT is not a directory USR_PRJ_ROOT:{design_info['USR_PRJ_ROOT']}")
-        Paths = namedtuple("Paths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USR_PRJ_ROOT")
+            if not os.path.exists(design_info["USER_PROJECT_ROOT"]) :
+                raise NotADirectoryError (f"USER_PROJECT_ROOT is not a directory USER_PROJECT_ROOT:{design_info['USER_PROJECT_ROOT']}")
+            else: 
+                self.configure_user_files(design_info["USER_PROJECT_ROOT"])
+        Paths = namedtuple("Paths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USER_PROJECT_ROOT")
         CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
         VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
         CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
@@ -64,7 +67,7 @@ class main():
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
         COCOTB_PATH = os.getcwd()
-        self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH,design_info["USR_PRJ_ROOT"] )
+        self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH,design_info["USER_PROJECT_ROOT"] )
 
     def set_args(self,design_info):
         if self.args.clk is None: 
@@ -93,6 +96,17 @@ class main():
             if not check_valid_mail_addr(self.args.emailto): 
                 self.args.emailto = [[mail_addr for  mail_addr in self.args.emailto if check_valid_mail_addr(mail_addr)]] # if mail input aren't a valid mail will ignore it
 
+    def configure_user_files(self,user_path):
+        file = f"{user_path}/verilog/dv/cocotb/cocotb_includes.py"
+        with open(file, 'r') as f:
+            # read a list of lines into data
+            page  = f.readlines()
+            for num,line in enumerate(page): 
+                if "sys.path.append(path.abspath(" in line:
+                    page[num] = f"sys.path.append(path.abspath('{os.getcwd()}'))\n"
+            file_w = open(file,"w")
+            file_w.write("".join(page))
+            file_w.close()
 
     def set_config_script(self,design_info):
         new_config_path = f'{self.paths.COCOTB_PATH}/sim/{self.args.tag}/configs.yalm'

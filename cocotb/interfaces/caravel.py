@@ -144,9 +144,9 @@ class Caravel_env:
             l_bit = h_bit 
         mprj_out= self.dut.mprj_io_tb.value[size - h_bit:size - l_bit]
         if(mprj_out.is_resolvable):
-            cocotb.log.info(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {hex(mprj_out)}')
+            cocotb.log.debug(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {hex(mprj_out)}')
         else:
-            cocotb.log.info(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {mprj_out}')
+            cocotb.log.debug(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {mprj_out}')
         return mprj_out
 
     """return the value of management gpio"""
@@ -154,6 +154,15 @@ class Caravel_env:
         data = self.dut.gpio_tb.value.binstr
         cocotb.log.debug(f' [caravel] Monitor mgmt gpio = {data}')
         return data
+
+    async def wait_mgmt_gpio(self,data):
+        data_s = str(data)
+        while True: 
+            if data_s == self.monitor_mgmt_gpio(): 
+                break
+            await ClockCycles(self.clk, 1)
+            
+
 
     """change the configration of the gpios by overwrite their defaults value then reset
         need to take at least 1 cycle for reset """

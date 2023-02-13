@@ -6,7 +6,8 @@ from interfaces.cpu import RiskV
 from interfaces.defsParser import Regs
 from cocotb.result import TestSuccess
 from tests.common_functions.test_functions import *
-from tests.uart.uart import uart_send_char
+from interfaces.UART import UART
+
 from interfaces.caravel import GPIO_MODE
 
 async def write_reg_spi(caravelEnv,address,data):
@@ -25,9 +26,7 @@ async def IRQ_uart_rx(dut):
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    clk = clock.period/1000
-    global bit_time_ns
-    bit_time_ns = round(10**5 * clk / (96))
+    uart = UART(caravelEnv,clock)
     cocotb.log.info(f"[TEST] Start IRQ_uart test")   
     pass_list = (0x1B,0x2B)
     fail_list = (0x1E,0x2E)
@@ -42,7 +41,7 @@ async def IRQ_uart_rx(dut):
                 break
             if reg2 == 0xAA:  
                 cocotb.log.info(f"[TEST] start sending through uart")  
-                await  cocotb.start( uart_send_char(caravelEnv,"B",bit_time_ns,clk))
+                await  cocotb.start( uart.uart_send_char("B"))
 
         if reg1 != cpu.read_debug_reg1():
             reg1 = cpu.read_debug_reg1()                

@@ -90,18 +90,17 @@ class RunRegression:
         if self.args.test is not None:
             if isinstance(self.args.test,list):
                 for test in self.args.test:
-                    if test in self.tests_json:
-                        if isinstance(self.args.sim,list):
-                            for sim_type in self.args.sim:
-                                if sim_type =="GL_SDF": 
-                                    for corner in self.corners: 
-                                        self.add_new_test(test_name=test,sim_type = sim_type, corner = corner)
-                                else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.args.corner[0])
-                        else:
+                    if isinstance(self.args.sim,list):
+                        for sim_type in self.args.sim:
                             if sim_type =="GL_SDF": 
                                 for corner in self.corners: 
                                     self.add_new_test(test_name=test,sim_type = sim_type, corner = corner)
                             else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.args.corner[0])
+                    else:
+                        if sim_type =="GL_SDF": 
+                            for corner in self.corners: 
+                                self.add_new_test(test_name=test,sim_type = sim_type, corner = corner)
+                        else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.args.corner[0])
 
             else:
                 if self.args.test in self.tests_json:
@@ -110,10 +109,8 @@ class RunRegression:
                             self.add_new_test(test_name=self.args.test,sim_type = sim_type,corner = self.args.corner[0])
                     else:
                         self.add_new_test(test_name=self.args.test,sim_type = self.args.sim,corner = self.args.corner[0])
-        # testlist TODO: add logic for test list
         if self.args.testlist is not None:
             for testlist in self.args.testlist:
-                
                 self.get_testlist(testlist)
 
         self.update_run_log()
@@ -202,10 +199,18 @@ class RunRegression:
         f.write( f"Repo: {run(f'cd {self.paths.CARAVEL_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( f"Branch name: {run(f'cd {self.paths.CARAVEL_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( run(f'cd {self.paths.CARAVEL_ROOT};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
+
         f.write( f"\n\n{'#'*4} Caravel Managment repo info {'#'*4}\n")
         f.write( f"Repo: {run(f'cd {self.paths.MCW_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( f"Branch name: {run(f'cd {self.paths.MCW_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( run(f'cd {self.paths.MCW_ROOT};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
+
+        if self.args.user_test: 
+            f.write( f"\n\n{'#'*4} User repo info {'#'*4}\n")
+            f.write( f"Repo: {run(f'cd {self.paths.USER_PROJECT_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+            f.write( f"Branch name: {run(f'cd {self.paths.USER_PROJECT_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+            f.write( run(f'cd {self.paths.USER_PROJECT_ROOT};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
+
         f.write( f"\n\n{'#'*4} caravel-dynamic-sims repo info {'#'*4}\n")
         f.write( f"Repo: {run(f'cd {self.paths.COCOTB_PATH};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( f"Branch name: {run(f'cd {self.paths.COCOTB_PATH};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
