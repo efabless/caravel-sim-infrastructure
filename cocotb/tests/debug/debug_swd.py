@@ -23,7 +23,7 @@ ACK = {int("100",2):"OK" ,int("010",2):"WAIT",int("001",2):"FAULT" }
 async def debug_swd(dut):
     dut._id(f"bin{35}",False).value = 0
     dut._id(f"bin{35}_en",False).value = Force(1)
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=31011)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1131011)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

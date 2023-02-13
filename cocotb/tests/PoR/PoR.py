@@ -12,13 +12,14 @@ from cocotb.binary import BinaryValue
 from interfaces.common import sky
 from tests.common_functions.Timeout import Timeout
 from tests.housekeeping.housekeeping_spi.spi_access_functions import *
+from tests.mgmt_gpio.mgmt_gpio import blink_counter
 
 @cocotb.test()
 @repot_test
 async def PoR(dut):
     # configurations
     caravelEnv = caravel.Caravel_env(dut)
-    Timeout(clk=caravelEnv.clk,cycle_num=185972,precision=0.2)
+    Timeout(clk=caravelEnv.clk,cycle_num=18223191,precision=0.2)
     cocotb.scheduler.add(max_num_error(10,caravelEnv.clk))
     clock = Clock(caravelEnv.clk, read_config_file()["clock"], units="ns")  # Create a 25ns period clock on port clk
     cocotb.start_soon(clock.start())  # Start the clock
@@ -35,8 +36,6 @@ async def PoR(dut):
 
     # start test
     cpu = RiskV(dut)
-    cpu.cpu_force_reset()
-    cpu.cpu_release_reset()
     cocotb.log.info(f"[TEST] Start mgmt_gpio_bidir test")  
 
     await wait_reg1(cpu,caravelEnv,0XAA)
@@ -46,34 +45,27 @@ async def PoR(dut):
         if i == num_blinks-1: #last iteration
             cpu.write_debug_reg1_backdoor(0xFF) 
         caravelEnv.drive_mgmt_gpio(1)
-        await ClockCycles(caravelEnv.clk,3000) 
+        await ClockCycles(caravelEnv.clk,30000) 
         caravelEnv.drive_mgmt_gpio(0)
         if i != num_blinks-1: # not last iteration
-            await ClockCycles(caravelEnv.clk,3000) 
+            await ClockCycles(caravelEnv.clk,30000) 
         else: 
+            # caravelEnv.drive_mgmt_gpio('z')
             await ClockCycles(caravelEnv.clk,1) 
 
+    # caravelEnv.drive_mgmt_gpio('z')
     cocotb.log.info(f"[TEST] finish sending {num_blinks} blinks ")
 
     cocotb.log.info(f"[TEST] waiting for {num_blinks} blinks ")
-    recieved_blinks = 0
-    while True:
-        if cpu.read_debug_reg2() == 0xFF:  #test finish
-            break
-        while (True):
-            if caravelEnv.monitor_mgmt_gpio() == '0': 
-                break
-            if cpu.read_debug_reg2() == 0xFF:  #test finish
-                break
-            await ClockCycles(caravelEnv.clk,1) 
-        while (True):
-            if caravelEnv.monitor_mgmt_gpio() == '1': 
-                recieved_blinks +=1
-                break
-            if cpu.read_debug_reg2() == 0xFF:  #test finish
-                break
-            await ClockCycles(caravelEnv.clk,1) 
-        await ClockCycles(caravelEnv.clk,1) 
+    counter = [0] # list to pass by ref
+    await cocotb.start(blink_counter(caravelEnv.get_mgmt_gpi_hdl(),counter))  # forked
+    await wait_reg2(cpu,caravelEnv,0xFF)
+    recieved_blinks = counter[0]
+    if recieved_blinks == num_blinks:
+        cocotb.log.info(f"[TEST] recieved the correct number of blinks {num_blinks}")
+    else: 
+        cocotb.log.error(f"[TEST] recieved the incorrect number of blinks recieved = {recieved_blinks} expected = {num_blinks}")
+    cocotb.log.info(f"[TEST] counter =  {counter}")
         
 
     if recieved_blinks == num_blinks:

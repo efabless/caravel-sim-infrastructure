@@ -10,7 +10,7 @@ void main(){
     }
     for (unsigned int i = 0; i < dff_size; i++){
         if (data != *(dff_start_address+i)){
-            set_debug_reg2(i);
+            set_debug_reg2(dff_start_address + i);
             set_debug_reg1(0x1E); 
             return;
         }
@@ -22,7 +22,7 @@ void main(){
     }
     for (unsigned int i = 0; i < dff_size; i++){
         if (data != *(dff_start_address+i)){
-            set_debug_reg2(i);
+            set_debug_reg2(dff_start_address + i);
             set_debug_reg1(0x1E); 
             return;
         }

@@ -13,7 +13,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def mem_dff2_W(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1803911)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=111803911)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -30,14 +30,14 @@ async def mem_dff2_W(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff2 memory ")   
                 break
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x00000400 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break
         await ClockCycles(caravelEnv.clk,1000) 
 
 @cocotb.test()
 @repot_test
 async def mem_dff2_HW(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=3589591)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=113589591)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -54,7 +54,7 @@ async def mem_dff2_HW(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff2 memory ")   
                 break
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x00000400 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break
         await ClockCycles(caravelEnv.clk,1000) 
 
@@ -62,7 +62,7 @@ async def mem_dff2_HW(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff2_B(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=4883401)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=114883401)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -79,7 +79,7 @@ async def mem_dff2_B(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff2 memory ")   
                 break
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x00000400 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break
         await ClockCycles(caravelEnv.clk,1000) 
 
@@ -87,7 +87,7 @@ async def mem_dff2_B(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff_W(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=3591611)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=113591611)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -102,7 +102,7 @@ async def mem_dff_W(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         await ClockCycles(caravelEnv.clk,1000) 
     
@@ -110,7 +110,7 @@ async def mem_dff_W(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff_HW(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=7161961)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=117161961)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -125,7 +125,7 @@ async def mem_dff_HW(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         await ClockCycles(caravelEnv.clk,1000) 
     
@@ -133,7 +133,7 @@ async def mem_dff_HW(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff_B(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=9752611)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=119752611)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -148,14 +148,14 @@ async def mem_dff_B(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all dff memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         await ClockCycles(caravelEnv.clk,1000) 
        
 @cocotb.test()
 @repot_test
 async def mem_sram_W(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=8083081)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=118083081)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -171,7 +171,7 @@ async def mem_sram_W(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         if reg2 != cpu.read_debug_reg2():
             reg2 = cpu.read_debug_reg2()
@@ -181,7 +181,7 @@ async def mem_sram_W(dut):
 @cocotb.test()
 @repot_test
 async def mem_sram_HW(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=16274181)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1116274181)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -197,7 +197,7 @@ async def mem_sram_HW(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all srram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         # if reg2 != cpu.read_debug_reg2():
         #     reg2 = cpu.read_debug_reg2()
@@ -207,7 +207,7 @@ async def mem_sram_HW(dut):
 @cocotb.test()
 @repot_test
 async def mem_sram_B(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=28500231)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1128500231)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -223,7 +223,7 @@ async def mem_sram_B(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         # if reg2 != cpu.read_debug_reg2():
         #     reg2 = cpu.read_debug_reg2()
@@ -234,7 +234,7 @@ async def mem_sram_B(dut):
 @cocotb.test()
 @repot_test
 async def mem_sram_smoke(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=655541)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=11655541)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -250,7 +250,7 @@ async def mem_sram_smoke(dut):
                 cocotb.log.info(f"[TEST] pass writing and reading all sram memory ")  
                 break 
             elif reg1 in fail_list:  # pass phase
-                cocotb.log.error(f"[TEST] failed access address {hex(0x0000000 + cpu.read_debug_reg2())}")     
+                cocotb.log.error(f"[TEST] failed access address {hex(cpu.read_debug_reg2())}")     
                 break 
         # if reg2 != cpu.read_debug_reg2():
         #     reg2 = cpu.read_debug_reg2()

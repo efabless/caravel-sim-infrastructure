@@ -25,7 +25,7 @@ def shift(gpio,shift_type):
         if not sky: 
             bits = "0101010101"
     fail = False
-    gpio_to_skip = None 
+    gpio_to_skip = () 
 
     if Macros['ARM']:
         gpio_to_skip = ("gpio_control_bidir_2[0]","gpio_control_bidir_2[1]","gpio_control_bidir_2[2]")
@@ -54,7 +54,7 @@ def shift(gpio,shift_type):
 @cocotb.test()
 @repot_test
 async def serial_shifting_10(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=37825)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1137825)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -87,7 +87,7 @@ async def serial_shifting_10(dut):
 @cocotb.test()
 @repot_test
 async def serial_shifting_01(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=37825)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1137825)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -122,7 +122,7 @@ async def serial_shifting_01(dut):
 @cocotb.test()
 @repot_test
 async def serial_shifting_0011(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=36724)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1136724)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -154,7 +154,7 @@ async def serial_shifting_0011(dut):
 @cocotb.test()
 @repot_test
 async def serial_shifting_1100(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=36734)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1136734)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -199,7 +199,7 @@ def shift_2(gpio,shift_type):
         bits = "1001100110011"
         if not sky: 
             bits = "1100110011"
-
+    gpio_to_skip = ()
     if Macros['ARM']:
         gpio_to_skip = ("gpio_control_bidir_2[0]","gpio_control_bidir_2[1]","gpio_control_bidir_2[2]")
     

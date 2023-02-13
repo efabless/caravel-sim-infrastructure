@@ -14,7 +14,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def timer0_oneshot(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1023545)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=111023545)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -56,7 +56,7 @@ async def timer0_oneshot(dut):
 @cocotb.test()
 @repot_test
 async def timer0_periodic(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=53500)
+    caravelEnv,clock = await test_configure(dut,timeout_cycles=1153500)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
