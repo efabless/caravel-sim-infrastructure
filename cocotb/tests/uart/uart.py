@@ -17,13 +17,13 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def uart_tx(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11346140)
+    caravelEnv = await test_configure(dut,timeout_cycles=11346140)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     cocotb.log.info(f"[TEST] Start uart test")  
     expected_msg = "Monitor: Test UART (RTL) passed"
-    uart = UART(caravelEnv,clock)
+    uart = UART(caravelEnv)
     # wait for start of sending
     await wait_reg1(cpu,caravelEnv,0XAA) 
     msg = await uart.get_line()
@@ -35,18 +35,14 @@ async def uart_tx(dut):
 @cocotb.test()
 @repot_test
 async def uart_rx(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1198315)
+    caravelEnv = await test_configure(dut,timeout_cycles=1198315)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    uart = UART(caravelEnv,clock)
+    uart = UART(caravelEnv)
     cocotb.log.info(f"[TEST] Start uart test")  
     caravelEnv.drive_gpio_in((0,0),0) # IO[0] affects the uart selecting btw system and debug
     caravelEnv.drive_gpio_in((5,5),1)
-    # calculate bit time
-    clk = clock.period/1000 #ns
-    bit_time_ns = round(10**5 * clk / (96))
-    cocotb.log.info (f"[TEST] bit_time_ns = {bit_time_ns}ns")
     # send first char
     await wait_reg1(cpu,caravelEnv,0XAA)  
     await uart.uart_send_char("B")
@@ -87,7 +83,7 @@ async def uart_check_char_recieved(caravelEnv,cpu):
 @cocotb.test()
 @repot_test
 async def uart_loopback(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11199021)
+    caravelEnv = await test_configure(dut,timeout_cycles=11199021)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

@@ -54,7 +54,7 @@ def shift(gpio,shift_type):
 @cocotb.test()
 @repot_test
 async def serial_shifting_10(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1137825)
+    caravelEnv = await test_configure(dut,timeout_cycles=1137825)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -87,7 +87,7 @@ async def serial_shifting_10(dut):
 @cocotb.test()
 @repot_test
 async def serial_shifting_01(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1137825)
+    caravelEnv = await test_configure(dut,timeout_cycles=1137825)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -122,7 +122,7 @@ async def serial_shifting_01(dut):
 @cocotb.test()
 @repot_test
 async def serial_shifting_0011(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1136724)
+    caravelEnv = await test_configure(dut,timeout_cycles=1136724)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -154,7 +154,7 @@ async def serial_shifting_0011(dut):
 @cocotb.test()
 @repot_test
 async def serial_shifting_1100(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1136734)
+    caravelEnv = await test_configure(dut,timeout_cycles=1136734)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

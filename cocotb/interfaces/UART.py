@@ -3,20 +3,24 @@ from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles,Timer,Edge
 from interfaces.common import Macros
 
 class UART():
-    def __init__(self,caravelEnv,clock) -> None:
+    def __init__(self,caravelEnv) -> None:
         self.caravelEnv = caravelEnv
+        clock = caravelEnv.get_clock_obj()
         self.period = clock.period/1000
-        self.bit_time_ns = round( 10**5 * self.period / (96))  # 10% factor of safety
+        self.bit_time_ns = round( 1.01 * 10**5 * self.period / (96))  # 10% factor of safety
         cocotb.log.info (f"[UART] configure uart bit_time_ns = {self.bit_time_ns}ns")
 
     async def get_line(self):
         line =''
         while(True):
             new_char = await self.get_char()
+            cocotb.log.info (f"[UART] new char = {new_char}")
             if new_char == "\n":
                 break
             line += new_char 
+            cocotb.log.info (f"[UART] new char again = {new_char}")
             cocotb.log.info (f"[UART] line recieved = {line}")
+        cocotb.log.info (f"[UART] line recieved = {line}")
         return line
 
     async def get_char(self):

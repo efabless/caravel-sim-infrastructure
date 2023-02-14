@@ -5,7 +5,7 @@ from tests.common_functions.test_functions import *
 @repot_test
 
 async def helloWorld(dut):
-    caravelEnv,clock = await test_configure(dut)
+    caravelEnv = await test_configure(dut)
     cocotb.log.info("[Test] Hello world")
     await ClockCycles(caravelEnv.clk,100000) 
  

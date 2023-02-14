@@ -16,31 +16,31 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def gpio_all_o_user(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11538624)
-    await gpio_all_o_seq(dut,caravelEnv,clock)
+    caravelEnv = await test_configure(dut,timeout_cycles=11538624)
+    await gpio_all_o_seq(dut,caravelEnv)
     
 @cocotb.test()
 @repot_test
 async def gpio_all_i_user(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11498255)
-    await gpio_all_i_seq(dut,caravelEnv,clock)
+    caravelEnv = await test_configure(dut,timeout_cycles=11498255)
+    await gpio_all_i_seq(dut,caravelEnv)
 
 @cocotb.test()
 @repot_test
 async def gpio_all_i_pu_user(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1154138)
-    await gpio_all_i_pu_seq(dut,caravelEnv,clock)
+    caravelEnv = await test_configure(dut,timeout_cycles=1154138)
+    await gpio_all_i_pu_seq(dut,caravelEnv)
     
 @cocotb.test()
 @repot_test
 async def gpio_all_i_pd_user(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1154138)
-    await gpio_all_i_pd_seq(dut,caravelEnv,clock)
+    caravelEnv = await test_configure(dut,timeout_cycles=1154138)
+    await gpio_all_i_pd_seq(dut,caravelEnv)
     
 @cocotb.test()
 @repot_test
 async def gpio_all_bidir_user(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=111266662)
+    caravelEnv = await test_configure(dut,timeout_cycles=111266662)
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -122,7 +122,7 @@ async def gpio_all_bidir_user(dut):
     else: 
         cocotb.log.error(f"[TEST] Error: reg_mprj_datal has recieved wrong data {cpu.read_debug_reg2()} instead of {data_in}")
     data_in = 0x3f
-    data_in = int(bin(data_in)[31-active_gpios_num-2:],2)
+    data_in = int(bin(data_in).replace("0b","")[31-active_gpios_num:],2)
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[{active_gpios_num}:32]")
     caravelEnv.drive_gpio_in((active_gpios_num,32),data_in)
     await wait_reg1(cpu,caravelEnv,0xD2)
@@ -139,7 +139,7 @@ async def gpio_all_bidir_user(dut):
     else: 
         cocotb.log.error(f"[TEST] Error: reg_mprj_datah has recieved wrong data {cpu.read_debug_reg2()} instead of {data_in}")
     data_in = 0x15
-    data_in = int(bin(data_in)[31-active_gpios_num-2:],2)
+    data_in = int(bin(data_in).replace("0b","")[31-active_gpios_num:],2)
 
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[{active_gpios_num}:32]")
     caravelEnv.drive_gpio_in((active_gpios_num,32),data_in)
@@ -149,7 +149,7 @@ async def gpio_all_bidir_user(dut):
     else: 
         cocotb.log.error(f"[TEST] Error: reg_mprj_datah has recieved wrong data {cpu.read_debug_reg2()} instead of {data_in}")
     data_in = 0x2A
-    data_in = int(bin(data_in)[31-active_gpios_num-2:],2)
+    data_in = int(bin(data_in).replace("0b","")[31-active_gpios_num:],2)
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[{active_gpios_num}:32]")
     caravelEnv.drive_gpio_in((active_gpios_num,32),data_in) 
     await wait_reg2(cpu,caravelEnv,0XFF) 

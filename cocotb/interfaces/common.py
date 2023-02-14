@@ -41,7 +41,7 @@ def drive_hdl(path,bits,data):
 
 """Enum for GPIO modes valus used to configured the pins"""
 tag = os.getenv('RUNTAG')
-# config_file = f"sim.{tag.replace('/','.')}.configs" // TODO: fix this 
+# config_file = f"sim.{tag.replace('/','.')}.configs" // TODO: fix this
 sky = 1
 if 1:
     class GPIO_MODE(Enum):

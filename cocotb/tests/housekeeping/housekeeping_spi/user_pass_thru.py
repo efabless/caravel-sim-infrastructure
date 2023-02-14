@@ -18,7 +18,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def user_pass_thru_rd(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1113771)
+    caravelEnv = await test_configure(dut,timeout_cycles=1113771)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -53,7 +53,7 @@ async def user_pass_thru_rd(dut):
 @cocotb.test()
 @repot_test
 async def user_pass_thru_connection(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1113771)
+    caravelEnv = await test_configure(dut,timeout_cycles=1113771)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

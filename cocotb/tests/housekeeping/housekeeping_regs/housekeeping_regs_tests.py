@@ -19,12 +19,12 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def hk_regs_wr_wb(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=111678,num_error=INFINITY)
+    caravelEnv = await test_configure(dut,timeout_cycles=111678,num_error=INFINITY)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
-    hk_file = 'wb_models/housekeepingWB/HK_regs.json'
+    hk_file = f'{cocotb.plusargs["MAIN_PATH"]}/wb_models/housekeepingWB/HK_regs.json'
     if not sky: 
-        hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
+        hk_file = f'{cocotb.plusargs["MAIN_PATH"]}/wb_models/housekeepingWB/HK_regs_gf.json'
     with open(hk_file) as f:
         regs = json.load(f)
     await ClockCycles(caravelEnv.clk, 10)
@@ -74,7 +74,7 @@ async def hk_regs_wr_wb(dut):
 @cocotb.test()
 @repot_test
 async def hk_regs_wr_wb_cpu(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11209454)    
+    caravelEnv = await test_configure(dut,timeout_cycles=11209454)    
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -102,10 +102,10 @@ async def hk_regs_wr_wb_cpu(dut):
 @cocotb.test()
 @repot_test
 async def hk_regs_wr_spi(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11116330,num_error=INFINITY)
-    hk_file = 'wb_models/housekeepingWB/HK_regs.json'
+    caravelEnv = await test_configure(dut,timeout_cycles=11116330,num_error=INFINITY)
+    hk_file = f'{cocotb.plusargs["MAIN_PATH"]}/wb_models/housekeepingWB/HK_regs.json'
     if not sky: 
-        hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
+        hk_file = f'{cocotb.plusargs["MAIN_PATH"]}/wb_models/housekeepingWB/HK_regs_gf.json'
     with open(hk_file) as f:
         regs = json.load(f)
     # write then read single byte 
@@ -164,10 +164,10 @@ async def hk_regs_wr_spi(dut):
 @cocotb.test()
 @repot_test
 async def hk_regs_rst_spi(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=118730,num_error=INFINITY)
-    hk_file = 'wb_models/housekeepingWB/HK_regs.json'
+    caravelEnv = await test_configure(dut,timeout_cycles=118730,num_error=INFINITY)
+    hk_file = f'{cocotb.plusargs["MAIN_PATH"]}/wb_models/housekeepingWB/HK_regs.json'
     if not sky: 
-        hk_file = 'wb_models/housekeepingWB/HK_regs_gf.json'
+        hk_file = f'{cocotb.plusargs["MAIN_PATH"]}/wb_models/housekeepingWB/HK_regs_gf.json'
     with open(hk_file) as f:
         regs = json.load(f)
     # read 

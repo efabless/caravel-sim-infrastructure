@@ -110,7 +110,7 @@ class Test:
             print(f"{bcolors.FAIL }Test: {self.sim}-{self.name} has Failed please check logs under {bcolors.ENDC}{bcolors.OKCYAN }{self.test_dir}{bcolors.ENDC}")
         if self.args.lint: 
             self.create_lint_log()
-        if is_pass[1] and not self.args.keep_pass_unzip:
+        if is_pass[1] and self.args.zip_passed:
             self.tar_large_files()
         shutil.copyfile(f'{self.paths.COCOTB_PATH}/hex_files/{self.name}.hex',f'{self.test_dir}/{self.name}.hex')
         self.set_rerun_script()
@@ -192,7 +192,7 @@ class Test:
         remove_argument(to_remove,"-r")
         remove_argument(to_remove,"-tag")
         command = ' '.join([arg for arg in sys.argv if arg not in to_remove])
-        command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun -seed {self.get_seed()}  -keep_pass_unzip -sim {self.sim} -corner {self.corner} "
+        command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun -seed {self.get_seed()}  -sim {self.sim} -corner {self.corner} "
         shutil.copyfile(f'{self.paths.COCOTB_PATH}/scripts/rerun_script_tamplate.py', f"{self.test_dir}/rerun.py")
         change_str(str="replace by test command",new_str=f"{command}",file_path=f"{self.test_dir}/rerun.py")
         change_str(str="replace by cocotb path",new_str=f"{self.paths.COCOTB_PATH}",file_path=f"{self.test_dir}/rerun.py")

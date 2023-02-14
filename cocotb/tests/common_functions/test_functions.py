@@ -47,6 +47,7 @@ async def test_configure(dut,timeout_cycles=1000000,clk=read_config_file()['cloc
     cocotb.scheduler.add(max_num_error(num_error,caravelEnv.clk))
     clock = Clock(caravelEnv.clk, clk, units="ns")  # Create a 25ns period clock on port clk
     cocotb.start_soon(clock.start())  # Start the clock
+    caravelEnv.set_clock_obj(clock)
     await caravelEnv.start_up()
     await ClockCycles(caravelEnv.clk, 10)
     coverage = Macros['COVERAGE']
@@ -60,7 +61,7 @@ async def test_configure(dut,timeout_cycles=1000000,clk=read_config_file()['cloc
     if  Macros['ARM']:
         global active_gpios_num
         active_gpios_num = 34 # with ARM the last 3 gpios are not configurable
-    return caravelEnv,clock
+    return caravelEnv
     
 class CallCounted:
     """Decorator to determine number of calls for a method"""

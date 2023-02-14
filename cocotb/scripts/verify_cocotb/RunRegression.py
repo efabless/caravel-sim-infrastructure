@@ -112,9 +112,14 @@ class RunRegression:
         if self.args.testlist is not None:
             for testlist in self.args.testlist:
                 self.get_testlist(testlist)
-
+            if (len(self.tests)==0):
+                raise RuntimeError(f"test list {self.args.testlist} doesn't have any valid tests please review the format of the yalm file")
+        if (len(self.tests)==0):
+                raise RuntimeError(f"There is no test provided to run")
         self.update_run_log()
-        # exit()
+        # zip pass tests if running more than 7 tests 
+        if (len(self.tests)>7):
+            self.args.zip_passed = True
 
     def add_new_test(self,test_name,sim_type,corner):
         self.tests.append(Test(test_name,sim_type,corner,self.args,self.paths))
@@ -129,13 +134,14 @@ class RunRegression:
                     self.get_testlist(f"{include}")
                 else:
                     self.get_testlist(f"{directory}/{include}")
-        for test in testlist["Tests"]:
-            data = {'test_name':test["name"],'sim_type' :"RTL",'corner':self.args.corner[0]}
-            if "sim" in test: 
-                data['sim_type'] = test["sim"]
-            if "corner" in test: 
-                data["corner"] = test["corner"]
-            self.add_new_test(**data)
+        if "Tests" in testlist: 
+            for test in testlist["Tests"]:
+                data = {'test_name':test["name"],'sim_type' :"RTL",'corner':self.args.corner[0]}
+                if "sim" in test: 
+                    data['sim_type'] = test["sim"]
+                if "corner" in test: 
+                    data["corner"] = test["corner"]
+                self.add_new_test(**data)
 
     def run_regression(self):
         threads = list()
@@ -163,6 +169,7 @@ class RunRegression:
             os.system(merge_fun_cov_command)
                 
     def test_run_function(self,test):
+        test.start_of_test()
         self.update_run_log()
         RunTest(self.args,self.paths,test)
         self.update_run_log()
@@ -196,23 +203,31 @@ class RunRegression:
         file_name=f"sim/{self.args.tag}/repos_info.log"
         f = open(file_name, "w")
         f.write( f"{'#'*4} Caravel repo info {'#'*4}\n")
-        f.write( f"Repo: {run(f'cd {self.paths.CARAVEL_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+        url = "https://github.com/" + f"{run(f'cd {self.paths.CARAVEL_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:","").replace(".git","")
+        repo = f"Repo: {run(f'cd {self.paths.CARAVEL_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace('\n', ' ')
+        f.write(f"{repo}\n")
         f.write( f"Branch name: {run(f'cd {self.paths.CARAVEL_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( run(f'cd {self.paths.CARAVEL_ROOT};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
 
         f.write( f"\n\n{'#'*4} Caravel Managment repo info {'#'*4}\n")
-        f.write( f"Repo: {run(f'cd {self.paths.MCW_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+        url = "https://github.com/" + f"{run(f'cd {self.paths.MCW_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:","").replace(".git","")
+        repo = f"Repo: {run(f'cd {self.paths.MCW_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace('\n', ' ')
+        f.write(f"{repo}\n")
         f.write( f"Branch name: {run(f'cd {self.paths.MCW_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( run(f'cd {self.paths.MCW_ROOT};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
 
         if self.args.user_test: 
             f.write( f"\n\n{'#'*4} User repo info {'#'*4}\n")
-            f.write( f"Repo: {run(f'cd {self.paths.USER_PROJECT_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+            url = "https://github.com/" + f"{run(f'cd {self.paths.USER_PROJECT_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:","").replace(".git","")
+            repo = f"Repo: {run(f'cd {self.paths.USER_PROJECT_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace('\n', ' ')
+            f.write(f"{repo}\n")
             f.write( f"Branch name: {run(f'cd {self.paths.USER_PROJECT_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
             f.write( run(f'cd {self.paths.USER_PROJECT_ROOT};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
 
         f.write( f"\n\n{'#'*4} caravel-dynamic-sims repo info {'#'*4}\n")
-        f.write( f"Repo: {run(f'cd {self.paths.COCOTB_PATH};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
+        url = "https://github.com/" + f"{run(f'cd {self.paths.COCOTB_PATH};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:","").replace(".git","")
+        repo = f"Repo: {run(f'cd {self.paths.COCOTB_PATH};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace('\n', ' ')
+        f.write(f"{repo}\n")
         f.write( f"Branch name: {run(f'cd {self.paths.COCOTB_PATH};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
         f.write( run(f'cd {self.paths.COCOTB_PATH};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
         f.close()
@@ -222,24 +237,21 @@ class RunRegression:
             return
         #get commits 
         showlog = f"{self.paths.COCOTB_PATH}/sim/{self.args.tag}/repos_info.log"
-        with open(showlog, 'rb') as fp:
-            first_commit = True
-            for line in fp:
-                if fnmatch(str(line,"utf-8"),"commit*"):
-                    for word in line.split():
-                        if first_commit:
-                            caravel_commit = str(word,"utf-8")
-                        else: 
-                            mgmt_commit = str(word,"utf-8")
-                    first_commit = False
-
-
+        commits = ""
+        lines = open(showlog, 'r').readlines()
+        for line in lines:
+            if "Repo" in line:
+                repo = line.replace(")","").split("(")
+                repo_name = repo[0]
+                repo_url = repo[1].replace(" ","").replace("\n","")
+            elif "commit" in line: 
+                commit = line.split()[-1]
+                commits += f"<th> {repo_name} commit</th> <th><a href='{repo_url}/commit/{commit}'>{commit}<a></th> <tr>  "
         tag = f"{self.paths.COCOTB_PATH}/sim/{self.args.tag}"
         mail_sub = ("<html><head><style>table {border-collapse: collapse;width: 50%;} th, td {text-align: left;padding: 8px;} tr:nth-child(even) {background-color: #D6EEEE;}"
                     f"</style></head><body><h2>Run info:</h2> <table border=2 bgcolor=#D6EEEE> "
                     f"<th>location</th> <th><strong>{socket.gethostname()}</strong>:{tag}</th> <tr>  "
-                    f"<th> caravel commit</th> <th><a href='https://github.com/efabless/caravel/commit/{caravel_commit}'>{caravel_commit}<a></th> <tr>  " 
-                    f"<th>caravel_mgmt_soc_litex commit</th> <th><a href='https://github.com/efabless/caravel_mgmt_soc_litex/commit/{mgmt_commit}'>{mgmt_commit}<a></th> <tr> </table> ") 
+                    f"{commits}</table> ") 
         mail_sub += self.set_html_test_table()
         mail_sub += f"<p>best regards, </p></body></html>"
         # print(mail_sub)

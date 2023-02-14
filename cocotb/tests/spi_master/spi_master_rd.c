@@ -36,7 +36,7 @@ void main(){
     configure_gpio(32,GPIO_MODE_MGMT_STD_OUTPUT);       // SCK
 
     // Now, apply the configuration
-    gpio_load();
+    gpio_config_load();
 
     set_debug_reg2(0xAA);
 

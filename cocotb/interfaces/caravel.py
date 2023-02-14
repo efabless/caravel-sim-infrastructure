@@ -41,6 +41,7 @@ class Caravel_env:
         self.clk         = dut.clock_tb
         self.caravel_hdl = dut.uut.chip_core
         self.hk_hdl      = dut.uut.chip_core.housekeeping
+        self.user_hdl    = dut.uut.chip_core.mprj
 
     """start carvel by insert power then reset"""
     async def start_up(self):
@@ -116,7 +117,7 @@ class Caravel_env:
     async def disable_csb(self ):
         cocotb.log.info(f' [caravel] disable housekeeping spi transmission')
         await self.drive_csb(1)
-        self.release_csb()
+        await self.release_csb()
         await ClockCycles(self.clk, 1)
 
     """set the spi vsb signal high impedance """
@@ -470,3 +471,8 @@ class Caravel_env:
 
 
 
+    def set_clock_obj(self,clock): 
+        self.clock_obj = clock
+
+    def get_clock_obj(self):
+        return self.clock_obj

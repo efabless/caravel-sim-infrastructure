@@ -31,7 +31,7 @@ void main(){
 
 
     // Now, apply the configuration
-    gpio_load();
+    gpio_config_load();
 
 //    reg_uart_clkdiv = 625;
     uart_TX_enable();

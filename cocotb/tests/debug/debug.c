@@ -27,7 +27,7 @@ void main()
     configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
     configure_gpio(5,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
     configure_gpio(0,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
-    gpio_load(); 
+    gpio_config_load(); 
     #ifndef ARM 
 
     (*(volatile uint32_t*) CSR_DEBUG_MODE_OUT_ADDR ) = 1; // enable debug mode

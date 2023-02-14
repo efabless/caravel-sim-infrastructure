@@ -8,7 +8,6 @@ class RunTest:
         self.args  = args
         self.paths = paths
         self.test  = test
-        self.test.start_of_test()
         self.hex_generate()
         self.runTest()
         self.test.end_of_test()

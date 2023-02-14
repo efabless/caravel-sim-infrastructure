@@ -20,7 +20,7 @@ void main(){
     enable_debug();
     clear_flag();
     configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
-    gpio_load();
+    gpio_config_load();
     enable_uart_tx_irq();
 
     set_debug_reg2(0xAA); //start sending data through the uart

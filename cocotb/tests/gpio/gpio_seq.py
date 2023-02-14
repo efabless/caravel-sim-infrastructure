@@ -10,7 +10,7 @@ from tests.common_functions.test_functions import *
 from interfaces.caravel import GPIO_MODE
 from cocotb.binary import BinaryValue
 
-async def gpio_all_i_seq(dut,caravelEnv,clock,after_config_callback=None):
+async def gpio_all_i_seq(dut,caravelEnv,after_config_callback=None):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -53,7 +53,7 @@ async def gpio_all_i_seq(dut,caravelEnv,clock,after_config_callback=None):
     else: 
         cocotb.log.error(f"[TEST] Error: reg_mprj_datal has recieved wrong data {cpu.read_debug_reg2()} instead of {data_in}")
     data_in = 0x3f
-    data_in = int(bin(data_in)[31-active_gpios_num-2:],2)
+    data_in = int(bin(data_in).replace("0b","")[31-active_gpios_num:],2)
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[{active_gpios_num}:32]")
     caravelEnv.drive_gpio_in((active_gpios_num,32),data_in)
     await wait_reg1(cpu,caravelEnv,0xD2)
@@ -70,7 +70,7 @@ async def gpio_all_i_seq(dut,caravelEnv,clock,after_config_callback=None):
     else: 
         cocotb.log.error(f"[TEST] Error: reg_mprj_datah has recieved wrong data {cpu.read_debug_reg2()} instead of {data_in}")
     data_in = 0x15
-    data_in = int(bin(data_in)[31-active_gpios_num-2:],2)
+    data_in = int(bin(data_in).replace("0b","")[31-active_gpios_num:],2)
 
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[{active_gpios_num}:32]")
     caravelEnv.drive_gpio_in((active_gpios_num,32),data_in)
@@ -80,7 +80,7 @@ async def gpio_all_i_seq(dut,caravelEnv,clock,after_config_callback=None):
     else: 
         cocotb.log.error(f"[TEST] Error: reg_mprj_datah has recieved wrong data {cpu.read_debug_reg2()} instead of {data_in}")
     data_in = 0x2A
-    data_in = int(bin(data_in)[31-active_gpios_num-2:],2)
+    data_in = int(bin(data_in).replace("0b","")[31-active_gpios_num:],2)
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[{active_gpios_num}:32]")
     caravelEnv.drive_gpio_in((active_gpios_num,32),data_in) 
     await wait_reg1(cpu,caravelEnv,0XD5) 
@@ -97,7 +97,7 @@ async def gpio_all_i_seq(dut,caravelEnv,clock,after_config_callback=None):
         cocotb.log.info(f"[TEST] [TEST] PASS: firmware cannot write to the gpios while they are configured as input_nopull gpio= {caravelEnv.monitor_gpio((active_gpios_num,0))}")
     cocotb.log.info(f"[TEST] finish")
 
-async def gpio_all_o_seq(dut,caravelEnv,clock,after_config_callback=None):
+async def gpio_all_o_seq(dut,caravelEnv,after_config_callback=None):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -145,7 +145,7 @@ async def gpio_all_o_seq(dut,caravelEnv,clock,after_config_callback=None):
     await wait_reg1(cpu,caravelEnv,0XFF)
     await ClockCycles(caravelEnv.clk, 10)
 
-async def gpio_all_i_pd_seq(dut,caravelEnv,clock):
+async def gpio_all_i_pd_seq(dut,caravelEnv):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -173,7 +173,7 @@ async def gpio_all_i_pd_seq(dut,caravelEnv,clock):
     await ClockCycles(caravelEnv.clk,100) 
     # drive gpios with ones 
     data_in =  0x3FFFFFFFFF
-    data_in = int(bin(data_in)[-active_gpios_num-1:],2)
+    data_in = int(bin(data_in).replace("0b","")[-active_gpios_num-1:],2)
     caravelEnv.drive_gpio_in((active_gpios_num,0),data_in)
     await ClockCycles(caravelEnv.clk,100) 
     gpio = dut.uut.padframe.mprj_io_in.value.binstr[::-1]
@@ -208,7 +208,7 @@ async def gpio_all_i_pd_seq(dut,caravelEnv,clock):
     await ClockCycles(caravelEnv.clk,100) 
     # drive odd half gpios with ones and float other half
     data_in =  0x3FFFFFFFFF
-    data_in = int(bin(data_in)[-active_gpios_num-1:],2)
+    data_in = int(bin(data_in).replace("0b","")[-active_gpios_num-1:],2)
     caravelEnv.drive_gpio_in((active_gpios_num,0),data_in)
     for i in range(0,38,2):
         caravelEnv.release_gpio(i) # release even gpios
@@ -243,7 +243,7 @@ async def gpio_all_i_pd_seq(dut,caravelEnv,clock):
 
     # drive with ones then release all gpio
     data_in =  0x3FFFFFFFFF
-    data_in = int(bin(data_in)[-active_gpios_num-1:],2)
+    data_in = int(bin(data_in).replace("0b","")[-active_gpios_num-1:],2)
     caravelEnv.drive_gpio_in((active_gpios_num,0),data_in)
     await ClockCycles(caravelEnv.clk,100) 
     caravelEnv.release_gpio((active_gpios_num,0))
@@ -255,7 +255,7 @@ async def gpio_all_i_pd_seq(dut,caravelEnv,clock):
             cocotb.log.error(f"[TEST] gpio[{i}] is having wrong value {gpio[i]} instead of 0 while configured as input pulldown and all released")
     await ClockCycles(caravelEnv.clk,100) 
 
-async def gpio_all_i_pu_seq(dut,caravelEnv,clock):
+async def gpio_all_i_pu_seq(dut,caravelEnv):
     from tests.common_functions.test_functions import active_gpios_num
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -283,7 +283,7 @@ async def gpio_all_i_pu_seq(dut,caravelEnv,clock):
     await ClockCycles(caravelEnv.clk,100) 
     # drive gpios with ones 
     data_in =  0x3FFFFFFFFF
-    data_in = int(bin(data_in)[-active_gpios_num-1:],2)
+    data_in = int(bin(data_in).replace("0b","")[-active_gpios_num-1:],2)
     caravelEnv.drive_gpio_in((active_gpios_num,0),data_in)
     await ClockCycles(caravelEnv.clk,100) 
     gpio = dut.uut.padframe.mprj_io_in.value.binstr[::-1]
@@ -325,7 +325,7 @@ async def gpio_all_i_pu_seq(dut,caravelEnv,clock):
     await ClockCycles(caravelEnv.clk,100) 
     # drive odd half gpios with ones and float other half
     data_in =  0x3FFFFFFFFF
-    data_in = int(bin(data_in)[-active_gpios_num-1:],2)
+    data_in = int(bin(data_in).replace("0b","")[-active_gpios_num-1:],2)
     caravelEnv.drive_gpio_in((active_gpios_num,0),data_in)
     for i in range(0,active_gpios_num+1,2):
         caravelEnv.release_gpio(i) # release even gpios

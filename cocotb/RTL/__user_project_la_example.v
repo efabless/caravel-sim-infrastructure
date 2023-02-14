@@ -31,10 +31,10 @@ module user_project_la_example (
     input  [127:0] la_oenb
 );
     // LA
-    assign la_data_out[63:32]  =  la_oenb[63:32]  ?  32'hz: la_data_in[31:0]  ; // assign la0 to la1 if la0 output enable
-    assign la_data_out[31:0]   =  la_oenb[31:0]   ?  32'hz: la_data_in[63:32] ; // assign la1 to la0 if la1 output enable
-    assign la_data_out[127:96] =  la_oenb[127:96] ?  32'hz: la_data_in[95:64] ; // assign la2 to la3 if la2 output enable
-    assign la_data_out[95:64]  =  la_oenb[95:64]  ?  32'hz: la_data_in[127:96]; // assign la3 to la2 if la3 output enable
+    assign la_data_out[63:32]  =  ~la_oenb[63:32]  ?  32'hz: la_data_in[31:0]  ; // assign la0 to la1 if la0 output enable
+    assign la_data_out[31:0]   =  ~la_oenb[31:0]   ?  32'hz: la_data_in[63:32] ; // assign la1 to la0 if la1 output enable
+    assign la_data_out[127:96] =  ~la_oenb[127:96] ?  32'hz: la_data_in[95:64] ; // assign la2 to la3 if la2 output enable
+    assign la_data_out[95:64]  =  ~la_oenb[95:64]  ?  32'hz: la_data_in[127:96]; // assign la3 to la2 if la3 output enable
     // // LA
     // assign la_data_out[63:32]  =  la_oenb[31:0]   ?  la_data_in[31:0]   : 32'hz ; // assign la0 to la1 if la0 output enable
     // assign la_data_out[31:0]   =  la_oenb[63:32]  ?  la_data_in[63:32]  : 32'hz ; // assign la1 to la0 if la1 output enable
