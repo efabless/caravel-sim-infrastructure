@@ -24,6 +24,7 @@ from interfaces.common import GPIO_MODE
 from interfaces.common import MASK_GPIO_CTRL
 from interfaces.common import Macros
 from interfaces.common import sky
+from collections.abc import Iterable
 
 def gpio_mode(gpios_values:list):
     gpios=[]
@@ -40,6 +41,7 @@ class Caravel_env:
         self.clk         = dut.clock_tb
         self.caravel_hdl = dut.uut.chip_core
         self.hk_hdl      = dut.uut.chip_core.housekeeping
+        self.user_hdl    = dut.uut.chip_core.mprj
 
     """start carvel by insert power then reset"""
     async def start_up(self):
@@ -115,7 +117,7 @@ class Caravel_env:
     async def disable_csb(self ):
         cocotb.log.info(f' [caravel] disable housekeeping spi transmission')
         await self.drive_csb(1)
-        self.release_csb()
+        await self.release_csb()
         await ClockCycles(self.clk, 1)
 
     """set the spi vsb signal high impedance """
@@ -133,14 +135,19 @@ class Caravel_env:
         
 
     """return the value of mprj in bits used tp monitor the output gpios value"""
-    def monitor_gpio(self,bits:tuple):
+    def monitor_gpio(self,h_bit,l_bit=None):
         mprj = self.dut.mprj_io_tb.value
         size =mprj.n_bits -1 #size of bins array
-        mprj_out= self.dut.mprj_io_tb.value[size - bits[0]:size - bits[1]]
+        if  isinstance(h_bit, Iterable):
+            l_bit = h_bit[1]
+            h_bit = h_bit[0]
+        if l_bit is None:
+            l_bit = h_bit 
+        mprj_out= self.dut.mprj_io_tb.value[size - h_bit:size - l_bit]
         if(mprj_out.is_resolvable):
-            cocotb.log.debug(f' [caravel] Monitor : mprj[{bits[0]}:{bits[1]}] = {hex(mprj_out)}')
+            cocotb.log.debug(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {hex(mprj_out)}')
         else:
-            cocotb.log.debug(f' [caravel] Monitor : mprj[{bits[0]}:{bits[1]}] = {mprj_out}')
+            cocotb.log.debug(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {mprj_out}')
         return mprj_out
 
     """return the value of management gpio"""
@@ -149,9 +156,18 @@ class Caravel_env:
         cocotb.log.debug(f' [caravel] Monitor mgmt gpio = {data}')
         return data
 
+    async def wait_mgmt_gpio(self,data):
+        data_s = str(data)
+        while True: 
+            if data_s == self.monitor_mgmt_gpio(): 
+                break
+            await ClockCycles(self.clk, 1)
+            
+
+
     """change the configration of the gpios by overwrite their defaults value then reset
         need to take at least 1 cycle for reset """
-        ### dont use back door accessing 
+    ### dont use back door accessing 
     async def configure_gpio_defaults(self,gpios_values: list):
         gpio_defaults = self.caravel_hdl.gpio_defaults.value
         cocotb.log.info(f' [caravel] start cofigure gpio gpios ')
@@ -455,3 +471,8 @@ class Caravel_env:
 
 
 
+    def set_clock_obj(self,clock): 
+        self.clock_obj = clock
+
+    def get_clock_obj(self):
+        return self.clock_obj

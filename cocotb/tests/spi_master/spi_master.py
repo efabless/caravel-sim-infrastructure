@@ -22,12 +22,12 @@ async def spi_master_rd(dut):
     the method of testing used can't work if 2 addresses Consecutive have the same address
     """
 
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11213888)
+    caravelEnv = await test_configure(dut,timeout_cycles=11213888)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     cocotb.log.info (f"[TEST] start spi_master_rd test")
-    file_name = f"{os.getenv('COCOTB_PATH')}/tests/spi_master/test_data"
+    file_name = f'{cocotb.plusargs["MAIN_PATH"]}/tests/spi_master/test_data'
     mem = read_mem(file_name)
     CSB = dut.bin33_monitor
     SCK = dut.bin32_monitor
@@ -67,7 +67,7 @@ async def spi_master_temp(dut):
     
     the method of testing used can't work if 2 addresses Consecutive have the same address
     """
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1139554)
+    caravelEnv = await test_configure(dut,timeout_cycles=1139554)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

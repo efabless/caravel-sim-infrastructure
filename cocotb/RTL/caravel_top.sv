@@ -1,7 +1,7 @@
 `timescale 1 ns / 1 ps
 `ifdef VCS
 	`include "includes.v" // in case of RTL coverage is needed and it doesn't work correctly without include files by this way
-`ifdef sky
+`ifdef sky130
 `ifndef ENABLE_SDF
 	`include "libs.ref/sky130_fd_io/verilog/sky130_fd_io.v"
 	`include "libs.ref/sky130_fd_io/verilog/sky130_ef_io.v"
@@ -17,21 +17,21 @@
 	`include "cvc-pdk/primitives_hvl.v"
 	`include "cvc-pdk/sky130_fd_sc_hvl.v"
 `endif // ~ ENABLE_SDF
-`else // sky
+`elsif gf180  // sky180
 	`include "libs.ref/gf180mcu_fd_io/verilog/gf180mcu_fd_io.v"
 	// `include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/GF018hv5v_mcu_sc7_udp.v"
 	`include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/primitives.v"
 	`include "libs.ref/gf180mcu_fd_sc_mcu7t5v0/verilog/gf180mcu_fd_sc_mcu7t5v0.v"
 	// `include "libs.ref/gf180mcu_sc7_hv/verilog/GF018hv5v_mcu_sc7.v"
 	`include "libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1.v"
-`endif //sky
+`endif //sky180
 `endif // VCS
 
 
 module caravel_top ;
 
 // parameter FILENAME = {"hex_files/",`TESTNAME,".hex"};
-parameter FILENAME={"hex_files/",`TESTNAME,".hex"};
+parameter FILENAME={`MAIN_PATH,"/hex_files/",`TESTNAME,".hex"};
 `ifdef WAVE_GEN 
 initial begin
 	`ifdef VCS
@@ -42,7 +42,7 @@ initial begin
 		`endif
 		$vcdpluson();
 	`else 
-		$dumpfile ({"sim/",`TAG,"/",`SIM,"-",`TESTNAME,"/",`SIM,"-",`TESTNAME,".vcd"});
+		$dumpfile ({`MAIN_PATH,"/sim/",`TAG,"/",`SIM,"-",`TESTNAME,"/",`SIM,"-",`TESTNAME,".vcd"});
 		$dumpvars (0, caravel_top);
 	`endif
 end
@@ -94,7 +94,7 @@ caravan uut (
 caravel uut (
 `endif // caravan
 `endif // ARM
-		`ifdef sky
+		`ifdef sky130
 		.vddio	  (vddio_tb),
 		.vddio_2  (vddio_2_tb),		
 		.vssio	  (vssio_tb),
@@ -113,7 +113,7 @@ caravel uut (
 		.vccd2	  (vccd2_tb),
 		.vssd1	  (vssd1_tb),
 		.vssd2	  (vssd2_tb),
-		`else 
+		`elsif gf180 
 		.VDD (vddio_tb),
 		.VSS (vssio_tb),
 		`endif // sky
@@ -417,6 +417,7 @@ reg COVERAGE = `ifdef COVERAGE 1 `else 0 `endif;
 reg ARM      = `ifdef ARM      1 `else 0 `endif;
 
 reg [31:0] LA_SIZE  = `ifdef LA_SIZE `LA_SIZE `else 0 `endif;
-reg [31:0]USER_SPACE_ADDR  = `ifdef USER_SPACE_ADDR `USER_SPACE_ADDR `else 0 `endif;
-reg [31:0]USER_SPACE_SIZE  = `ifdef USER_SPACE_SIZE `USER_SPACE_SIZE `else 0 `endif;
+reg [31:0]USER_SPACE_ADDR  = `USER_SPACE_ADDR ;
+reg [31:0]USER_SPACE_SIZE  = `USER_SPACE_SIZE ;
+reg [31:0]IO_CTRL_BITS  = `IO_CTRL_BITS;
 endmodule

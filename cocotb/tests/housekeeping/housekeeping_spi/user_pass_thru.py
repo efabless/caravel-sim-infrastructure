@@ -18,12 +18,12 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def user_pass_thru_rd(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1113771)
+    caravelEnv = await test_configure(dut,timeout_cycles=1113771)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     cocotb.log.info (f"[TEST] start spi_master_rd test")
-    file_name = f"{os.getenv('COCOTB_PATH')}/tests/housekeeping/housekeeping_spi/test_data"
+    file_name = f"{cocotb.plusargs['MAIN_PATH']}/tests/housekeeping/housekeeping_spi/test_data"
     mem = read_mem(file_name)
     await  cocotb.start(SPI_VIP(dut.bin8_monitor,dut.bin9_monitor,dut.bin10_monitor,(dut.bin11_en,dut.bin11),mem)) # fork for SPI 
     await wait_reg1(cpu,caravelEnv,0XAA) 
@@ -53,7 +53,7 @@ async def user_pass_thru_rd(dut):
 @cocotb.test()
 @repot_test
 async def user_pass_thru_connection(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1113771)
+    caravelEnv = await test_configure(dut,timeout_cycles=1113771)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

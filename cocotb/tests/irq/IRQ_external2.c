@@ -41,7 +41,7 @@ void main(){
     // setting bit 12 as input 
     configure_gpio(12,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
-    gpio_load();
+    gpio_config_load();
     enable_external2_irq();
 
     // test interrrupt happen when mprj[12] is asserted

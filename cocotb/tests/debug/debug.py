@@ -18,11 +18,12 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def debug(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1131011)
+    caravelEnv = await test_configure(dut,timeout_cycles=1131011)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     # calculate bit time
+    clock = caravelEnv.get_clock_obj()
     clk = clock.period/1000
     global bit_time_ns
     bit_time_ns = round(10**5 * clk / (1152))

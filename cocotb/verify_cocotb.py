@@ -1,721 +1,126 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-import collections
-import json
 import sys
 import os
-from pathlib import Path
 from fnmatch import fnmatch
 from datetime import datetime
-import random
 from pathlib import Path
-import shutil
-from subprocess import PIPE, run
-import threading
-import time
 import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 import socket
-import logging 
-import xml.etree.ElementTree as ET
+from collections import namedtuple
+import yaml
+from scripts.verify_cocotb.RunRegression import RunRegression
+import re
+import fileinput
 
-COCOTB_PATH = os.getcwd()
-iverilog = True
-vcs = False
-coverage = False
-checkers = False
-zip_waves = True
-caravan = False 
-html_mail =f""
-tests_pass = "Pass:"
-SEED = None
-wave_gen = True
-sdf_setup = False
-LINT = False
-ARM = False
-sky =fnmatch(os.getenv('PDK'),'sky*')
-def go_up(path, n):
-    for i in range(n):
-        path = os.path.dirname(path)
-    return path
-# search pattern in file
-def search_str(file_path, word):
-    with open(file_path, 'r') as file:
-        # read all content of a file
-        content = file.read()
-        # check if string present in a file
-        if word in content:
-            return "passed"
-        else:
-            return "failed"
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-def change_str(str,new_str,file_path):
-    # Read in the file
-    with open(file_path, 'r') as file :
-        filedata = file.read()
-
-    filedata = filedata.replace(str, new_str)
-
-    # Write the file out again
-    with open(file_path, 'w') as file:
-        file.write(filedata)
-
-class RunTest:
-    def __init__(self,test_name,sim,corner) -> None:
-        self.cocotb_path = COCOTB_PATH
-        self.test_name = test_name
-        self.sim_type  = sim
-        self.corner  = corner
-        self.tag = os.getenv('RUNTAG')
-        self.create_log_file()
-        self.hex_generate()
-        self.runTest()
-    
-    # create and open full terminal log to be able to use it before run the test
-    def create_log_file(self):
-        self.cd_cocotb()
-        os.chdir(f"sim/{self.tag}")
-        test_dir = f"{self.sim_type}-{self.test_name}"
-        if (self.sim_type == "GL_SDF"):
-            test_dir = f'{test_dir}-{self.corner}'
-        os.makedirs(f"{test_dir}",exist_ok=True)
-        self.cd_cocotb()
-        self.sim_path = f"sim/{self.tag}/{test_dir}/"
-        terminal_log=f"{self.sim_path}/fullTerminal.log"
-        test_log=f"{self.sim_path}/{self.test_name}.log"
-        self.test_log=open(test_log, "w")
-        self.full_file=f"{self.sim_path}/full.log"
-        self.full_terminal = open(self.full_file, "w")
-        
-    def runTest(self):
-        self.full_test_name = f"{self.sim_type}-{self.test_name}"
-        os.environ["COCOTB_RESULTS_FILE"] = f"{self.sim_path}/seed.xml"
-        if (self.sim_type=="GL_SDF"):
-            self.full_test_name =  f"{self.sim_type}-{self.test_name}-{self.corner}"
-        os.environ["TESTFULLNAME"] = f"{self.full_test_name}"
-        if (iverilog): self.runTest_iverilog()
-        elif(vcs): self.runTest_vcs()
-        self.get_seed()
-        self.set_rerun_script()
-
-
-    def get_seed(self):
-        self.seed = "unknown"
-        seed_tree = ET.parse(f'{self.sim_path}/seed.xml')
-        root = seed_tree.getroot()
-        for property in root.iter('property'):
-            if property.attrib["name"] == "random_seed":
-                self.seed = property.attrib["value"]
-
-    def set_rerun_script(self):
-        command = f"python3 verify_cocotb.py -t {self.test_name} -sim {self.sim_type} -corner {self.corner} -keep_pass_unzip -tag {self.tag}/{self.full_test_name}/rerun -seed {self.seed}"
-        if vcs : command +=" -v "
-        if coverage: command += " -cov "
-        if checkers: command += " -checkers_en "
-        if caravan: command += " -caravan "
-        shutil.copyfile(f'{self.cocotb_path}/scripts/rerun_script_tamplate.py', f"{self.sim_path}/rerun.py")
-        change_str(str="replace by test command",new_str=f"{command}",file_path=f"{self.sim_path}/rerun.py")
-        change_str(str="replace by cocotb path",new_str=f"{self.cocotb_path}",file_path=f"{self.sim_path}/rerun.py")
-        change_str(str="replace by mgmt Root",new_str=f"{os.getenv('MCW_ROOT')}",file_path=f"{self.sim_path}/rerun.py")
-        change_str(str="replace by caravel Root",new_str=f"{os.getenv('CARAVEL_ROOT')}",file_path=f"{self.sim_path}/rerun.py")
-        change_str(str="replace by orignal rerun script",new_str=f"{self.sim_path}/rerun.py",file_path=f"{self.sim_path}/rerun.py")
-        change_str(str="replace by new rerun script",new_str=f"{self.sim_path}rerun/{self.full_test_name}/rerun.py",file_path=f"{self.sim_path}/rerun.py")
-
-    def caravel_macros(self,is_vcs=False):
-        macroslist = ["FUNCTIONAL",f'SIM=\\\"{self.sim_type}\\\"',"USE_POWER_PINS","UNIT_DELAY=#1",f'MAIN_PATH=\\\"{self.cocotb_path}\\\"']
-        macroslist.extend([f'TESTNAME=\\\"{self.test_name}\\\"',f'TAG=\\\"{os.getenv("RUNTAG")}\\\"',"COCOTB_SIM",f'FTESTNAME=\\\"{self.full_test_name}\\\"'])
-        macroslist.extend([f'CARAVEL_ROOT=\\\"{os.getenv("CARAVEL_ROOT")}\\\"'])
-        
-        if self.test_name == "la":
-            macroslist.append ('LA_TESTING')
-        if self.test_name in ["gpio_all_o_user","gpio_all_i_user","gpio_all_i_pu_user","gpio_all_i_pd_user","gpio_all_bidir_user"]:
-            macroslist.append ('GPIO_TESTING')
-        if self.test_name == "user_address_space":
-            macroslist.remove('COCOTB_SIM') # using debug register in this test isn't needed
-            macroslist.append('ADDR_SPACE_TESTING')
-        
-        if(self.sim_type=="GL"):
-            macroslist.append('GL')
-        elif(self.sim_type=="GL_SDF"):
-            macroslist.extend(['ENABLE_SDF','GL_SDF','GL',f'SDF_POSTFIX=\\\"{self.corner[-1]}{self.corner[-1]}\\\"',f'CORNER=\\\"{self.corner[0:3]}\\\"'])
-            if fnmatch(os.getenv('PDK'),"GF180*"):
-                macroslist.remove("FUNCTIONAL") # functional need to be removed so specify blocks are seen in SDF sim
-        if caravan:
-            print ("Use caravan")
-            macroslist.append(f'CARAVAN') 
-
-        if wave_gen:
-            macroslist.append(f'WAVE_GEN')
-
-        if sdf_setup:
-            macroslist.append(f'MAX_SDF')
-        
-        if coverage:
-            macroslist.append(f'COVERAGE')
-        if checkers:
-            macroslist.append(f'CHECKERS')
-
-        if not is_vcs:
-            macroslist.append(f'IVERILOG')
-        else: 
-            macroslist.append(f'VCS')
-
-        if fnmatch(os.getenv('PDK'),"sky*"):
-            macroslist.append(f'sky')
-
-        macroslist.append(f'CORNER_{self.corner[0:3]}')
-        if ARM: 
-            macroslist.extend(['ARM','AHB'])
-
-        if "user_ram" in self.test_name: 
-            macroslist.append(f'USE_USER_WRAPPER')
-
-        if not is_vcs:
-            macros = ' -D'.join(macroslist)
-            macros = f'-D{macros}'
-            return macros
-            print(macros)
-            sys.exit()
-        else: 
-            macros = ' +define+'.join(macroslist)
-            macros = f'+define+{macros}'
-            return macros
-            print(macros)
-            sys.exit()
-    # iverilog function
-    def runTest_iverilog(self):
-        print(f"Start running test: {bcolors.OKBLUE}{self.sim_type}-{self.test_name}{bcolors.ENDC}")
-        CARAVEL_ROOT = os.getenv('CARAVEL_ROOT')
-        CARAVEL_VERILOG_PATH  = os.getenv('CARAVEL_VERILOG_PATH')
-        MCW_ROOT = os.getenv('MCW_ROOT')
-        VERILOG_PATH = os.getenv('VERILOG_PATH')
-        CARAVEL_PATH = os.getenv('CARAVEL_PATH')
-        USER_PROJECT_VERILOG  = os.getenv('USER_PROJECT_VERILOG')
-        FIRMWARE_PATH = os.getenv('FIRMWARE_PATH')
-        RUNTAG = self.tag
-        ERRORMAX = os.getenv('ERRORMAX')
-        PDK_ROOT = os.getenv('PDK_ROOT')
-        PDK = os.getenv('PDK')
-        TESTFULLNAME = os.getenv('TESTFULLNAME')
-        COCOTB_RESULTS_FILE = os.getenv('COCOTB_RESULTS_FILE')
-        env_vars = f"-e COCOTB_RESULTS_FILE={COCOTB_RESULTS_FILE} -e {CARAVEL_ROOT} -e CARAVEL_VERILOG_PATH={CARAVEL_VERILOG_PATH} -e MCW_ROOT={MCW_ROOT} -e VERILOG_PATH={VERILOG_PATH} -e CARAVEL_PATH={CARAVEL_PATH} -e USER_PROJECT_VERILOG={USER_PROJECT_VERILOG} -e FIRMWARE_PATH={FIRMWARE_PATH} -e RUNTAG={RUNTAG} -e ERRORMAX={ERRORMAX} -e PDK_ROOT={PDK_ROOT} -e PDK={PDK} -e TESTFULLNAME={TESTFULLNAME} -e COCOTB_PATH={COCOTB_PATH}"
-        if SEED != None:
-            env_vars += f" -e RANDOM_SEED={SEED} "
-        if(self.sim_type=="RTL"): 
-            includes = f" -f {VERILOG_PATH}/includes/includes.rtl.caravel"
-        elif(self.sim_type=="GL"): 
-            includes = f"-f {VERILOG_PATH}/includes/includes.gl.caravel"
-        elif(self.sim_type=="GLSDF"): 
-            print(f"iverilog can't run SDF for test {self.test_name} Please use anothor simulator like cvc" )
-            return
-        user_project = f"RTL/debug_regs.v RTL/__user_project_wrapper.v RTL/__user_project_gpio_example.v RTL/__user_project_la_example.v RTL/__user_project_addr_space_project.v"
-        if caravan:
-            user_project = f"RTL/__user_analog_project_wrapper.v"
-        iverilog_command = (f"iverilog -Ttyp {self.caravel_macros()} {includes}  -o {self.sim_path}/sim.vvp"
-                            f" {user_project}  RTL/caravel_top.sv -s caravel_top"
-                            f" && TESTCASE={self.test_name} MODULE=caravel_tests vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.sim_path}/sim.vvp")
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} -v {COCOTB_PATH}:{COCOTB_PATH}  -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} -v {os.getenv('PDK_ROOT')}:{os.getenv('PDK_ROOT')}   efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && {iverilog_command}' >> {self.full_file}"
-        self.full_terminal = open(self.full_file, "a")
-        self.full_terminal.write(f"docker command for running iverilog and cocotb:\n% ")
-        self.full_terminal.write(os.path.expandvars(docker_command)+"\n")
-        self.full_terminal.close()
-        
-        os.system(docker_command)
-        self.passed = search_str(self.test_log.name,"Test passed with (0)criticals (0)errors")
-        Path(f'{self.sim_path}/{self.passed}').touch()
-        if self.passed == "passed": 
-            print(f"{bcolors.OKGREEN }Test: {self.sim_type}-{self.test_name} has passed{bcolors.ENDC}")
-            if zip_waves:
-                os.chdir(f'{self.cocotb_path}/{self.sim_path}')
-                os.system(f'zip -m waves_logs.zip  sim.vvp full.log *.vcd')
-                self.cd_cocotb()
-        else : 
-            print(f"{bcolors.FAIL }Test: {self.sim_type}-{self.test_name} has Failed please check logs under {bcolors.ENDC}{bcolors.OKCYAN }{self.sim_path}{bcolors.ENDC}")
-
-
-    # vcs function      
-    def runTest_vcs(self):
-        print(f"Start running test: {bcolors.OKGREEN  } {self.sim_type}-{self.test_name} {bcolors.ENDC}")
-        CARAVEL_PATH = os.getenv('CARAVEL_PATH')
-        PDK_ROOT = os.getenv('PDK_ROOT')
-        PDK = os.getenv('PDK')
-        VERILOG_PATH = os.getenv('VERILOG_PATH')
-        dirs = f'+incdir+\\\"{PDK_ROOT}/{PDK}\\\" '
-        if self.sim_type == "RTL":
-            shutil.copyfile(f'{VERILOG_PATH}/includes/rtl_caravel_vcs.v', f"{self.cocotb_path}/includes.v")
-            change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{VERILOG_PATH}",file_path=f"{self.cocotb_path}/includes.v")
-            change_str(str="\"caravel/verilog",new_str=f"\"{CARAVEL_PATH}",file_path=f"{self.cocotb_path}/includes.v")
-        else: 
-            shutil.copyfile(f'{VERILOG_PATH}/includes/gl_caravel_vcs.v', f"{self.cocotb_path}/includes.v")
-            change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{VERILOG_PATH}",file_path=f"{self.cocotb_path}/includes.v")
-            change_str(str="\"caravel/verilog",new_str=f"\"{CARAVEL_PATH}",file_path=f"{self.cocotb_path}/includes.v")     
-            
-        # shutil.copyfile(f'{self.test_full_dir}/{self.test_name}.hex',f'{self.sim_path}/{self.test_name}.hex')
-        # if os.path.exists(f'{self.test_full_dir}/test_data'):
-        #     shutil.copyfile(f'{self.test_full_dir}/test_data',f'{self.sim_path}/test_data')
-            # corner example is corner nom-t so `SDF_POSTFIX = tt and `CORNER = nom
-            # os.makedirs(f"annotation_logs",exist_ok=True)
-            dirs = f"{dirs}  +incdir+\\\"{os.getenv('MCW_ROOT')}/verilog/\\\" "
-            # +incdir+\\\"{os.getenv('CARAVEL_ROOT')}/signoff/caravel/primetime-signoff/\\\"
-        coverage_command = ""
-        if coverage: 
-            coverage_command = "-cm line+tgl+cond+fsm+branch+assert"
-        os.environ["TESTCASE"] = f"{self.test_name}"
-        os.environ["MODULE"] = f"caravel_tests"
-        os.environ["SIM"] = self.sim_type
-        user_project = f"-v RTL/debug_regs.v  -v RTL/__user_project_wrapper.v -v RTL/__user_project_addr_space_project.v  -v RTL/__user_project_gpio_example.v -v RTL/__user_project_la_example.v "
-        if "user_ram" in self.test_name: 
-            user_project = user_project.replace('-v RTL/__user_project_wrapper.v', '')        
-        if caravan:
-            user_project = f"-v RTL/__user_analog_project_wrapper.v"
-        os.system(f"vlogan -full64  -sverilog +error+30 RTL/caravel_top.sv {user_project} {dirs}  {self.caravel_macros(True)}   -l {self.sim_path}/analysis.log -o {self.sim_path} ")
-
-        lint = ""
-        if LINT: 
-            lint = "+lint=all"
-        os.system(f"vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.sim_path}/test.log  caravel_top -Mdir={self.sim_path}/csrc -o {self.sim_path}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)")
-        self.passed = search_str(self.test_log.name,"Test passed with (0)criticals (0)errors")
-        Path(f'{self.sim_path}/{self.passed}').touch()
-        os.system("rm -rf AN.DB ucli.key core") # delete vcs additional files
-        if LINT: 
-            lint_file = open(f'{self.sim_path}/lint.log', "w")
-            lint_line = False
-            with open(f'{self.sim_path}/test.log', 'r') as f:
-                for line in f.readlines():
-                    if 'Lint' in line:
-                        lint_file.write(line)
-                        lint_line=True
-                    elif lint_line:
-                        lint_file.write(line)
-                        if line.strip() == "": # line emptry
-                            lint_line = False
-        #delete wave when passed
-        if self.passed == "passed" and zip_waves:
-            os.chdir(f'{self.cocotb_path}/{self.sim_path}')
-            os.system(f'zip -m waves_logs.zip analysis.log test.log *.vpd *.vcd')
-            self.cd_cocotb()
-        if os.path.exists(f"{self.cocotb_path}/sdfAnnotateInfo"):
-            shutil.move(f"{self.cocotb_path}/sdfAnnotateInfo", f"{self.sim_path}/sdfAnnotateInfo")
-        shutil.copyfile(f'{self.cocotb_path}/hex_files/{self.test_name}.hex',f'{self.sim_path}/{self.test_name}.hex')
-
-    def find(self,name, path):
-        for root, dirs, files in os.walk(path):
-            if name in files:
-                return os.path.join(root, name)
-        print(f"Test {name} doesn't exist or don't have a C file ")
-
-    def test_path(self):
-        test_name = self.test_name
-        test_name += ".c"
-        tests_path = os.path.abspath(f"{self.cocotb_path}/tests")
-        test_file =  self.find(test_name,tests_path)
-        test_path = os.path.dirname(test_file)
-        return (test_path)
-
-    def hex_generate(self):
-        tests_use_dff2 = ["mem_dff_W","mem_dff_HW","mem_dff_B"]
-        tests_use_dff = ["mem_dff2_W","mem_dff2_HW","mem_dff2_B","debug"]
-        #open docker 
-        test_path =self.test_path()
-        self.cd_make()
-        if not os.path.exists(f"{self.cocotb_path}/hex_files"):
-            os.makedirs(f"{self.cocotb_path}/hex_files") # Create a new hex_files directory because it does not exist 
-        elf_out = f"{self.cocotb_path}/hex_files/{self.test_name}.elf"
-        lst_out = f"{self.cocotb_path}/hex_files/{self.test_name}.lst"
-        c_file = f"{test_path}/{self.test_name}.c"
-        hex_file = f"{self.cocotb_path}/hex_files/{self.test_name}.hex"
-        GCC_PATH = "/foss/tools/riscv-gnu-toolchain-rv32i/217e7f3debe424d61374d31e33a091a630535937/bin/"
-        GCC_PREFIX = "riscv32-unknown-linux-gnu"
-        if ARM: 
-            GCC_COMPILE = "arm-none-eabi"
-        else:
-            GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
-        if ARM:
-            SOURCE_FILES = f"{os.getenv('FIRMWARE_PATH')}/cm0_start.s"
-        else:
-            SOURCE_FILES = f"{os.getenv('FIRMWARE_PATH')}/crt0_vex.S {os.getenv('FIRMWARE_PATH')}/isr.c"
-        
-        if ARM:
-            CPUFLAGS = f"-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
-        else:
-            CPUFLAGS = f"-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        verilog_path = f"{os.getenv('VERILOG_PATH')}"
-        test_dir = f"{os.getenv('VERILOG_PATH')}/dv/tests-caravel/mem" # linker script include // TODO: to fix this in the future from the mgmt repo
-        if ARM:
-            includes = f"-I{os.getenv('FIRMWARE_PATH')}/"
-        else: 
-            includes = f"-I{verilog_path}/dv/firmware -I{verilog_path}/dv/generated  -I{verilog_path}/dv/ -I{verilog_path}/common"
-        #change linker script to for mem tests 
-        LINKER_SCRIPT = f"{os.getenv('FIRMWARE_PATH')}/sections.lds"
-
-        if self.test_name in tests_use_dff2:
-           LINKER_SCRIPT = self.linkerScript_for_mem("dff2",LINKER_SCRIPT)
-        elif self.test_name in tests_use_dff:
-           LINKER_SCRIPT = self.linkerScript_for_mem("dff",LINKER_SCRIPT)
-
-        if ARM:
-            LINKER_SCRIPT = f"-T {os.getenv('FIRMWARE_PATH')}/link.ld"
-        else:
-            LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{LINKER_SCRIPT},--strip-debug "
-        elf_command = (f"{GCC_COMPILE}-gcc  {includes}"
-                 f" {CPUFLAGS} {LINKER_SCRIPT}"
-                 f" -o {elf_out} {SOURCE_FILES} {c_file}")
-        lst_command = f"{GCC_COMPILE}-objdump -d -S {elf_out} > {lst_out} "
-        hex_command = f"{GCC_COMPILE}-objcopy -O verilog {elf_out} {hex_file} "
-        sed_command = f"sed -ie 's/@10/@00/g' {hex_file}"
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it -v {self.cocotb_path}:{self.cocotb_path} -v {os.getenv('CARAVEL_ROOT')}:{os.getenv('CARAVEL_ROOT')} -v {os.getenv('MCW_ROOT')}:{os.getenv('MCW_ROOT')} efabless/dv:latest sh -c 'cd {test_dir} && {elf_command} && {lst_command} && {hex_command} && {sed_command} '"
-        hex_gen_state = os.system(docker_command)
-        # hex_gen_state = os.system(f" {elf_command} && {lst_command} && {hex_command} && {sed_command}")
-        self.full_terminal.write("elf file generation command:\n% ")
-        self.full_terminal.write(os.path.expandvars(elf_command)+"\n")
-        self.full_terminal.write("hex file generation command:\n% ")
-        self.full_terminal.write(os.path.expandvars(hex_command)+"\n% ")
-        self.full_terminal.write(os.path.expandvars(sed_command)+"\n")
-        self.cd_cocotb()
-        self.full_terminal.close()
-        if hex_gen_state != 0 :
-            print(f"fatal: Error when generating hex")
-            sys.exit()
-        
-    #change linker script to for mem tests 
-    def linkerScript_for_mem(self,ram,LINKER_SCRIPT):
-        if ARM :
-            return LINKER_SCRIPT
-        new_LINKER_SCRIPT = f"{self.cocotb_path}/{self.sim_path}/sections.lds"
-        shutil.copyfile(LINKER_SCRIPT, new_LINKER_SCRIPT)
-        if ram == "dff2":  
-            change_str(str="> dff ",new_str="> dff2 ",file_path=new_LINKER_SCRIPT)
-            change_str(str="> dff\n",new_str="> dff2\n",file_path=new_LINKER_SCRIPT)
-            change_str(str="ORIGIN(dff)",new_str="ORIGIN(dff2)",file_path=new_LINKER_SCRIPT)
-            change_str(str="LENGTH(dff)",new_str="LENGTH(dff2)",file_path=new_LINKER_SCRIPT)
-        elif ram == "dff":
-            change_str(str="> dff2 ",new_str="> dff ",file_path=new_LINKER_SCRIPT)
-            change_str(str="ORIGIN(dff2)",new_str="ORIGIN(dff)",file_path=new_LINKER_SCRIPT)
-            change_str(str="LENGTH(dff2)",new_str="LENGTH(dff)",file_path=new_LINKER_SCRIPT)
-        else: 
-            print(f"ERROR: wrong trype of ram {ram} need to be used for now the oldy rams that can be used for flashing and data are dff and dff2")
-            sys.exit()
-        return new_LINKER_SCRIPT
-
-    def cd_make(self):
-        if ARM:
-            os.chdir(f"{os.getenv('VERILOG_PATH')}/dv")
-        else:
-            os.chdir(f"{os.getenv('VERILOG_PATH')}/dv/make")
-        
-    def cd_cocotb(self):
-        os.chdir(self.cocotb_path)
-
-class RunRegression: 
-    def __init__(self,regression,test,type_arg,testlist,corner) -> None:
-        self.cocotb_path = COCOTB_PATH
-        self.regression_arg = regression
-        self.test_arg = test
-        self.testlist_arg = testlist
-        self.corners = corner
-        self.total_start_time = datetime.now()
-        self.tag = os.getenv('RUNTAG')
-        if type_arg is None:
-            type_arg = "RTL"
-        self.type_arg = type_arg
-        self.write_command_log()
-        self.write_git_log()
-        self.test_name_size = 30
-        with open('tests.json') as f:
-            self.tests_json = json.load(f)
-            self.tests_json = self.tests_json["Tests"]
-        self.get_tests()
-        self.run_regression()
-
-    def get_tests(self):
-        self.tests = collections.defaultdict(lambda : collections.defaultdict(lambda : collections.defaultdict(dict))) #key is testname and value is list of sim types
-        self.unknown_tests = 0
-        self.passed_tests = 0
-        self.failed_tests = 0
-        # regression 
-        if self.regression_arg is not None:
-            sim_types = ("RTL","GL","GL_SDF")
-            for test,test_elements in self.tests_json.items():
-                if fnmatch(test,"_*"):
-                        continue
-                if sky:
-                    if "sky" not in test_elements["PDK"]:
-                        continue # test is not valid for sky pdk 
-                else: 
-                    if "gf" not in test_elements["PDK"]:
-                        continue # test is not valid for gf pdk 
-
-                for sim_type in sim_types:
-                    if sim_type =="GL_SDF": 
-                        for corner in self.corners: 
-                            if self.regression_arg in test_elements[sim_type]: 
-                                self.add_new_test(test_name=test,sim_type = sim_type,corner = corner)
-                    else: 
-                        if self.regression_arg in test_elements[sim_type]: 
-                                self.add_new_test(test_name=test,sim_type = sim_type,corner = "-")
-            if (len(self.tests)==0):
-                print(f"fatal:{self.regression_arg} is not a valid regression name please input a valid regression \ncheck tests.json for more info")
-                sys.exit()
-        #test
-        if self.test_arg is not None:
-            if isinstance(self.test_arg,list):
-                for test in self.test_arg:
-                    if test in self.tests_json:
-                        if isinstance(self.type_arg,list):
-                            for sim_type in self.type_arg:
-                                if sim_type =="GL_SDF": 
-                                    for corner in self.corners: 
-                                        self.add_new_test(test_name=test,sim_type = sim_type, corner = corner)
-                                else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.corners[0])
-                        else:
-                            if sim_type =="GL_SDF": 
-                                for corner in self.corners: 
-                                    self.add_new_test(test_name=test,sim_type = sim_type, corner = corner)
-                            else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.corners[0])
-
-            else:
-                if self.test_arg in self.tests_json:
-                    if isinstance(self.type_arg,list):
-                        for sim_type in self.type_arg:
-                            self.add_new_test(test_name=self.test_arg,sim_type = sim_type,corner = self.corners[0])
-                    else:
-                        self.add_new_test(test_name=self.test_arg,sim_type = self.type_arg,corner = self.corners[0])
-        # testlist TODO: add logic for test list
-        if self.testlist_arg is not None:
-            print(f'fatal: code for test list isnt added yet')
-            sys.exit()
-
-
-        self.update_reg_log()
-
-    def add_new_test(self,test_name,sim_type,corner):
-        self.tests[test_name][sim_type][corner]["status"]= "pending"
-        self.tests[test_name][sim_type][corner]["starttime"]= "-"
-        self.tests[test_name][sim_type][corner]["endtime"]= "-"
-        self.tests[test_name][sim_type][corner]["duration"] = "-"
-        self.tests[test_name][sim_type][corner]["pass"]= "-"
-        self.tests[test_name][sim_type][corner]["seed"]= "-"
-        self.unknown_tests +=1
-
-    def run_regression(self):
-        threads = list()
-        for test,sim_types in self.tests.items():
-            for sim_type,corners in sim_types.items(): # TODO: add multithreading or multiprocessing here
-                for corner,status in corners.items():
-                    if iverilog: #threading
-                        # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
-                        # threads.append(x)
-                        # x.start()
-                        # time.sleep(10)
-                        self.test_run_function(test,sim_type,corner)
-                    else: 
-                        self.test_run_function(test,sim_type,corner)
-        for index, thread in enumerate(threads):
-            thread.join()
-
-        if coverage:
-            if vcs:
-                self.generate_cov()
-            #merge functional coverage
-            merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.cocotb_path}:{self.cocotb_path}  efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && python3 scripts/merge_coverage.py -p {self.cocotb_path}/sim/{self.tag}'"
-            self.full_terminal = open(f"{self.cocotb_path}/sim/{self.tag}/command.log", "a")
-            self.full_terminal.write(f"\n\ndocker command for merge functional coverage:\n% ")
-            self.full_terminal.write(os.path.expandvars(merge_fun_cov_command)+"\n")
-            self.full_terminal.close()
-            os.system(merge_fun_cov_command)
-                
-    def test_run_function(self,test,sim_type,corner):
-        start_time = datetime.now()
-        self.tests[test][sim_type][corner]["starttime"] = datetime.now().strftime("%H:%M:%S(%a)")
-        self.tests[test][sim_type][corner]["duration"] = "-"
-        self.tests[test][sim_type][corner]["status"] = "running"
-        self.tests[test][sim_type][corner]["seed"] = "-"
-        self.update_reg_log()
-        test_run = RunTest(test,sim_type,corner,)
-        self.tests[test][sim_type][corner]["status"] = "done"
-        self.tests[test][sim_type][corner]["endtime"] = datetime.now().strftime("%H:%M:%S(%a)")
-        self.tests[test][sim_type][corner]["duration"] = ("%.10s" % (datetime.now() - start_time))
-        self.tests[test][sim_type][corner]["pass"]= test_run.passed
-        self.tests[test][sim_type][corner]["seed"]= test_run.seed
-        if test_run.passed == "passed":
-            self.passed_tests +=1
-        elif test_run.passed == "failed":
-            self.failed_tests +=1
-            global tests_pass
-            tests_pass = "Fail:"
-        self.unknown_tests -=1
-        self.update_reg_log()
-
-
-    def generate_cov(self):
-        os.chdir(f"{self.cocotb_path}/sim/{self.tag}")
-        os.system(f"urg -dir RTL*/*.vdb -format both -show tests -report coverageRTL/")
-        # os.system(f"urg -dir GL*/*.vdb -format both -show tests -report coverageGL/")
-        # os.system(f"urg -dir SDF*/*.vdb -format both -show tests -report coverageSDF/")
-        os.chdir(self.cocotb_path)
-
-    def update_reg_log(self):
-        global html_mail
-        html_mail =f"<h2>Tests Table:</h2><table border=2 bgcolor=#D6EEEE>"
-        file_name=f"sim/{self.tag}/runs.log"
-        f = open(file_name, "w")
-        f.write(f"{'Test':<{self.test_name_size}} {'status':<10} {'start':<15} {'end':<15} {'duration':<13} {'p/f':<8} {'seed':<10} \n")
-        html_mail += f"<th>Test</th> <th>duration</th> <th>status</th> <th>seed</th> <tr> "
-        for test,sim_types in self.tests.items():
-            for sim_type,corners in sim_types.items():
-                for corner,status in corners.items():
-                    new_test_name= f"{sim_type}-{test}"
-                    if sim_type =="GL_SDF":
-                        new_test_name= f"{sim_type}-{test}-{corner}"
-                    if len(new_test_name) > self.test_name_size:
-                        self.test_name_size = len(new_test_name) +4
-                    f.write(f"{new_test_name:<{self.test_name_size}} {status['status']:<10} {status['starttime']:<15} {status['endtime']:<15} {status['duration']:<13} {status['pass']:<8} {status['seed']:<10}\n")
-                    if status['pass'] == "passed":
-                        html_mail += f"<th>{new_test_name}</th><th>{status['duration']}</th> <th style='background-color:#16EC0C'> {status['pass']} </th><th>{status['seed']}</th><tr>"
-                    else:
-                        html_mail += f"<th>{new_test_name}</th><th>{status['duration']}</th> <th style='background-color:#E50E0E'> {status['pass']} </th><th>{status['seed']}</th><tr>"
-        html_mail += "</table>"
-
-        f.write(f"\n\nTotal: ({self.passed_tests})passed ({self.failed_tests})failed ({self.unknown_tests})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})time consumed ")
-        html_mail += (f"<h2>Total status Table:</h2><table border=2 bgcolor=#D6EEEE><th>Passed</th> <th>failed</th> <th>unknown</th> <th>duration</th> <tr>"
-                      f"<th style='background-color:#16EC0C' >{self.passed_tests}</th> <th style='background-color:#E50E0E' >{self.failed_tests} </th> "
-                      f"<th style='background-color:#14E5F2'>{self.unknown_tests}</th> <th>{('%.10s' % (datetime.now() - self.total_start_time))}</th> <tr></table>")
-        f.close()
-    
-    def write_command_log(self):
-        file_name=f"sim/{self.tag}/command.log"
-        f = open(file_name, "w")
-        f.write(f"command used to run this sim:\n% ")
-        f.write(f"{' '.join(sys.argv)}")
-        f.close()
-  
-    def write_git_log(self):
-        file_name=f"sim/{self.tag}/git_show.log"
-        f = open(file_name, "w")
-        # status, output = commands.getstatusoutput("git show")
-        CARAVEL_ROOT = f"CARAVEL_ROOT"
-        f.write( f"\n\nRepo: {run(f'cd {os.getenv(CARAVEL_ROOT)};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
-        f.write( f"Branch name: {run(f'cd {os.getenv(CARAVEL_ROOT)};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
-        f.write( run(f'cd {os.getenv(CARAVEL_ROOT)};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
-        MCW_ROOT = f"MCW_ROOT"
-
-        f.write( f"\n\nRepo: {run(f'cd {os.getenv(MCW_ROOT)};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
-        f.write( f"Branch name: {run(f'cd {os.getenv(MCW_ROOT)};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}")
-        f.write( run(f'cd {os.getenv(MCW_ROOT)};git show --quiet HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout)
-        f.close()
+def check_valid_mail_addr(address):
+    pat = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    if re.match(pat,address):
+        print(f"valid mail {address}")
+        return True
+    print(f"invalid mail {address}")
+    return False
 class main():
     def __init__(self,args) -> None:
-        self.regression   = args.regression
-        self.test         = args.test
-        self.testlist     = args.testlist
-        self.sim          = args.sim
-        self.tag          = args.tag
-        self.corner       = args.corner
-        self.maxerr       = args.maxerr
-        self.clk          = args.clk
+        self.args         = args
         self.check_valid_args()
         self.set_tag()
-        self.def_env_vars()
-        self.set_config_script()
-        RunRegression(self.regression,self.test,self.sim,self.testlist,self.corner)
-        if args.emailto is not None:
-            self.send_mail(args.emailto)
+        design_info = self.get_design_info()
+        self.set_paths(design_info)
+        self.set_args(design_info)
+        self.set_config_script(design_info)
+        RunRegression(self.args,self.paths)
 
     def check_valid_args(self):
-        if all(v is  None for v in [self.regression, self.test, self.testlist]):
-            print ("Fatal: Should provide at least one of the following options regression, test or testlist for more info use --help")
-            sys.exit()
-        if not set(self.sim).issubset(["RTL","GL","GL_SDF"]):
-            print (f"Fatal: {self.sim} isnt a correct type for -sim it should be one or combination of the following RTL, GL or GL_SDF")
-            sys.exit()
+        if all(v is  None for v in [self.args.regression, self.args.test, self.args.testlist]):
+            raise EnvironmentError("Should provide at least one of the following options regression, test or testlist for more info use --help")
+        if self.args.sim is not None:
+            if not set(self.args.sim).issubset(["RTL","GL","GL_SDF"]):
+                raise ValueError(f"{self.args.sim} isnt a correct value for -sim it should be one or combination of the following RTL, GL or GL_SDF")
     def set_tag(self):
-        self.TAG = None # tag will be set in the main phase and other functions will use it
-        if self.tag is not None:
-            self.TAG = self.tag
-        elif self.regression is not None: 
-            self.TAG = f'{self.regression}_{datetime.now().strftime("%H_%M_%S_%d_%m")}'
-        else: 
-            self.TAG = f'run{random.randint(0,1000)}_{datetime.now().strftime("%H_%M_%S_%d_%m")}'
-        Path(f"sim/{self.TAG}").mkdir(parents=True, exist_ok=True)
-        print(f"Run tag: {self.TAG}")
+        if self.args.tag is None:
+            if self.args.regression is not None:
+                self.args.tag = f'{self.regression}_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
+            else: 
+                self.args.tag = f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
+        Path(f"sim/{self.args.tag}").mkdir(parents=True, exist_ok=True)
+        print(f"Run tag: {self.args.tag}")
 
-    def def_env_vars(self):
-        if os.getenv('CARAVEL_ROOT') is None or os.getenv('MCW_ROOT') is None:
-            print(f"Fatal: CARAVEL_ROOT or MCW_ROOT are not defined")
-            sys.exit()
-        os.environ["CARAVEL_VERILOG_PATH"] = f"{os.getenv('CARAVEL_ROOT')}/verilog"
-        os.environ["VERILOG_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog"
-        os.environ["CARAVEL_PATH"] = f"{os.getenv('CARAVEL_VERILOG_PATH')}"
-        if ARM:
-            os.environ["FIRMWARE_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog/dv/fw"
+    def set_paths(self,design_info):
+        if not os.path.exists(design_info["CARAVEL_ROOT"])  or not os.path.exists(design_info["MCW_ROOT"]) :
+            raise NotADirectoryError (f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}")
+        if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
+            raise NotADirectoryError (f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}")
+        self.args.user_test = False 
+        if design_info["USER_PROJECT_ROOT"] != "None":
+            self.args.user_test = True 
+            if not os.path.exists(design_info["USER_PROJECT_ROOT"]) :
+                raise NotADirectoryError (f"USER_PROJECT_ROOT is not a directory USER_PROJECT_ROOT:{design_info['USER_PROJECT_ROOT']}")
+            else: 
+                self.configure_user_files(design_info["USER_PROJECT_ROOT"])
+        Paths = namedtuple("Paths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USER_PROJECT_ROOT")
+        CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
+        VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
+        CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
+        if self.args.arm:
+            FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
-            os.environ["FIRMWARE_PATH"] = f"{os.getenv('MCW_ROOT')}/verilog/dv/firmware"
-        os.environ["RUNTAG"] = f"{self.TAG}"
-        os.environ["ERRORMAX"] = f"{self.maxerr}"
-        os.environ["COCOTB_PATH"] = f"{COCOTB_PATH}"
-        if SEED != None:
-            os.environ["RANDOM_SEED"] = f"{SEED}"
-    def set_config_script(self):
-        new_config_path = f'{COCOTB_PATH}/sim/{self.TAG}/configs.py'
-        shutil.copyfile(f'{COCOTB_PATH}/scripts/config_script_tamplate.py', new_config_path)
-        change_str(str="replace by clock",new_str=self.clk,file_path=new_config_path)
-        change_str(str="replace by max number of errer",new_str=self.maxerr,file_path=new_config_path)
-        change_str(str="replace sky enable",new_str=f"{sky}",file_path=new_config_path)
-        change_str(str="replace CARAVEL_ROOT",new_str=f"\"{os.getenv('CARAVEL_ROOT')}\"",file_path=new_config_path)
-        change_str(str="replace MCW_ROOT",new_str=f"\"{os.getenv('MCW_ROOT')}\"",file_path=new_config_path)
-        change_str(str="replace PDK_ROOT",new_str=f"\"{os.getenv('PDK_ROOT')}\"",file_path=new_config_path)
-        change_str(str="replace PDK",new_str=f"\"{os.getenv('PDK')}\"",file_path=new_config_path)
+            FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
+        COCOTB_PATH = os.getcwd()
+        self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH,design_info["USER_PROJECT_ROOT"] )
 
-    def send_mail(self,mails):
-        #get commits 
-        showlog = f"{COCOTB_PATH}/sim/{self.TAG}/git_show.log"
-        with open(showlog, 'rb') as fp:
-            first_commit = True
-            for line in fp:
-                if fnmatch(str(line,"utf-8"),"commit*"):
-                    for word in line.split():
-                        if first_commit:
-                            caravel_commit = str(word,"utf-8")
-                        else: 
-                            mgmt_commit = str(word,"utf-8")
-                    first_commit = False
+    def set_args(self,design_info):
+        if self.args.clk is None: 
+            self.args.clk = design_info["clk"]
+
+        self.args.caravan = design_info["caravan"]
+
+        if self.args.sim is None: 
+            self.args.sim= ["RTL"]
+
+        if self.args.corner == None: 
+            self.args.corner= ["nom-t"]
+
+        if "sky130" in design_info['PDK'] : 
+            self.args.pdk = "sky130"
+        elif "gf180" in design_info['PDK'] : 
+            self.args.pdk = "gf180"
+
+        self.args.iverilog = False
+        if not self.args.vcs: 
+            self.args.iverilog = True
+
+        if self.args.emailto is None: 
+            self.args.emailto = [mail_addr for  mail_addr in design_info["emailto"] if check_valid_mail_addr(mail_addr)]
+        else : 
+            if not check_valid_mail_addr(self.args.emailto): 
+                self.args.emailto = [[mail_addr for  mail_addr in self.args.emailto if check_valid_mail_addr(mail_addr)]] # if mail input aren't a valid mail will ignore it
+
+    def configure_user_files(self,user_path):
+        file = f"{user_path}/verilog/dv/cocotb/cocotb_includes.py"
+        with open(file, 'r') as f:
+            # read a list of lines into data
+            page  = f.readlines()
+            for num,line in enumerate(page): 
+                if "sys.path.append(path.abspath(" in line:
+                    page[num] = f"sys.path.append(path.abspath('{os.getcwd()}'))\n"
+            file_w = open(file,"w")
+            file_w.write("".join(page))
+            file_w.close()
+
+    def set_config_script(self,design_info):
+        new_config_path = f'{self.paths.COCOTB_PATH}/sim/{self.args.tag}/configs.yalm'
+        design_configs = dict(clock=self.args.clk,max_err=self.args.maxerr,PDK=self.args.pdk)
+        design_configs.update(dict(CARAVEL_ROOT=self.paths.CARAVEL_ROOT,MCW_ROOT=self.paths.MCW_ROOT,PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}'))
+        with open(new_config_path, 'w') as file:
+            yaml.dump(design_configs, file)
 
 
-        tag = f"{COCOTB_PATH}/sim/{self.TAG}"
-        mail_sub = ("<html><head><style>table {border-collapse: collapse;width: 50%;} th, td {text-align: left;padding: 8px;} tr:nth-child(even) {background-color: #D6EEEE;}"
-                    f"</style></head><body><h2>Run info:</h2> <table border=2 bgcolor=#D6EEEE> "
-                    f"<th>location</th> <th><strong>{socket.gethostname()}</strong>:{tag}</th> <tr>  "
-                    f"<th> caravel commit</th> <th><a href='https://github.com/efabless/caravel/commit/{caravel_commit}'>{caravel_commit}<a></th> <tr>  " 
-                    f"<th>caravel_mgmt_soc_litex commit</th> <th><a href='https://github.com/efabless/caravel_mgmt_soc_litex/commit/{mgmt_commit}'>{mgmt_commit}<a></th> <tr> </table> ") 
-        mail_sub += html_mail
-        mail_sub += f"<p>best regards, </p></body></html>"
-        # print(mail_sub)
-        msg = MIMEMultipart("alternative", None, [ MIMEText(mail_sub,'html')])
-        msg['Subject'] = f'{tests_pass} {self.TAG} run results'
-        msg['From'] = "verification@efabless.com"
-        msg['To'] = ", ".join(mails)
-        docker = False
-        if docker: 
-            mail_command = f'echo "{mail_sub}" | mail -a "Content-type: text/html;" -s "{msg["Subject"]}" {mails[0]}'
-            docker_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) efabless/dv:mail sh -c '{mail_command}'"
-            print(docker_command)
-            os.system(docker_command)
-        else:
-            # Send the message via our own SMTP server.
-            s = smtplib.SMTP('localhost')
-            s.send_message(msg)
-            s.quit()
+
+    def get_design_info(self):
+        yalm_file = open("design_info.yalm", 'r')
+        design_info = yaml.safe_load(yalm_file)
+        return design_info
 
 
 import argparse
@@ -723,53 +128,26 @@ parser = argparse.ArgumentParser(description='Run cocotb tests')
 parser.add_argument('-regression','-r', help='name of regression can found in tests.json')
 parser.add_argument('-test','-t', nargs='+' ,help='name of test if no --sim provided RTL will be run <takes list as input>')
 parser.add_argument('-sim', nargs='+' ,help='Simulation type to be run RTL,GL&GL_SDF provided only when run -test <takes list as input>')
-parser.add_argument('-testlist','-tl', help='path of testlist to be run ')
+parser.add_argument('-testlist','-tl',nargs='+', help='path of testlist to be run ')
 parser.add_argument('-tag', help='provide tag of the run default would be regression name and if no regression is provided would be run_<random float>_<timestamp>_')
 parser.add_argument('-maxerr', help='max number of errors for every test before simulation breaks default = 3')
 parser.add_argument('-vcs','-v',action='store_true', help='use vcs as compiler if not used iverilog would be used')
 parser.add_argument('-cov',action='store_true', help='enable code coverage')
 parser.add_argument('-checkers_en',action='store_true', help='enable whitebox models checkers and coverage no need to use -cov ')
 parser.add_argument('-corner','-c', nargs='+' ,help='Corner type in case of GL_SDF run has to be provided')
-parser.add_argument('-keep_pass_unzip',action='store_true', help='Normally the waves and logs of passed tests would be zipped. Using this option they wouldn\'t be zipped')
-parser.add_argument('-caravan',action='store_true', help='simulate caravan instead of caravel')
+parser.add_argument('-zip_passed',action='store_true', help='zip the waves and logs of passed tests. by default if the run has more than 7 tests pass tests results would be zipped automatically')
 parser.add_argument('-emailto','-mail', nargs='+' ,help='mails to send results to when results finish')
 parser.add_argument('-seed' ,help='run with specific seed')
 parser.add_argument('-no_wave',action='store_true', help='disable dumping waves')
 parser.add_argument('-sdf_setup',action='store_true', help='targeting setup violations by taking the sdf mamximum values')
-parser.add_argument('-clk', help='define the clock period in ns default = 25 ns')
+parser.add_argument('-clk', help='define the clock period in ns default defined at design_info.yalm')
 parser.add_argument('-lint',action='store_true', help='generate lint log -v must be used')
 parser.add_argument('-arm',action='store_true', help='generate lint log -v must be used')
+parser.add_argument('-macros',nargs='+', help='Add addtional verilog macros for the design ')
 args = parser.parse_args()
-if (args.vcs) : 
-    iverilog = False
-    vcs = True
-if args.cov: 
-    coverage = True
-if args.checkers_en: 
-    checkers = True
-    coverage = True
-if args.sim == None: 
-    args.sim= ["RTL"]
-if args.corner == None: 
-    args.corner= ["nom-t"]
-if args.keep_pass_unzip: 
-    zip_waves = False
-if args.caravan: 
-    caravan = True
-if args.seed != None: 
-    SEED = args.seed
-if args.no_wave: 
-    wave_gen = False
-if args.sdf_setup: 
-    sdf_setup = True
-if args.clk == None:
-    args.clk = "25"
-if args.maxerr == None:
-    args.maxerr ="3"
-if args.lint: 
-    LINT = True
-if args.arm: 
-    ARM = True
+# Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  zip_passed caravan emailto seed no_wave clk lint arm sdf_setup")
+# arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en  ,args.zip_passed ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)
+# print(args)
 print(f"regression:{args.regression}, test:{args.test}, testlist:{args.testlist} sim: {args.sim}")
 main(args)
 

@@ -26,19 +26,28 @@ from importlib import import_module
    start up the test connecting power vdd to the design then reset and disable the CSB bit 
    return the caravel environmnet with clock and start up
 """
-config_file = f"sim.{os.getenv('RUNTAG')}.configs"
-clk = import_module(config_file).clock
-max_error = import_module(config_file).max_err
+import yaml
+def read_config_file():
+    cocotb.plusargs["TAG"]
+    config_file = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yalm".replace('"', '')
+
+    with open(config_file) as file:
+        # The FullLoader parameter handles the conversion from YAML
+        # scalar values to Python the dictionary format
+        configs = yaml.load(file, Loader=yaml.FullLoader)
+
+        print(configs)
+        return configs
+
 
 active_gpios_num = 37 # number of active gpios
-async def test_configure(dut,timeout_cycles=111000000,clk=clk,timeout_precision=0.2,num_error=max_error):
+async def test_configure(dut,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err'])):
     caravelEnv = caravel.Caravel_env(dut)
     Timeout(caravelEnv.clk,timeout_cycles,timeout_precision)
-    if os.getenv('ERRORMAX') != 'None': 
-        num_error = int(os.getenv('ERRORMAX'))
     cocotb.scheduler.add(max_num_error(num_error,caravelEnv.clk))
     clock = Clock(caravelEnv.clk, clk, units="ns")  # Create a 25ns period clock on port clk
     cocotb.start_soon(clock.start())  # Start the clock
+    caravelEnv.set_clock_obj(clock)
     await caravelEnv.start_up()
     await ClockCycles(caravelEnv.clk, 10)
     coverage = Macros['COVERAGE']
@@ -52,7 +61,7 @@ async def test_configure(dut,timeout_cycles=111000000,clk=clk,timeout_precision=
     if  Macros['ARM']:
         global active_gpios_num
         active_gpios_num = 34 # with ARM the last 3 gpios are not configurable
-    return caravelEnv,clock
+    return caravelEnv
     
 class CallCounted:
     """Decorator to determine number of calls for a method"""
@@ -70,21 +79,22 @@ def repot_test(func):
     async def wrapper_func(*args, **kwargs):
         ## configure logging 
         COCOTB_ANSI_OUTPUT=0
-        TESTFULLNAME = os.getenv('TESTFULLNAME')
-        RUNTAG = os.getenv('RUNTAG')
+        TESTFULLNAME = cocotb.plusargs['FTESTNAME']
+        sim_dir = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}"
         TestName = func.__name__
+        logger_file= f"{sim_dir}/{TESTFULLNAME}/{TestName}.log".replace('"', '')
         cocotb.log.setLevel(logging.INFO)
         cocotb.log.error = CallCounted(cocotb.log.error)
         cocotb.log.critical = CallCounted(cocotb.log.critical)
         cocotb.log.warning = CallCounted(cocotb.log.warning)
-        handler = logging.FileHandler(f"sim/{RUNTAG}/{TESTFULLNAME}/{TestName}.log",mode='w')
+        handler = logging.FileHandler(logger_file,mode='w')
         handler.addFilter(SimTimeContextFilter())
         handler.setFormatter(SimLogFormatter())
         cocotb.log.addHandler(handler) 
         ## call test 
         await func(*args, **kwargs)
         if Macros['COVERAGE'] or Macros['CHECKERS']:
-            coverage_db.export_to_yaml(filename=f"sim/{RUNTAG}/{TESTFULLNAME}/coverage.ylm")
+            coverage_db.export_to_yaml(filename=f"{sim_dir}/{TESTFULLNAME}/coverage.ylm")
         ## report after finish simulation
         msg = f'with ({cocotb.log.critical.counter})criticals ({cocotb.log.error.counter})errors ({cocotb.log.warning.counter})warnings '
         if cocotb.log.error.counter > 0 or cocotb.log.critical.counter >0:

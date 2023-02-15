@@ -33,7 +33,7 @@ void main()
     configure_gpio(8  ,GPIO_MODE_MGMT_STD_OUTPUT); // csb
     configure_gpio(1  ,GPIO_MODE_MGMT_STD_OUTPUT); // SDI housekeeping spi
 
-    gpio_load();
+    gpio_config_load();
 
     // Start test
     set_debug_reg1(0xAA);

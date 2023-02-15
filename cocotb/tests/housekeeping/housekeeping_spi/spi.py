@@ -17,7 +17,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def spi_rd_wr_nbyte(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=112626)
+    caravelEnv = await test_configure(dut,timeout_cycles=112626)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -44,7 +44,7 @@ async def spi_rd_wr_nbyte(dut):
 @cocotb.test()
 @repot_test
 async def spi_rd_wr_stream(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1111370)
+    caravelEnv = await test_configure(dut,timeout_cycles=1111370)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

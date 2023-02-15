@@ -1,4 +1,8 @@
 
+#ifndef GPIO_C_FILE
+#define GPIO_C_FILE
+
+
 void configure_all_gpios(unsigned int config){
     #ifndef ARM
     reg_mprj_io_37 = config;
@@ -40,9 +44,9 @@ void configure_all_gpios(unsigned int config){
     reg_mprj_io_2  = config;
     reg_mprj_io_1  = config;
     reg_mprj_io_0  = config;
-    gpio_load();
+    gpio_config_load();
 }
-void gpio_load(){
+void gpio_config_load(){
     reg_mprj_xfer = 1;
     while ((reg_mprj_xfer&0x1) == 1);
 
@@ -129,3 +133,5 @@ void configure_gpio(int gpio_num, unsigned int config){
             break;
     }
 }
+
+#endif

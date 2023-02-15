@@ -17,7 +17,7 @@ void main(){
         else
            configure_gpio(i,0xAAA); 
     }
-    gpio_load();
+    gpio_config_load();
     dummy_delay(10);
     set_debug_reg1(0XFF); // finish configuration 
     dummy_delay(10000);

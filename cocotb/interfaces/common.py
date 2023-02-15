@@ -41,9 +41,9 @@ def drive_hdl(path,bits,data):
 
 """Enum for GPIO modes valus used to configured the pins"""
 tag = os.getenv('RUNTAG')
-config_file = f"sim.{tag.replace('/','.')}.configs"
-sky = import_module(config_file).sky
-if sky:
+# config_file = f"sim.{tag.replace('/','.')}.configs" // TODO: fix this
+sky = 1
+if 1:
     class GPIO_MODE(Enum):
         GPIO_MODE_MGMT_STD_INPUT_NOPULL    = 0x0403
         GPIO_MODE_MGMT_STD_INPUT_PULLDOWN  = 0x0c01

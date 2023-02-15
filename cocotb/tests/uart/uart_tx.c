@@ -31,7 +31,7 @@ void main(){
 
 
     // Now, apply the configuration
-    gpio_load();
+    gpio_config_load();
 
 //    reg_uart_clkdiv = 625;
     uart_TX_enable();
@@ -41,7 +41,7 @@ void main(){
     // This should appear at the output, received by the testbench UART.
     // (Makes simulation time long.)
 //    print("test msg\n");
-    print("Monitor: Test UART (RTL) passed");
+    print("Monitor: Test UART (RTL) passed\n");
 
     // Allow transmission to complete before signalling that the program
     // has ended.

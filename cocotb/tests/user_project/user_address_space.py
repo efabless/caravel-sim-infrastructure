@@ -17,7 +17,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def user_address_space(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11117936)
+    caravelEnv = await test_configure(dut,timeout_cycles=11117936)
     cocotb.log.info(f"[TEST] Start user_address_space test")
     ack_hdl   = caravelEnv.caravel_hdl.mprj.addr_space_testing.wbs_ack_o 
     addr_hdl  = caravelEnv.caravel_hdl.mprj.addr_space_testing.addr 

@@ -15,7 +15,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_out(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1191385)
+    caravelEnv = await test_configure(dut,timeout_cycles=1191385)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -63,7 +63,7 @@ async def mgmt_gpio_out(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_in(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11281094)
+    caravelEnv = await test_configure(dut,timeout_cycles=11281094)
     caravelEnv.drive_mgmt_gpio(0)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -113,7 +113,7 @@ async def mgmt_gpio_in(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_bidir(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=11223191)
+    caravelEnv = await test_configure(dut,timeout_cycles=11223191)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -158,7 +158,7 @@ async def blink_counter(hdl,counter):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_pu_pd(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1112487)
+    caravelEnv = await test_configure(dut,timeout_cycles=1112487)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -188,7 +188,7 @@ async def mgmt_gpio_pu_pd(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_disable(dut):
-    caravelEnv,clock = await test_configure(dut,timeout_cycles=1125554)
+    caravelEnv = await test_configure(dut,timeout_cycles=1125554)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

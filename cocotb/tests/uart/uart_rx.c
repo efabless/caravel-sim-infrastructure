@@ -36,7 +36,7 @@ void main(){
     configure_gpio(5,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
     // Now, apply the configuration
-    gpio_load();
+    gpio_config_load();
 
 
     uart_RX_enable();
