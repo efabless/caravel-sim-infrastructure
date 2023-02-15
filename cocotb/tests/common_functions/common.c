@@ -199,6 +199,7 @@ unsigned int get_timer0_val(){
     #ifdef ARM 
     return reg_timer0_data;
     #else
+    update_timer0_val();
     return reg_timer0_value;
     #endif
     }
