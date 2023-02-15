@@ -23,6 +23,7 @@ async def debug(dut):
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     # calculate bit time
+    clock = caravelEnv.get_clock_obj()
     clk = clock.period/1000
     global bit_time_ns
     bit_time_ns = round(10**5 * clk / (1152))
