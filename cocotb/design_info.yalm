@@ -3,18 +3,18 @@
 
 #eg CARAVEL_ROOT: "/usr/Desktop/caravel_project/caravel/" 
 #like repo https://github.com/efabless/caravel
-CARAVEL_ROOT: "/home/rady/caravel/swift/swift2"
-#CARAVEL_ROOT: "/home/rady/caravel/caravel_gf/caravel-gf180mcu/"
+#CARAVEL_ROOT: "/home/rady/caravel/swift/swift2"
+CARAVEL_ROOT: "/home/rady/caravel/caravel_orginal/caravel/"
 
 #eg MCW_ROOT: "/usr/Desktop/caravel_project/caravel_mgmt_soc_litex/" 
 #like repo https://github.com/efabless/caravel_mgmt_soc_litex 
-MCW_ROOT: "/home/rady/caravel/swift/swift2"
-#MCW_ROOT: "/home/rady/caravel/caravel_gf/caravel_mgmt_soc_gf180mcu/"
+#MCW_ROOT: "/home/rady/caravel/swift/swift2"
+MCW_ROOT: "/home/rady/caravel/caravel_orginal/caravel_mgmt_soc_litex/"
 
-#eg USR_PRJ_ROOT: "/usr/Desktop/caravel_project/caravel_user_project/" 
+#eg USER_PROJECT_ROOT: "/usr/Desktop/caravel_project/caravel_user_project/" 
 #like repo https://github.com/efabless/caravel_user_project
-#USR_PRJ_ROOT: None
-USR_PRJ_ROOT: "/home/rady/caravel/swift/caravel_user_project/"
+#USER_PROJECT_ROOT: None
+USER_PROJECT_ROOT: "/home/rady/caravel/swift/caravel_user_project/"
 
 
 #eg PDK_ROOT: "/usr/Desktop/caravel_project/pdk/" 

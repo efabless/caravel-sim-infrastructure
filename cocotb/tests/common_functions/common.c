@@ -534,3 +534,38 @@ void disable_uart_rx_irq(){
 }
 // debug 
 void mgmt_debug_enable(){reg_wb_enable = reg_wb_enable | 0x10;}
+
+
+// set user address value 
+
+void write_user_word(unsigned int data,int offset){
+    (*(volatile unsigned int*) (USER_SPACE_ADDR + offset )) = data;
+}
+
+unsigned int write_read_word(int offset){
+    return (*(volatile unsigned int*) (USER_SPACE_ADDR + offset ));
+}
+
+void write_user_half_word(unsigned short data,unsigned int offset,bool is_lower_half){
+    unsigned int half_word_offset = offset *2 + is_lower_half;
+    (*(volatile unsigned short*) (USER_SPACE_ADDR + half_word_offset )) = data;
+}
+
+unsigned short read_user_half_word(unsigned int offset,bool is_lower_half){
+    unsigned int half_word_offset = offset *2 + is_lower_half;
+    return (*(volatile unsigned short*) (USER_SPACE_ADDR + half_word_offset ));
+}
+
+void write_user_byte(unsigned char data,unsigned int offset,unsigned char byte_num){
+    if (byte_num > 3) 
+        byte_num =0; 
+    unsigned int byte_offset = offset *4 + byte_num;
+    (*(volatile unsigned int*) (USER_SPACE_ADDR + byte_offset )) = data;
+}
+
+unsigned char read_user_byte( unsigned int offset,unsigned char byte_num){
+    if (byte_num > 3) 
+        byte_num =0; 
+    unsigned int byte_offset = offset *4 + byte_num;
+    return (*(volatile unsigned int*) (USER_SPACE_ADDR + byte_offset ));
+}
