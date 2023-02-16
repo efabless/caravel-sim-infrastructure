@@ -29,7 +29,7 @@ from importlib import import_module
 import yaml
 def read_config_file():
     cocotb.plusargs["TAG"]
-    config_file = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yalm".replace('"', '')
+    config_file = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yaml".replace('"', '')
 
     with open(config_file) as file:
         # The FullLoader parameter handles the conversion from YAML

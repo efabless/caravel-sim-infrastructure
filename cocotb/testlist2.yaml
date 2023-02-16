@@ -4,8 +4,7 @@
 ## tests: [debug,clock_redirect]
 ## sim: [RTL,RTL]
 Tests: 
-    - {name: debug_swd, sim: RTL}
+    - {name: debug, sim: RTL}
     - {name: clock_redirect, sim: RTL}
 
-includes: 
-    - ../testlist2.yalm
+

@@ -18,10 +18,9 @@ class UART():
             if new_char == "\n":
                 break
             line += new_char 
-            cocotb.log.info (f"[UART] new char again = {new_char}")
-            cocotb.log.info (f"[UART] line recieved = {line}")
+            cocotb.log.debug (f"[UART] part of the line recieved = {line}")
         cocotb.log.info (f"[UART] line recieved = {line}")
-        return line
+        return line[0:-1]
 
     async def get_char(self):
         await self.start_of_tx()
