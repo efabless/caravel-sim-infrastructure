@@ -109,7 +109,7 @@ class main():
             file_w.close()
 
     def set_config_script(self,design_info):
-        new_config_path = f'{self.paths.COCOTB_PATH}/sim/{self.args.tag}/configs.yalm'
+        new_config_path = f'{self.paths.COCOTB_PATH}/sim/{self.args.tag}/configs.yaml'
         design_configs = dict(clock=self.args.clk,max_err=self.args.maxerr,PDK=self.args.pdk)
         design_configs.update(dict(CARAVEL_ROOT=self.paths.CARAVEL_ROOT,MCW_ROOT=self.paths.MCW_ROOT,PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}'))
         with open(new_config_path, 'w') as file:
@@ -118,8 +118,8 @@ class main():
 
 
     def get_design_info(self):
-        yalm_file = open("design_info.yalm", 'r')
-        design_info = yaml.safe_load(yalm_file)
+        yaml_file = open("design_info.yaml", 'r')
+        design_info = yaml.safe_load(yaml_file)
         return design_info
 
 
@@ -140,7 +140,7 @@ parser.add_argument('-emailto','-mail', nargs='+' ,help='mails to send results t
 parser.add_argument('-seed' ,help='run with specific seed')
 parser.add_argument('-no_wave',action='store_true', help='disable dumping waves')
 parser.add_argument('-sdf_setup',action='store_true', help='targeting setup violations by taking the sdf mamximum values')
-parser.add_argument('-clk', help='define the clock period in ns default defined at design_info.yalm')
+parser.add_argument('-clk', help='define the clock period in ns default defined at design_info.yaml')
 parser.add_argument('-lint',action='store_true', help='generate lint log -v must be used')
 parser.add_argument('-arm',action='store_true', help='generate lint log -v must be used')
 parser.add_argument('-macros',nargs='+', help='Add addtional verilog macros for the design ')
