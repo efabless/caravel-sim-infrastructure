@@ -73,6 +73,9 @@ class main():
         if self.args.clk is None: 
             self.args.clk = design_info["clk"]
 
+        if self.args.maxerr is None: 
+            self.args.maxerr = 3
+            
         self.args.caravan = design_info["caravan"]
 
         if self.args.sim is None: 
