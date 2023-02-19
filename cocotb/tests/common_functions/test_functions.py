@@ -100,7 +100,7 @@ def repot_test(func):
         if cocotb.log.error.counter > 0 or cocotb.log.critical.counter >0:
             raise cocotb.result.TestComplete(f'Test failed {msg}')
         else: 
-            raise cocotb.result.TestComplete(f'Test passed {msg}')
+            cocotb.log.info(f'Test passed {msg}')
     return wrapper_func
 
 async def max_num_error(num_error,clk):
