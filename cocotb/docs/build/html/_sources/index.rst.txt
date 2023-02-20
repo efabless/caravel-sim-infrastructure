@@ -9,7 +9,7 @@ Welcome to caravel_cocotb's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   usage
+   python_api
 
 
 Indices and tables
@@ -19,5 +19,5 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-Check out the :doc:`usage` section for further information, including how to
-:ref:`in <installation123>` the project.
+.. Check out the :doc:`usage` section for further information, including how to
+.. :ref:`in <installation123>` the project.

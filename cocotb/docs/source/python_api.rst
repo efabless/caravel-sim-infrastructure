@@ -1,16 +1,3 @@
-Usage
-=====
-
-.. _installation123:
-
-Installation
-------------
-
-To use , first install it using pip:
-
-.. code-block:: console
-
-   (.venv) $ pip install 
 
 .. _python_API:
 
@@ -33,4 +20,15 @@ Caravel Environment
    :members:
    :member-order: bysource
    :exclude-members: drive_csb, power_up, start_up
+
+
+UART Environment 
+-------------------
+
+.. currentmodule:: interfaces.UART
+
+.. autoclass:: UART
+   :members:
+   :member-order: bysource
+   :exclude-members: 
 

@@ -36,6 +36,13 @@ def gpio_mode(gpios_values:list):
     return gpios
 
 class Caravel_env:
+    """
+    Verification environment for caraval 
+
+    - provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins 
+
+    :param SimHandle dut: dut handle
+    """
     def __init__(self,dut:SimHandleBase):
         self.dut         = dut
         self.clk         = dut.clock_tb
@@ -45,6 +52,7 @@ class Caravel_env:
 
     """start carvel by insert power then reset"""
     async def start_up(self):
+        """Start carvel by insert power then reset """
         await self.power_up()
         await self.disable_csb() # no need for this anymore as default for gpio3 is now pullup
         await self.reset()
@@ -57,8 +65,8 @@ class Caravel_env:
                 continue
             common.drive_hdl(self.dut._id(f"bin{i}_en",False),(0,0),0) 
 
-    """setup the vdd and vcc power bins"""
     async def power_up(self):
+        """Setup the vdd and vcc power bins"""
         cocotb.log.info(f' [caravel] start powering up')
         self.set_vdd(0)
         if sky:
@@ -72,8 +80,8 @@ class Caravel_env:
             self.set_vcc(1)
         await ClockCycles(self.clk, 10)
 
-    """"reset caravel"""
     async def reset(self):
+        """Reset caravel"""
         # initial value of reset is x
         cocotb.log.info(f' [caravel] start resetting')
         self.dut.resetb_tb.value = 0
@@ -106,36 +114,52 @@ class Caravel_env:
         self.dut.vccd2_tb.value   = value
         self.dut.vssd2_tb.value   = 0
 
-    """drive csb signal bin E8 mprj[3]"""
     async def drive_csb(self,bit): 
+        """Drive csb signal bin E8 mprj[3]"""
         self.drive_gpio_in((3,3),bit)
         self.drive_gpio_in((4,4),0)
         await ClockCycles(self.clk, 1)
 
 
-    """set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
     async def disable_csb(self ):
+        """Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
         cocotb.log.info(f' [caravel] disable housekeeping spi transmission')
         await self.drive_csb(1)
         await self.release_csb()
         await ClockCycles(self.clk, 1)
 
-    """set the spi vsb signal high impedance """
     async def release_csb(self ):
+        """Set the spi vsb signal high impedance """
         cocotb.log.info(f' [caravel] release housekeeping spi transmission')
         self.release_gpio(2)
         self.release_gpio(3)
         self.release_gpio(4)
         await ClockCycles(self.clk, 1)
 
-    """set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]"""
     async def enable_csb(self ):
+        """Set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]"""
         cocotb.log.info(f' [caravel] enable housekeeping spi transmission')
         await self.drive_csb(0)
         
 
-    """return the value of mprj in bits used tp monitor the output gpios value"""
-    def monitor_gpio(self,h_bit,l_bit=None):
+    def monitor_gpio(self,h_bit,l_bit=None) -> cocotb.binary.BinaryValue:
+        """monitor GPIOs output value
+
+        :param h_bit: highest gpio number of the tuple of (high gpio, low gpio)
+        :param l_bit: lowest gpio to monitor number
+        :type h_bit: int or tuple(int, int)
+        :raise expection: If h_bit is lower than l_bit
+        :return: cocotb.binary.BinaryValue
+
+        Example:
+
+        .. code-block:: python
+
+            monitor_gpio(7) #get output value of gpio 7 (gpios[7])
+            monitor_gpio(7,0) # get output value from gpio 7 to 0 (gpios[7:0])
+            monitor_gpio((7,0)) #get output value from gpio 7 to 0 (gpios[7:0])
+
+        """
         mprj = self.dut.mprj_io_tb.value
         size =mprj.n_bits -1 #size of bins array
         if  isinstance(h_bit, Iterable):
@@ -151,12 +175,21 @@ class Caravel_env:
         return mprj_out
 
     """return the value of management gpio"""
-    def monitor_mgmt_gpio(self):
+    def monitor_mgmt_gpio(self)->str:
+        """monitor managment gpio output 
+
+        :return: return the value of management gpio in string format possible values ``"0"`` ``"1"`` ``"X"`` ``"Z"``
+        """
         data = self.dut.gpio_tb.value.binstr
         cocotb.log.debug(f' [caravel] Monitor mgmt gpio = {data}')
         return data
 
-    async def wait_mgmt_gpio(self,data):
+    async def wait_mgmt_gpio(self,data:int) -> None:
+        """wait for specific managment gpio value 
+
+        :param data: data to wait for possible inputs ``"0"`` ``"1"`` ``0`` ``1``
+        :type data: int or str
+        """
         data_s = str(data)
         while True: 
             if data_s == self.monitor_mgmt_gpio(): 
@@ -306,15 +339,28 @@ class Caravel_env:
         gpio_dm   =sum(d * 2**i for i, d in enumerate(gpio_dm)) # convert list to binary int
         path.gpio_dm.value           = gpio_dm
         
-    # """drive the value of mprj bits with spicific data from input pad at the top"""
+    # """drive the value of mprj bits with spicific data  at the top"""
     # def release_gpio(self):
     #     io = self.caravel_hdl.padframe.mprj_pads.io
     #     mprj , n_bits = common.signal_valueZ_size(io)
     #     io.value  =  mprj
     #     cocotb.log.info(f' [caravel] drive_gpio_in pad mprj with {mprj}')          
 
-    """drive the value of mprj bits with spicific data from input pad at the top"""
-    def drive_gpio_in(self,bits,data):
+    
+    def drive_gpio_in(self,bits,data) -> None:
+        """drive input gpios with spicific data 
+
+        :param bits: gpios to drive
+        :param int data: data to drive the gpios with
+        :type bits: int or tuple(int, int)
+
+        Example:
+
+        .. code-block:: python
+
+            drive_gpio_in(7,0x1) # drive gpio 7 with 1 (gpios[7]=1)
+            drive_gpio_in((31,0),0xFFFFFFFF) # drive gpio 31 to 0 with ones (gpios[31:0]=32'hFFFFFFFF)
+        """
         # io = self.caravel_hdl.padframe.mprj_pads.io
         # mprj , n_bits = common.signal_value_size(io)
         # cocotb.log.debug(f' [caravel] before mprj with {mprj} and data = {data} bit [{n_bits-1-bits[0]}]:[{n_bits-1-bits[1]}]')
@@ -335,8 +381,11 @@ class Caravel_env:
             self.dut._id(f'bin{bits}_en',False).value = 1
             cocotb.log.debug(f'[caravel] [drive_gpio_in] drive bin{bits} with {data} and bin{bits}_en with 1')
 
-    """ release driving the value of mprj bits """
     def release_gpio(self,bits):
+        """ release driving the value of mprj bits 
+        :param bits: gpios to drive
+        :type bits: int or tuple(int, int)
+         """
         data_bits = []
         is_list  = isinstance(bits, (list,tuple)) 
         if is_list : 
@@ -352,6 +401,10 @@ class Caravel_env:
         return self.dut.gpio_tb
     """drive the value of  gpio management"""
     def drive_mgmt_gpio(self,data):
+        """drive gpio management with spicific data 
+
+        :param int data: data to drive the gpios with
+        """
         self.get_mgmt_gpi_hdl().value  =  BinaryValue(value = data,n_bits=1)
         cocotb.log.info(f' [caravel] drive_mgmt_gpio through management area mprj with {data}')
 
@@ -471,8 +524,19 @@ class Caravel_env:
 
 
 
-    def set_clock_obj(self,clock): 
-        self.clock_obj = clock
+    def setup_clock(self,period,unit="ns") -> cocotb.clock.Clock: 
+        """
+        Configure caravel clock and start it
 
-    def get_clock_obj(self):
+        :param int period: clock period
+        :param str unit: One of ``'step'``, ``'fs'``, ``'ps'``, ``'ns'``, ``'us'``, ``'ms'``, ``'sec'``.When *units* is ``'step'``,the timestep is determined by the simulator.
+        :return: Object of type Caravel_env (caravel environment)
+        """
+        self.clock_obj = Clock(self.clk, period, unit)  # Create a 25ns period clock on port clk
+        cocotb.start_soon(self.clock_obj.start())  # Start the clock
+        return self.clock_obj
+
+
+    def get_clock_obj(self) -> cocotb.clock.Clock:
+        """return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info"""
         return self.clock_obj

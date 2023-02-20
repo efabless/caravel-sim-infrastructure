@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage &mdash; caravel_cocotb alpha documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <title>Python APIs &mdash; caravel_cocotb alpha documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
@@ -43,13 +43,10 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="#python-apis">Python APIs</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python APIs</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#common-functions">Common functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#caravel-environment">Caravel Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#uart-environment">UART Environment</a></li>
 </ul>
 </li>
 </ul>
@@ -68,9 +65,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Usage</li>
+      <li class="breadcrumb-item active">Python APIs</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/python_api.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -78,17 +75,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="installation">
-<span id="installation123"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>To use , first install it using pip:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">(.venv) $</span> pip install
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="python-apis">
+  <div class="section" id="python-apis">
 <span id="python-api"></span><h1>Python APIs<a class="headerlink" href="#python-apis" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="common-functions">
 <h2>Common functions<a class="headerlink" href="#common-functions" title="Permalink to this headline">¶</a></h2>
@@ -288,6 +275,59 @@
 <dt id="interfaces.caravel.Caravel_env.get_clock_obj">
 <code class="descname">get_clock_obj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; cocotb.clock.Clock<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.get_clock_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.get_clock_obj" title="Permalink to this definition">¶</a></dt>
 <dd><p>return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="uart-environment">
+<h2>UART Environment<a class="headerlink" href="#uart-environment" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="interfaces.UART.UART">
+<em class="property">class </em><code class="descclassname">interfaces.UART.</code><code class="descname">UART</code><span class="sig-paren">(</span><em>caravelEnv: interfaces.caravel.Caravel_env</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART" title="Permalink to this definition">¶</a></dt>
+<dd><p>UART Verification environment to provide APIs to communicate with caravel uart through caravel gpios</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>caravelEnv</strong> (<a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><em>Caravel_env</em></a>) – caravel environment</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="interfaces.UART.UART.get_char">
+<code class="descname">get_char</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.get_char"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.get_char" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read character sent through UART (character is sent by the software)</p>
+<ul class="simple">
+<li>Character is a 8 bit ASCII sybmol</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="interfaces.UART.UART.get_line">
+<code class="descname">get_line</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.get_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.get_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read line sent through UART (msg is sent by the software)</p>
+<ul class="simple">
+<li>Line is a bunch of ASCII sybmols ended by linefeed ‘\n’</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="interfaces.UART.UART.uart_send_char">
+<code class="descname">uart_send_char</code><span class="sig-paren">(</span><em>char</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.uart_send_char"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.uart_send_char" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send character to UART (character is sent to the software)</p>
+<ul class="simple">
+<li>Character is a 8 bit ASCII sybmol</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="interfaces.UART.UART.uart_send_line">
+<code class="descname">uart_send_line</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.uart_send_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.uart_send_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send line to UART (msg is sent to the software)</p>
+<ul class="simple">
+<li>Line is a bunch of ASCII sybmols ended by linefeed ‘\n’</li>
+</ul>
 </dd></dl>
 
 </dd></dl>
