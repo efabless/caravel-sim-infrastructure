@@ -1,5 +1,6 @@
-#include "../common_functions/common.c"
-#include "../common_functions/bitbang.c"
+#include <common.h>
+
+#include <bitbang.h>
 
 void main(){
     enable_debug();

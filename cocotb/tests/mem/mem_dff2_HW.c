@@ -1,5 +1,6 @@
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 void main(){
     enable_debug();
     unsigned short *dff2_start_address =  (unsigned short *) DFF2_START_ADDR;

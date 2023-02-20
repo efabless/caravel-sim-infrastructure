@@ -14,8 +14,9 @@
  * limitations under the License.
  * SPDX-License-Identifier: Apache-2.0
  */
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 void main(){
     enable_debug();
     clear_flag();

@@ -1,5 +1,6 @@
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 void main(){
         unsigned int i,i_temp, j, active_gpio_num,num_high_gpio;
         enable_debug();

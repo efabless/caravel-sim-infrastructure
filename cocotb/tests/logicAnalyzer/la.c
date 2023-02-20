@@ -1,6 +1,7 @@
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 user exmple
 assign la0 to la1 if la0 output enable

@@ -1,6 +1,6 @@
 
-#ifndef GPIO_C_FILE
-#define GPIO_C_FILE
+#ifndef GPIO_C_HEADER_FILE
+#define GPIO_C_HEADER_FILE
 
 
 void configure_all_gpios(unsigned int config){
@@ -134,4 +134,4 @@ void configure_gpio(int gpio_num, unsigned int config){
     }
 }
 
-#endif
+#endif // GPIO_C_HEADER_FILE

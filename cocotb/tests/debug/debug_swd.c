@@ -1,7 +1,8 @@
 
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 
 
 // --------------------------------------------------------

@@ -1,5 +1,6 @@
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 This test is developed for testing RAM used inside the user area by swift 2 release
 */

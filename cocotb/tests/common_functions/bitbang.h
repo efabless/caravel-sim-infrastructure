@@ -1,3 +1,6 @@
+
+#ifndef BITBANG_C_HEADER_FILE
+#define BITBANG_C_HEADER_FILE
 /*
 reg_mprj_xfer contain 
 bit 0 : busy 
@@ -151,3 +154,5 @@ void bb_configure_all_gpios(unsigned int config){
     bb_configure_2_gpios(config,config);// 0	& 37
     bb_load();
 }
+
+#endif // BITBANG_C_HEADER_FILE

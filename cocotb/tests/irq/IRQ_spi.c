@@ -15,8 +15,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 Testing spi interrupt
 */

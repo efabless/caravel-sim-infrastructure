@@ -15,8 +15,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 Testing timer interrupts 
 Enable interrupt for IRQ external pin mprj_io[7] -> should be drived to 1 by the environment

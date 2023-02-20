@@ -1,4 +1,5 @@
-#include "../../common_functions/common.c"
+#include <common.h>
+
 
 
 // access all housekeeping registers that can be access through firmware and change it's value

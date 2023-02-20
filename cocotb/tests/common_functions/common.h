@@ -1,3 +1,7 @@
+
+#ifndef COMMON_C_HEADER_FILE
+#define COMMON_C_HEADER_FILE
+
 #include <defs.h>
 #include <stub.c>
 #ifdef ARM 
@@ -7,7 +11,7 @@
 #include <irq_vex.h>
 
 #endif
-#include "gpios.c"
+#include <gpios.h>
 void enable_debug(){
     enable_user_interface();
     set_debug_reg1(0);
@@ -546,13 +550,20 @@ void write_user_word(unsigned int data,int offset){
 unsigned int write_read_word(int offset){
     return (*(volatile unsigned int*) (USER_SPACE_ADDR + offset ));
 }
-
+#ifdef ARM
+void write_user_half_word(unsigned short data,unsigned int offset,char is_lower_half){
+#else
 void write_user_half_word(unsigned short data,unsigned int offset,bool is_lower_half){
+#endif
     unsigned int half_word_offset = offset *2 + is_lower_half;
     (*(volatile unsigned short*) (USER_SPACE_ADDR + half_word_offset )) = data;
 }
 
+#ifdef ARM
+unsigned short read_user_half_word(unsigned int offset,char is_lower_half){
+#else
 unsigned short read_user_half_word(unsigned int offset,bool is_lower_half){
+#endif
     unsigned int half_word_offset = offset *2 + is_lower_half;
     return (*(volatile unsigned short*) (USER_SPACE_ADDR + half_word_offset ));
 }
@@ -570,3 +581,6 @@ unsigned char read_user_byte( unsigned int offset,unsigned char byte_num){
     unsigned int byte_offset = offset *4 + byte_num;
     return (*(volatile unsigned int*) (USER_SPACE_ADDR + byte_offset ));
 }
+
+
+#endif // COMMON_C_HEADER_FILE

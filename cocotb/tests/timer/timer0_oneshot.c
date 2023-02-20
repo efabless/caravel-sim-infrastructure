@@ -16,7 +16,8 @@
  */
 
 
-#include "../common_functions/common.c"
+#include <common.h>
+
 
 
 void main(){
