@@ -8,8 +8,8 @@ class RunTest:
         self.args  = args
         self.paths = paths
         self.test  = test
-        self.hex_generate()
-        self.runTest()
+        if self.hex_generate() == "hex_generated": # run test only if hex is generated
+            self.runTest()
         self.test.end_of_test()
 
     def hex_riscv32_command_gen(self): 
@@ -66,13 +66,18 @@ class RunTest:
         self.test.full_terminal.write(os.path.expandvars(command_slipt[1])+"\n\n")
         self.test.full_terminal.write("hex file generation command:\n% ")
         self.test.full_terminal.write(os.path.expandvars(command_slipt[2])+"\n\n")
-        self.test.full_terminal.close()
         if not self.args.arm : # TODO add arm processor to docker
             hex_gen_state = os.system(docker_command)
         else:
             hex_gen_state = os.system(f" {command} ")
         if hex_gen_state != 0 :
-            raise RuntimeError (f"Error when generating hex")
+            print (f"Error when generating hex")
+            self.test.full_terminal.write (f"Error when generating hex")
+            self.test.full_terminal.close()
+            return "hex_error"
+        self.test.full_terminal.close()
+        return "hex_generated"
+        
         
 
     def test_path(self):

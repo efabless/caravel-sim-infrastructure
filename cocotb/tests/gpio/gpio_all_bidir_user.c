@@ -5,8 +5,9 @@
 void main(){
     unsigned int i,i_temp, j, active_gpio_num,num_high_gpio;
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     configure_all_gpios(GPIO_MODE_USER_STD_BIDIRECTIONAL);
+    gpio_config_load();      
     set_debug_reg1(0x1A); // finish configuration
 
     // try as output 

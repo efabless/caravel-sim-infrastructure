@@ -166,7 +166,7 @@ class Test:
 
     def check_test_pass(self):
         pass_pattern = "Test passed with (0)criticals (0)errors"
-        with open(self.test_log, 'r') as file:
+        with open(self.full_log, 'r') as file:
             # read all content of a file
             content = file.read()
             # check if string present in a file
@@ -177,7 +177,10 @@ class Test:
     
     def get_seed(self):
         seed = "unknown"
-        seed_tree = ET.parse(f'{self.test_dir}/seed.xml')
+        seed_file = f"{self.test_dir}/seed.xml"
+        if not os.path.exists(seed_file): 
+            return seed
+        seed_tree = ET.parse(seed_file)
         root = seed_tree.getroot()
         for property in root.iter('property'):
             if property.attrib["name"] == "random_seed":

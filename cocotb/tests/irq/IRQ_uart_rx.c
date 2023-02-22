@@ -23,7 +23,7 @@ void main(){
     configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
     configure_gpio(5,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
     gpio_config_load();
-    enable_uart_rx_irq();
+    enable_uart_rx_irq(1);
 
     set_debug_reg2(0xAA); //start sending data through the uart
 
@@ -43,7 +43,7 @@ void main(){
     }
     // test interrupt doesn't happened nothing sent at uart
     set_debug_reg2(0xBB);
-    disable_uart_rx_irq();
+    enable_uart_rx_irq(0);
     clear_flag();
     // Loop, waiting for the interrupt to change reg_mprj_datah
     is_pass = 0;

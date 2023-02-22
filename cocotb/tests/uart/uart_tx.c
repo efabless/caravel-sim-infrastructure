@@ -23,7 +23,7 @@
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
 
     // Set clock to 64 kbaud and enable the UART.  It is important to do this
@@ -35,7 +35,7 @@ void main(){
     gpio_config_load();
 
 //    reg_uart_clkdiv = 625;
-    uart_TX_enable();
+    enable_uart_TX(1);
 
     set_debug_reg1(0xAA);
 

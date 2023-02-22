@@ -8,6 +8,7 @@ void main()
 {
     enable_debug();
     configure_all_gpios(GPIO_MODE_MGMT_STD_INPUT_NOPULL);	
+    gpio_config_load();
     set_debug_reg1(0xAA); // finish configuration 
     wait_debug_reg2(0xDD);
     // low

@@ -29,7 +29,7 @@
 void main()
 {
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     mgmt_gpio_io_enable();
 
     // pull up

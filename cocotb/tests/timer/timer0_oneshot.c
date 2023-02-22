@@ -24,7 +24,7 @@ void main(){
     unsigned int value;
     unsigned int old_value;
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
 
     /* Configure timer for a single-shot countdown */
     timer0_oneshot_configure(0xF300);

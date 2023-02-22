@@ -43,7 +43,7 @@ void main(){
     configure_gpio(7,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
     gpio_config_load();
-    enable_external1_irq();
+    enable_external1_irq(1);
 
     // test interrrupt happen when mprj[7] is asserted
     clear_flag();

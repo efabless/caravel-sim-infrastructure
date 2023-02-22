@@ -29,21 +29,21 @@ void wait_for_char(char *c){
     }else{
         set_debug_reg2(0x1E); // timeout didn't recieve the character
     }
-    uart_read_pop();
+    uart_pop_char();
     set_debug_reg2(0);
 }
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
     configure_gpio(5,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
     // Now, apply the configuration
     gpio_config_load();
 
-    uart_RX_enable();
-    uart_TX_enable();
+    uart_RX_enable(1);
+    enable_uart_TX(1);
 
     print("M");
     wait_for_char("M");
