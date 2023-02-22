@@ -1,0 +1,68 @@
+\hypertarget{spi__master_8h}{}\section{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/spi\+\_\+master.h File Reference}
+\label{spi__master_8h}\index{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/spi\+\_\+master.\+h@{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/spi\+\_\+master.\+h}}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{spi__master_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{spi__master_8h_ac256606f0178011ddb85162d9584c487}{spi\+\_\+write} (char c)
+\item 
+char \hyperlink{spi__master_8h_ae677e13a3b0995516e495ced349dbcc5}{spi\+\_\+read} ()
+\item 
+void \hyperlink{spi__master_8h_a60653a00868af39a2ae44b05717197d5}{enable\+\_\+spi} (bool is\+\_\+enable)
+\item 
+void \hyperlink{spi__master_8h_a904d489d359261aab3e5149f4ac4fb0f}{enable\+\_\+\+CS} (bool is\+\_\+enable)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{spi__master_8h_a904d489d359261aab3e5149f4ac4fb0f}\label{spi__master_8h_a904d489d359261aab3e5149f4ac4fb0f}} 
+\index{spi\+\_\+master.\+h@{spi\+\_\+master.\+h}!enable\+\_\+\+CS@{enable\+\_\+\+CS}}
+\index{enable\+\_\+\+CS@{enable\+\_\+\+CS}!spi\+\_\+master.\+h@{spi\+\_\+master.\+h}}
+\subsubsection{\texorpdfstring{enable\+\_\+\+C\+S()}{enable\_CS()}}
+{\footnotesize\ttfamily void enable\+\_\+\+CS (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+assert or deassert chip select
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1 (true) chip select is asserted, 0 (false) chip select is deasserted \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{spi__master_8h_a60653a00868af39a2ae44b05717197d5}\label{spi__master_8h_a60653a00868af39a2ae44b05717197d5}} 
+\index{spi\+\_\+master.\+h@{spi\+\_\+master.\+h}!enable\+\_\+spi@{enable\+\_\+spi}}
+\index{enable\+\_\+spi@{enable\+\_\+spi}!spi\+\_\+master.\+h@{spi\+\_\+master.\+h}}
+\subsubsection{\texorpdfstring{enable\+\_\+spi()}{enable\_spi()}}
+{\footnotesize\ttfamily void enable\+\_\+spi (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+Enable or disable the master spi
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1 (true) master spi is active, 0 (false) master spi is disabled \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{spi__master_8h_ae677e13a3b0995516e495ced349dbcc5}\label{spi__master_8h_ae677e13a3b0995516e495ced349dbcc5}} 
+\index{spi\+\_\+master.\+h@{spi\+\_\+master.\+h}!spi\+\_\+read@{spi\+\_\+read}}
+\index{spi\+\_\+read@{spi\+\_\+read}!spi\+\_\+master.\+h@{spi\+\_\+master.\+h}}
+\subsubsection{\texorpdfstring{spi\+\_\+read()}{spi\_read()}}
+{\footnotesize\ttfamily char spi\+\_\+read (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Read byte (8bits) through S\+PI master \mbox{\Hypertarget{spi__master_8h_ac256606f0178011ddb85162d9584c487}\label{spi__master_8h_ac256606f0178011ddb85162d9584c487}} 
+\index{spi\+\_\+master.\+h@{spi\+\_\+master.\+h}!spi\+\_\+write@{spi\+\_\+write}}
+\index{spi\+\_\+write@{spi\+\_\+write}!spi\+\_\+master.\+h@{spi\+\_\+master.\+h}}
+\subsubsection{\texorpdfstring{spi\+\_\+write()}{spi\_write()}}
+{\footnotesize\ttfamily void spi\+\_\+write (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+Write byte (8bits) through S\+PI master
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & byte to write range 0x0 to 0x\+FF \\
+\hline
+\end{DoxyParams}

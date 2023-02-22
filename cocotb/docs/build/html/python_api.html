@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python APIs &mdash; caravel_cocotb alpha documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Python APIs &mdash; caravel_cocotb alpha documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="X APIs" href="C_api.html" />
     <link rel="prev" title="Welcome to caravel_cocotb’s documentation!" href="index.html" /> 
 </head>
 
@@ -41,14 +46,44 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Python APIs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#common-functions">Common functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#caravel-environment">Caravel Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#uart-environment">UART Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-functions">Common functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#test_functions.test_configure"><code class="docutils literal notranslate"><span class="pre">test_configure()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#caravel-environment">Caravel Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interfaces.caravel.Caravel_env"><code class="docutils literal notranslate"><span class="pre">Caravel_env</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.reset"><code class="docutils literal notranslate"><span class="pre">Caravel_env.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.disable_csb"><code class="docutils literal notranslate"><span class="pre">Caravel_env.disable_csb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.release_csb"><code class="docutils literal notranslate"><span class="pre">Caravel_env.release_csb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.enable_csb"><code class="docutils literal notranslate"><span class="pre">Caravel_env.enable_csb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.monitor_gpio"><code class="docutils literal notranslate"><span class="pre">Caravel_env.monitor_gpio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.monitor_mgmt_gpio"><code class="docutils literal notranslate"><span class="pre">Caravel_env.monitor_mgmt_gpio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.wait_mgmt_gpio"><code class="docutils literal notranslate"><span class="pre">Caravel_env.wait_mgmt_gpio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.drive_gpio_in"><code class="docutils literal notranslate"><span class="pre">Caravel_env.drive_gpio_in()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.release_gpio"><code class="docutils literal notranslate"><span class="pre">Caravel_env.release_gpio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.drive_mgmt_gpio"><code class="docutils literal notranslate"><span class="pre">Caravel_env.drive_mgmt_gpio()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.setup_clock"><code class="docutils literal notranslate"><span class="pre">Caravel_env.setup_clock()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.get_clock_obj"><code class="docutils literal notranslate"><span class="pre">Caravel_env.get_clock_obj()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#uart-environment">UART Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interfaces.UART.UART"><code class="docutils literal notranslate"><span class="pre">UART</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.get_line"><code class="docutils literal notranslate"><span class="pre">UART.get_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.get_char"><code class="docutils literal notranslate"><span class="pre">UART.get_char()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.uart_send_char"><code class="docutils literal notranslate"><span class="pre">UART.uart_send_char()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.uart_send_line"><code class="docutils literal notranslate"><span class="pre">UART.uart_send_line()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="C_api.html">X APIs</a></li>
 </ul>
 
         </div>
@@ -75,76 +110,89 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="python-apis">
-<span id="python-api"></span><h1>Python APIs<a class="headerlink" href="#python-apis" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="common-functions">
-<h2>Common functions<a class="headerlink" href="#common-functions" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="test_functions.test_configure">
-<code class="descclassname">test_functions.</code><code class="descname">test_configure</code><span class="sig-paren">(</span><em>dut: cocotb.handle.SimHandle</em>, <em>timeout_cycles=1000000</em>, <em>clk=25</em>, <em>timeout_precision=0.2</em>, <em>num_error=3</em><span class="sig-paren">)</span> &#x2192; interfaces.caravel.Caravel_env<a class="reference internal" href="_modules/test_functions.html#test_configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_functions.test_configure" title="Permalink to this definition">¶</a></dt>
+  <section id="python-apis">
+<span id="python-api"></span><h1>Python APIs<a class="headerlink" href="#python-apis" title="Permalink to this heading"></a></h1>
+<section id="common-functions">
+<h2>Common functions<a class="headerlink" href="#common-functions" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="test_functions.test_configure">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">test_functions.</span></span><span class="sig-name descname"><span class="pre">test_configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SimHandle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout_cycles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout_precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><span class="pre">Caravel_env</span></a></span></span><a class="reference internal" href="_modules/test_functions.html#test_configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#test_functions.test_configure" title="Permalink to this definition"></a></dt>
 <dd><p>Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Async:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dut</strong> (<em>SimHandle</em>) – dut handle</li>
-<li><strong>timeout_cycles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of cycles before reporting timeout and exit the test default = 1000000 cycles</li>
-<li><strong>clk</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The clock period to be used in the design in <code class="docutils literal notranslate"><span class="pre">'ns'</span></code> default 12.5 <code class="docutils literal notranslate"><span class="pre">'ns'</span></code></li>
-<li><strong>timeout_precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Precision of logging how many cycle left until the timeout default is 0.2 meaning if time is 100 cycle every 20 cycles there would be a warning message for timeout</li>
-<li><strong>num_error</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum number of errors reported before terminate the test</li>
+<dl class="field-list simple">
+<dt class="field-odd">Async<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>dut</strong> (<em>SimHandle</em>) – dut handle</p></li>
+<li><p><strong>timeout_cycles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of cycles before reporting timeout and exit the test default = 1000000 cycles</p></li>
+<li><p><strong>clk</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The clock period to be used in the design in <code class="docutils literal notranslate"><span class="pre">'ns'</span></code> default 12.5 <code class="docutils literal notranslate"><span class="pre">'ns'</span></code></p></li>
+<li><p><strong>timeout_precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Precision of logging how many cycle left until the timeout default is 0.2 meaning if time is 100 cycle every 20 cycles there would be a warning message for timeout</p></li>
+<li><p><strong>num_error</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum number of errors reported before terminate the test</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Object of type Caravel_env (caravel environment)</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Object of type Caravel_env (caravel environment)</p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
-<div class="section" id="caravel-environment">
-<h2>Caravel Environment<a class="headerlink" href="#caravel-environment" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="interfaces.caravel.Caravel_env">
-<em class="property">class </em><code class="descclassname">interfaces.caravel.</code><code class="descname">Caravel_env</code><span class="sig-paren">(</span><em>dut: cocotb.handle.SimHandleBase</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="caravel-environment">
+<h2>Caravel Environment<a class="headerlink" href="#caravel-environment" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.caravel.</span></span><span class="sig-name descname"><span class="pre">Caravel_env</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dut</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SimHandleBase</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env" title="Permalink to this definition"></a></dt>
 <dd><p>Verification environment for caraval</p>
 <ul class="simple">
-<li>provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins</li>
+<li><p>provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins</p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dut</strong> (<em>SimHandle</em>) – dut handle</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.monitor_gpio">
-<code class="descname">monitor_gpio</code><span class="sig-paren">(</span><em>h_bit</em>, <em>l_bit=None</em><span class="sig-paren">)</span> &#x2192; cocotb.binary.BinaryValue<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.monitor_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.monitor_gpio" title="Permalink to this definition">¶</a></dt>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dut</strong> (<em>SimHandle</em>) – dut handle</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.reset">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset caravel</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.disable_csb">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">disable_csb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.disable_csb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.disable_csb" title="Permalink to this definition"></a></dt>
+<dd><p>Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.release_csb">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">release_csb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.release_csb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.release_csb" title="Permalink to this definition"></a></dt>
+<dd><p>Set the spi vsb signal high impedance</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.enable_csb">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enable_csb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.enable_csb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.enable_csb" title="Permalink to this definition"></a></dt>
+<dd><p>Set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.monitor_gpio">
+<span class="sig-name descname"><span class="pre">monitor_gpio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_bit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l_bit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">BinaryValue</span></span></span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.monitor_gpio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.monitor_gpio" title="Permalink to this definition"></a></dt>
 <dd><p>monitor GPIOs output value</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h_bit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – highest gpio number of the tuple of (high gpio, low gpio)</li>
-<li><strong>l_bit</strong> – lowest gpio to monitor number</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h_bit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – highest gpio number of the tuple of (high gpio, low gpio)</p></li>
+<li><p><strong>l_bit</strong> – lowest gpio to monitor number</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>expection</strong> – If h_bit is lower than l_bit</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">cocotb.binary.BinaryValue</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>expection</strong> – If h_bit is lower than l_bit</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cocotb.binary.BinaryValue</p>
+</dd>
+</dl>
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">monitor_gpio</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="c1">#get output value of gpio 7 (gpios[7])</span>
 <span class="n">monitor_gpio</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># get output value from gpio 7 to 0 (gpios[7:0])</span>
@@ -153,36 +201,40 @@
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.monitor_mgmt_gpio">
-<code class="descname">monitor_mgmt_gpio</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.monitor_mgmt_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.monitor_mgmt_gpio" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.monitor_mgmt_gpio">
+<span class="sig-name descname"><span class="pre">monitor_mgmt_gpio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.monitor_mgmt_gpio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.monitor_mgmt_gpio" title="Permalink to this definition"></a></dt>
 <dd><p>monitor managment gpio output</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">return the value of management gpio in string format possible values <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;X&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;Z&quot;</span></code></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>return the value of management gpio in string format possible values <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;X&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;Z&quot;</span></code></p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.drive_gpio_in">
-<code class="descname">drive_gpio_in</code><span class="sig-paren">(</span><em>bits</em>, <em>data</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.drive_gpio_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.drive_gpio_in" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.wait_mgmt_gpio">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wait_mgmt_gpio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.wait_mgmt_gpio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.wait_mgmt_gpio" title="Permalink to this definition"></a></dt>
+<dd><p>wait for specific managment gpio value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – data to wait for possible inputs <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">0</span></code> <code class="docutils literal notranslate"><span class="pre">1</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.drive_gpio_in">
+<span class="sig-name descname"><span class="pre">drive_gpio_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.drive_gpio_in"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.drive_gpio_in" title="Permalink to this definition"></a></dt>
 <dd><p>drive input gpios with spicific data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – gpios to drive</li>
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – data to drive the gpios with</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – gpios to drive</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – data to drive the gpios with</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>Example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">drive_gpio_in</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mh">0x1</span><span class="p">)</span> <span class="c1"># drive gpio 7 with 1 (gpios[7]=1)</span>
 <span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">31</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span> <span class="c1"># drive gpio 31 to 0 with ones (gpios[31:0]=32&#39;hFFFFFFFF)</span>
@@ -190,156 +242,109 @@
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.release_gpio">
-<code class="descname">release_gpio</code><span class="sig-paren">(</span><em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.release_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.release_gpio" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.release_gpio">
+<span class="sig-name descname"><span class="pre">release_gpio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bits</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.release_gpio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.release_gpio" title="Permalink to this definition"></a></dt>
 <dd><p>release driving the value of mprj bits 
 :param bits: gpios to drive
 :type bits: int or tuple(int, int)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.drive_mgmt_gpio">
-<code class="descname">drive_mgmt_gpio</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.drive_mgmt_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.drive_mgmt_gpio" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.drive_mgmt_gpio">
+<span class="sig-name descname"><span class="pre">drive_mgmt_gpio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.drive_mgmt_gpio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.drive_mgmt_gpio" title="Permalink to this definition"></a></dt>
 <dd><p>drive gpio management with spicific data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – data to drive the gpios with</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – data to drive the gpios with</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.disable_csb">
-<code class="descname">disable_csb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.disable_csb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.disable_csb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.enable_csb">
-<code class="descname">enable_csb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.enable_csb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.enable_csb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.release_csb">
-<code class="descname">release_csb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.release_csb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.release_csb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the spi vsb signal high impedance</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset caravel</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.wait_mgmt_gpio">
-<code class="descname">wait_mgmt_gpio</code><span class="sig-paren">(</span><em>data: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.wait_mgmt_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.wait_mgmt_gpio" title="Permalink to this definition">¶</a></dt>
-<dd><p>wait for specific managment gpio value</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – data to wait for possible inputs <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">0</span></code> <code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.setup_clock">
-<code class="descname">setup_clock</code><span class="sig-paren">(</span><em>period</em>, <em>unit='ns'</em><span class="sig-paren">)</span> &#x2192; cocotb.clock.Clock<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.setup_clock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.setup_clock" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.setup_clock">
+<span class="sig-name descname"><span class="pre">setup_clock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ns'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Clock</span></span></span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.setup_clock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.setup_clock" title="Permalink to this definition"></a></dt>
 <dd><p>Configure caravel clock and start it</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – clock period</li>
-<li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – One of <code class="docutils literal notranslate"><span class="pre">'step'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fs'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ps'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ns'</span></code>, <code class="docutils literal notranslate"><span class="pre">'us'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ms'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sec'</span></code>.When <em>units</em> is <code class="docutils literal notranslate"><span class="pre">'step'</span></code>,the timestep is determined by the simulator.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – clock period</p></li>
+<li><p><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – One of <code class="docutils literal notranslate"><span class="pre">'step'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fs'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ps'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ns'</span></code>, <code class="docutils literal notranslate"><span class="pre">'us'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ms'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sec'</span></code>.When <em>units</em> is <code class="docutils literal notranslate"><span class="pre">'step'</span></code>,the timestep is determined by the simulator.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Object of type Caravel_env (caravel environment)</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Object of type Caravel_env (caravel environment)</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.get_clock_obj">
-<code class="descname">get_clock_obj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; cocotb.clock.Clock<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.get_clock_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.get_clock_obj" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.get_clock_obj">
+<span class="sig-name descname"><span class="pre">get_clock_obj</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Clock</span></span></span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.get_clock_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.get_clock_obj" title="Permalink to this definition"></a></dt>
 <dd><p>return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="uart-environment">
-<h2>UART Environment<a class="headerlink" href="#uart-environment" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="interfaces.UART.UART">
-<em class="property">class </em><code class="descclassname">interfaces.UART.</code><code class="descname">UART</code><span class="sig-paren">(</span><em>caravelEnv: interfaces.caravel.Caravel_env</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART" title="Permalink to this definition">¶</a></dt>
+</section>
+<section id="uart-environment">
+<h2>UART Environment<a class="headerlink" href="#uart-environment" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.UART.UART">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.UART.</span></span><span class="sig-name descname"><span class="pre">UART</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caravelEnv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><span class="pre">Caravel_env</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART" title="Permalink to this definition"></a></dt>
 <dd><p>UART Verification environment to provide APIs to communicate with caravel uart through caravel gpios</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>caravelEnv</strong> (<a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><em>Caravel_env</em></a>) – caravel environment</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="interfaces.UART.UART.get_char">
-<code class="descname">get_char</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.get_char"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.get_char" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read character sent through UART (character is sent by the software)</p>
-<ul class="simple">
-<li>Character is a 8 bit ASCII sybmol</li>
-</ul>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.UART.UART.get_line">
-<code class="descname">get_line</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.get_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.get_line" title="Permalink to this definition">¶</a></dt>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>caravelEnv</strong> (<a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><em>Caravel_env</em></a>) – caravel environment</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.UART.UART.get_line">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_line</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.get_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART.get_line" title="Permalink to this definition"></a></dt>
 <dd><p>Read line sent through UART (msg is sent by the software)</p>
 <ul class="simple">
-<li>Line is a bunch of ASCII sybmols ended by linefeed ‘\n’</li>
+<li><p>Line is a bunch of ASCII sybmols ended by linefeed ‘\n’</p></li>
 </ul>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.UART.UART.uart_send_char">
-<code class="descname">uart_send_char</code><span class="sig-paren">(</span><em>char</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.uart_send_char"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.uart_send_char" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.UART.UART.get_char">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_char</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.get_char"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART.get_char" title="Permalink to this definition"></a></dt>
+<dd><p>Read character sent through UART (character is sent by the software)</p>
+<ul class="simple">
+<li><p>Character is a 8 bit ASCII sybmol</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.UART.UART.uart_send_char">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uart_send_char</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">char</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.uart_send_char"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART.uart_send_char" title="Permalink to this definition"></a></dt>
 <dd><p>Send character to UART (character is sent to the software)</p>
 <ul class="simple">
-<li>Character is a 8 bit ASCII sybmol</li>
+<li><p>Character is a 8 bit ASCII sybmol</p></li>
 </ul>
 </dd></dl>
 
-<dl class="method">
-<dt id="interfaces.UART.UART.uart_send_line">
-<code class="descname">uart_send_line</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.uart_send_line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.UART.UART.uart_send_line" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.UART.UART.uart_send_line">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uart_send_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART.uart_send_line"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART.uart_send_line" title="Permalink to this definition"></a></dt>
 <dd><p>Send line to UART (msg is sent to the software)</p>
 <ul class="simple">
-<li>Line is a bunch of ASCII sybmols ended by linefeed ‘\n’</li>
+<li><p>Line is a bunch of ASCII sybmols ended by linefeed ‘\n’</p></li>
 </ul>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to caravel_cocotb’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="C_api.html" class="btn btn-neutral float-right" title="X APIs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

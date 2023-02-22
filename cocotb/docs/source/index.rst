@@ -10,6 +10,7 @@ Welcome to caravel_cocotb's documentation!
    :caption: Contents:
 
    python_api
+   C_api
 
 
 Indices and tables

@@ -17,6 +17,14 @@ import sys
 sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../../tests/common_functions'))
 
+## add C code XML
+import subprocess
+# subprocess.call('make clean', shell=True)
+subprocess.call('cd ../Doxgen ; doxygen sample_text.conf', shell=True)
+
+breathe_projects = { "caravel_c_apis": "../Doxgen/xml/" }
+breathe_default_project = "caravel_c_apis"
+
 # -- Project information -----------------------------------------------------
 
 project = 'caravel_cocotb'
@@ -48,6 +56,8 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    'sphinx.ext.imgmath', 
+    'breathe',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -67,7 +77,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

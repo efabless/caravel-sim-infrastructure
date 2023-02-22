@@ -1,0 +1,366 @@
+\hypertarget{gpios_8h}{}\section{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/gpios.h File Reference}
+\label{gpios_8h}\index{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/gpios.\+h@{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/gpios.\+h}}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{gpios_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}{gpio\+\_\+mode} \{ \newline
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a8213364713e3fa58f0dbc3d7d8326a37}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a0692f9bfce909b91bd9f7faf6768d33f}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1af737b3ae00ab0da3c4e8266468675bbf}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a212e7e8a8a66bc6551a715349fb23c93}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT}, 
+\newline
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a3959113ab38df8c1570c3896e737bfe4}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1aef9d32b4ee71fef8f8e4b5dac0a3c6f9}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a86c2f278348b5fb8986136dcac018bd1}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a684040c986c72845ae41d9f4878d4214}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN}, 
+\newline
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a61e7144c6d34211df5683483dc9c659e}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a6b4ccdd0e04e7c98f31e044ae5306b1f}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1ad00272ea2326ecce292be6954fc41679}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL}, 
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a65640a21fdf67741abce266ad62b25cb}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+ED}, 
+\newline
+\hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1ae6f3bc54065951dc92cac9959cf68baa}{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{gpios_8h_a855aacde2c3eb9f09f7ca6d4ee44b57a}{configure\+\_\+all\+\_\+gpios} (enum \hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}{gpio\+\_\+mode} config)
+\item 
+void \hyperlink{gpios_8h_a7d48a49426f2c9c379660611de769c29}{gpio\+\_\+config\+\_\+load} ()
+\item 
+void \hyperlink{gpios_8h_a60b4f4fbfae8495880881b1d4da68725}{configure\+\_\+gpio} (int gpio\+\_\+num, enum \hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}{gpio\+\_\+mode} config)
+\item 
+void \hyperlink{gpios_8h_a381a8a44c3dad81f0a46e202533dba8a}{set\+\_\+gpio\+\_\+l} (unsigned int data)
+\item 
+void \hyperlink{gpios_8h_ac6950e132b8bd925bb1ede3d18631f05}{set\+\_\+gpio\+\_\+h} (unsigned int data)
+\item 
+void \hyperlink{gpios_8h_a55f590722256813d85552b198b25440d}{set\+\_\+gpio} (long data)
+\item 
+unsigned int \hyperlink{gpios_8h_a48dd1cdca7124e34b86b729d7355ce04}{get\+\_\+gpio\+\_\+h} ()
+\item 
+unsigned int \hyperlink{gpios_8h_a5b3a80032bca3d58fb29a598b8524fb1}{get\+\_\+gpio\+\_\+l} ()
+\item 
+void \hyperlink{gpios_8h_ae04c0971756bf7f833129bf0b6f6d547}{wait\+\_\+gpio\+\_\+l} (unsigned int data)
+\item 
+void \hyperlink{gpios_8h_a9fb980ee2469d57c9d37eed263f1864d}{wait\+\_\+gpio\+\_\+h} (unsigned int data)
+\item 
+void \hyperlink{gpios_8h_a4f971ec71379f092d9b616ec6e40bde1}{wait\+\_\+gpio\+\_\+l\+\_\+masked} (unsigned int data, unsigned int mask)
+\item 
+void \hyperlink{gpios_8h_ad071916d2d8c21af15b9dd1ed385b437}{wait\+\_\+gpio\+\_\+h\+\_\+masked} (unsigned int data, unsigned int mask)
+\end{DoxyCompactItemize}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}} 
+\index{gpios.\+h@{gpios.\+h}!gpio\+\_\+mode@{gpio\+\_\+mode}}
+\index{gpio\+\_\+mode@{gpio\+\_\+mode}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{gpio\+\_\+mode}{gpio\_mode}}
+{\footnotesize\ttfamily enum \hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}{gpio\+\_\+mode}}
+
+G\+P\+I\+Os possible modes \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a8213364713e3fa58f0dbc3d7d8326a37}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a8213364713e3fa58f0dbc3d7d8326a37}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL&Managment input with no pull (floating is read as Z) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a0692f9bfce909b91bd9f7faf6768d33f}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a0692f9bfce909b91bd9f7faf6768d33f}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN&Managment input pull-\/down (floating is read as 0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1af737b3ae00ab0da3c4e8266468675bbf}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1af737b3ae00ab0da3c4e8266468675bbf}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP&Managment input pull-\/up (floating is read as 1) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a212e7e8a8a66bc6551a715349fb23c93}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a212e7e8a8a66bc6551a715349fb23c93}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT&Managment output \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a3959113ab38df8c1570c3896e737bfe4}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a3959113ab38df8c1570c3896e737bfe4}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL&Managment bi-\/direction \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1aef9d32b4ee71fef8f8e4b5dac0a3c6f9}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1aef9d32b4ee71fef8f8e4b5dac0a3c6f9}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+M\+G\+M\+T\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG&Managment Ananlog \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a86c2f278348b5fb8986136dcac018bd1}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a86c2f278348b5fb8986136dcac018bd1}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+O\+P\+U\+LL&User input with no pull (floating is read as Z) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a684040c986c72845ae41d9f4878d4214}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a684040c986c72845ae41d9f4878d4214}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+D\+O\+WN&User input pull-\/down (floating is read as 0) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a61e7144c6d34211df5683483dc9c659e}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a61e7144c6d34211df5683483dc9c659e}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+I\+N\+P\+U\+T\+\_\+\+P\+U\+L\+L\+UP&User input pull-\/up (floating is read as 1) \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a6b4ccdd0e04e7c98f31e044ae5306b1f}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a6b4ccdd0e04e7c98f31e044ae5306b1f}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+P\+UT&User output \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1ad00272ea2326ecce292be6954fc41679}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1ad00272ea2326ecce292be6954fc41679}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+B\+I\+D\+I\+R\+E\+C\+T\+I\+O\+N\+AL&User bi-\/direction \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+ED@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+ED}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+ED@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+ED}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a65640a21fdf67741abce266ad62b25cb}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1a65640a21fdf67741abce266ad62b25cb}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+O\+U\+T\+\_\+\+M\+O\+N\+I\+T\+O\+R\+ED&User Monitor same as output \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG}!gpios.\+h@{gpios.\+h}}\index{gpios.\+h@{gpios.\+h}!G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG@{G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG}}}\mbox{\Hypertarget{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1ae6f3bc54065951dc92cac9959cf68baa}\label{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1ae6f3bc54065951dc92cac9959cf68baa}} 
+G\+P\+I\+O\+\_\+\+M\+O\+D\+E\+\_\+\+U\+S\+E\+R\+\_\+\+S\+T\+D\+\_\+\+A\+N\+A\+L\+OG&User Ananlog \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{gpios_8h_a855aacde2c3eb9f09f7ca6d4ee44b57a}\label{gpios_8h_a855aacde2c3eb9f09f7ca6d4ee44b57a}} 
+\index{gpios.\+h@{gpios.\+h}!configure\+\_\+all\+\_\+gpios@{configure\+\_\+all\+\_\+gpios}}
+\index{configure\+\_\+all\+\_\+gpios@{configure\+\_\+all\+\_\+gpios}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{configure\+\_\+all\+\_\+gpios()}{configure\_all\_gpios()}}
+{\footnotesize\ttfamily void configure\+\_\+all\+\_\+gpios (\begin{DoxyParamCaption}\item[{enum \hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}{gpio\+\_\+mode}}]{config }\end{DoxyParamCaption})}
+
+Configure all gpio with the config
+
+
+\begin{DoxyParams}{Parameters}
+{\em config} & is configuration of type gpio\+\_\+mode\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+These configurations will not be change the G\+P\+I\+Os modes until calling \hyperlink{gpios_8h_a7d48a49426f2c9c379660611de769c29}{gpio\+\_\+config\+\_\+load()} 
+\end{DoxyNote}
+\mbox{\Hypertarget{gpios_8h_a60b4f4fbfae8495880881b1d4da68725}\label{gpios_8h_a60b4f4fbfae8495880881b1d4da68725}} 
+\index{gpios.\+h@{gpios.\+h}!configure\+\_\+gpio@{configure\+\_\+gpio}}
+\index{configure\+\_\+gpio@{configure\+\_\+gpio}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{configure\+\_\+gpio()}{configure\_gpio()}}
+{\footnotesize\ttfamily void configure\+\_\+gpio (\begin{DoxyParamCaption}\item[{int}]{gpio\+\_\+num,  }\item[{enum \hyperlink{gpios_8h_a620d533a2ccc5296d2f6c8b95bf89fe1}{gpio\+\_\+mode}}]{config }\end{DoxyParamCaption})}
+
+Configure one gpio with the input config
+
+
+\begin{DoxyParams}{Parameters}
+{\em config} & is configuration of type gpio\+\_\+mode \\
+\hline
+{\em gpio\+\_\+num} & is gpio number it can have values from 0 to 37\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+These configurations will not be change the G\+P\+I\+Os modes until calling \hyperlink{gpios_8h_a7d48a49426f2c9c379660611de769c29}{gpio\+\_\+config\+\_\+load()} 
+\end{DoxyNote}
+\mbox{\Hypertarget{gpios_8h_a48dd1cdca7124e34b86b729d7355ce04}\label{gpios_8h_a48dd1cdca7124e34b86b729d7355ce04}} 
+\index{gpios.\+h@{gpios.\+h}!get\+\_\+gpio\+\_\+h@{get\+\_\+gpio\+\_\+h}}
+\index{get\+\_\+gpio\+\_\+h@{get\+\_\+gpio\+\_\+h}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{get\+\_\+gpio\+\_\+h()}{get\_gpio\_h()}}
+{\footnotesize\ttfamily unsigned int get\+\_\+gpio\+\_\+h (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Read the highest 6 G\+P\+I\+Os G\+P\+I\+OS\mbox{[}37\+:32\mbox{]} \begin{DoxyNote}{Note}
+For Reading value from the G\+P\+I\+Os, the G\+P\+IO should configure as managment input. otherwise 0 would be read 
+\end{DoxyNote}
+\mbox{\Hypertarget{gpios_8h_a5b3a80032bca3d58fb29a598b8524fb1}\label{gpios_8h_a5b3a80032bca3d58fb29a598b8524fb1}} 
+\index{gpios.\+h@{gpios.\+h}!get\+\_\+gpio\+\_\+l@{get\+\_\+gpio\+\_\+l}}
+\index{get\+\_\+gpio\+\_\+l@{get\+\_\+gpio\+\_\+l}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{get\+\_\+gpio\+\_\+l()}{get\_gpio\_l()}}
+{\footnotesize\ttfamily unsigned int get\+\_\+gpio\+\_\+l (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Read low 32 G\+P\+I\+Os G\+P\+I\+OS\mbox{[}31\+:0\mbox{]} \begin{DoxyNote}{Note}
+For Reading value from the G\+P\+I\+Os, the G\+P\+IO should configure as managment input. otherwise 0 would be read 
+\end{DoxyNote}
+\mbox{\Hypertarget{gpios_8h_a7d48a49426f2c9c379660611de769c29}\label{gpios_8h_a7d48a49426f2c9c379660611de769c29}} 
+\index{gpios.\+h@{gpios.\+h}!gpio\+\_\+config\+\_\+load@{gpio\+\_\+config\+\_\+load}}
+\index{gpio\+\_\+config\+\_\+load@{gpio\+\_\+config\+\_\+load}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{gpio\+\_\+config\+\_\+load()}{gpio\_config\_load()}}
+{\footnotesize\ttfamily void gpio\+\_\+config\+\_\+load (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Load the configurations changes to the G\+P\+I\+Os \mbox{\Hypertarget{gpios_8h_a55f590722256813d85552b198b25440d}\label{gpios_8h_a55f590722256813d85552b198b25440d}} 
+\index{gpios.\+h@{gpios.\+h}!set\+\_\+gpio@{set\+\_\+gpio}}
+\index{set\+\_\+gpio@{set\+\_\+gpio}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+gpio()}{set\_gpio()}}
+{\footnotesize\ttfamily void set\+\_\+gpio (\begin{DoxyParamCaption}\item[{long}]{data }\end{DoxyParamCaption})}
+
+Write to the 38 G\+P\+I\+Os G\+P\+I\+OS\mbox{[}37\+:0\mbox{]} \begin{DoxyNote}{Note}
+For writing by this function to be seen at the G\+P\+IO the G\+P\+IO has to be configured as managment output
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the data sent to the G\+P\+I\+Os\\
+\hline
+\end{DoxyParams}
+Examples\+: \begin{DoxyItemize}
+\item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a55f590722256813d85552b198b25440d}{set\_gpio}(0x1); \textcolor{comment}{// write 1 to gpio[0] and write 0 in the remaining 37 gpios  }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a55f590722256813d85552b198b25440d}{set\_gpio}(0x5); \textcolor{comment}{// write 1 to gpio[0] and gpio[3] and write 0 in the remaining 36 gpios }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a55f590722256813d85552b198b25440d}{set\_gpio}(0x100000000); \textcolor{comment}{// write 1 to gpio[32] and write 0 in the remaining 36 gpios }
+\end{DoxyCode}
+\end{DoxyItemize}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]verify this function \end{DoxyRefDesc}
+\mbox{\Hypertarget{gpios_8h_ac6950e132b8bd925bb1ede3d18631f05}\label{gpios_8h_ac6950e132b8bd925bb1ede3d18631f05}} 
+\index{gpios.\+h@{gpios.\+h}!set\+\_\+gpio\+\_\+h@{set\+\_\+gpio\+\_\+h}}
+\index{set\+\_\+gpio\+\_\+h@{set\+\_\+gpio\+\_\+h}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+gpio\+\_\+h()}{set\_gpio\_h()}}
+{\footnotesize\ttfamily void set\+\_\+gpio\+\_\+h (\begin{DoxyParamCaption}\item[{unsigned int}]{data }\end{DoxyParamCaption})}
+
+Write to the highest 6 G\+P\+I\+Os G\+P\+I\+OS\mbox{[}37\+:32\mbox{]} \begin{DoxyNote}{Note}
+For writing by this function to be seen at the G\+P\+IO the G\+P\+IO has to be configured as managment output
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the data sent to the G\+P\+I\+Os\\
+\hline
+\end{DoxyParams}
+Examples\+: \begin{DoxyItemize}
+\item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_ac6950e132b8bd925bb1ede3d18631f05}{set\_gpio\_h}(0x1); \textcolor{comment}{// write 1 to gpio[32] and write 0 in the remaining 5 gpios }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_ac6950e132b8bd925bb1ede3d18631f05}{set\_gpio\_h}(0x5); \textcolor{comment}{// write 1 to gpio[32] and 34 and write 0 in the remaining 4 gpios }
+\end{DoxyCode}
+ \end{DoxyItemize}
+\mbox{\Hypertarget{gpios_8h_a381a8a44c3dad81f0a46e202533dba8a}\label{gpios_8h_a381a8a44c3dad81f0a46e202533dba8a}} 
+\index{gpios.\+h@{gpios.\+h}!set\+\_\+gpio\+\_\+l@{set\+\_\+gpio\+\_\+l}}
+\index{set\+\_\+gpio\+\_\+l@{set\+\_\+gpio\+\_\+l}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+gpio\+\_\+l()}{set\_gpio\_l()}}
+{\footnotesize\ttfamily void set\+\_\+gpio\+\_\+l (\begin{DoxyParamCaption}\item[{unsigned int}]{data }\end{DoxyParamCaption})}
+
+Write to the low 32 G\+P\+I\+Os G\+P\+I\+OS\mbox{[}31\+:0\mbox{]} \begin{DoxyNote}{Note}
+For writing by this function to be seen at the G\+P\+IO the G\+P\+IO has to be configured as managment output
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the data sent to the G\+P\+I\+Os\\
+\hline
+\end{DoxyParams}
+Examples\+: \begin{DoxyItemize}
+\item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a381a8a44c3dad81f0a46e202533dba8a}{set\_gpio\_l}(0x1); \textcolor{comment}{// write 1 to gpio[0] and write 0 in the remaining 31 gpios  }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a381a8a44c3dad81f0a46e202533dba8a}{set\_gpio\_l}(0x5); \textcolor{comment}{// write 1 to gpio[0] and gpio[3] and write 0 in the remaining 30 gpios }
+\end{DoxyCode}
+ \end{DoxyItemize}
+\mbox{\Hypertarget{gpios_8h_a9fb980ee2469d57c9d37eed263f1864d}\label{gpios_8h_a9fb980ee2469d57c9d37eed263f1864d}} 
+\index{gpios.\+h@{gpios.\+h}!wait\+\_\+gpio\+\_\+h@{wait\+\_\+gpio\+\_\+h}}
+\index{wait\+\_\+gpio\+\_\+h@{wait\+\_\+gpio\+\_\+h}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{wait\+\_\+gpio\+\_\+h()}{wait\_gpio\_h()}}
+{\footnotesize\ttfamily void wait\+\_\+gpio\+\_\+h (\begin{DoxyParamCaption}\item[{unsigned int}]{data }\end{DoxyParamCaption})}
+
+wait over the higest 6 gpios to equal the data passed \begin{DoxyNote}{Note}
+For writing by this function to be seen at the G\+P\+IO the G\+P\+IO has to be configured as managment output
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the data that should wait until sent to the G\+P\+I\+Os\\
+\hline
+\end{DoxyParams}
+Examples\+: \begin{DoxyItemize}
+\item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a9fb980ee2469d57c9d37eed263f1864d}{wait\_gpio\_h}(0x1); \textcolor{comment}{// function would return only when gpio[32]==1 and rest of 5 gpios = 0  }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a9fb980ee2469d57c9d37eed263f1864d}{wait\_gpio\_h}(0x5); \textcolor{comment}{// function would return only when gpio[32]==1 and gpio[34]==1 and rest of 4
+       gpios = 0 }
+\end{DoxyCode}
+ \end{DoxyItemize}
+\mbox{\Hypertarget{gpios_8h_ad071916d2d8c21af15b9dd1ed385b437}\label{gpios_8h_ad071916d2d8c21af15b9dd1ed385b437}} 
+\index{gpios.\+h@{gpios.\+h}!wait\+\_\+gpio\+\_\+h\+\_\+masked@{wait\+\_\+gpio\+\_\+h\+\_\+masked}}
+\index{wait\+\_\+gpio\+\_\+h\+\_\+masked@{wait\+\_\+gpio\+\_\+h\+\_\+masked}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{wait\+\_\+gpio\+\_\+h\+\_\+masked()}{wait\_gpio\_h\_masked()}}
+{\footnotesize\ttfamily void wait\+\_\+gpio\+\_\+h\+\_\+masked (\begin{DoxyParamCaption}\item[{unsigned int}]{data,  }\item[{unsigned int}]{mask }\end{DoxyParamCaption})}
+
+wait over the masked higest 6 gpios to equal the data passed \begin{DoxyNote}{Note}
+For writing by this function to be seen at the G\+P\+IO the G\+P\+IO has to be configured as managment output
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the data that should wait until sent to the G\+P\+I\+Os \\
+\hline
+{\em mask} & mask over the each G\+P\+IO if the mask value is 0 the this gpio value are ignored\\
+\hline
+\end{DoxyParams}
+Examples\+: \begin{DoxyItemize}
+\item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_ad071916d2d8c21af15b9dd1ed385b437}{wait\_gpio\_h\_masked}(0x1,0xF); \textcolor{comment}{// function would return only when gpio[32]==1 and
+       gpio[35:33]==0 and don't care about the rest of gpios  }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_ad071916d2d8c21af15b9dd1ed385b437}{wait\_gpio\_h\_masked}(0x5,0x7); \textcolor{comment}{// function would return only when gpio[32]==1 and
+       gpio[34]==1 and gpio[33]==0 and don't care about the rest of gpios }
+\end{DoxyCode}
+ \end{DoxyItemize}
+\mbox{\Hypertarget{gpios_8h_ae04c0971756bf7f833129bf0b6f6d547}\label{gpios_8h_ae04c0971756bf7f833129bf0b6f6d547}} 
+\index{gpios.\+h@{gpios.\+h}!wait\+\_\+gpio\+\_\+l@{wait\+\_\+gpio\+\_\+l}}
+\index{wait\+\_\+gpio\+\_\+l@{wait\+\_\+gpio\+\_\+l}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{wait\+\_\+gpio\+\_\+l()}{wait\_gpio\_l()}}
+{\footnotesize\ttfamily void wait\+\_\+gpio\+\_\+l (\begin{DoxyParamCaption}\item[{unsigned int}]{data }\end{DoxyParamCaption})}
+
+wait over the lowest 32 gpios to equal the data passed \begin{DoxyNote}{Note}
+For writing by this function to be seen at the G\+P\+IO the G\+P\+IO has to be configured as managment output
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the data that should wait until sent to the G\+P\+I\+Os\\
+\hline
+\end{DoxyParams}
+Examples\+: \begin{DoxyItemize}
+\item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_ae04c0971756bf7f833129bf0b6f6d547}{wait\_gpio\_l}(0x1); \textcolor{comment}{// function would return only when gpio[0]==1 and rest of 31 gpios = 0  }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_ae04c0971756bf7f833129bf0b6f6d547}{wait\_gpio\_l}(0x5); \textcolor{comment}{// function would return only when gpio[0]==1 and gpio[3]==1 and rest of 30
+       gpios = 0 }
+\end{DoxyCode}
+ \end{DoxyItemize}
+\mbox{\Hypertarget{gpios_8h_a4f971ec71379f092d9b616ec6e40bde1}\label{gpios_8h_a4f971ec71379f092d9b616ec6e40bde1}} 
+\index{gpios.\+h@{gpios.\+h}!wait\+\_\+gpio\+\_\+l\+\_\+masked@{wait\+\_\+gpio\+\_\+l\+\_\+masked}}
+\index{wait\+\_\+gpio\+\_\+l\+\_\+masked@{wait\+\_\+gpio\+\_\+l\+\_\+masked}!gpios.\+h@{gpios.\+h}}
+\subsubsection{\texorpdfstring{wait\+\_\+gpio\+\_\+l\+\_\+masked()}{wait\_gpio\_l\_masked()}}
+{\footnotesize\ttfamily void wait\+\_\+gpio\+\_\+l\+\_\+masked (\begin{DoxyParamCaption}\item[{unsigned int}]{data,  }\item[{unsigned int}]{mask }\end{DoxyParamCaption})}
+
+wait over the masked lowest 32 gpios to equal the data passed \begin{DoxyNote}{Note}
+For writing by this function to be seen at the G\+P\+IO the G\+P\+IO has to be configured as managment output
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & is the data that should wait until sent to the G\+P\+I\+Os \\
+\hline
+{\em mask} & mask over the each G\+P\+IO if the mask value is 0 the this gpio value are ignored\\
+\hline
+\end{DoxyParams}
+Examples\+: \begin{DoxyItemize}
+\item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a4f971ec71379f092d9b616ec6e40bde1}{wait\_gpio\_l\_masked}(0x1,0xF); \textcolor{comment}{// function would return only when gpio[0]==1 and
+       gpio[3:1]==0 and don't care about the rest of gpios  }
+\end{DoxyCode}
+ \item 
+\begin{DoxyCode}
+\hyperlink{gpios_8h_a4f971ec71379f092d9b616ec6e40bde1}{wait\_gpio\_l\_masked}(0x5,0x7); \textcolor{comment}{// function would return only when gpio[0]==1 and gpio[3]==1
+       and gpio[2]==0 and don't care about the rest of gpios }
+\end{DoxyCode}
+ \end{DoxyItemize}
