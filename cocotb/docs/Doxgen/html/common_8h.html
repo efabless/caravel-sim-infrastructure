@@ -149,7 +149,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Enable or disable the housekeeping SPI This function writes to the housekeeping disenable register inside the housekeeping </p><dl class="section note"><dt>Note</dt><dd>When this register asserted housekeeping SPI can't be used and gpios [3] which is CSB can be used as anyother housekeeping gpio</dd></dl>
+<p>Enable or disable the housekeeping SPI This function writes to the housekeeping disenable register inside the housekeeping </p><dl class="section note"><dt>Note</dt><dd>When this register asserted housekeeping SPI can't be used and GPIOs[3] which is CSB can be used as any other Caravel GPIOs</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>By default the housekeeping SPI is enabled to use GPIOs[3] freely it should be disabled.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">is_enable</td><td>when 1 (true) housekeeping is active, 0 (false) housekeeping is disabled </td></tr>
@@ -173,7 +174,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Enable comunication between software and user project </p><dl class="section warning"><dt>Warning</dt><dd>This necessary when reading or writing are needed between wishbone and user project if interface isn't enabled no ack would be recieve and the writing or reading command will be stuck </dd></dl>
+<p>Enable communication between software and user project </p><dl class="section warning"><dt>Warning</dt><dd>This necessary when reading or writing are needed between wishbone and user project if interface isn't enabled no ack would be receive and the writing or reading command will be stuck </dd></dl>
 
 </div>
 </div>

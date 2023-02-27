@@ -35,14 +35,14 @@ Read byte at user address space 32 bit register
 
 
 \begin{DoxyParams}{Parameters}
-{\em int} & offset the offset of the register to write. Origin at the user project address \\
+{\em offset} & the offset of the register to write. Origin at the user project address \\
 \hline
-{\em byte\+\_\+num} & number of the in the 4byte register (32 bits)\\
+{\em byte\+\_\+num} & number of the in the 4 bytes register (32 bits)\\
 \hline
 \end{DoxyParams}
 \begin{DoxyNote}{Note}
-if user space address length is 4 bits address that mean it has 2$^\wedge$4 bytes = 16 bytes. In this case offset would take values from 0 to 3 and byte\+\_\+num can take 0 to 3. ~\newline
-Typically address space is 26 address bits which mean it has 67,108,864 bytes. In this case offset would take values from 0 to 16,777,215 and byte\+\_\+num can take 0 or 4.
+Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 ~\newline
+ For example if project caravel space are 26 address bit offset = wb\+\_\+addr\+\_\+i\mbox{[}25\+:0\mbox{]}/4
 \end{DoxyNote}
 \hypertarget{user__addr__space_8h_multi_row}{}
 \tabulinesep=1mm
@@ -76,13 +76,13 @@ Read double word (4 bytes) at user address space 32 bit register
 \hline
 \end{DoxyParams}
 \begin{DoxyNote}{Note}
-if user space address length is 4 bits address that mean it has 2$^\wedge$4 bytes = 16 bytes that mean it has only 4 doublewords. In this case offset would take values from 0 to 3. ~\newline
- Typically address space is 26 address bits which mean it has 67,108,864 bytes = 16,777,216 doubleword In this case offset would take values from 0 to 16,777,215.
+Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 ~\newline
+ For example if project caravel space are 26 address bit offset = wb\+\_\+addr\+\_\+i\mbox{[}25\+:0\mbox{]}/4
 \end{DoxyNote}
 \hypertarget{user__addr__space_8h_multi_row}{}
 \tabulinesep=1mm
 \begin{longtabu} spread 0pt [c]{*{6}{|X[-1]}|}
-\caption{double world memory (4byte offset)}\label{user__addr__space_8h_multi_row}\\
+\caption{double world memory (4 bytes offset)}\label{user__addr__space_8h_multi_row}\\
 \hline
 \rowcolor{\tableheadbgcolor}\textbf{ address}&\textbf{ offset }&\textbf{ byte0}&\textbf{ byte1}&\textbf{ byte2}&\textbf{ byte3 }\\\cline{1-6}
 \endfirsthead
@@ -112,8 +112,8 @@ Read word (2 bytes) at user address space 32 bit register
 \hline
 \end{DoxyParams}
 \begin{DoxyNote}{Note}
-if user space address length is 4 bits address that mean it has 2$^\wedge$4 bytes = 16 bytes that mean it has only 8 words. In this case offset would take values from 0 to 3 and is\+\_\+first\+\_\+word can take 0 or 1. ~\newline
-Typically address space is 26 address bits which mean it has 67,108,864 bytes = 33,554,432 doubleword In this case offset would take values from 0 to 16,777,215 and is\+\_\+first\+\_\+word can take 0 or 1.
+Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 ~\newline
+ For example if project caravel space are 26 address bit offset = wb\+\_\+addr\+\_\+i\mbox{[}25\+:0\mbox{]}/4
 \end{DoxyNote}
 \hypertarget{user__addr__space_8h_multi_row}{}
 \tabulinesep=1mm
@@ -147,12 +147,12 @@ Write byte at user address space 32 bit register
 \hline
 {\em offset} & the offset of the register to write. Origin at the user project address \\
 \hline
-{\em byte\+\_\+num} & number of the in the 4byte register (32 bits)\\
+{\em byte\+\_\+num} & number of the in the 4 bytes register (32 bits)\\
 \hline
 \end{DoxyParams}
 \begin{DoxyNote}{Note}
-if user space address length is 4 bits address that mean it has 2$^\wedge$4 bytes = 16 bytes. In this case offset would take values from 0 to 3 and byte\+\_\+num can take 0 to 3. ~\newline
-Typically address space is 26 address bits which mean it has 67,108,864 bytes. In this case offset would take values from 0 to 16,777,215 and byte\+\_\+num can take 0 or 4.
+Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 ~\newline
+ For example if project caravel space are 26 address bit offset = wb\+\_\+addr\+\_\+i\mbox{[}25\+:0\mbox{]}/4
 \end{DoxyNote}
 \hypertarget{user__addr__space_8h_multi_row}{}
 \tabulinesep=1mm
@@ -188,13 +188,13 @@ Write double word (4 bytes) at user address space 32 bit register
 \hline
 \end{DoxyParams}
 \begin{DoxyNote}{Note}
-if user space address length is 4 bits address that mean it has 2$^\wedge$4 bytes = 16 bytes that mean it has only 4 doublewords. In this case offset would take values from 0 to 3. ~\newline
-Typically address space is 26 address bits which mean it has 67,108,864 bytes = 16,777,216 doubleword In this case offset would take values from 0 to 16,777,215.
+Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 ~\newline
+ For example if project caravel space are 26 address bit offset = wb\+\_\+addr\+\_\+i\mbox{[}25\+:0\mbox{]}/4
 \end{DoxyNote}
 \hypertarget{user__addr__space_8h_multi_row}{}
 \tabulinesep=1mm
 \begin{longtabu} spread 0pt [c]{*{6}{|X[-1]}|}
-\caption{double world memory (4byte offset)}\label{user__addr__space_8h_multi_row}\\
+\caption{double world memory (4 bytes offset)}\label{user__addr__space_8h_multi_row}\\
 \hline
 \rowcolor{\tableheadbgcolor}\textbf{ address}&\textbf{ offset }&\textbf{ byte0}&\textbf{ byte1}&\textbf{ byte2}&\textbf{ byte3 }\\\cline{1-6}
 \endfirsthead
@@ -226,8 +226,8 @@ Write word (2 bytes) at user address space 32 bit register
 \hline
 \end{DoxyParams}
 \begin{DoxyNote}{Note}
-if user space address length is 4 bits address that mean it has 2$^\wedge$4 bytes = 16 bytes that mean it has only 8 words. In this case offset would take values from 0 to 3 and is\+\_\+first\+\_\+word can take 0 or 1. ~\newline
-Typically address space is 26 address bits which mean it has 67,108,864 bytes = 33,554,432 doubleword In this case offset would take values from 0 to 16,777,215 and is\+\_\+first\+\_\+word can take 0 or 1.
+Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 ~\newline
+ For example if project caravel space are 26 address bit offset = wb\+\_\+addr\+\_\+i\mbox{[}25\+:0\mbox{]}/4
 \end{DoxyNote}
 \hypertarget{user__addr__space_8h_multi_row}{}
 \tabulinesep=1mm

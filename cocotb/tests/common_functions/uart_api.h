@@ -8,15 +8,15 @@
 void arm_mgmt_uart_enable(){reg_wb_enable = reg_wb_enable | 0x40;}
 void arm_mgmt_uart_disable(){reg_wb_enable = reg_wb_enable  & 0xFFBF;}
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
-// uart 
+// UART 
 /**
- * Enable or disable TX of uart
+ * Enable or disable TX of UART
  * 
  *  
- * @param is_enable when 1(true) uart TX enable, 0 (false) uart TX disable
+ * @param is_enable when 1(true) UART TX enable, 0 (false) UART TX disable
  * 
  * \note
- * Some caravel CPU enable and disable uart TX and RX together
+ * Some caravel CPU enable and disable UART TX and RX together
  * 
  */
 void enable_uart_TX(bool is_enable){
@@ -47,15 +47,15 @@ void enable_uart_TX(bool is_enable){
     }
 
 } 
-// uart 
+// UART 
 /**
- * Enable or disable RX of uart
+ * Enable or disable RX of UART
  * 
  *  
- * @param is_enable when 1(true) uart RX enable, 0 (false) uart RX disable
+ * @param is_enable when 1(true) UART RX enable, 0 (false) UART RX disable
  * 
  * \note
- * Some caravel CPU enable and disable uart TX and RX together
+ * Some caravel CPU enable and disable UART TX and RX together
  * 
  */
 void uart_RX_enable(bool is_enable){
@@ -81,7 +81,7 @@ void uart_RX_enable(bool is_enable){
 /**
  * Wait receiving ASCII symbol and return it. 
  * 
- * Return the first ASCII symbol of the UART recieved queue
+ * Return the first ASCII symbol of the UART received queue
  * 
  * RX mode have to be enabled
  * 
@@ -95,7 +95,7 @@ char uart_getc(){
     return reg_uart_data;
 }
 /**
- * Pop the first ASCII symbol of the UART recieved queue
+ * Pop the first ASCII symbol of the UART received queue
  * 
  * uart_getc() function would keeping reading the same symbol unless this function is called
  */

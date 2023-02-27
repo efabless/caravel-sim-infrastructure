@@ -6,7 +6,7 @@
 
 // timer 
 /**
- * Start Timer in oneshot count down mode start value is count
+ * Start Timer in oneshot countdown mode start value is count
  * 
  * @param count start value in the counter > 0
  * 
@@ -17,9 +17,9 @@ void timer0_oneshot_configure(unsigned int count){
     enable_timer0(1); // enable
 }
 /**
- * Start counter in periodic count down mode start value is count
+ * Start counter in periodic countdown mode start value is count
  * 
- * Timer will roll over to the caount value when it reachs 0
+ * Timer will roll over to the count value when it reaches 0
  * @param count start value in the counter > 0
  * 
  */

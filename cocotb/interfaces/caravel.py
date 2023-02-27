@@ -145,19 +145,19 @@ class Caravel_env:
     def monitor_gpio(self,h_bit,l_bit=None) -> cocotb.binary.BinaryValue:
         """monitor GPIOs output value
 
-        :param h_bit: highest gpio number of the tuple of (high gpio, low gpio)
-        :param l_bit: lowest gpio to monitor number
+        :param h_bit: highest GPIO number of the tuple of (high gpio, low gpio)
+        :param l_bit: lowest GPIO to monitor number
         :type h_bit: int or tuple(int, int)
-        :raise expection: If h_bit is lower than l_bit
+        :raise exception: If h_bit is lower than l_bit
         :return: cocotb.binary.BinaryValue
 
         Example:
 
         .. code-block:: python
 
-            monitor_gpio(7) #get output value of gpio 7 (gpios[7])
-            monitor_gpio(7,0) # get output value from gpio 7 to 0 (gpios[7:0])
-            monitor_gpio((7,0)) #get output value from gpio 7 to 0 (gpios[7:0])
+            monitor_gpio(7) #get output value of GPIO 7 (gpios[7])
+            monitor_gpio(7,0) # get output value from GPIO 7 to 0 (gpios[7:0])
+            monitor_gpio((7,0)) #get output value from GPIO 7 to 0 (gpios[7:0])
 
         """
         mprj = self.dut.mprj_io_tb.value
@@ -176,16 +176,16 @@ class Caravel_env:
 
     """return the value of management gpio"""
     def monitor_mgmt_gpio(self)->str:
-        """monitor managment gpio output 
+        """monitor management GPIO output 
 
-        :return: return the value of management gpio in string format possible values ``"0"`` ``"1"`` ``"X"`` ``"Z"``
+        :return: return the value of management GPIO in string format possible values ``"0"`` ``"1"`` ``"X"`` ``"Z"``
         """
         data = self.dut.gpio_tb.value.binstr
-        cocotb.log.debug(f' [caravel] Monitor mgmt gpio = {data}')
+        cocotb.log.debug(f' [caravel] Monitor mgmt GPIO = {data}')
         return data
 
     async def wait_mgmt_gpio(self,data:int) -> None:
-        """wait for specific managment gpio value 
+        """wait for specific management GPIO value 
 
         :param data: data to wait for possible inputs ``"0"`` ``"1"`` ``0`` ``1``
         :type data: int or str
@@ -272,7 +272,7 @@ class Caravel_env:
     def _check_gpio_ctrl_eq_HW(self):
         assert self.print_gpios_ctrl_val(1) == self.print_gpios_HW_val(1), f'there is an issue while configuration the control block register value isn\'t the same as the house keeping gpio register' 
 
-    """print the values return in the gpio of housekeeping block mode in GPIO Mode format"""
+    """print the values return in the GPIO of housekeeping block mode in GPIO Mode format"""
     def print_gpios_HW_val(self,print=1):
         gpios = []
         for pin  in range(Macros['MPRJ_IO_PADS']):
@@ -339,7 +339,7 @@ class Caravel_env:
         gpio_dm   =sum(d * 2**i for i, d in enumerate(gpio_dm)) # convert list to binary int
         path.gpio_dm.value           = gpio_dm
         
-    # """drive the value of mprj bits with spicific data  at the top"""
+    # """drive the value of mprj bits with specific data  at the top"""
     # def release_gpio(self):
     #     io = self.caravel_hdl.padframe.mprj_pads.io
     #     mprj , n_bits = common.signal_valueZ_size(io)
@@ -348,7 +348,7 @@ class Caravel_env:
 
     
     def drive_gpio_in(self,bits,data) -> None:
-        """drive input gpios with spicific data 
+        """drive input gpios with specific data 
 
         :param bits: gpios to drive
         :param int data: data to drive the gpios with
@@ -358,8 +358,8 @@ class Caravel_env:
 
         .. code-block:: python
 
-            drive_gpio_in(7,0x1) # drive gpio 7 with 1 (gpios[7]=1)
-            drive_gpio_in((31,0),0xFFFFFFFF) # drive gpio 31 to 0 with ones (gpios[31:0]=32'hFFFFFFFF)
+            drive_gpio_in(7,0x1) # drive GPIO 7 with 1 (gpios[7]=1)
+            drive_gpio_in((31,0),0xFFFFFFFF) # drive GPIO 31 to 0 with ones (gpios[31:0]=32'hFFFFFFFF)
         """
         # io = self.caravel_hdl.padframe.mprj_pads.io
         # mprj , n_bits = common.signal_value_size(io)
@@ -399,23 +399,23 @@ class Caravel_env:
 
     def get_mgmt_gpi_hdl(self):
         return self.dut.gpio_tb
-    """drive the value of  gpio management"""
+    """drive the value of  GPIO management"""
     def drive_mgmt_gpio(self,data):
-        """drive gpio management with spicific data 
+        """drive GPIO management with specific data 
 
         :param int data: data to drive the gpios with
         """
         self.get_mgmt_gpi_hdl().value  =  BinaryValue(value = data,n_bits=1)
         cocotb.log.info(f' [caravel] drive_mgmt_gpio through management area mprj with {data}')
 
-    """update the value of mprj bits with spicific data then after certain number of cycle drive z to free the signal"""
+    """update the value of mprj bits with specific data then after certain number of cycle drive z to free the signal"""
     async def drive_gpio_in_with_cycles(self,bits,data,num_cycles):
         self.drive_gpio_in(bits,data)
         cocotb.log.info(f' [caravel] wait {num_cycles} cycles')
         await cocotb.start(self.wait_then_undrive(bits,num_cycles))
         cocotb.log.info(f' [caravel] finish drive_gpio_with_in_cycles ')
 
-    """drive the value of mprj bits with spicific data from management area then after certain number of cycle drive z to free the signal"""
+    """drive the value of mprj bits with specific data from management area then after certain number of cycle drive z to free the signal"""
     async def drive_mgmt_gpio_with_cycles(self,bits,data,num_cycles):
         self.drive_mgmt_gpio(bits,data)
         cocotb.log.info(f' [caravel] wait {num_cycles} cycles')
@@ -529,7 +529,7 @@ class Caravel_env:
         Configure caravel clock and start it
 
         :param int period: clock period
-        :param str unit: One of ``'step'``, ``'fs'``, ``'ps'``, ``'ns'``, ``'us'``, ``'ms'``, ``'sec'``.When *units* is ``'step'``,the timestep is determined by the simulator.
+        :param str unit: One of ``'step'``, ``'fs'``, ``'ps'``, ``'ns'``, ``'us'``, ``'ms'``, ``'sec'``.When *unit* is ``'step'``,the timestep is determined by the simulator.
         :return: Object of type Caravel_env (caravel environment)
         """
         self.clock_obj = Clock(self.clk, period, unit)  # Create a 25ns period clock on port clk

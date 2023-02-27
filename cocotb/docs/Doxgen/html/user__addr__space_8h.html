@@ -124,13 +124,13 @@ Functions</h2></td></tr>
 <p>Read byte at user address space 32 bit register</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">int</td><td>offset the offset of the register to write. Origin at the user project address </td></tr>
-    <tr><td class="paramname">byte_num</td><td>number of the in the 4byte register (32 bits)</td></tr>
+    <tr><td class="paramname">offset</td><td>the offset of the register to write. Origin at the user project address </td></tr>
+    <tr><td class="paramname">byte_num</td><td>number of the in the 4 bytes register (32 bits)</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes. In this case offset would take values from 0 to 3 and byte_num can take 0 to 3. <br />
-Typically address space is 26 address bits which mean it has 67,108,864 bytes. In this case offset would take values from 0 to 16,777,215 and byte_num can take 0 or 4.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 <br />
+ For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</dd></dl>
 <a class="anchor" id="multi_row"></a>
 <table class="doxtable">
 <caption>world memory (2byte offset)</caption>
@@ -172,11 +172,11 @@ Typically address space is 26 address bits which mean it has 67,108,864 bytes. I
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 4 doublewords. In this case offset would take values from 0 to 3. <br />
- Typically address space is 26 address bits which mean it has 67,108,864 bytes = 16,777,216 doubleword In this case offset would take values from 0 to 16,777,215.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 <br />
+ For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</dd></dl>
 <a class="anchor" id="multi_row"></a>
 <table class="doxtable">
-<caption>double world memory (4byte offset)</caption>
+<caption>double world memory (4 bytes offset)</caption>
 <tr>
 <th>address</th><th>offset </th><th>byte0</th><th>byte1</th><th>byte2</th><th>byte3 </th></tr>
 <tr>
@@ -224,8 +224,8 @@ Typically address space is 26 address bits which mean it has 67,108,864 bytes. I
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 8 words. In this case offset would take values from 0 to 3 and is_first_word can take 0 or 1. <br />
-Typically address space is 26 address bits which mean it has 67,108,864 bytes = 33,554,432 doubleword In this case offset would take values from 0 to 16,777,215 and is_first_word can take 0 or 1.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 <br />
+ For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</dd></dl>
 <a class="anchor" id="multi_row"></a>
 <table class="doxtable">
 <caption>world memory (2byte offset)</caption>
@@ -281,12 +281,12 @@ Typically address space is 26 address bits which mean it has 67,108,864 bytes = 
   <table class="params">
     <tr><td class="paramname">data</td><td>byte data to write </td></tr>
     <tr><td class="paramname">offset</td><td>the offset of the register to write. Origin at the user project address </td></tr>
-    <tr><td class="paramname">byte_num</td><td>number of the in the 4byte register (32 bits)</td></tr>
+    <tr><td class="paramname">byte_num</td><td>number of the in the 4 bytes register (32 bits)</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes. In this case offset would take values from 0 to 3 and byte_num can take 0 to 3. <br />
-Typically address space is 26 address bits which mean it has 67,108,864 bytes. In this case offset would take values from 0 to 16,777,215 and byte_num can take 0 or 4.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 <br />
+ For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</dd></dl>
 <a class="anchor" id="multi_row"></a>
 <table class="doxtable">
 <caption>world memory (2byte offset)</caption>
@@ -339,11 +339,11 @@ Typically address space is 26 address bits which mean it has 67,108,864 bytes. I
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 4 doublewords. In this case offset would take values from 0 to 3. <br />
-Typically address space is 26 address bits which mean it has 67,108,864 bytes = 16,777,216 doubleword In this case offset would take values from 0 to 16,777,215.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 <br />
+ For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</dd></dl>
 <a class="anchor" id="multi_row"></a>
 <table class="doxtable">
-<caption>double world memory (4byte offset)</caption>
+<caption>double world memory (4 bytes offset)</caption>
 <tr>
 <th>address</th><th>offset </th><th>byte0</th><th>byte1</th><th>byte2</th><th>byte3 </th></tr>
 <tr>
@@ -398,8 +398,8 @@ Typically address space is 26 address bits which mean it has 67,108,864 bytes = 
   </table>
   </dd>
 </dl>
-<dl class="section note"><dt>Note</dt><dd>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 8 words. In this case offset would take values from 0 to 3 and is_first_word can take 0 or 1. <br />
-Typically address space is 26 address bits which mean it has 67,108,864 bytes = 33,554,432 doubleword In this case offset would take values from 0 to 16,777,215 and is_first_word can take 0 or 1.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4 <br />
+ For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</dd></dl>
 <a class="anchor" id="multi_row"></a>
 <table class="doxtable">
 <caption>world memory (2byte offset)</caption>

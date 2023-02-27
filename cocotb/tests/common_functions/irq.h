@@ -130,7 +130,7 @@ void enable_timer0_irq(bool is_enable){
     }
 }
 /**
- * Enable or disable uart tx interrupt 
+ * Enable or disable UART tx interrupt 
  * 
  *  
  * @param is_enable when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened
@@ -162,7 +162,7 @@ void enable_uart_tx_irq(bool is_enable){
     }
 }
 /**
- * Enable or disable uart rx interrupt 
+ * Enable or disable UART rx interrupt 
  * 
  *  
  * @param is_enable when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened
@@ -194,7 +194,7 @@ void enable_uart_rx_irq(bool is_enable){
     }
 }
 /**
- * Enable or disable spi interrupt 
+ * Enable or disable SPI interrupt 
  * 
  *  
  * @param is_enable when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened

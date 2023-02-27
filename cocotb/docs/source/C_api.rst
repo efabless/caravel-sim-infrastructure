@@ -30,7 +30,7 @@ Logic analyzers
 .. doxygenfile:: la.h
    :project: caravel_c_apis
 
-Managment GPIO 
+Management GPIO 
 ------------------
 .. doxygenfile:: mgmt_gpio.h
    :project: caravel_c_apis

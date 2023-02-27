@@ -32,7 +32,7 @@ class UART():
     async def get_char(self):
         """Read character sent through UART (character is sent by the software) 
 
-        - Character is a 8 bit ASCII sybmol """
+        - Character is a 8 bit ASCII symbol """
         await self.start_of_tx()
         char =''
         for i in range(8):
@@ -51,7 +51,7 @@ class UART():
     async def uart_send_char(self,char):
         """Send character to UART (character is sent to the software) 
 
-        - Character is a 8 bit ASCII sybmol """
+        - Character is a 8 bit ASCII symbol """
         char_bits = [int(x) for x in '{:08b}'.format(ord(char))]
         cocotb.log.info (f"[TEST] start sending on uart {char}")
         #send start bit

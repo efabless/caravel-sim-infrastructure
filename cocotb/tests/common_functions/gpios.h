@@ -4,7 +4,7 @@
 #ifndef GPIO_C_HEADER_FILE
 #define GPIO_C_HEADER_FILE
 /**
- * Configure all gpio with the config
+ * Configure all GPIOs with the config
  *  
  * @param config is configuration of type gpio_mode
  * 
@@ -65,10 +65,10 @@ void gpio_config_load(){
 
 }
 /**
- * Configure one gpio with the input config
+ * Configure one GPIO with the input config
  *  
  * @param config is configuration of type gpio_mode
- * @param gpio_num is gpio number it can have values from 0 to 37
+ * @param gpio_num is GPIO number it can have values from 0 to 37
  * 
  * \note
  * These configurations will not be change the GPIOs modes until calling gpio_config_load()
@@ -160,38 +160,38 @@ void configure_gpio(int gpio_num,enum gpio_mode config){
 /**
  * Write to the low 32 GPIOs GPIOS[31:0]
  * \note
- * For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output
+ * For writing by this function to be seen at the GPIO the GPIO has to be configured as management output
  *  
  * @param data is the data sent to the GPIOs 
  * 
  * Examples: 
- * \li \code set_gpio_l(0x1); // write 1 to gpio[0] and write 0 in the remaining 31 gpios  \endcode
- * \li \code set_gpio_l(0x5); // write 1 to gpio[0] and gpio[3] and write 0 in the remaining 30 gpios \endcode
+ * \li \code set_gpio_l(0x1); // write 1 to GPIO [0] and write 0 in the remaining 31 GPIOs \endcode
+ * \li \code set_gpio_l(0x5); // write 1 to GPIO [0] and GPIO [3] and write 0 in the remaining 30 GPIOs\endcode
  */
 void set_gpio_l(unsigned int data){reg_mprj_datal = data;}
 /**
  * Write to the highest 6 GPIOs GPIOS[37:32]
  * \note
- * For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output
+ * For writing by this function to be seen at the GPIO the GPIO has to be configured as management output
  *  
  * @param data is the data sent to the GPIOs 
  * 
  * Examples: 
- * \li \code set_gpio_h(0x1); // write 1 to gpio[32] and write 0 in the remaining 5 gpios \endcode
- * \li \code set_gpio_h(0x5); // write 1 to gpio[32] and 34 and write 0 in the remaining 4 gpios \endcode
+ * \li \code set_gpio_h(0x1); // write 1 to GPIO [32] and write 0 in the remaining 5 GPIOs\endcode
+ * \li \code set_gpio_h(0x5); // write 1 to GPIO [32] and 34 and write 0 in the remaining 4 GPIOs\endcode
  */
 void set_gpio_h(unsigned int data){reg_mprj_datah = data;}
 /**
  * Write to the 38 GPIOs GPIOS[37:0]
  * \note
- * For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output
+ * For writing by this function to be seen at the GPIO the GPIO has to be configured as management output
  *  
  * @param data is the data sent to the GPIOs 
  * 
  * Examples: 
- * \li \code set_gpio(0x1); // write 1 to gpio[0] and write 0 in the remaining 37 gpios  \endcode
- * \li \code set_gpio(0x5); // write 1 to gpio[0] and gpio[3] and write 0 in the remaining 36 gpios \endcode
- * \li \code set_gpio(0x100000000); // write 1 to gpio[32] and write 0 in the remaining 36 gpios \endcode
+ * \li \code set_gpio(0x1); // write 1 to GPIO [0] and write 0 in the remaining 37 GPIOs \endcode
+ * \li \code set_gpio(0x5); // write 1 to GPIO [0] and GPIO [3] and write 0 in the remaining 36 GPIOs\endcode
+ * \li \code set_gpio(0x100000000); // write 1 to GPIO [32] and write 0 in the remaining 36 GPIOs\endcode
  * 
  * \todo verify this function
  */
@@ -203,12 +203,12 @@ void set_gpio(long data){
 /**
  * Read the highest 6 GPIOs GPIOS[37:32]
  * \note
- * For Reading value from the GPIOs, the GPIO should configure as managment input. otherwise 0 would be read
+ * For Reading value from the GPIOs, the GPIO should be configured as management input. otherwise 0 would be read
  * 
  */
 unsigned int get_gpio_h(){
     #ifdef ARM 
-    return reg_mprj_datah & 0x7; // because with ARM the higest 3 gpios are not used by the design it is used by flashing
+    return reg_mprj_datah & 0x7; // because with ARM the highest 3 GPIOsare not used by the design it is used by flashing
     #else 
     return reg_mprj_datah;
     #endif
@@ -216,67 +216,67 @@ unsigned int get_gpio_h(){
 /**
  * Read low 32 GPIOs GPIOS[31:0]
  * \note
- * For Reading value from the GPIOs, the GPIO should configure as managment input. otherwise 0 would be read
+ * For Reading value from the GPIOs, the GPIO should be configured as management input. otherwise 0 would be read
  * 
  */
 unsigned int get_gpio_l(){return reg_mprj_datal;}
 /**
- * wait over the lowest 32 gpios to equal the data passed
+ * wait over the lowest 32 GPIOsto equal the data passed
  * \note
- * For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output
+ * For writing by this function to be seen at the GPIO the GPIO has to be configured as management output
  *  
  * @param data is the data that should wait until sent to the GPIOs 
  * 
  * Examples: 
- * \li \code wait_gpio_l(0x1); // function would return only when gpio[0]==1 and rest of 31 gpios = 0  \endcode
- * \li \code wait_gpio_l(0x5); // function would return only when gpio[0]==1 and gpio[3]==1 and rest of 30 gpios = 0 \endcode
+ * \li \code wait_gpio_l(0x1); // function would return only when GPIO [0]==1 and rest of 31 GPIOs= 0  \endcode
+ * \li \code wait_gpio_l(0x5); // function would return only when GPIO [0]==1 and GPIO [3]==1 and rest of 30 GPIOs = 0 \endcode
  */
 void wait_gpio_l(unsigned int data){while (get_gpio_l()  != data);}
 /**
- * wait over the higest 6 gpios to equal the data passed
+ * wait over the highest 6 GPIOs to equal the data passed
  * \note
- * For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output
+ * For writing by this function to be seen at the GPIO the GPIO has to be configured as management output
  *  
  * @param data is the data that should wait until sent to the GPIOs 
  * 
  * Examples: 
- * \li \code wait_gpio_h(0x1); // function would return only when gpio[32]==1 and rest of 5 gpios = 0  \endcode
- * \li \code wait_gpio_h(0x5); // function would return only when gpio[32]==1 and gpio[34]==1 and rest of 4 gpios = 0 \endcode
+ * \li \code wait_gpio_h(0x1); // function would return only when GPIO [32]==1 and rest of 5 GPIOs = 0  \endcode
+ * \li \code wait_gpio_h(0x5); // function would return only when GPIO [32]==1 and GPIO [34]==1 and rest of 4 GPIOs = 0 \endcode
  */
 void wait_gpio_h(unsigned int data){
     #ifdef ARM 
-    data = data&0x7; // because with ARM the higest 3 gpios are not used by the design it is used by flashing
+    data = data&0x7; // because with ARM the highest 3 GPIOs are not used by the design it is used by flashing
     #endif
     while (get_gpio_h() != data);    
 }
 /**
- * wait over the masked lowest 32 gpios to equal the data passed
+ * wait over the masked lowest 32 GPIOs to equal the data passed
  * \note
- * For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output
+ * For writing by this function to be seen at the GPIO the GPIO has to be configured as management output
  *  
  * @param data is the data that should wait until sent to the GPIOs 
- * @param mask mask over the each GPIO if the mask value is 0 the this gpio value are ignored
+ * @param mask mask over the each GPIO if the mask value is 0 the this GPIO  value are ignored
  * 
  * Examples: 
- * \li \code wait_gpio_l_masked(0x1,0xF); // function would return only when gpio[0]==1 and gpio[3:1]==0 and don't care about the rest of gpios  \endcode
- * \li \code wait_gpio_l_masked(0x5,0x7); // function would return only when gpio[0]==1 and gpio[3]==1 and gpio[2]==0 and don't care about the rest of gpios \endcode
+ * \li \code wait_gpio_l_masked(0x1,0xF); // function would return only when GPIO [0]==1 and GPIO [3:1]==0 and don't care about the rest of GPIOs  \endcode
+ * \li \code wait_gpio_l_masked(0x5,0x7); // function would return only when GPIO [0]==1 and GPIO [3]==1 and GPIO [2]==0 and don't care about the rest of GPIOs \endcode
  */
 void wait_gpio_l_masked(unsigned int data,unsigned int mask){while (get_gpio_l()  & mask != data);}
 /**
- * wait over the masked higest 6 gpios to equal the data passed
+ * wait over the masked highest 6 GPIOs to equal the data passed
  * \note
- * For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output
+ * For writing by this function to be seen at the GPIO the GPIO has to be configured as management output
  *  
  * @param data is the data that should wait until sent to the GPIOs 
- * @param mask mask over the each GPIO if the mask value is 0 the this gpio value are ignored
+ * @param mask mask over the each GPIO if the mask value is 0 the this GPIO  value are ignored
  * 
  * Examples: 
- * \li \code wait_gpio_h_masked(0x1,0xF); // function would return only when gpio[32]==1 and gpio[35:33]==0 and don't care about the rest of gpios  \endcode
- * \li \code wait_gpio_h_masked(0x5,0x7); // function would return only when gpio[32]==1 and gpio[34]==1 and gpio[33]==0 and don't care about the rest of gpios \endcode
+ * \li \code wait_gpio_h_masked(0x1,0xF); // function would return only when GPIO [32]==1 and GPIO [35:33]==0 and don't care about the rest of GPIOs  \endcode
+ * \li \code wait_gpio_h_masked(0x5,0x7); // function would return only when GPIO [32]==1 and GPIO [34]==1 and GPIO [33]==0 and don't care about the rest of GPIOs \endcode
  */
 void wait_gpio_h_masked(unsigned int data,unsigned int mask){
     #ifdef ARM 
-    data = data&0x7; // because with ARM the higest 3 gpios are not used by the design it is used by flashing
+    data = data&0x7; // because with ARM the highest 3 GPIOs are not used by the design it is used by flashing
     #endif
     while (get_gpio_h() != data);    
 }
@@ -301,21 +301,24 @@ unsigned int get_gpio_num_bit(){
 #ifdef DOXYGEN_DOCS_ONLY
 /*! \enum gpio_mode
  * GPIOs possible modes
+  <table>
+    <caption id="multi_row"> Enumerator gpio_mode</caption>
+    <tr><th >name<th>description
+    <tr><td>GPIO_MODE_MGMT_STD_INPUT_NOPULL<td>Management input with no pull (floating is read as Z)
+    <tr><td>GPIO_MODE_MGMT_STD_INPUT_PULLDOWN<td>Management input pull-down (floating is read as 0)
+    <tr><td>GPIO_MODE_MGMT_STD_INPUT_PULLUP<td>Management input pull-up (floating is read as 1)
+    <tr><td>GPIO_MODE_MGMT_STD_OUTPUT<td>Management output
+    <tr><td>GPIO_MODE_MGMT_STD_BIDIRECTIONAL<td>Management bi-direction 
+    <tr><td>GPIO_MODE_MGMT_STD_ANALOG<td>Management Analog  
+    <tr><td>GPIO_MODE_USER_STD_INPUT_NOPULL<td>User input with no pull (floating is read as Z)
+    <tr><td>GPIO_MODE_USER_STD_INPUT_PULLDOWN<td>User input pull-down (floating is read as 0)
+    <tr><td>GPIO_MODE_USER_STD_INPUT_PULLUP<td>User input pull-up (floating is read as 1)
+    <tr><td>GPIO_MODE_USER_STD_OUTPUT<td>User output
+    <tr><td>GPIO_MODE_USER_STD_BIDIRECTIONAL<td>User bi-direction
+    <tr><td>GPIO_MODE_USER_STD_OUT_MONITORED<td>User Monitor same as output
+    <tr><td>GPIO_MODE_USER_STD_ANALOG<td>User Analog 
  */
-enum gpio_mode {
-                GPIO_MODE_MGMT_STD_INPUT_NOPULL/*!< Managment input with no pull (floating is read as Z)*/,
-                GPIO_MODE_MGMT_STD_INPUT_PULLDOWN /*!< Managment input pull-down (floating is read as 0)*/,
-                GPIO_MODE_MGMT_STD_INPUT_PULLUP/*!< Managment input pull-up (floating is read as 1)*/,
-                GPIO_MODE_MGMT_STD_OUTPUT/*!< Managment output*/,
-                GPIO_MODE_MGMT_STD_BIDIRECTIONAL/*!< Managment bi-direction */,
-                GPIO_MODE_MGMT_STD_ANALOG/*!< Managment Ananlog */,
-                GPIO_MODE_USER_STD_INPUT_NOPULL/*!< User input with no pull (floating is read as Z)*/,
-                GPIO_MODE_USER_STD_INPUT_PULLDOWN/*!< User input pull-down (floating is read as 0)*/,
-                GPIO_MODE_USER_STD_INPUT_PULLUP/*!< User input pull-up (floating is read as 1)*/,
-                GPIO_MODE_USER_STD_OUTPUT/*!< User output*/,
-                GPIO_MODE_USER_STD_BIDIRECTIONAL/*!< User bi-direction*/,
-                GPIO_MODE_USER_STD_OUT_MONITORED/*!< User Monitor same as output*/,
-                GPIO_MODE_USER_STD_ANALOG/*!< User Ananlog*/};
+enum gpio_mode {};
 
 #endif
 #endif // GPIO_C_HEADER_FILE

@@ -4,8 +4,7 @@ var indexSectionsWithContent =
   1: "cgilmstu",
   2: "cdegmprstuw",
   3: "gl",
-  4: "gl",
-  5: "t"
+  4: "t"
 };
 
 var indexSectionNames =
@@ -14,8 +13,7 @@ var indexSectionNames =
   1: "files",
   2: "functions",
   3: "enums",
-  4: "enumvalues",
-  5: "pages"
+  4: "pages"
 };
 
 var indexSectionLabels =
@@ -24,7 +22,6 @@ var indexSectionLabels =
   1: "Files",
   2: "Functions",
   3: "Enumerations",
-  4: "Enumerator",
-  5: "Pages"
+  4: "Pages"
 };
 

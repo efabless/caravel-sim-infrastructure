@@ -99,7 +99,7 @@ async def bb_reset_spi(caravelEnv):
     await caravelEnv.hk_write_byte(reg_mprj_xfer) # Address (register 19 = GPIO bit-bang control)
     await caravelEnv.hk_write_byte(0x06) # 00
     await caravelEnv.disable_csb()
-#configure the gpio in the left chain with configL and the gpio in 
+#configure the GPIO  in the left chain with configL and the GPIO  in 
 #the right chain with configR
 #left | right
 #18	& 19

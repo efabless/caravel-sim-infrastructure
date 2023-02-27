@@ -51,8 +51,11 @@ Insert delay
 {\footnotesize\ttfamily void enable\+\_\+hk\+\_\+spi (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
 
 Enable or disable the housekeeping S\+PI This function writes to the housekeeping disenable register inside the housekeeping \begin{DoxyNote}{Note}
-When this register asserted housekeeping S\+PI can\textquotesingle{}t be used and gpios \mbox{[}3\mbox{]} which is C\+SB can be used as anyother housekeeping gpio
+When this register asserted housekeeping S\+PI can\textquotesingle{}t be used and G\+P\+I\+Os\mbox{[}3\mbox{]} which is C\+SB can be used as any other Caravel G\+P\+I\+Os
 \end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+By default the housekeeping S\+PI is enabled to use G\+P\+I\+Os\mbox{[}3\mbox{]} freely it should be disabled.
+\end{DoxyWarning}
 
 \begin{DoxyParams}{Parameters}
 {\em is\+\_\+enable} & when 1 (true) housekeeping is active, 0 (false) housekeeping is disabled \\
@@ -64,6 +67,6 @@ When this register asserted housekeeping S\+PI can\textquotesingle{}t be used an
 \subsubsection{\texorpdfstring{enable\+\_\+user\+\_\+interface()}{enable\_user\_interface()}}
 {\footnotesize\ttfamily void enable\+\_\+user\+\_\+interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-Enable comunication between software and user project \begin{DoxyWarning}{Warning}
-This necessary when reading or writing are needed between wishbone and user project if interface isn\textquotesingle{}t enabled no ack would be recieve and the writing or reading command will be stuck 
+Enable communication between software and user project \begin{DoxyWarning}{Warning}
+This necessary when reading or writing are needed between wishbone and user project if interface isn\textquotesingle{}t enabled no ack would be receive and the writing or reading command will be stuck 
 \end{DoxyWarning}

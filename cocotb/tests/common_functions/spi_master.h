@@ -37,9 +37,9 @@ char spi_read(){
     return reg_spimaster_rdata;
 }
 /**
- * Enable or disable the master spi
+ * Enable or disable the master SPI
  *  
- * @param is_enable when 1 (true) master spi is active, 0 (false) master spi is disabled
+ * @param is_enable when 1 (true) master SPI is active, 0 (false) master SPI is disabled
  */
 void enable_spi(bool is_enable){
     if(is_enable){

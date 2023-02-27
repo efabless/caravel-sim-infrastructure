@@ -54,7 +54,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#gpio">GPIO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#interrupts">Interrupts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#logic-analyzers">Logic analyzers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#managment-gpio">Managment GPIO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#management-gpio">Management GPIO</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#spi-master">SPI master</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#timer0">Timer0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#uart">UART</a></li>
@@ -100,10 +100,10 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421enable_user_interfacev">
 <span id="_CPPv321enable_user_interfacev"></span><span id="_CPPv221enable_user_interfacev"></span><span id="enable_user_interface"></span><span class="target" id="common_8h_1af79fbe355fd538621db12e3ae9e3e6b8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user_interface</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421enable_user_interfacev" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable comunication between software and user project </p>
+<dd><p>Enable communication between software and user project </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>This necessary when reading or writing are needed between wishbone and user project if interface isn’t enabled no ack would be recieve and the writing or reading command will be stuck </p>
+<p>This necessary when reading or writing are needed between wishbone and user project if interface isn’t enabled no ack would be receive and the writing or reading command will be stuck </p>
 </div>
 </dd></dl>
 
@@ -113,7 +113,11 @@
 <dd><p>Enable or disable the housekeeping SPI This function writes to the housekeeping disenable register inside the housekeeping </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When this register asserted housekeeping SPI can’t be used and gpios [3] which is CSB can be used as anyother housekeeping gpio</p>
+<p>When this register asserted housekeeping SPI can’t be used and GPIOs[3] which is CSB can be used as any other Caravel GPIOs</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>By default the housekeeping SPI is enabled to use GPIOs[3] freely it should be disabled.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -142,86 +146,56 @@
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv49gpio_mode">
 <span id="_CPPv39gpio_mode"></span><span id="_CPPv29gpio_mode"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gpio_mode</span></span></span><a class="headerlink" href="#_CPPv49gpio_mode" title="Permalink to this definition"></a><br /></dt>
-<dd><p>GPIOs possible modes </p>
+<dd><p>GPIOs possible modes <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>description </p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GPIO_MODE_MGMT_STD_INPUT_NOPULL</p></td>
+<td><p>Management input with no pull (floating is read as Z) </p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO_MODE_MGMT_STD_INPUT_PULLDOWN</p></td>
+<td><p>Management input pull-down (floating is read as 0) </p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO_MODE_MGMT_STD_INPUT_PULLUP</p></td>
+<td><p>Management input pull-up (floating is read as 1) </p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO_MODE_MGMT_STD_OUTPUT</p></td>
+<td><p>Management output </p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO_MODE_MGMT_STD_BIDIRECTIONAL</p></td>
+<td><p>Management bi-direction </p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO_MODE_MGMT_STD_ANALOG</p></td>
+<td><p>Management Analog </p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO_MODE_USER_STD_INPUT_NOPULL</p></td>
+<td><p>User input with no pull (floating is read as Z) </p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO_MODE_USER_STD_INPUT_PULLDOWN</p></td>
+<td><p>User input pull-down (floating is read as 0) </p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO_MODE_USER_STD_INPUT_PULLUP</p></td>
+<td><p>User input pull-up (floating is read as 1) </p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO_MODE_USER_STD_OUTPUT</p></td>
+<td><p>User output </p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO_MODE_USER_STD_BIDIRECTIONAL</p></td>
+<td><p>User bi-direction </p></td>
+</tr>
+<tr class="row-odd"><td><p>GPIO_MODE_USER_STD_OUT_MONITORED</p></td>
+<td><p>User Monitor same as output </p></td>
+</tr>
+<tr class="row-even"><td><p>GPIO_MODE_USER_STD_ANALOG</p></td>
+<td><p>User Analog </p></td>
+</tr>
+</tbody>
+</table>
+</p>
 <p><em>Values:</em></p>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_NOPULLE">
-<span id="_CPPv3N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_NOPULLE"></span><span id="_CPPv2N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_NOPULLE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a8213364713e3fa58f0dbc3d7d8326a37"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_MGMT_STD_INPUT_NOPULL</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_NOPULLE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Managment input with no pull (floating is read as Z) </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode33GPIO_MODE_MGMT_STD_INPUT_PULLDOWNE">
-<span id="_CPPv3N9gpio_mode33GPIO_MODE_MGMT_STD_INPUT_PULLDOWNE"></span><span id="_CPPv2N9gpio_mode33GPIO_MODE_MGMT_STD_INPUT_PULLDOWNE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a0692f9bfce909b91bd9f7faf6768d33f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_MGMT_STD_INPUT_PULLDOWN</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode33GPIO_MODE_MGMT_STD_INPUT_PULLDOWNE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Managment input pull-down (floating is read as 0) </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_PULLUPE">
-<span id="_CPPv3N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_PULLUPE"></span><span id="_CPPv2N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_PULLUPE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1af737b3ae00ab0da3c4e8266468675bbf"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_MGMT_STD_INPUT_PULLUP</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode31GPIO_MODE_MGMT_STD_INPUT_PULLUPE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Managment input pull-up (floating is read as 1) </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode25GPIO_MODE_MGMT_STD_OUTPUTE">
-<span id="_CPPv3N9gpio_mode25GPIO_MODE_MGMT_STD_OUTPUTE"></span><span id="_CPPv2N9gpio_mode25GPIO_MODE_MGMT_STD_OUTPUTE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a212e7e8a8a66bc6551a715349fb23c93"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_MGMT_STD_OUTPUT</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode25GPIO_MODE_MGMT_STD_OUTPUTE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Managment output </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode32GPIO_MODE_MGMT_STD_BIDIRECTIONALE">
-<span id="_CPPv3N9gpio_mode32GPIO_MODE_MGMT_STD_BIDIRECTIONALE"></span><span id="_CPPv2N9gpio_mode32GPIO_MODE_MGMT_STD_BIDIRECTIONALE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a3959113ab38df8c1570c3896e737bfe4"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_MGMT_STD_BIDIRECTIONAL</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode32GPIO_MODE_MGMT_STD_BIDIRECTIONALE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Managment bi-direction </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode25GPIO_MODE_MGMT_STD_ANALOGE">
-<span id="_CPPv3N9gpio_mode25GPIO_MODE_MGMT_STD_ANALOGE"></span><span id="_CPPv2N9gpio_mode25GPIO_MODE_MGMT_STD_ANALOGE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1aef9d32b4ee71fef8f8e4b5dac0a3c6f9"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_MGMT_STD_ANALOG</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode25GPIO_MODE_MGMT_STD_ANALOGE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Managment Ananlog </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode31GPIO_MODE_USER_STD_INPUT_NOPULLE">
-<span id="_CPPv3N9gpio_mode31GPIO_MODE_USER_STD_INPUT_NOPULLE"></span><span id="_CPPv2N9gpio_mode31GPIO_MODE_USER_STD_INPUT_NOPULLE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a86c2f278348b5fb8986136dcac018bd1"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_USER_STD_INPUT_NOPULL</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode31GPIO_MODE_USER_STD_INPUT_NOPULLE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>User input with no pull (floating is read as Z) </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode33GPIO_MODE_USER_STD_INPUT_PULLDOWNE">
-<span id="_CPPv3N9gpio_mode33GPIO_MODE_USER_STD_INPUT_PULLDOWNE"></span><span id="_CPPv2N9gpio_mode33GPIO_MODE_USER_STD_INPUT_PULLDOWNE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a684040c986c72845ae41d9f4878d4214"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_USER_STD_INPUT_PULLDOWN</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode33GPIO_MODE_USER_STD_INPUT_PULLDOWNE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>User input pull-down (floating is read as 0) </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode31GPIO_MODE_USER_STD_INPUT_PULLUPE">
-<span id="_CPPv3N9gpio_mode31GPIO_MODE_USER_STD_INPUT_PULLUPE"></span><span id="_CPPv2N9gpio_mode31GPIO_MODE_USER_STD_INPUT_PULLUPE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a61e7144c6d34211df5683483dc9c659e"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_USER_STD_INPUT_PULLUP</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode31GPIO_MODE_USER_STD_INPUT_PULLUPE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>User input pull-up (floating is read as 1) </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode25GPIO_MODE_USER_STD_OUTPUTE">
-<span id="_CPPv3N9gpio_mode25GPIO_MODE_USER_STD_OUTPUTE"></span><span id="_CPPv2N9gpio_mode25GPIO_MODE_USER_STD_OUTPUTE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a6b4ccdd0e04e7c98f31e044ae5306b1f"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_USER_STD_OUTPUT</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode25GPIO_MODE_USER_STD_OUTPUTE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>User output </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode32GPIO_MODE_USER_STD_BIDIRECTIONALE">
-<span id="_CPPv3N9gpio_mode32GPIO_MODE_USER_STD_BIDIRECTIONALE"></span><span id="_CPPv2N9gpio_mode32GPIO_MODE_USER_STD_BIDIRECTIONALE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1ad00272ea2326ecce292be6954fc41679"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_USER_STD_BIDIRECTIONAL</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode32GPIO_MODE_USER_STD_BIDIRECTIONALE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>User bi-direction </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode32GPIO_MODE_USER_STD_OUT_MONITOREDE">
-<span id="_CPPv3N9gpio_mode32GPIO_MODE_USER_STD_OUT_MONITOREDE"></span><span id="_CPPv2N9gpio_mode32GPIO_MODE_USER_STD_OUT_MONITOREDE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1a65640a21fdf67741abce266ad62b25cb"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_USER_STD_OUT_MONITORED</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode32GPIO_MODE_USER_STD_OUT_MONITOREDE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>User Monitor same as output </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N9gpio_mode25GPIO_MODE_USER_STD_ANALOGE">
-<span id="_CPPv3N9gpio_mode25GPIO_MODE_USER_STD_ANALOGE"></span><span id="_CPPv2N9gpio_mode25GPIO_MODE_USER_STD_ANALOGE"></span><span class="target" id="gpios_8h_1a620d533a2ccc5296d2f6c8b95bf89fe1ae6f3bc54065951dc92cac9959cf68baa"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIO_MODE_USER_STD_ANALOG</span></span></span><a class="headerlink" href="#_CPPv4N9gpio_mode25GPIO_MODE_USER_STD_ANALOGE" title="Permalink to this definition"></a><br /></dt>
-<dd><p>User Ananlog </p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -230,7 +204,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419configure_all_gpios9gpio_mode">
 <span id="_CPPv319configure_all_gpios9gpio_mode"></span><span id="_CPPv219configure_all_gpios9gpio_mode"></span><span id="configure_all_gpios__gpio_mode"></span><span class="target" id="gpios_8h_1a855aacde2c3eb9f09f7ca6d4ee44b57a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">configure_all_gpios</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49gpio_mode" title="gpio_mode"><span class="n"><span class="pre">gpio_mode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419configure_all_gpios9gpio_mode" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Configure all gpio with the config</p>
+<dd><p>Configure all GPIOs with the config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a> </p>
@@ -251,7 +225,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414configure_gpioi9gpio_mode">
 <span id="_CPPv314configure_gpioi9gpio_mode"></span><span id="_CPPv214configure_gpioi9gpio_mode"></span><span id="configure_gpio__i.gpio_mode"></span><span class="target" id="gpios_8h_1a60b4f4fbfae8495880881b1d4da68725"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">configure_gpio</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gpio_num</span></span>, <span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49gpio_mode" title="gpio_mode"><span class="n"><span class="pre">gpio_mode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414configure_gpioi9gpio_mode" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Configure one gpio with the input config</p>
+<dd><p>Configure one GPIO with the input config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a> </p>
@@ -260,7 +234,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>config</strong> – is configuration of type gpio_mode </p></li>
-<li><p><strong>gpio_num</strong> – is gpio number it can have values from 0 to 37</p></li>
+<li><p><strong>gpio_num</strong> – is GPIO number it can have values from 0 to 37</p></li>
 </ul>
 </dd>
 </dl>
@@ -272,11 +246,11 @@
 <dd><p><p>Write to the low 32 GPIOs GPIOS[31:0]</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">gpios</span>  
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">gpios</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
@@ -284,7 +258,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output</p>
+<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as management output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -299,11 +273,11 @@
 <dd><p><p>Write to the highest 6 GPIOs GPIOS[37:32]</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">gpios</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">gpios</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
@@ -311,7 +285,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output</p>
+<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as management output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -326,15 +300,15 @@
 <dd><p><p>Write to the 38 GPIOs GPIOS[37:0]</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">gpios</span>  
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">gpios</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">gpios</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
 </p></li>
@@ -348,7 +322,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output</p>
+<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as management output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -363,7 +337,7 @@
 <dd><p>Read the highest 6 GPIOs GPIOS[37:32] </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For Reading value from the GPIOs, the GPIO should configure as managment input. otherwise 0 would be read </p>
+<p>For Reading value from the GPIOs, the GPIO should be configured as management input. otherwise 0 would be read </p>
 </div>
 </dd></dl>
 
@@ -373,21 +347,21 @@
 <dd><p>Read low 32 GPIOs GPIOS[31:0] </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For Reading value from the GPIOs, the GPIO should configure as managment input. otherwise 0 would be read </p>
+<p>For Reading value from the GPIOs, the GPIO should be configured as management input. otherwise 0 would be read </p>
 </div>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv411wait_gpio_lj">
 <span id="_CPPv311wait_gpio_lj"></span><span id="_CPPv211wait_gpio_lj"></span><span id="wait_gpio_l__unsigned-i"></span><span class="target" id="gpios_8h_1ae04c0971756bf7f833129bf0b6f6d547"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_l</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411wait_gpio_lj" title="Permalink to this definition"></a><br /></dt>
-<dd><p><p>wait over the lowest 32 gpios to equal the data passed</p>
+<dd><p><p>wait over the lowest 32 GPIOsto equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">gpios</span> <span class="o">=</span> <span class="mi">0</span>  
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">GPIOs</span><span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">gpios</span> <span class="o">=</span> <span class="mi">0</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
  </p></li>
@@ -395,7 +369,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output</p>
+<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as management output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -407,14 +381,14 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv411wait_gpio_hj">
 <span id="_CPPv311wait_gpio_hj"></span><span id="_CPPv211wait_gpio_hj"></span><span id="wait_gpio_h__unsigned-i"></span><span class="target" id="gpios_8h_1a9fb980ee2469d57c9d37eed263f1864d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_h</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411wait_gpio_hj" title="Permalink to this definition"></a><br /></dt>
-<dd><p><p>wait over the higest 6 gpios to equal the data passed</p>
+<dd><p><p>wait over the highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">gpios</span> <span class="o">=</span> <span class="mi">0</span>  
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">gpios</span> <span class="o">=</span> <span class="mi">0</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
  </p></li>
@@ -422,7 +396,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output</p>
+<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as management output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -434,14 +408,14 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418wait_gpio_l_maskedjj">
 <span id="_CPPv318wait_gpio_l_maskedjj"></span><span id="_CPPv218wait_gpio_l_maskedjj"></span><span id="wait_gpio_l_masked__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1a4f971ec71379f092d9b616ec6e40bde1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_l_masked</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418wait_gpio_l_maskedjj" title="Permalink to this definition"></a><br /></dt>
-<dd><p><p>wait over the masked lowest 32 gpios to equal the data passed</p>
+<dd><p><p>wait over the masked lowest 32 GPIOs to equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of gpios  </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of gpios </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
  </p></li>
@@ -449,13 +423,13 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output</p>
+<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as management output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – is the data that should wait until sent to the GPIOs </p></li>
-<li><p><strong>mask</strong> – mask over the each GPIO if the mask value is 0 the this gpio value are ignored</p></li>
+<li><p><strong>mask</strong> – mask over the each GPIO if the mask value is 0 the this GPIO value are ignored</p></li>
 </ul>
 </dd>
 </dl>
@@ -464,14 +438,14 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418wait_gpio_h_maskedjj">
 <span id="_CPPv318wait_gpio_h_maskedjj"></span><span id="_CPPv218wait_gpio_h_maskedjj"></span><span id="wait_gpio_h_masked__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1ad071916d2d8c21af15b9dd1ed385b437"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_h_masked</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418wait_gpio_h_maskedjj" title="Permalink to this definition"></a><br /></dt>
-<dd><p><p>wait over the masked higest 6 gpios to equal the data passed</p>
+<dd><p><p>wait over the masked highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of gpios  </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">gpio</span><span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of gpios </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
  </p></li>
@@ -479,13 +453,13 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as managment output</p>
+<p>For writing by this function to be seen at the GPIO the GPIO has to be configured as management output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – is the data that should wait until sent to the GPIOs </p></li>
-<li><p><strong>mask</strong> – mask over the each GPIO if the mask value is 0 the this gpio value are ignored</p></li>
+<li><p><strong>mask</strong> – mask over the each GPIO if the mask value is 0 the this GPIO value are ignored</p></li>
 </ul>
 </dd>
 </dl>
@@ -533,7 +507,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418enable_uart_tx_irqb">
 <span id="_CPPv318enable_uart_tx_irqb"></span><span id="_CPPv218enable_uart_tx_irqb"></span><span id="enable_uart_tx_irq__b"></span><span class="target" id="irq_8h_1afc59d7e9a7bdac60111985d56dcc7187"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_uart_tx_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418enable_uart_tx_irqb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable or disable uart tx interrupt</p>
+<dd><p>Enable or disable UART tx interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
@@ -544,7 +518,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418enable_uart_rx_irqb">
 <span id="_CPPv318enable_uart_rx_irqb"></span><span id="_CPPv218enable_uart_rx_irqb"></span><span id="enable_uart_rx_irq__b"></span><span class="target" id="irq_8h_1a96f7a3547cfb0c10cd43d3cb21d297b8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_uart_rx_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418enable_uart_rx_irqb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable or disable uart rx interrupt</p>
+<dd><p>Enable or disable UART rx interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
@@ -555,7 +529,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv417enable_hk_spi_irqb">
 <span id="_CPPv317enable_hk_spi_irqb"></span><span id="_CPPv217enable_hk_spi_irqb"></span><span id="enable_hk_spi_irq__b"></span><span class="target" id="irq_8h_1aaf1679fd3e37519e4024ae3d8de8a0c2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_hk_spi_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417enable_hk_spi_irqb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable or disable spi interrupt</p>
+<dd><p>Enable or disable SPI interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
@@ -572,32 +546,34 @@
 <dl class="cpp enum">
 <dt class="sig sig-object cpp" id="_CPPv413la_reg_number">
 <span id="_CPPv313la_reg_number"></span><span id="_CPPv213la_reg_number"></span><span class="target" id="la_8h_1a4f5936f125c6714bbd6b3747270f48f0"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">la_reg_number</span></span></span><a class="headerlink" href="#_CPPv413la_reg_number" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Logic analyzers registers </p>
+<dd><p>Logic analyzers registers <table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>value</p></th>
+<th class="head"><p>description </p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LA_REG_0</p></td>
+<td><p>0</p></td>
+<td><p>First LA register probs [31:0] </p></td>
+</tr>
+<tr class="row-odd"><td><p>LA_REG_1</p></td>
+<td><p>1</p></td>
+<td><p>Second LA register probs [63:32] </p></td>
+</tr>
+<tr class="row-even"><td><p>LA_REG_2</p></td>
+<td><p>2</p></td>
+<td><p>Third LA register probs [95:64] </p></td>
+</tr>
+<tr class="row-odd"><td><p>LA_REG_3</p></td>
+<td><p>3</p></td>
+<td><p>Fourth LA register probs [95:64] </p></td>
+</tr>
+</tbody>
+</table>
+</p>
 <p><em>Values:</em></p>
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N13la_reg_number8LA_REG_0E">
-<span id="_CPPv3N13la_reg_number8LA_REG_0E"></span><span id="_CPPv2N13la_reg_number8LA_REG_0E"></span><span class="target" id="la_8h_1a4f5936f125c6714bbd6b3747270f48f0a0d3af4f5b60987146f5974ad32c27eb6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LA_REG_0</span></span></span><a class="headerlink" href="#_CPPv4N13la_reg_number8LA_REG_0E" title="Permalink to this definition"></a><br /></dt>
-<dd><p>First LA register probs [31:0] </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N13la_reg_number8LA_REG_1E">
-<span id="_CPPv3N13la_reg_number8LA_REG_1E"></span><span id="_CPPv2N13la_reg_number8LA_REG_1E"></span><span class="target" id="la_8h_1a4f5936f125c6714bbd6b3747270f48f0adf66775e2f551147e41dc6f7a09f83d6"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LA_REG_1</span></span></span><a class="headerlink" href="#_CPPv4N13la_reg_number8LA_REG_1E" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Second LA register probs [63:32] </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N13la_reg_number8LA_REG_2E">
-<span id="_CPPv3N13la_reg_number8LA_REG_2E"></span><span id="_CPPv2N13la_reg_number8LA_REG_2E"></span><span class="target" id="la_8h_1a4f5936f125c6714bbd6b3747270f48f0a4ada66bdcd0603b75788f7a62470a151"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LA_REG_2</span></span></span><a class="headerlink" href="#_CPPv4N13la_reg_number8LA_REG_2E" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Third LA register probs [95:64] </p>
-</dd></dl>
-
-<dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N13la_reg_number8LA_REG_3E">
-<span id="_CPPv3N13la_reg_number8LA_REG_3E"></span><span id="_CPPv2N13la_reg_number8LA_REG_3E"></span><span class="target" id="la_8h_1a4f5936f125c6714bbd6b3747270f48f0ae27665e3a11966acf84e1613663b8bf2"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LA_REG_3</span></span></span><a class="headerlink" href="#_CPPv4N13la_reg_number8LA_REG_3E" title="Permalink to this definition"></a><br /></dt>
-<dd><p>First LA register probs [127:96] </p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -607,12 +583,12 @@
 <dt class="sig sig-object cpp" id="_CPPv410set_la_ien13la_reg_numberj">
 <span id="_CPPv310set_la_ien13la_reg_numberj"></span><span id="_CPPv210set_la_ien13la_reg_numberj"></span><span id="set_la_ien__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1aa59af651665d8938229016610ffeb925"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_ien</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_ien13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Setting logic analyzer input enable</p>
-<p>Enable as input to the user project. Software sends to user prject</p>
+<p>Enable as input to the user project. Software sends to user project</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</p></li>
-<li><p><strong>is_enable</strong> – 32 bits each bit indicate if the corresponding prob enabled as input </p></li>
+<li><p><strong>is_enable</strong> – 32 bits each bit indicate if the corresponding probe enabled as input </p></li>
 </ul>
 </dd>
 </dl>
@@ -622,12 +598,12 @@
 <dt class="sig sig-object cpp" id="_CPPv410set_la_oen13la_reg_numberj">
 <span id="_CPPv310set_la_oen13la_reg_numberj"></span><span id="_CPPv210set_la_oen13la_reg_numberj"></span><span id="set_la_oen__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1aeed29349be1ae153fde34d62a59b9dfc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_oen</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_oen13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Setting logic analyzer output enable</p>
-<p>Enable as output from the user project. Software receieves from user prject</p>
+<p>Enable as output from the user project. Software receives from user project</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</p></li>
-<li><p><strong>is_enable</strong> – 32 bits each bit indicate if the corresponding prob enabled as output </p></li>
+<li><p><strong>is_enable</strong> – 32 bits each bit indicate if the corresponding probe enabled as output </p></li>
 </ul>
 </dd>
 </dl>
@@ -636,10 +612,10 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv410set_la_reg13la_reg_numberj">
 <span id="_CPPv310set_la_reg13la_reg_numberj"></span><span id="_CPPv210set_la_reg13la_reg_numberj"></span><span id="set_la_reg__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1a8f614c8578907a47d6826cc8cdb6f1d5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_reg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_reg13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Write data through logic analyers from software to user project</p>
+<dd><p>Write data through logic analyzers from software to user project</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For this to work correctly prob should be configured as output</p>
+<p>For this to work correctly probe should be configured as output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -654,10 +630,10 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv410get_la_reg13la_reg_number">
 <span id="_CPPv310get_la_reg13la_reg_number"></span><span id="_CPPv210get_la_reg13la_reg_number"></span><span id="get_la_reg__la_reg_number"></span><span class="target" id="la_8h_1a46f839584a4aa3a3c0a24a103f8e5a1e"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_la_reg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410get_la_reg13la_reg_number" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Read data through logic analyers from user projectt to software</p>
+<dd><p>Read data through logic analyzers from user project to software</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For this to work correctly prob should be configured as output</p>
+<p>For this to work correctly probe should be configured as output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -668,45 +644,45 @@
 
 </div>
 </section>
-<section id="managment-gpio">
-<h3>Managment GPIO<a class="headerlink" href="#managment-gpio" title="Permalink to this heading"></a></h3>
+<section id="management-gpio">
+<h3>Management GPIO<a class="headerlink" href="#management-gpio" title="Permalink to this heading"></a></h3>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418mgmt_gpio_i_enablev">
 <span id="_CPPv318mgmt_gpio_i_enablev"></span><span id="_CPPv218mgmt_gpio_i_enablev"></span><span id="mgmt_gpio_i_enable"></span><span class="target" id="mgmt__gpio_8h_1a5e552dcb3b7872a84b0590aca0626577"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_i_enable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418mgmt_gpio_i_enablev" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Configure managment GPIO as input </p>
+<dd><p>Configure management GPIO as input </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv418mgmt_gpio_o_enablev">
 <span id="_CPPv318mgmt_gpio_o_enablev"></span><span id="_CPPv218mgmt_gpio_o_enablev"></span><span id="mgmt_gpio_o_enable"></span><span class="target" id="mgmt__gpio_8h_1a28a81799fe6b08635e4c38a10870bd19"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_o_enable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418mgmt_gpio_o_enablev" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Configure managment GPIO as outpur </p>
+<dd><p>Configure management GPIO as output </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv419mgmt_gpio_io_enablev">
 <span id="_CPPv319mgmt_gpio_io_enablev"></span><span id="_CPPv219mgmt_gpio_io_enablev"></span><span id="mgmt_gpio_io_enable"></span><span class="target" id="mgmt__gpio_8h_1af6ca17f3be830146f0feaa42992bc8a6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_io_enable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419mgmt_gpio_io_enablev" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Configure managment GPIO as bi-direction </p>
+<dd><p>Configure management GPIO as bi-direction </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv420mgmt_gpio_io_disablev">
 <span id="_CPPv320mgmt_gpio_io_disablev"></span><span id="_CPPv220mgmt_gpio_io_disablev"></span><span id="mgmt_gpio_io_disable"></span><span class="target" id="mgmt__gpio_8h_1a0227af4e18cc2d6c665eb8d663a9ee8a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_io_disable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420mgmt_gpio_io_disablev" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Configure managment GPIO as floating It’s not connected as input or output </p>
+<dd><p>Configure management GPIO as floating It’s not connected as input or output </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv412mgmt_gpio_wrb">
 <span id="_CPPv312mgmt_gpio_wrb"></span><span id="_CPPv212mgmt_gpio_wrb"></span><span id="mgmt_gpio_wr__b"></span><span class="target" id="mgmt__gpio_8h_1a340b2d0d4f7b0996433830850a66272f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_wr</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412mgmt_gpio_wrb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Write data in managment GPIO</p>
+<dd><p>Write data in management GPIO</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This function works when managment GPIO configured as output </p>
+<p>This function works when management GPIO configured as output </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> – data to write at managment GPIO possbile values are 0 and 1</p>
+<dd class="field-odd"><p><strong>data</strong> – data to write at management GPIO possible values are 0 and 1</p>
 </dd>
 </dl>
 </dd></dl>
@@ -714,20 +690,20 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv412mgmt_gpio_rdv">
 <span id="_CPPv312mgmt_gpio_rdv"></span><span id="_CPPv212mgmt_gpio_rdv"></span><span id="mgmt_gpio_rd"></span><span class="target" id="mgmt__gpio_8h_1ac834401bc984e15179fdf70c4836ed6d"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_rd</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412mgmt_gpio_rdv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Read data in managment GPIO</p>
+<dd><p>Read data in management GPIO</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This function works correctly when managment GPIO configured as input If managment doesn’t connect to anything the software would read “0” </p>
+<p>This function works correctly when management GPIO configured as input If management doesn’t connect to anything the software would read “0” </p>
 </div>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414wait_gpio_mgmtb">
 <span id="_CPPv314wait_gpio_mgmtb"></span><span id="_CPPv214wait_gpio_mgmtb"></span><span id="wait_gpio_mgmt__b"></span><span class="target" id="mgmt__gpio_8h_1a4aca6477221bd8ef8b91853817d1e104"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_mgmt</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414wait_gpio_mgmtb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Wait over managment GPIO to equal data</p>
+<dd><p>Wait over management GPIO to equal data</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This function works correctly when managment GPIO configured as input</p>
+<p>This function works correctly when management GPIO configured as input</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -762,10 +738,10 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv410enable_spib">
 <span id="_CPPv310enable_spib"></span><span id="_CPPv210enable_spib"></span><span id="enable_spi__b"></span><span class="target" id="spi__master_8h_1a60653a00868af39a2ae44b05717197d5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_spi</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410enable_spib" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable or disable the master spi</p>
+<dd><p>Enable or disable the master SPI</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) master spi is active, 0 (false) master spi is disabled </p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) master SPI is active, 0 (false) master SPI is disabled </p>
 </dd>
 </dl>
 </dd></dl>
@@ -790,7 +766,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv424timer0_oneshot_configurej">
 <span id="_CPPv324timer0_oneshot_configurej"></span><span id="_CPPv224timer0_oneshot_configurej"></span><span id="timer0_oneshot_configure__unsigned-i"></span><span class="target" id="timer0_8h_1a618b157336f2fbb272590e57b0105fb4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_oneshot_configure</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424timer0_oneshot_configurej" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Start Timer in oneshot count down mode start value is count</p>
+<dd><p>Start Timer in oneshot countdown mode start value is count</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>count</strong> – start value in the counter &gt; 0 </p>
@@ -801,8 +777,8 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv425timer0_periodic_configurej">
 <span id="_CPPv325timer0_periodic_configurej"></span><span id="_CPPv225timer0_periodic_configurej"></span><span id="timer0_periodic_configure__unsigned-i"></span><span class="target" id="timer0_8h_1ace0a359a15e1744a3f8eb4e8a415680e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_periodic_configure</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425timer0_periodic_configurej" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Start counter in periodic count down mode start value is count</p>
-<p>Timer will roll over to the caount value when it reachs 0 </p>
+<dd><p>Start counter in periodic countdown mode start value is count</p>
+<p>Timer will roll over to the count value when it reaches 0 </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>count</strong> – start value in the counter &gt; 0 </p>
@@ -836,14 +812,14 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414enable_uart_TXb">
 <span id="_CPPv314enable_uart_TXb"></span><span id="_CPPv214enable_uart_TXb"></span><span id="enable_uart_TX__b"></span><span class="target" id="uart__api_8h_1af271ffef8910e5c9f6ddf14163ec7e6a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_uart_TX</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414enable_uart_TXb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable or disable TX of uart</p>
+<dd><p>Enable or disable TX of UART</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Some caravel CPU enable and disable uart TX and RX together </p>
+<p>Some caravel CPU enable and disable UART TX and RX together </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1(true) uart TX enable, 0 (false) uart TX disable</p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1(true) UART TX enable, 0 (false) UART TX disable</p>
 </dd>
 </dl>
 </dd></dl>
@@ -851,14 +827,14 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv414uart_RX_enableb">
 <span id="_CPPv314uart_RX_enableb"></span><span id="_CPPv214uart_RX_enableb"></span><span id="uart_RX_enable__b"></span><span class="target" id="uart__api_8h_1a23a72c60afce70b08a0fd3ff45a4f024"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uart_RX_enable</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414uart_RX_enableb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable or disable RX of uart</p>
+<dd><p>Enable or disable RX of UART</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Some caravel CPU enable and disable uart TX and RX together </p>
+<p>Some caravel CPU enable and disable UART TX and RX together </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1(true) uart RX enable, 0 (false) uart RX disable</p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1(true) UART RX enable, 0 (false) UART RX disable</p>
 </dd>
 </dl>
 </dd></dl>
@@ -867,14 +843,14 @@
 <dt class="sig sig-object cpp" id="_CPPv49uart_getcv">
 <span id="_CPPv39uart_getcv"></span><span id="_CPPv29uart_getcv"></span><span id="uart_getc"></span><span class="target" id="uart__api_8h_1a11508a3c55df6779452e795b23f2af40"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uart_getc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49uart_getcv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Wait receiving ASCII symbol and return it.</p>
-<p>Return the first ASCII symbol of the UART recieved queue</p>
+<p>Return the first ASCII symbol of the UART received queue</p>
 <p>RX mode have to be enabled </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv413uart_pop_charv">
 <span id="_CPPv313uart_pop_charv"></span><span id="_CPPv213uart_pop_charv"></span><span id="uart_pop_char"></span><span class="target" id="uart__api_8h_1a8398a7147ed6979b318b895c18766975"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uart_pop_char</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413uart_pop_charv" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Pop the first ASCII symbol of the UART recieved queue</p>
+<dd><p>Pop the first ASCII symbol of the UART received queue</p>
 <p><a class="reference internal" href="#uart__api_8h_1a11508a3c55df6779452e795b23f2af40"><span class="std std-ref">uart_getc()</span></a> function would keeping reading the same symbol unless this function is called </p>
 </dd></dl>
 
@@ -939,8 +915,8 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 4 doublewords. In this case offset would take values from 0 to 3.</p>
-<p>Typically address space is 26 address bits which mean it has 67,108,864 bytes = 16,777,216 doubleword In this case offset would take values from 0 to 16,777,215.</p>
+<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
@@ -1001,8 +977,8 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 4 doublewords. In this case offset would take values from 0 to 3.</p>
-<p>Typically address space is 26 address bits which mean it has 67,108,864 bytes = 16,777,216 doubleword In this case offset would take values from 0 to 16,777,215.</p>
+<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
@@ -1067,8 +1043,8 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 8 words. In this case offset would take values from 0 to 3 and is_first_word can take 0 or 1.</p>
-<p>Typically address space is 26 address bits which mean it has 67,108,864 bytes = 33,554,432 doubleword In this case offset would take values from 0 to 16,777,215 and is_first_word can take 0 or 1.</p>
+<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
@@ -1137,8 +1113,8 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes that mean it has only 8 words. In this case offset would take values from 0 to 3 and is_first_word can take 0 or 1.</p>
-<p>Typically address space is 26 address bits which mean it has 67,108,864 bytes = 33,554,432 doubleword In this case offset would take values from 0 to 16,777,215 and is_first_word can take 0 or 1.</p>
+<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
@@ -1206,8 +1182,8 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes. In this case offset would take values from 0 to 3 and byte_num can take 0 to 3.</p>
-<p>Typically address space is 26 address bits which mean it has 67,108,864 bytes. In this case offset would take values from 0 to 16,777,215 and byte_num can take 0 or 4.</p>
+<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
@@ -1215,7 +1191,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> – byte data to write </p></li>
 <li><p><strong>offset</strong> – the offset of the register to write. Origin at the user project address </p></li>
-<li><p><strong>byte_num</strong> – number of the in the 4byte register (32 bits)</p></li>
+<li><p><strong>byte_num</strong> – number of the in the 4 bytes register (32 bits)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1276,15 +1252,15 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>if user space address length is 4 bits address that mean it has 2^4 bytes = 16 bytes. In this case offset would take values from 0 to 3 and byte_num can take 0 to 3.</p>
-<p>Typically address space is 26 address bits which mean it has 67,108,864 bytes. In this case offset would take values from 0 to 16,777,215 and byte_num can take 0 or 4.</p>
+<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>int</strong> – offset the offset of the register to write. Origin at the user project address </p></li>
-<li><p><strong>byte_num</strong> – number of the in the 4byte register (32 bits)</p></li>
+<li><p><strong>offset</strong> – the offset of the register to write. Origin at the user project address </p></li>
+<li><p><strong>byte_num</strong> – number of the in the 4 bytes register (32 bits)</p></li>
 </ul>
 </dd>
 </dl>

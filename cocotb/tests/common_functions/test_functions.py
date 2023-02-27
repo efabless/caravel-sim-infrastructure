@@ -41,11 +41,10 @@ def read_config_file():
 
 
 active_gpios_num = 37 # number of active gpios
-async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err']))-> caravel.Caravel_env:
+async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=25,timeout_precision=0.2,num_error=3)-> caravel.Caravel_env:
     """
     Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.
 
-    :async:
     :param SimHandle dut: dut handle
     :param int timeout_cycles: Number of cycles before reporting timeout and exit the test default = 1000000 cycles 
     :param int clk: The clock period to be used in the design in ``'ns'`` default 12.5 ``'ns'``

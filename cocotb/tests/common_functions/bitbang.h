@@ -44,7 +44,7 @@ void bb_reset(){
 
 }
 
-// configure the gpio in the left chain with configL and the gpio in 
+// configure the GPIO  in the left chain with configL and the GPIO  in 
 // the right chain with configR
 // left | right
 // 18	& 19
