@@ -34,6 +34,7 @@ class RunRegression:
             self.args.macros =list()
         simulation_macros = ["USE_POWER_PINS","UNIT_DELAY=#1","COCOTB_SIM"]
         paths_macros      = [f'MAIN_PATH=\\\"{self.paths.COCOTB_PATH}\\\"',f'TAG=\\\"{self.args.tag}\\\"',f'CARAVEL_ROOT=\\\"{os.getenv("CARAVEL_ROOT")}\\\"']
+        paths_macros.append(f'SIM_PATH=\\\"{self.paths.SIM_PATH}/\\\"')
         if self.args.pdk is not "gf180":
             simulation_macros.append("FUNCTIONAL")
 
@@ -161,8 +162,8 @@ class RunRegression:
             if self.args.vcs:
                 self.generate_cov()
             #merge functional coverage
-            merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.cocotb_path}:{self.cocotb_path}  efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && python3 scripts/merge_coverage.py -p {self.cocotb_path}/sim/{self.args.tag}'"
-            self.full_terminal = open(f"{self.cocotb_path}/sim/{self.args.tag}/command.log", "a")
+            merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.cocotb_path}:{self.cocotb_path}  efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && python3 scripts/merge_coverage.py -p {self.paths.SIM_PATH}/{self.args.tag}'"
+            self.full_terminal = open(f"{self.paths.SIM_PATH}/{self.args.tag}/command.log", "a")
             self.full_terminal.write(f"\n\ndocker command for merge functional coverage:\n% ")
             self.full_terminal.write(os.path.expandvars(merge_fun_cov_command)+"\n")
             self.full_terminal.close()
@@ -176,14 +177,14 @@ class RunRegression:
 
 
     def generate_cov(self):
-        os.chdir(f"{self.cocotb_path}/sim/{self.args.tag}")
+        os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
         os.system(f"urg -dir RTL*/*.vdb -format both -show tests -report coverageRTL/")
         # os.system(f"urg -dir GL*/*.vdb -format both -show tests -report coverageGL/")
         # os.system(f"urg -dir SDF*/*.vdb -format both -show tests -report coverageSDF/")
         os.chdir(self.cocotb_path)
 
     def update_run_log(self):
-        file_name=f"sim/{self.args.tag}/runs.log"
+        file_name=f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
         f = open(file_name, "w")
         name_size = self.tests[0].max_name_size
         f.write(f"{'Test':<{name_size}} {'status':<10} {'start':<15} {'end':<15} {'duration':<13} {'p/f':<8} {'seed':<10} \n")
@@ -193,14 +194,14 @@ class RunRegression:
         f.close()
 
     def write_command_log(self):
-        file_name=f"sim/{self.args.tag}/command.log"
+        file_name=f"{self.paths.SIM_PATH}/{self.args.tag}/command.log"
         f = open(file_name, "w")
         f.write(f"command used to run this sim:\n% ")
         f.write(f"{' '.join(sys.argv)}")
         f.close()
   
     def write_git_log(self):
-        file_name=f"sim/{self.args.tag}/repos_info.log"
+        file_name=f"{self.paths.SIM_PATH}/{self.args.tag}/repos_info.log"
         f = open(file_name, "w")
         f.write( f"{'#'*4} Caravel repo info {'#'*4}\n")
         url = "https://github.com/" + f"{run(f'cd {self.paths.CARAVEL_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:","").replace(".git","")
@@ -236,7 +237,7 @@ class RunRegression:
         if self.args.emailto is None: 
             return
         #get commits 
-        showlog = f"{self.paths.COCOTB_PATH}/sim/{self.args.tag}/repos_info.log"
+        showlog = f"{self.paths.SIM_PATH}/{self.args.tag}/repos_info.log"
         commits = ""
         lines = open(showlog, 'r').readlines()
         for line in lines:
@@ -247,7 +248,7 @@ class RunRegression:
             elif "commit" in line: 
                 commit = line.split()[-1]
                 commits += f"<th> {repo_name} commit</th> <th><a href='{repo_url}/commit/{commit}'>{commit}<a></th> <tr>  "
-        tag = f"{self.paths.COCOTB_PATH}/sim/{self.args.tag}"
+        tag = f"{self.paths.SIM_PATH}/{self.args.tag}"
         mail_sub = ("<html><head><style>table {border-collapse: collapse;width: 50%;} th, td {text-align: left;padding: 8px;} tr:nth-child(even) {background-color: #D6EEEE;}"
                     f"</style></head><body><h2>Run info:</h2> <table border=2 bgcolor=#D6EEEE> "
                     f"<th>location</th> <th><strong>{socket.gethostname()}</strong>:{tag}</th> <tr>  "

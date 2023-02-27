@@ -88,7 +88,7 @@ def repot_test(func):
         ## configure logging 
         COCOTB_ANSI_OUTPUT=0
         TESTFULLNAME = cocotb.plusargs['FTESTNAME']
-        sim_dir = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}"
+        sim_dir = f"{cocotb.plusargs['SIM_PATH']}/{cocotb.plusargs['TAG']}"
         TestName = func.__name__
         logger_file= f"{sim_dir}/{TESTFULLNAME}/{TestName}.log".replace('"', '')
         cocotb.log.setLevel(logging.INFO)

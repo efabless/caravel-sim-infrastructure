@@ -118,8 +118,8 @@ class Test:
 
     # create and open full terminal log to be able to use it before run the test
     def create_logs(self):
-        os.makedirs(f"sim/{self.args.tag}/{self.full_name}",exist_ok=True)
-        self.test_dir = f"{self.paths.COCOTB_PATH}/sim/{self.args.tag}/{self.full_name}"
+        os.makedirs(f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}",exist_ok=True)
+        self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
         self.test_log=f"{self.test_dir}/{self.name}.log"
         # self.test_log=open(test_log, "w")
         self.full_log=f"{self.test_dir}/full.log"

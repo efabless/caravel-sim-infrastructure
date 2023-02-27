@@ -24,9 +24,9 @@ class main():
     def __init__(self,args) -> None:
         self.args         = args
         self.check_valid_args()
-        self.set_tag()
         design_info = self.get_design_info()
         self.set_paths(design_info)
+        self.set_tag()
         self.set_args(design_info)
         self.set_config_script(design_info)
         RunRegression(self.args,self.paths)
@@ -43,7 +43,7 @@ class main():
                 self.args.tag = f'{self.regression}_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
             else: 
                 self.args.tag = f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
-        Path(f"sim/{self.args.tag}").mkdir(parents=True, exist_ok=True)
+        Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(parents=True, exist_ok=True)
         print(f"Run tag: {self.args.tag}")
 
     def set_paths(self,design_info):
@@ -58,7 +58,7 @@ class main():
                 raise NotADirectoryError (f"USER_PROJECT_ROOT is not a directory USER_PROJECT_ROOT:{design_info['USER_PROJECT_ROOT']}")
             else: 
                 self.configure_user_files(design_info["USER_PROJECT_ROOT"])
-        Paths = namedtuple("Paths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USER_PROJECT_ROOT")
+        Paths = namedtuple("Paths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USER_PROJECT_ROOT SIM_PATH")
         CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
         VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
         CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
@@ -67,7 +67,8 @@ class main():
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
         COCOTB_PATH = os.getcwd()
-        self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH,design_info["USER_PROJECT_ROOT"] )
+        SIM_PATH = f"{COCOTB_PATH}/sim" if self.args.sim_path is None else f"{self.args.sim_path}/sim"
+        self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH,design_info["USER_PROJECT_ROOT"],SIM_PATH)
 
     def set_args(self,design_info):
         if self.args.clk is None: 
@@ -147,6 +148,7 @@ parser.add_argument('-clk', help='define the clock period in ns default defined 
 parser.add_argument('-lint',action='store_true', help='generate lint log -v must be used')
 parser.add_argument('-arm',action='store_true', help='generate lint log -v must be used')
 parser.add_argument('-macros',nargs='+', help='Add addtional verilog macros for the design ')
+parser.add_argument('-sim_path', help='directory where simulation result directory "sim" would be created if None it would be created under cocotb folder')
 args = parser.parse_args()
 # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  zip_passed caravan emailto seed no_wave clk lint arm sdf_setup")
 # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en  ,args.zip_passed ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)

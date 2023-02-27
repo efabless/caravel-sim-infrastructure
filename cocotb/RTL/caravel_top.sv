@@ -36,13 +36,13 @@ parameter FILENAME={`MAIN_PATH,"/hex_files/",`TESTNAME,".hex"};
 initial begin
 	`ifdef VCS
 		`ifdef ENABLE_SDF
-				$vcdplusfile({`MAIN_PATH,"/sim/",`TAG,"/",`FTESTNAME,"/",`TESTNAME , `CORNER,"-",`SDF_POSTFIX, ".vpd"});
+				$vcdplusfile({`SIM_PATH,`TAG,"/",`FTESTNAME,"/",`TESTNAME , `CORNER,"-",`SDF_POSTFIX, ".vpd"});
 		`else
-				$vcdplusfile({`MAIN_PATH,"/sim/",`TAG,"/",`FTESTNAME,"/",`TESTNAME ,".vpd"});
+				$vcdplusfile({`SIM_PATH,`TAG,"/",`FTESTNAME,"/",`TESTNAME ,".vpd"});
 		`endif
 		$vcdpluson();
 	`else 
-		$dumpfile ({`MAIN_PATH,"/sim/",`TAG,"/",`SIM,"-",`TESTNAME,"/",`SIM,"-",`TESTNAME,".vcd"});
+		$dumpfile ({`SIM_PATH,`TAG,"/",`SIM,"-",`TESTNAME,"/",`SIM,"-",`TESTNAME,".vcd"});
 		$dumpvars (0, caravel_top);
 	`endif
 end
