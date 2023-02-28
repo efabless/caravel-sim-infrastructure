@@ -61,6 +61,6 @@ class WriteDesignInfo:
             self.yaml.dump(self.code, outfile)
 
 
-paths = EnvironmentPaths("/home/rady/caravel/caravel_orginal/caravel/","/home/rady/caravel/caravel_orginal/caravel_mgmt_soc_litex/","/home/rady/caravel/files4vcs/pdk","sky130A", "/home/rady/caravel/swift/caravel_user_project/")
+# paths = EnvironmentPaths("/home/rady/caravel/caravel_orginal/caravel/","/home/rady/caravel/caravel_orginal/caravel_mgmt_soc_litex/","/home/rady/caravel/files4vcs/pdk","sky130A", "/home/rady/caravel/swift/caravel_user_project/")
 
-WriteDesignInfo("/home/rady/caravel/swift/caravel-dynamic-sims/cocotb/",paths,Emailto=["mostafa.rady@efabless.com"])
+# WriteDesignInfo("/home/Marwan/caravel/swift/caravel-dynamic-sims/cocotb/",paths,Emailto=["mostafa.rady@efabless.com"])
