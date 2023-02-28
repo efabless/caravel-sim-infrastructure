@@ -21,8 +21,9 @@ def check_valid_mail_addr(address):
     print(f"invalid mail {address}")
     return False
 class RunFLow():
-    def __init__(self,args) -> None:
+    def __init__(self,args,COCOTB_PATH) -> None:
         self.args         = args
+        self.cocotb_path = self.args.cocotb_path
         self.check_valid_args()
         design_info = self.get_design_info()
         self.set_paths(design_info)
@@ -35,7 +36,8 @@ class RunFLow():
         if all(v is  None for v in [self.args.regression, self.args.test, self.args.testlist]):
             raise EnvironmentError("Should provide at least one of the following options regression, test or testlist for more info use --help")
         if self.args.sim is not None:
-            if not set(self.args.sim).issubset(["RTL","GL","GL_SDF"]):
+            print(type(self.args.sim))
+            if not self.args.sim in ["RTL","GL","GL_SDF"]:
                 raise ValueError(f"{self.args.sim} isnt a correct value for -sim it should be one or combination of the following RTL, GL or GL_SDF")
     def set_tag(self):
         if self.args.tag is None:
@@ -122,13 +124,13 @@ class RunFLow():
 
 
     def get_design_info(self):
-        yaml_file = open("design_info.yaml", 'r')
+        yaml_file = open(f"{self.cocotb_path}/design_info.yaml", 'r')
         design_info = yaml.safe_load(yaml_file)
         return design_info
 
 
 class CocotbArgs():
-    def __init__(self,test=None,sim=None,testlist=None,tag=None,maxerr =3,corner=None,seed=None,no_wave=False,clk=25,vcs=False,zip_passed=False,emailto=None,sdf_setup=None,macros=None,sim_path=None) -> None:
+    def __init__(self,test=None,sim=None,testlist=None,tag=None,maxerr =3,corner=None,seed=None,no_wave=False,clk=25,vcs=False,zip_passed=False,emailto=None,sdf_setup=None,macros=None,sim_path=None,COCOTB_PATH=".") -> None:
         self.regression  = None
         self.test        = test
         self.sim         = sim
@@ -145,6 +147,7 @@ class CocotbArgs():
         self.clk         = clk
         self.macros      = macros
         self.sim_path    = sim_path
+        self.cocotb_path = COCOTB_PATH
         # dev only
         self.cov         = None
         self.checkers_en = None
