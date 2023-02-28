@@ -31,7 +31,7 @@
 module caravel_top ;
 
 // parameter FILENAME = {"hex_files/",`TESTNAME,".hex"};
-parameter FILENAME={`MAIN_PATH,"/hex_files/",`TESTNAME,".hex"};
+parameter FILENAME={`SIM_PATH,"/hex_files/",`TESTNAME,".hex"};
 `ifdef WAVE_GEN 
 initial begin
 	`ifdef VCS

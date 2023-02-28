@@ -36,7 +36,6 @@ class RunFLow():
         if all(v is  None for v in [self.args.regression, self.args.test, self.args.testlist]):
             raise EnvironmentError("Should provide at least one of the following options regression, test or testlist for more info use --help")
         if self.args.sim is not None:
-            print(type(self.args.sim))
             if not self.args.sim in ["RTL","GL","GL_SDF"]:
                 raise ValueError(f"{self.args.sim} isnt a correct value for -sim it should be one or combination of the following RTL, GL or GL_SDF")
     def set_tag(self):
@@ -109,7 +108,7 @@ class RunFLow():
             page  = f.readlines()
             for num,line in enumerate(page): 
                 if "sys.path.append(path.abspath(" in line:
-                    page[num] = f"sys.path.append(path.abspath('{os.getcwd()}'))\n"
+                    page[num] = f"sys.path.append(path.abspath('{self.args.cocotb_path}'))\n"
             file_w = open(file,"w")
             file_w.write("".join(page))
             file_w.close()

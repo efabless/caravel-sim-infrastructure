@@ -22,6 +22,7 @@ class Test:
         self.corner = corner
         self.args  = args
         self.paths = paths
+        self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.init_test()
     
     def init_test(self):
@@ -112,7 +113,7 @@ class Test:
             self.create_lint_log()
         if is_pass[1] and self.args.zip_passed:
             self.tar_large_files()
-        shutil.copyfile(f'{self.paths.COCOTB_PATH}/hex_files/{self.name}.hex',f'{self.test_dir}/{self.name}.hex')
+        shutil.copyfile(f'{self.hex_dir}/{self.name}.hex',f'{self.test_dir}/{self.name}.hex')
         self.set_rerun_script()
         
 

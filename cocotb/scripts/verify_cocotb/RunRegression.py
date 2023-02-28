@@ -234,7 +234,7 @@ class RunRegression:
         f.close()
 
     def send_mail(self):
-        if self.args.emailto is None: 
+        if self.args.emailto is None or self.args.emailto == []: 
             return
         #get commits 
         showlog = f"{self.paths.SIM_PATH}/{self.args.tag}/repos_info.log"
