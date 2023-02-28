@@ -21,9 +21,10 @@ class RunRegression:
         self.total_start_time = datetime.now()
         self.write_command_log()
         self.write_git_log()
-        with open(f'{self.paths.COCOTB_PATH}/tests.json') as f:
-            self.tests_json = json.load(f)
-            self.tests_json = self.tests_json["Tests"]
+        if args.regression:
+            with open(f'{self.paths.COCOTB_PATH}/tests.json') as f:
+                self.tests_json = json.load(f)
+                self.tests_json = self.tests_json["Tests"]
         self.set_common_macros()
         self.get_tests()
         self.run_regression()
@@ -104,12 +105,11 @@ class RunRegression:
                         else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.args.corner[0])
 
             else:
-                if self.args.test in self.tests_json:
-                    if isinstance(self.args.sim,list):
-                        for sim_type in self.args.sim:
-                            self.add_new_test(test_name=self.args.test,sim_type = sim_type,corner = self.args.corner[0])
-                    else:
-                        self.add_new_test(test_name=self.args.test,sim_type = self.args.sim,corner = self.args.corner[0])
+                if isinstance(self.args.sim,list):
+                    for sim_type in self.args.sim:
+                        self.add_new_test(test_name=self.args.test,sim_type = sim_type,corner = self.args.corner[0])
+                else:
+                    self.add_new_test(test_name=self.args.test,sim_type = self.args.sim,corner = self.args.corner[0])
         if self.args.testlist is not None:
             for testlist in self.args.testlist:
                 self.get_testlist(testlist)

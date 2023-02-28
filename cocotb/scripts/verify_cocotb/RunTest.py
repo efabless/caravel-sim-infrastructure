@@ -43,9 +43,9 @@ class RunTest:
     def hex_generate(self):
         #open docker 
         test_path =self.test_path()
-        if not os.path.exists(f"{self.paths.COCOTB_PATH}/hex_files"):
-            os.makedirs(f"{self.paths.COCOTB_PATH}/hex_files") # Create a new hex_files directory because it does not exist 
-        self.hex_dir = f"{self.paths.COCOTB_PATH}/hex_files/"
+        if not os.path.exists(f"{self.paths.SIM_PATH}/hex_files"):
+            os.makedirs(f"{self.paths.SIM_PATH}/hex_files") # Create a new hex_files directory because it does not exist 
+        self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.c_file = f"{test_path}/{self.test.name}.c"
         test_dir = f"{self.paths.VERILOG_PATH}/dv/tests-caravel/mem" # linker script include // TODO: to fix this in the future from the mgmt repo
         if self.args.arm : 
@@ -53,7 +53,7 @@ class RunTest:
         else: 
             command = self.hex_riscv32_command_gen()
 
-        docker_dir = f"-v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} "
+        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} "
         docker_dir = docker_dir if not self.args.user_test else docker_dir + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} ' >> {self.test.full_log}"
         

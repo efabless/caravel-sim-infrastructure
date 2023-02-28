@@ -21,7 +21,7 @@ def check_valid_mail_addr(address):
     print(f"invalid mail {address}")
     return False
 class RunFLow():
-    def __init__(self,args,COCOTB_PATH) -> None:
+    def __init__(self,args) -> None:
         self.args         = args
         self.cocotb_path = self.args.cocotb_path
         self.check_valid_args()
@@ -68,7 +68,7 @@ class RunFLow():
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
-        COCOTB_PATH = os.getcwd()
+        COCOTB_PATH = self.args.cocotb_path
         SIM_PATH = f"{COCOTB_PATH}/sim" if self.args.sim_path is None else f"{self.args.sim_path}/sim"
         self.paths = Paths(design_info["CARAVEL_ROOT"],design_info['MCW_ROOT'],design_info["PDK_ROOT"],design_info["PDK"],CARAVEL_VERILOG_PATH,VERILOG_PATH,CARAVEL_PATH,FIRMWARE_PATH ,COCOTB_PATH,design_info["USER_PROJECT_ROOT"],SIM_PATH)
 
@@ -97,7 +97,7 @@ class RunFLow():
             self.args.iverilog = True
 
         if self.args.emailto is None: 
-            self.args.emailto = [mail_addr for  mail_addr in design_info["emailto"] if check_valid_mail_addr(mail_addr)]
+            self.args.emailto = [mail_addr for  mail_addr in design_info["emailto"] if mail_addr is not None and check_valid_mail_addr(mail_addr)]
         else : 
             if not check_valid_mail_addr(self.args.emailto): 
                 self.args.emailto = [[mail_addr for  mail_addr in self.args.emailto if check_valid_mail_addr(mail_addr)]] # if mail input aren't a valid mail will ignore it
