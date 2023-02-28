@@ -17,7 +17,7 @@
 #include <gpios.h>
 #include <timer0.h>
 #include <mgmt_gpio.h>
-#include <irq.h>
+#include <irq_api.h>
 #include <la.h>
 #include <uart_api.h>
 #include <spi_master.h>

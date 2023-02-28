@@ -2,8 +2,8 @@
 /**
  \file
 */
-#ifndef IRQ_C_HEADER_FILE
-#define IRQ_C_HEADER_FILE
+#ifndef IRQ_API_C_HEADER_FILE
+#define IRQ_API_C_HEADER_FILE
 // IRQ 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #ifndef ARM
@@ -223,4 +223,4 @@ void enable_hk_spi_irq(bool is_enable){
     }
 }
 
-#endif // IRQ_C_HEADER_FILE
+#endif // IRQ_API_C_HEADER_FILE

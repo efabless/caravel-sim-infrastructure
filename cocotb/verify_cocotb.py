@@ -20,7 +20,7 @@ def check_valid_mail_addr(address):
         return True
     print(f"invalid mail {address}")
     return False
-class main():
+class RunFLow():
     def __init__(self,args) -> None:
         self.args         = args
         self.check_valid_args()
@@ -40,7 +40,7 @@ class main():
     def set_tag(self):
         if self.args.tag is None:
             if self.args.regression is not None:
-                self.args.tag = f'{self.regression}_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
+                self.args.tag = f'{self.args.regression}_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
             else: 
                 self.args.tag = f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
         Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(parents=True, exist_ok=True)
@@ -127,6 +127,52 @@ class main():
         return design_info
 
 
+class CocotbArgs():
+    def __init__(self,test=None,sim=None,testlist=None,tag=None,maxerr =3,corner=None,seed=None,no_wave=False,clk=25,vcs=False,zip_passed=False,emailto=None,sdf_setup=None,macros=None,sim_path=None) -> None:
+        self.regression  = None
+        self.test        = test
+        self.sim         = sim
+        self.testlist    = testlist
+        self.tag         = tag 
+        self.maxerr      = maxerr
+        self.vcs         = vcs
+        self.corner      = corner
+        self.zip_passed  = zip_passed
+        self.emailto     = emailto
+        self.seed        = seed
+        self.no_wave     = no_wave
+        self.sdf_setup   = sdf_setup
+        self.clk         = clk
+        self.macros      = macros
+        self.sim_path    = sim_path
+        # dev only
+        self.cov         = None
+        self.checkers_en = None
+        self.lint        = None
+        self.arm         = None
+
+    def argparse_to_CocotbArgs(self,args):
+        self.regression  = args.regression 
+        self.test        = args.test       
+        self.sim         = args.sim        
+        self.testlist    = args.testlist   
+        self.tag         = args.tag        
+        self.maxerr      = args.maxerr     
+        self.vcs         = args.vcs        
+        self.corner      = args.corner     
+        self.zip_passed  = args.zip_passed 
+        self.emailto     = args.emailto    
+        self.seed        = args.seed       
+        self.no_wave     = args.no_wave    
+        self.sdf_setup   = args.sdf_setup  
+        self.clk         = args.clk        
+        self.macros      = args.macros     
+        self.sim_path    = args.sim_path   
+        self.cov         = args.cov        
+        self.checkers_en = args.checkers_en
+        self.lint        = args.lint       
+        self.arm         = args.arm        
+
 import argparse
 parser = argparse.ArgumentParser(description='Run cocotb tests')
 parser.add_argument('-regression','-r', help='name of regression can found in tests.json')
@@ -154,12 +200,9 @@ args = parser.parse_args()
 # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en  ,args.zip_passed ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)
 # print(args)
 print(f"regression:{args.regression}, test:{args.test}, testlist:{args.testlist} sim: {args.sim}")
-main(args)
-
-
-
-
-
+cocotb_args = CocotbArgs()
+cocotb_args.argparse_to_CocotbArgs(args)
+RunFLow(cocotb_args)
 
 """
 verilator_command = (f"verilator {macros} --vpi --public-flat-rw --prefix Vtop"
