@@ -130,7 +130,7 @@ class RunFLow():
 
 
 class CocotbArgs():
-    def __init__(self,test=None,sim=None,testlist=None,tag=None,maxerr =3,corner=None,seed=None,no_wave=False,clk=25,vcs=False,zip_passed=False,emailto=None,sdf_setup=None,macros=None,sim_path=None,COCOTB_PATH=".") -> None:
+    def __init__(self,test=None,sim=None,testlist=None,tag=None,maxerr =3,corner=None,seed=None,no_wave=False,clk=25,vcs=False,zip_passed=False,emailto=None,sdf_setup=None,macros=None,sim_path=None,cocotb_root=".") -> None:
         self.regression  = None
         self.test        = test
         self.sim         = sim
@@ -147,7 +147,7 @@ class CocotbArgs():
         self.clk         = clk
         self.macros      = macros
         self.sim_path    = sim_path
-        self.cocotb_path = COCOTB_PATH
+        self.cocotb_path = cocotb_root
         # dev only
         self.cov         = None
         self.checkers_en = None
