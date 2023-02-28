@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+
 import sys
 import os
 from fnmatch import fnmatch
@@ -174,3 +173,4 @@ class CocotbArgs():
         self.checkers_en = args.checkers_en
         self.lint        = args.lint       
         self.arm         = args.arm        
+        self.cocotb_path = os.getcwd()

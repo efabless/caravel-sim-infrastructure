@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 from scripts.verify_cocotb.RunFlow import RunFLow,CocotbArgs
 
 import argparse
