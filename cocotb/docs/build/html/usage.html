@@ -1,21 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html4" lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usage &mdash; caravel_cocotb alpha documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>Quickstart Guide &mdash; caravel_cocotb alpha documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python APIs" href="python_api.html" />
     <link rel="prev" title="Welcome to caravel_cocotb’s documentation!" href="index.html" /> 
 </head>
 
@@ -41,17 +44,22 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-test">Creating a Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python-template">Python Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-template">C Template</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#python-apis">Python APIs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#common-functions">Common functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#caravel-environment">Caravel Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-test">Running a Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-testlist">Creating a Testlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-testlist">Running a Testlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-results">Checking Results</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C_api.html">Software APIs</a></li>
 </ul>
 
         </div>
@@ -68,7 +76,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Usage</li>
+      <li class="breadcrumb-item active">Quickstart Guide</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -78,228 +86,130 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="usage">
-<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="installation">
-<span id="installation123"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>To use , first install it using pip:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">(.venv) $</span> pip install
-</pre></div>
+  <section id="quickstart-guide">
+<span id="usage"></span><h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Permalink to this heading"></a></h1>
+<p>This project aims to provide a user friendly environment for adding and running cocotb tests for <em>Caravel user projects</em>.</p>
+<p>Please setup your project through <code class="docutils literal notranslate"><span class="pre">ChipCraft</span></code> as this project is setuped and run through <code class="docutils literal notranslate"><span class="pre">ChipCraft</span></code>.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Add chipcraft docs link or info</p>
 </div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Add link for examples</p>
 </div>
-</div>
-<div class="section" id="python-apis">
-<span id="python-api"></span><h1>Python APIs<a class="headerlink" href="#python-apis" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="common-functions">
-<h2>Common functions<a class="headerlink" href="#common-functions" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="test_functions.test_configure">
-<code class="descclassname">test_functions.</code><code class="descname">test_configure</code><span class="sig-paren">(</span><em>dut: cocotb.handle.SimHandle</em>, <em>timeout_cycles=1000000</em>, <em>clk=25</em>, <em>timeout_precision=0.2</em>, <em>num_error=3</em><span class="sig-paren">)</span> &#x2192; interfaces.caravel.Caravel_env<a class="reference internal" href="_modules/test_functions.html#test_configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#test_functions.test_configure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Async:</th><td class="field-body"></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dut</strong> (<em>SimHandle</em>) – dut handle</li>
-<li><strong>timeout_cycles</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of cycles before reporting timeout and exit the test default = 1000000 cycles</li>
-<li><strong>clk</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The clock period to be used in the design in <code class="docutils literal notranslate"><span class="pre">'ns'</span></code> default 12.5 <code class="docutils literal notranslate"><span class="pre">'ns'</span></code></li>
-<li><strong>timeout_precision</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Precision of logging how many cycle left until the timeout default is 0.2 meaning if time is 100 cycle every 20 cycles there would be a warning message for timeout</li>
-<li><strong>num_error</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Maximum number of errors reported before terminate the test</li>
-</ul>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Object of type Caravel_env (caravel environment)</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="caravel-environment">
-<h2>Caravel Environment<a class="headerlink" href="#caravel-environment" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="interfaces.caravel.Caravel_env">
-<em class="property">class </em><code class="descclassname">interfaces.caravel.</code><code class="descname">Caravel_env</code><span class="sig-paren">(</span><em>dut: cocotb.handle.SimHandleBase</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env" title="Permalink to this definition">¶</a></dt>
-<dd><p>Verification environment for caraval</p>
+<section id="creating-a-test">
+<span id="create-test"></span><h2>Creating a Test<a class="headerlink" href="#creating-a-test" title="Permalink to this heading"></a></h2>
+<p>A typical test for <em>Caravel</em> consists of 2 parts: <code class="docutils literal notranslate"><span class="pre">Python/cocotb</span></code> code and <code class="docutils literal notranslate"><span class="pre">C</span></code> code.</p>
 <ul class="simple">
-<li>provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Python/cocotb</span></code> code is for communicating with <em>Caravel</em> hardware interface inputs, outputs, clock, reset, and power ports/bins. <code class="docutils literal notranslate"><span class="pre">cocotb</span></code> here replaces the <code class="docutils literal notranslate"><span class="pre">verilog</span></code> code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C</span></code> code provides software code that would be loaded into the <em>Caravel</em> CPU.</p></li>
 </ul>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>dut</strong> (<em>SimHandle</em>) – dut handle</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.monitor_gpio">
-<code class="descname">monitor_gpio</code><span class="sig-paren">(</span><em>h_bit</em>, <em>l_bit=None</em><span class="sig-paren">)</span> &#x2192; cocotb.binary.BinaryValue<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.monitor_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.monitor_gpio" title="Permalink to this definition">¶</a></dt>
-<dd><p>monitor GPIOs output value</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h_bit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – highest gpio number of the tuple of (high gpio, low gpio)</li>
-<li><strong>l_bit</strong> – lowest gpio to monitor number</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first"><strong>expection</strong> – If h_bit is lower than l_bit</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">cocotb.binary.BinaryValue</p>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">monitor_gpio</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="c1">#get output value of gpio 7 (gpios[7])</span>
-<span class="n">monitor_gpio</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># get output value from gpio 7 to 0 (gpios[7:0])</span>
-<span class="n">monitor_gpio</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="c1">#get output value from gpio 7 to 0 (gpios[7:0])</span>
+<p>Tests files has to located under <code class="docutils literal notranslate"><span class="pre">&lt;caravel_user_project&gt;/verilog/dv/cocotb/</span></code></p>
+<div class="line-block">
+<div class="line">dv</div>
+<div class="line">├── cocotb</div>
+<div class="line">│   ├── &lt;new_test&gt;</div>
+<div class="line">│   │   └── &lt;new_test.py&gt;</div>
+<div class="line">│   │   └── &lt;new_test.c&gt;</div>
+<div class="line">│   └── cocotb_tests.py</div>
+<div class="line"><br /></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name of <code class="docutils literal notranslate"><span class="pre">C</span></code> file must match the name of <code class="docutils literal notranslate"><span class="pre">cocotb</span></code> test function</p>
+</div>
+<section id="python-template">
+<h3>Python Template<a class="headerlink" href="#python-template" title="Permalink to this heading"></a></h3>
+<p>The template for <code class="docutils literal notranslate"><span class="pre">python</span></code> test:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cocotb_includes</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># import python APIs</span>
+<span class="kn">import</span> <span class="nn">cocotb</span>
+
+<span class="nd">@cocotb</span><span class="o">.</span><span class="n">test</span><span class="p">()</span> <span class="c1"># cocotb test marker</span>
+<span class="nd">@repot_test</span> <span class="c1"># wrapper for configure test reporting files</span>
+<span class="k">async</span> <span class="k">def</span> <span class="o">&lt;</span><span class="n">test_name</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dut</span><span class="p">):</span>
+   <span class="n">caravelEnv</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_configure</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span> <span class="c1">#configure, start up and reset caravel</span>
+
+   <span class="c1">######################## add test sequence ######################</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.monitor_mgmt_gpio">
-<code class="descname">monitor_mgmt_gpio</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.monitor_mgmt_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.monitor_mgmt_gpio" title="Permalink to this definition">¶</a></dt>
-<dd><p>monitor managment gpio output</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">return the value of management gpio in string format possible values <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;X&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;Z&quot;</span></code></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.drive_gpio_in">
-<code class="descname">drive_gpio_in</code><span class="sig-paren">(</span><em>bits</em>, <em>data</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.drive_gpio_in"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.drive_gpio_in" title="Permalink to this definition">¶</a></dt>
-<dd><p>drive input gpios with spicific data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>bits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – gpios to drive</li>
-<li><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – data to drive the gpios with</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-<p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">drive_gpio_in</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mh">0x1</span><span class="p">)</span> <span class="c1"># drive gpio 7 with 1 (gpios[7]=1)</span>
-<span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">31</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mh">0xFFFFFFFF</span><span class="p">)</span> <span class="c1"># drive gpio 31 to 0 with ones (gpios[31:0]=32&#39;hFFFFFFFF)</span>
+<p>Commonly used APIs to monitor or drive the hardware can be found in <a class="reference internal" href="python_api.html"><span class="doc">Python APIs</span></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>New test python function should be imported into cocotb_tests.py</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="o">&lt;</span><span class="n">new_test</span><span class="o">&gt;.&lt;</span><span class="n">new_test</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="o">&lt;</span><span class="n">new_test</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.release_gpio">
-<code class="descname">release_gpio</code><span class="sig-paren">(</span><em>bits</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.release_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.release_gpio" title="Permalink to this definition">¶</a></dt>
-<dd><p>release driving the value of mprj bits 
-:param bits: gpios to drive
-:type bits: int or tuple(int, int)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.drive_mgmt_gpio">
-<code class="descname">drive_mgmt_gpio</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.drive_mgmt_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.drive_mgmt_gpio" title="Permalink to this definition">¶</a></dt>
-<dd><p>drive gpio management with spicific data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – data to drive the gpios with</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.disable_csb">
-<code class="descname">disable_csb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.disable_csb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.disable_csb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.enable_csb">
-<code class="descname">enable_csb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.enable_csb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.enable_csb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.release_csb">
-<code class="descname">release_csb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.release_csb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.release_csb" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the spi vsb signal high impedance</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.reset">
-<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reset caravel</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.wait_mgmt_gpio">
-<code class="descname">wait_mgmt_gpio</code><span class="sig-paren">(</span><em>data: int</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.wait_mgmt_gpio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.wait_mgmt_gpio" title="Permalink to this definition">¶</a></dt>
-<dd><p>wait for specific managment gpio value</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – data to wait for possible inputs <code class="docutils literal notranslate"><span class="pre">&quot;0&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code> <code class="docutils literal notranslate"><span class="pre">0</span></code> <code class="docutils literal notranslate"><span class="pre">1</span></code></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.setup_clock">
-<code class="descname">setup_clock</code><span class="sig-paren">(</span><em>period</em>, <em>unit='ns'</em><span class="sig-paren">)</span> &#x2192; cocotb.clock.Clock<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.setup_clock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.setup_clock" title="Permalink to this definition">¶</a></dt>
-<dd><p>Configure caravel clock and start it</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – clock period</li>
-<li><strong>unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – One of <code class="docutils literal notranslate"><span class="pre">'step'</span></code>, <code class="docutils literal notranslate"><span class="pre">'fs'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ps'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ns'</span></code>, <code class="docutils literal notranslate"><span class="pre">'us'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ms'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sec'</span></code>.When <em>units</em> is <code class="docutils literal notranslate"><span class="pre">'step'</span></code>,the timestep is determined by the simulator.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Object of type Caravel_env (caravel environment)</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="interfaces.caravel.Caravel_env.get_clock_obj">
-<code class="descname">get_clock_obj</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; cocotb.clock.Clock<a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.get_clock_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.get_clock_obj" title="Permalink to this definition">¶</a></dt>
-<dd><p>return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
+</section>
+<section id="c-template">
+<h3>C Template<a class="headerlink" href="#c-template" title="Permalink to this heading"></a></h3>
+<p>The template for Code test:</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;common.h&gt;</span><span class="c1"> // include required APIs</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(){</span>
+<span class="w">   </span><span class="c1">//////////////////////add test here//////////////////////</span>
+<span class="w">   </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 </div>
+<p>Commonly used APIs for software can be found in <a class="reference internal" href="C_api.html"><span class="doc">Software APIs</span></a></p>
+</section>
+</section>
+<section id="running-a-test">
+<span id="run-test"></span><h2>Running a Test<a class="headerlink" href="#running-a-test" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">chipcraft</span> <span class="pre">verify</span> <span class="pre">&lt;testname&gt;</span> <span class="pre">--design</span> <span class="pre">&lt;design</span> <span class="pre">name&gt;</span></code></p>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Add how to run test using chipcraft</p>
+</div>
+</section>
+<section id="creating-a-testlist">
+<span id="create-testlist"></span><h2>Creating a Testlist<a class="headerlink" href="#creating-a-testlist" title="Permalink to this heading"></a></h2>
+<p>Testlist is a file that contain a collection of test names to run together.</p>
+<p>The syntax is simple as <code class="docutils literal notranslate"><span class="pre">YAML</span></code> is used to write the testlist</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testlist Can has only 2 elements Tests or includes</span>
+
+<span class="c1"># Test element has list of dictionaries of tests to include</span>
+<span class="nt">Tests</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">&lt;test1&gt;</span><span class="p p-Indicator">,</span><span class="nt"> sim</span><span class="p">:</span><span class="w"> </span><span class="nv">RTL</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">&lt;test1&gt;</span><span class="p p-Indicator">,</span><span class="nt"> sim</span><span class="p">:</span><span class="w"> </span><span class="nv">GL</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">&lt;test2&gt;</span><span class="p p-Indicator">,</span><span class="nt"> sim</span><span class="p">:</span><span class="w"> </span><span class="nv">RTL</span><span class="p p-Indicator">}</span>
+
+<span class="c1"># include has paths  for other testlist to include in this test list</span>
+<span class="c1"># paths are relative to the location of this yaml file</span>
+<span class="nt">includes</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;test4&gt;/&lt;testlist&gt;.yaml</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;testlist&gt;.yaml</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../&lt;test5&gt;/&lt;testlist&gt;.yaml</span>
+</pre></div>
+</div>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>Add support for more elements for the test like clock, seed</p>
+</div>
+</section>
+<section id="running-a-testlist">
+<h2>Running a Testlist<a class="headerlink" href="#running-a-testlist" title="Permalink to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id5">
+<p class="admonition-title">Todo</p>
+<p>Add how to run testlist using chipcraft</p>
+</div>
+</section>
+<section id="checking-results">
+<h2>Checking Results<a class="headerlink" href="#checking-results" title="Permalink to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id6">
+<p class="admonition-title">Todo</p>
+<p>Add description of sim directiory</p>
+</div>
+</section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to caravel_cocotb’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python_api.html" class="btn btn-neutral float-right" title="Python APIs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

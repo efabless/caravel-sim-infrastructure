@@ -8,7 +8,8 @@ Welcome to caravel_cocotb's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-
+   
+   usage
    python_api
    C_api
 

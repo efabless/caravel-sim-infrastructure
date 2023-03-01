@@ -21,7 +21,7 @@ GPIO
 Interrupts
 ----------------
 
-.. doxygenfile:: irq.h
+.. doxygenfile:: irq_api.h
    :project: caravel_c_apis
 
 Logic analyzers
