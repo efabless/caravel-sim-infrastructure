@@ -91,6 +91,7 @@ class Test:
         self.create_module_trail()
         shutil.copyfile(f'{self.paths.COCOTB_PATH}/pli.tab',f'{self.test_dir}/pli.tab')
         self.set_test_macros()
+        self.set_linker_script()
         self.start_time = self.start_time_t.strftime("%H:%M:%S(%a)")
         self.status   = "running"
 
@@ -213,6 +214,24 @@ class Test:
                 f.write(f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n")
             else:
                 f.write(f"sys.path.append(path.abspath('{self.paths.COCOTB_PATH}'))\nfrom caravel_tests import *\n")
+    
+    def set_linker_script(self):
+        linker_script_orginal = f"{self.paths.FIRMWARE_PATH}/sections.lds" if not self.args.arm else f"{self.paths.FIRMWARE_PATH}/link.ld"
+        self.linker_script_file = f"{self.test_dir}/linker_script.lds"
+        shutil.copyfile(f'{linker_script_orginal}', self.linker_script_file)
+        if self.args.arm: 
+            return
+        if "mem_dff2_" in self.name: 
+            change_str(str="> dff2 ",new_str="> dff ",file_path=self.linker_script_file)
+            change_str(str="ORIGIN(dff2)",new_str="ORIGIN(dff)",file_path=self.linker_script_file)
+            change_str(str="LENGTH(dff2)",new_str="LENGTH(dff)",file_path=self.linker_script_file)
+        elif "mem_dff_" in self.name: 
+            change_str(str="> dff ",new_str="> dff2 ",file_path=self.linker_script_file)
+            change_str(str="> dff\n",new_str="> dff2\n",file_path=self.linker_script_file)
+            change_str(str="ORIGIN(dff)",new_str="ORIGIN(dff2)",file_path=self.linker_script_file)
+            change_str(str="LENGTH(dff)",new_str="LENGTH(dff2)",file_path=self.linker_script_file)
+
+
 
 def remove_argument(to_remove,patt):
     test_name = False

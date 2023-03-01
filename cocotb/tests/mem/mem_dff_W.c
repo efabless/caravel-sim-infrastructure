@@ -6,7 +6,7 @@ void main(){
     #define dff_start_address  (*(unsigned int*)0x0)  
     dff_start_address = DFF1_START_ADDR;
     #define dff_size  (*(unsigned int*)0x4)  
-    dff_size = 0x100;
+    dff_size = DFF1_SIZE /4;
 
     #define shifting  (*(unsigned int*)0x8)  
     #define data_used  (*(unsigned int*)0xC)  

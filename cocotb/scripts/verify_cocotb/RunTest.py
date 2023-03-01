@@ -17,7 +17,7 @@ class RunTest:
         GCC_PREFIX = "riscv32-unknown-linux-gnu"
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
-        LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.paths.FIRMWARE_PATH}/sections.lds,--strip-debug "
+        LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = f"-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
@@ -30,7 +30,7 @@ class RunTest:
     def hex_arm_command_gen(self): 
         GCC_COMPILE = f"arm-none-eabi"
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/cm0_start.s"
-        LINKER_SCRIPT = f"-T {self.paths.FIRMWARE_PATH}/link.ld"
+        LINKER_SCRIPT = f"-T {self.test.linker_script_file}"
         CPUFLAGS = f"-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
         includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
