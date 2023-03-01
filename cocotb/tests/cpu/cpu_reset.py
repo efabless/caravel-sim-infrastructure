@@ -13,7 +13,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def cpu_reset(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=1134823)
+    caravelEnv = await test_configure(dut,timeout_cycles=106878)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

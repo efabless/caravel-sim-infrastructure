@@ -17,11 +17,11 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def IRQ_external2(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=11155225)
+    caravelEnv = await test_configure(dut,timeout_cycles=396499)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    cocotb.log.info(f"[TEST] Start IRQ_external test")   
+    cocotb.log.info(f"[TEST] Start IRQ_external2 test")   
     pass_list = (0x1B,0x2B)
     fail_list = (0x1E,0x2E)
     phases_fails = 2

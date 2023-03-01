@@ -15,14 +15,14 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def bitbang_cpu_all_o(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=111842534)
+    caravelEnv = await test_configure(dut,timeout_cycles=437008)
     await gpio_all_o_seq(dut,caravelEnv)
 
 
 @cocotb.test()
 @repot_test
 async def bitbang_cpu_all_i(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=111641382)
+    caravelEnv = await test_configure(dut,timeout_cycles=2835898)
     await gpio_all_i_seq(dut,caravelEnv)
 
 
@@ -32,7 +32,7 @@ async def bitbang_cpu_all_i(dut):
 @cocotb.test()
 @repot_test
 async def bitbang_spi_o(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=11305311)
+    caravelEnv = await test_configure(dut,timeout_cycles=1879071)
     await gpio_all_o_seq(dut,caravelEnv,bitbang_spi_o_configure)
 
 
@@ -40,7 +40,7 @@ async def bitbang_spi_o(dut):
 @cocotb.test()
 @repot_test
 async def bitbang_spi_i(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=1170567)
+    caravelEnv = await test_configure(dut,timeout_cycles=315818)
     await gpio_all_i_seq(dut,caravelEnv,bitbang_spi_i_configure)
 
 async def bitbang_spi_i_configure(caravelEnv,cpu): 

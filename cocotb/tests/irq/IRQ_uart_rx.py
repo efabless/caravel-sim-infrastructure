@@ -22,12 +22,12 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def IRQ_uart_rx(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=11318039)
+    caravelEnv = await test_configure(dut,timeout_cycles=104979)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
     uart = UART(caravelEnv)
-    cocotb.log.info(f"[TEST] Start IRQ_uart test")   
+    cocotb.log.info(f"[TEST] Start IRQ_uart_rx test")   
     pass_list = (0x1B,0x2B)
     fail_list = (0x1E,0x2E)
     phases_fails = 2

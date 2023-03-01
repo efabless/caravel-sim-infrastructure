@@ -19,7 +19,7 @@ from tests.mgmt_gpio.mgmt_gpio import blink_counter
 async def PoR(dut):
     # configurations
     caravelEnv = caravel.Caravel_env(dut)
-    Timeout(clk=caravelEnv.clk,cycle_num=18223191,precision=0.2)
+    Timeout(clk=caravelEnv.clk,cycle_num=278945,precision=0.2)
     cocotb.scheduler.add(max_num_error(10,caravelEnv.clk))
     clock = Clock(caravelEnv.clk, read_config_file()["clock"], units="ns")  # Create a 25ns period clock on port clk
     cocotb.start_soon(clock.start())  # Start the clock

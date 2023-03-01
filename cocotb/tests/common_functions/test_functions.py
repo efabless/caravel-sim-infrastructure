@@ -39,8 +39,9 @@ def read_config_file():
         print(configs)
         return configs
 
-
+CLOCK_GLOBAL = 25
 active_gpios_num = 37 # number of active gpios
+# async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err']))-> caravel.Caravel_env:
 async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=25,timeout_precision=0.2,num_error=3)-> caravel.Caravel_env:
     """
     Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.
@@ -69,6 +70,11 @@ async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=
     if  Macros['ARM']:
         global active_gpios_num
         active_gpios_num = 34 # with ARM the last 3 gpios are not configurable
+
+    # For calculating recommended timeout
+    global CLOCK_GLOBAL
+    CLOCK_GLOBAL = clk
+
     return caravelEnv
     
 class CallCounted:
@@ -109,6 +115,7 @@ def repot_test(func):
             raise cocotb.result.TestComplete(f'Test failed {msg}')
         else: 
             cocotb.log.info(f'Test passed {msg}')
+            cocotb.log.info(f'Recommeneded timeout to use {int(cocotb.utils.get_sim_time("ns")*1.01/CLOCK_GLOBAL)} cycles')
     return wrapper_func
 
 async def max_num_error(num_error,clk):
