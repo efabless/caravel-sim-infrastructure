@@ -131,14 +131,11 @@ class RunTest:
         dirs = f'+incdir+\\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\\" '
         if self.test.sim == "RTL":
             shutil.copyfile(f'{self.paths.VERILOG_PATH}/includes/rtl_caravel_vcs.v', f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{self.paths.VERILOG_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel/verilog",new_str=f"\"{self.paths.CARAVEL_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
-            shutil.copyfile(f"{self.paths.COCOTB_PATH}/includes.v", f"{self.test.test_dir}/includes.v")
-
         else: 
-            shutil.copyfile(f'{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v', f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{self.paths.VERILOG_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel/verilog",new_str=f"\"{self.paths.CARAVEL_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")   
+            shutil.copyfile(f'{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v', f"{self.paths.COCOTB_PATH}/includes.v") 
+        change_str(str="\"caravel/verilog",new_str=f"\"{self.paths.CARAVEL_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
+        change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{self.paths.VERILOG_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
+        shutil.copyfile(f"{self.paths.COCOTB_PATH}/includes.v", f"{self.test.test_dir}/includes.v")
         macros = ' +define+' + ' +define+'.join(self.test.macros)
         coverage_command = ""
         if self.args.cov: 
