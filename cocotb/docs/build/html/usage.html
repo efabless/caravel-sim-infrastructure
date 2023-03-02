@@ -59,7 +59,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python_api.html">Python APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="C_api.html">Software APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C_api.html">Firmware APIs</a></li>
 </ul>
 
         </div>
@@ -103,17 +103,17 @@
 <p>A typical test for <em>Caravel</em> consists of 2 parts: <code class="docutils literal notranslate"><span class="pre">Python/cocotb</span></code> code and <code class="docutils literal notranslate"><span class="pre">C</span></code> code.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Python/cocotb</span></code> code is for communicating with <em>Caravel</em> hardware interface inputs, outputs, clock, reset, and power ports/bins. <code class="docutils literal notranslate"><span class="pre">cocotb</span></code> here replaces the <code class="docutils literal notranslate"><span class="pre">verilog</span></code> code.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">C</span></code> code provides software code that would be loaded into the <em>Caravel</em> CPU.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C</span></code> code provides firmware code that would be loaded into the <em>Caravel</em> CPU.</p></li>
 </ul>
 <p>Tests files has to located under <code class="docutils literal notranslate"><span class="pre">&lt;caravel_user_project&gt;/verilog/dv/cocotb/</span></code></p>
-<div class="line-block">
-<div class="line">dv</div>
-<div class="line">├── cocotb</div>
-<div class="line">│   ├── &lt;new_test&gt;</div>
-<div class="line">│   │   └── &lt;new_test.py&gt;</div>
-<div class="line">│   │   └── &lt;new_test.c&gt;</div>
-<div class="line">│   └── cocotb_tests.py</div>
-<div class="line"><br /></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>| dv
+| ├── cocotb
+| │   ├── &lt;new_test&gt;
+| │   │   └── &lt;new_test.py&gt;
+| │   │   └── &lt;new_test.c&gt;
+| │   └── cocotb_tests.py
+|
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -152,7 +152,7 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Commonly used APIs for software can be found in <a class="reference internal" href="C_api.html"><span class="doc">Software APIs</span></a></p>
+<p>Commonly used APIs for firmware can be found in <a class="reference internal" href="C_api.html"><span class="doc">Firmware APIs</span></a></p>
 </section>
 </section>
 <section id="running-a-test">

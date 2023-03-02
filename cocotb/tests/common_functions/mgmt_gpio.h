@@ -83,7 +83,7 @@ void mgmt_gpio_wr(bool data){reg_gpio_out = data;}
  * 
  * \note
  * This function works correctly when management GPIO  configured as input 
- * If management doesn't connect to anything the software would read "0"
+ * If management doesn't connect to anything the firmware would read "0"
  * 
  */
 int  mgmt_gpio_rd(){return reg_gpio_in;}

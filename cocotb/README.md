@@ -59,14 +59,13 @@ Creating a Test
 
 Refer to [creating a test](docs/build/html/_sources/usage.rst.txt#creating-a-test) for where and how to create a test 
 
-Refer to [Python APIs](docs/build/html/python_api.html) for APIs to monitor or drive the hardware
+Refer to [cocotb based APIs](docs/build/html/python_api.html) for APIs to monitor or drive the hardware
 
-Refer to [software APIs](docs/build/html/C_api.html) for APIs for software
+Refer to [firmware APIs](docs/build/html/C_api.html) for APIs for firmware
 
-Tests Example
-=================
+# Test Examples
 
-Refer to [cocotb](https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb) for tests example generated for 16bit counter
+Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb) for tests example generated for 16bit counter
 
 
 Creating a Testlist
@@ -78,8 +77,9 @@ Refer to [creating a testlist](docs/build/html/_sources/usage.rst.txt#creating-a
 run a test  
 =============================
 
- To run test or more than one test: 
- run script verify_cocotb at this directory
+Tests can run individually or as a test group using ``testlist``. Test can also run in RTL, GL or SDF sims with 8 different coreners.
+
+To a test use run script verify_cocotb: 
 
 ```
 optional arguments:

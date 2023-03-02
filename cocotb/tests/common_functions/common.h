@@ -32,7 +32,7 @@ void enable_debug(){
 }
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 /**
- * Enable communication  between software and user project 
+ * Enable communication  between firmware and user project 
  * \warning 
  * This necessary when reading or writing are needed between wishbone and user project 
  * if interface isn't enabled no ack would be receive  and the writing or reading command will be stuck

@@ -58,14 +58,14 @@ L\+A\+\_\+\+R\+E\+G\+\_\+3&3&Fourth LA register probs \mbox{[}95\+:64\mbox{]} \\
 \subsubsection{\texorpdfstring{get\+\_\+la\+\_\+reg()}{get\_la\_reg()}}
 {\footnotesize\ttfamily unsigned int get\+\_\+la\+\_\+reg (\begin{DoxyParamCaption}\item[{enum \hyperlink{la_8h_a4f5936f125c6714bbd6b3747270f48f0}{la\+\_\+reg\+\_\+number}}]{reg\+\_\+num }\end{DoxyParamCaption})}
 
-Read data through logic analyzers from user project to software
+Read data through logic analyzers from user project to firmware
 
 \begin{DoxyNote}{Note}
 For this to work correctly probe should be configured as output
 \end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
-{\em reg\+\_\+num} & logic analyzer register to read from. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project) \\
+{\em reg\+\_\+num} & logic analyzer register to read from. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project) \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{la_8h_aa59af651665d8938229016610ffeb925}\label{la_8h_aa59af651665d8938229016610ffeb925}} 
@@ -76,11 +76,11 @@ For this to work correctly probe should be configured as output
 
 Setting logic analyzer input enable
 
-Enable as input to the user project. Software sends to user project
+Enable as input to the user project. firmware sends to user project
 
 
 \begin{DoxyParams}{Parameters}
-{\em reg\+\_\+num} & logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)\\
+{\em reg\+\_\+num} & logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)\\
 \hline
 {\em is\+\_\+enable} & 32 bits each bit indicate if the corresponding probe enabled as input \\
 \hline
@@ -93,11 +93,11 @@ Enable as input to the user project. Software sends to user project
 
 Setting logic analyzer output enable
 
-Enable as output from the user project. Software receives from user project
+Enable as output from the user project. firmware receives from user project
 
 
 \begin{DoxyParams}{Parameters}
-{\em reg\+\_\+num} & logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)\\
+{\em reg\+\_\+num} & logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)\\
 \hline
 {\em is\+\_\+enable} & 32 bits each bit indicate if the corresponding probe enabled as output \\
 \hline
@@ -108,14 +108,14 @@ Enable as output from the user project. Software receives from user project
 \subsubsection{\texorpdfstring{set\+\_\+la\+\_\+reg()}{set\_la\_reg()}}
 {\footnotesize\ttfamily void set\+\_\+la\+\_\+reg (\begin{DoxyParamCaption}\item[{enum \hyperlink{la_8h_a4f5936f125c6714bbd6b3747270f48f0}{la\+\_\+reg\+\_\+number}}]{reg\+\_\+num,  }\item[{unsigned int}]{data }\end{DoxyParamCaption})}
 
-Write data through logic analyzers from software to user project
+Write data through logic analyzers from firmware to user project
 
 \begin{DoxyNote}{Note}
 For this to work correctly probe should be configured as output
 \end{DoxyNote}
 
 \begin{DoxyParams}{Parameters}
-{\em reg\+\_\+num} & logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)\\
+{\em reg\+\_\+num} & logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)\\
 \hline
 {\em data} & data to write through logic analyzers \\
 \hline
