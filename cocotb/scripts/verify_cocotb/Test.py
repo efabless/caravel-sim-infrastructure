@@ -74,7 +74,11 @@ class Test:
             if self.args.vcs:
                 user_project = user_project.replace("{","-v {")
         else: 
-            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
+            if self.sim == "RTL":
+                user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
+            else: 
+                user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
+
             user_project = f" -f {user_include}"
             if self.args.vcs:
                 user_project=""
