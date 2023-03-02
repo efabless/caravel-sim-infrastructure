@@ -142,11 +142,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Read data through logic analyzers from user project to software</p>
+<p>Read data through logic analyzers from user project to firmware</p>
 <dl class="section note"><dt>Note</dt><dd>For this to work correctly probe should be configured as output</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">reg_num</td><td>logic analyzer register to read from. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project) </td></tr>
+    <tr><td class="paramname">reg_num</td><td>logic analyzer register to read from. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project) </td></tr>
   </table>
   </dd>
 </dl>
@@ -179,10 +179,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Setting logic analyzer input enable</p>
-<p>Enable as input to the user project. Software sends to user project</p>
+<p>Enable as input to the user project. firmware sends to user project</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">reg_num</td><td>logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</td></tr>
+    <tr><td class="paramname">reg_num</td><td>logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)</td></tr>
     <tr><td class="paramname">is_enable</td><td>32 bits each bit indicate if the corresponding probe enabled as input </td></tr>
   </table>
   </dd>
@@ -216,10 +216,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Setting logic analyzer output enable</p>
-<p>Enable as output from the user project. Software receives from user project</p>
+<p>Enable as output from the user project. firmware receives from user project</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">reg_num</td><td>logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</td></tr>
+    <tr><td class="paramname">reg_num</td><td>logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)</td></tr>
     <tr><td class="paramname">is_enable</td><td>32 bits each bit indicate if the corresponding probe enabled as output </td></tr>
   </table>
   </dd>
@@ -252,11 +252,11 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Write data through logic analyzers from software to user project</p>
+<p>Write data through logic analyzers from firmware to user project</p>
 <dl class="section note"><dt>Note</dt><dd>For this to work correctly probe should be configured as output</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">reg_num</td><td>logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</td></tr>
+    <tr><td class="paramname">reg_num</td><td>logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)</td></tr>
     <tr><td class="paramname">data</td><td>data to write through logic analyzers </td></tr>
   </table>
   </dd>

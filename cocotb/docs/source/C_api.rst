@@ -1,7 +1,7 @@
 
 .. _C_API:
 
-Software APIs
+Firmware APIs
 ====================
 
 C functions

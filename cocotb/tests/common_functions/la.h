@@ -27,12 +27,12 @@ enum la_reg_number {
 /**
  * Setting logic analyzer input enable 
  * 
- * Enable as input to the user project. Software sends to user project
+ * Enable as input to the user project. firmware sends to user project
  *   
  * @param reg_num logic analyzer register to write to. 
  * Usually not all caravel versions has the same numbers of LA registers 
- * They might have 4 registers (128 probs between software and user project)
- * or  registers (64 probs between software and user project)
+ * They might have 4 registers (128 probs between firmware and user project)
+ * or  registers (64 probs between firmware and user project)
  * 
  * @param is_enable 32 bits each bit indicate if the corresponding probe enabled as input 
  *  
@@ -53,13 +53,13 @@ void set_la_ien(enum la_reg_number reg_num , unsigned int is_enable){
 /**
  * Setting logic analyzer output enable 
  * 
- * Enable as output from the user project. Software receives from user project
+ * Enable as output from the user project. firmware receives from user project
  * 
  *  
  * @param reg_num logic analyzer register to write to. 
  * Usually not all caravel versions has the same numbers of LA registers 
- * They might have 4 registers (128 probs between software and user project)
- * or  registers (64 probs between software and user project)
+ * They might have 4 registers (128 probs between firmware and user project)
+ * or  registers (64 probs between firmware and user project)
  * 
  * @param is_enable 32 bits each bit indicate if the corresponding probe enabled as output 
  *  
@@ -78,15 +78,15 @@ void set_la_oen(enum la_reg_number reg_num , unsigned int is_enable){
     }
 }
 /**
- * Write data through logic analyzers from software to user project
+ * Write data through logic analyzers from firmware to user project
  * 
  * \note 
  * For this to work correctly probe should be configured as output 
  * 
  * @param reg_num logic analyzer register to write to. 
  * Usually not all caravel versions has the same numbers of LA registers 
- * They might have 4 registers (128 probs between software and user project)
- * or  registers (64 probs between software and user project)
+ * They might have 4 registers (128 probs between firmware and user project)
+ * or  registers (64 probs between firmware and user project)
  * 
  * @param data data to write through logic analyzers 
  *  
@@ -105,15 +105,15 @@ void set_la_reg(enum la_reg_number reg_num , unsigned int data){
     }
 }
 /**
- * Read data through logic analyzers from user project to software
+ * Read data through logic analyzers from user project to firmware
  * 
  * \note 
  * For this to work correctly probe should be configured as output 
  * 
  * @param reg_num logic analyzer register to read from. 
  * Usually not all caravel versions has the same numbers of LA registers 
- * They might have 4 registers (128 probs between software and user project)
- * or  registers (64 probs between software and user project)
+ * They might have 4 registers (128 probs between firmware and user project)
+ * or  registers (64 probs between firmware and user project)
  * 
  *  
  */

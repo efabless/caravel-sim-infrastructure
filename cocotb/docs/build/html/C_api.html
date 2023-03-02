@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Software APIs &mdash; caravel_cocotb alpha documentation</title>
+  <title>Firmware APIs &mdash; caravel_cocotb alpha documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -47,7 +47,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Quickstart Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api.html">Python APIs</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Software APIs</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Firmware APIs</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#c-functions">C functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#common-functions">Common functions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#gpio">GPIO</a></li>
@@ -78,7 +78,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Software APIs</li>
+      <li class="breadcrumb-item active">Firmware APIs</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/C_api.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,8 +88,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="software-apis">
-<span id="c-api"></span><h1>Software APIs<a class="headerlink" href="#software-apis" title="Permalink to this heading"></a></h1>
+  <section id="firmware-apis">
+<span id="c-api"></span><h1>Firmware APIs<a class="headerlink" href="#firmware-apis" title="Permalink to this heading"></a></h1>
 <section id="c-functions">
 <h2>C functions<a class="headerlink" href="#c-functions" title="Permalink to this heading"></a></h2>
 <section id="common-functions">
@@ -99,7 +99,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv421enable_user_interfacev">
 <span id="_CPPv321enable_user_interfacev"></span><span id="_CPPv221enable_user_interfacev"></span><span id="enable_user_interface"></span><span class="target" id="common_8h_1af79fbe355fd538621db12e3ae9e3e6b8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user_interface</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421enable_user_interfacev" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable communication between software and user project </p>
+<dd><p>Enable communication between firmware and user project </p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This necessary when reading or writing are needed between wishbone and user project if interface isn’t enabled no ack would be receive and the writing or reading command will be stuck </p>
@@ -476,7 +476,7 @@
 <dd><p>Enable or disable external1 interrupt GPIO[7]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
 </dd>
 </dl>
 </dd></dl>
@@ -487,7 +487,7 @@
 <dd><p>Enable or disable external2 interrupt GPIO[12]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
 </dd>
 </dl>
 </dd></dl>
@@ -498,7 +498,7 @@
 <dd><p>Enable or disable timer0 interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
 </dd>
 </dl>
 </dd></dl>
@@ -509,7 +509,7 @@
 <dd><p>Enable or disable UART tx interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
 </dd>
 </dl>
 </dd></dl>
@@ -520,7 +520,7 @@
 <dd><p>Enable or disable UART rx interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
 </dd>
 </dl>
 </dd></dl>
@@ -531,7 +531,7 @@
 <dd><p>Enable or disable SPI interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and software would detect if happened, 0 (false) interrupt is disabled and software would not detect if happened </p>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
 </dd>
 </dl>
 </dd></dl>
@@ -582,11 +582,11 @@
 <dt class="sig sig-object cpp" id="_CPPv410set_la_ien13la_reg_numberj">
 <span id="_CPPv310set_la_ien13la_reg_numberj"></span><span id="_CPPv210set_la_ien13la_reg_numberj"></span><span id="set_la_ien__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1aa59af651665d8938229016610ffeb925"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_ien</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_ien13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Setting logic analyzer input enable</p>
-<p>Enable as input to the user project. Software sends to user project</p>
+<p>Enable as input to the user project. firmware sends to user project</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</p></li>
+<li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)</p></li>
 <li><p><strong>is_enable</strong> – 32 bits each bit indicate if the corresponding probe enabled as input </p></li>
 </ul>
 </dd>
@@ -597,11 +597,11 @@
 <dt class="sig sig-object cpp" id="_CPPv410set_la_oen13la_reg_numberj">
 <span id="_CPPv310set_la_oen13la_reg_numberj"></span><span id="_CPPv210set_la_oen13la_reg_numberj"></span><span id="set_la_oen__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1aeed29349be1ae153fde34d62a59b9dfc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_oen</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_oen13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Setting logic analyzer output enable</p>
-<p>Enable as output from the user project. Software receives from user project</p>
+<p>Enable as output from the user project. firmware receives from user project</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</p></li>
+<li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)</p></li>
 <li><p><strong>is_enable</strong> – 32 bits each bit indicate if the corresponding probe enabled as output </p></li>
 </ul>
 </dd>
@@ -611,7 +611,7 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv410set_la_reg13la_reg_numberj">
 <span id="_CPPv310set_la_reg13la_reg_numberj"></span><span id="_CPPv210set_la_reg13la_reg_numberj"></span><span id="set_la_reg__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1a8f614c8578907a47d6826cc8cdb6f1d5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_reg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_reg13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Write data through logic analyzers from software to user project</p>
+<dd><p>Write data through logic analyzers from firmware to user project</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For this to work correctly probe should be configured as output</p>
@@ -619,7 +619,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project)</p></li>
+<li><p><strong>reg_num</strong> – logic analyzer register to write to. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project)</p></li>
 <li><p><strong>data</strong> – data to write through logic analyzers </p></li>
 </ul>
 </dd>
@@ -629,14 +629,14 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv410get_la_reg13la_reg_number">
 <span id="_CPPv310get_la_reg13la_reg_number"></span><span id="_CPPv210get_la_reg13la_reg_number"></span><span id="get_la_reg__la_reg_number"></span><span class="target" id="la_8h_1a46f839584a4aa3a3c0a24a103f8e5a1e"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_la_reg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410get_la_reg13la_reg_number" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Read data through logic analyzers from user project to software</p>
+<dd><p>Read data through logic analyzers from user project to firmware</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For this to work correctly probe should be configured as output</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>reg_num</strong> – logic analyzer register to read from. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between software and user project) or registers (64 probs between software and user project) </p>
+<dd class="field-odd"><p><strong>reg_num</strong> – logic analyzer register to read from. Usually not all caravel versions has the same numbers of LA registers They might have 4 registers (128 probs between firmware and user project) or registers (64 probs between firmware and user project) </p>
 </dd>
 </dl>
 </dd></dl>
@@ -692,7 +692,7 @@
 <dd><p>Read data in management GPIO</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This function works correctly when management GPIO configured as input If management doesn’t connect to anything the software would read “0” </p>
+<p>This function works correctly when management GPIO configured as input If management doesn’t connect to anything the firmware would read “0” </p>
 </div>
 </dd></dl>
 

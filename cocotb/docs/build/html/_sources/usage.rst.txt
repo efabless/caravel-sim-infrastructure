@@ -27,18 +27,20 @@ A typical test for *Caravel* consists of 2 parts: ``Python/cocotb`` code and ``C
 
 * ``Python/cocotb`` code is for communicating with *Caravel* hardware interface inputs, outputs, clock, reset, and power ports/bins. ``cocotb`` here replaces the ``verilog`` code.
 
-* ``C`` code provides software code that would be loaded into the *Caravel* CPU.
+* ``C`` code provides firmware code that would be loaded into the *Caravel* CPU.
 
 Tests files has to located under ``<caravel_user_project>/verilog/dv/cocotb/`` 
 
+.. code-block::
 
-| dv
-| ├── cocotb
-| │   ├── <new_test>
-| │   │   └── <new_test.py>
-| │   │   └── <new_test.c>
-| │   └── cocotb_tests.py
-| 
+      | dv
+      | ├── cocotb
+      | │   ├── <new_test>
+      | │   │   └── <new_test.py>
+      | │   │   └── <new_test.c>
+      | │   └── cocotb_tests.py
+      | 
+
 
 .. note:: 
 
@@ -87,7 +89,7 @@ The template for Code test:
    }
 
 
-Commonly used APIs for software can be found in :doc:`C_api`
+Commonly used APIs for firmware can be found in :doc:`C_api`
 
 
 .. _run_test:
