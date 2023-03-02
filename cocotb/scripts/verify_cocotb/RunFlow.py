@@ -115,7 +115,7 @@ class RunFLow():
             file_w.close()
 
     def set_config_script(self,design_info):
-        new_config_path = f'{self.paths.COCOTB_PATH}/sim/{self.args.tag}/configs.yaml'
+        new_config_path = f'{self.paths.SIM_PATH}/{self.args.tag}/configs.yaml'
         design_configs = dict(clock=self.args.clk,max_err=self.args.maxerr,PDK=self.args.pdk)
         design_configs.update(dict(CARAVEL_ROOT=self.paths.CARAVEL_ROOT,MCW_ROOT=self.paths.MCW_ROOT,PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}'))
         with open(new_config_path, 'w') as file:
