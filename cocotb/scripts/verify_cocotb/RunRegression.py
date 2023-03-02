@@ -99,11 +99,10 @@ class RunRegression:
                                     self.add_new_test(test_name=test,sim_type = sim_type, corner = corner)
                             else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.args.corner[0])
                     else:
-                        if sim_type =="GL_SDF": 
+                        if self.args.sim =="GL_SDF": 
                             for corner in self.corners: 
                                 self.add_new_test(test_name=test,sim_type = sim_type, corner = corner)
                         else: self.add_new_test(test_name=test,sim_type = sim_type,corner = self.args.corner[0])
-
             else:
                 if isinstance(self.args.sim,list):
                     for sim_type in self.args.sim:
