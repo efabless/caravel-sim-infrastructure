@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quickstart Guide &mdash; caravel_cocotb alpha documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Python APIs" href="python_api.html" />
+    <link rel="prev" title="Welcome to caravel_cocotb’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            caravel_cocotb
+          </a>
+              <div class="version">
+                1.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-test">Creating a Test</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#python-template">Python Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#c-template">C Template</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-test">Running a Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-testlist">Creating a Testlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-testlist">Running a Testlist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-results">Checking Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api.html">Python APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C_api.html">Software APIs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">caravel_cocotb</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quickstart Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="quickstart-guide">
+<span id="usage"></span><h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Permalink to this heading"></a></h1>
+<p>This project aims to provide a user friendly environment for adding and running cocotb tests for <em>Caravel user projects</em>.</p>
+<p>Please setup your project through <code class="docutils literal notranslate"><span class="pre">ChipCraft</span></code> as this project is setuped and run through <code class="docutils literal notranslate"><span class="pre">ChipCraft</span></code>.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Add chipcraft docs link or info</p>
+</div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Add link for examples</p>
+</div>
+<section id="creating-a-test">
+<span id="create-test"></span><h2>Creating a Test<a class="headerlink" href="#creating-a-test" title="Permalink to this heading"></a></h2>
+<p>A typical test for <em>Caravel</em> consists of 2 parts: <code class="docutils literal notranslate"><span class="pre">Python/cocotb</span></code> code and <code class="docutils literal notranslate"><span class="pre">C</span></code> code.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Python/cocotb</span></code> code is for communicating with <em>Caravel</em> hardware interface inputs, outputs, clock, reset, and power ports/bins. <code class="docutils literal notranslate"><span class="pre">cocotb</span></code> here replaces the <code class="docutils literal notranslate"><span class="pre">verilog</span></code> code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">C</span></code> code provides software code that would be loaded into the <em>Caravel</em> CPU.</p></li>
+</ul>
+<p>Tests files has to located under <code class="docutils literal notranslate"><span class="pre">&lt;caravel_user_project&gt;/verilog/dv/cocotb/</span></code></p>
+<div class="line-block">
+<div class="line">dv</div>
+<div class="line">├── cocotb</div>
+<div class="line">│   ├── &lt;new_test&gt;</div>
+<div class="line">│   │   └── &lt;new_test.py&gt;</div>
+<div class="line">│   │   └── &lt;new_test.c&gt;</div>
+<div class="line">│   └── cocotb_tests.py</div>
+<div class="line"><br /></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The name of <code class="docutils literal notranslate"><span class="pre">C</span></code> file must match the name of <code class="docutils literal notranslate"><span class="pre">cocotb</span></code> test function</p>
+</div>
+<section id="python-template">
+<h3>Python Template<a class="headerlink" href="#python-template" title="Permalink to this heading"></a></h3>
+<p>The template for <code class="docutils literal notranslate"><span class="pre">python</span></code> test:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cocotb_includes</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># import python APIs</span>
+<span class="kn">import</span> <span class="nn">cocotb</span>
+
+<span class="nd">@cocotb</span><span class="o">.</span><span class="n">test</span><span class="p">()</span> <span class="c1"># cocotb test marker</span>
+<span class="nd">@repot_test</span> <span class="c1"># wrapper for configure test reporting files</span>
+<span class="k">async</span> <span class="k">def</span> <span class="o">&lt;</span><span class="n">test_name</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dut</span><span class="p">):</span>
+   <span class="n">caravelEnv</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_configure</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span> <span class="c1">#configure, start up and reset caravel</span>
+
+   <span class="c1">######################## add test sequence ######################</span>
+</pre></div>
+</div>
+<p>Commonly used APIs to monitor or drive the hardware can be found in <a class="reference internal" href="python_api.html"><span class="doc">Python APIs</span></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>New test python function should be imported into cocotb_tests.py</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="o">&lt;</span><span class="n">new_test</span><span class="o">&gt;.&lt;</span><span class="n">new_test</span><span class="o">&gt;</span> <span class="kn">import</span> <span class="o">&lt;</span><span class="n">new_test</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="c-template">
+<h3>C Template<a class="headerlink" href="#c-template" title="Permalink to this heading"></a></h3>
+<p>The template for Code test:</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;common.h&gt;</span><span class="c1"> // include required APIs</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(){</span>
+<span class="w">   </span><span class="c1">//////////////////////add test here//////////////////////</span>
+<span class="w">   </span><span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Commonly used APIs for software can be found in <a class="reference internal" href="C_api.html"><span class="doc">Software APIs</span></a></p>
+</section>
+</section>
+<section id="running-a-test">
+<span id="run-test"></span><h2>Running a Test<a class="headerlink" href="#running-a-test" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">chipcraft</span> <span class="pre">verify</span> <span class="pre">&lt;testname&gt;</span> <span class="pre">--design</span> <span class="pre">&lt;design</span> <span class="pre">name&gt;</span></code></p>
+<div class="admonition-todo admonition" id="id3">
+<p class="admonition-title">Todo</p>
+<p>Add how to run test using chipcraft</p>
+</div>
+</section>
+<section id="creating-a-testlist">
+<span id="create-testlist"></span><h2>Creating a Testlist<a class="headerlink" href="#creating-a-testlist" title="Permalink to this heading"></a></h2>
+<p>Testlist is a file that contain a collection of test names to run together.</p>
+<p>The syntax is simple as <code class="docutils literal notranslate"><span class="pre">YAML</span></code> is used to write the testlist</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># Testlist Can has only 2 elements Tests or includes</span>
+
+<span class="c1"># Test element has list of dictionaries of tests to include</span>
+<span class="nt">Tests</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">&lt;test1&gt;</span><span class="p p-Indicator">,</span><span class="nt"> sim</span><span class="p">:</span><span class="w"> </span><span class="nv">RTL</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">&lt;test1&gt;</span><span class="p p-Indicator">,</span><span class="nt"> sim</span><span class="p">:</span><span class="w"> </span><span class="nv">GL</span><span class="p p-Indicator">}</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="nv">&lt;test2&gt;</span><span class="p p-Indicator">,</span><span class="nt"> sim</span><span class="p">:</span><span class="w"> </span><span class="nv">RTL</span><span class="p p-Indicator">}</span>
+
+<span class="c1"># include has paths  for other testlist to include in this test list</span>
+<span class="c1"># paths are relative to the location of this yaml file</span>
+<span class="nt">includes</span><span class="p">:</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;test4&gt;/&lt;testlist&gt;.yaml</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;testlist&gt;.yaml</span>
+<span class="w">   </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">../&lt;test5&gt;/&lt;testlist&gt;.yaml</span>
+</pre></div>
+</div>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>Add support for more elements for the test like clock, seed</p>
+</div>
+</section>
+<section id="running-a-testlist">
+<h2>Running a Testlist<a class="headerlink" href="#running-a-testlist" title="Permalink to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id5">
+<p class="admonition-title">Todo</p>
+<p>Add how to run testlist using chipcraft</p>
+</div>
+</section>
+<section id="checking-results">
+<h2>Checking Results<a class="headerlink" href="#checking-results" title="Permalink to this heading"></a></h2>
+<div class="admonition-todo admonition" id="id6">
+<p class="admonition-title">Todo</p>
+<p>Add description of sim directiory</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to caravel_cocotb’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="python_api.html" class="btn btn-neutral float-right" title="Python APIs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Efabless.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

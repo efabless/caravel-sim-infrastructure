@@ -15,8 +15,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 Testing timer interrupts 
 Enable interrupt for IRQ external pin mprj_io[12] -> should be drived to 1 by the environment
@@ -42,7 +43,7 @@ void main(){
     configure_gpio(12,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
 
     gpio_config_load();
-    enable_external2_irq();
+    enable_external2_irq(1);
 
     // test interrrupt happen when mprj[12] is asserted
     clear_flag();

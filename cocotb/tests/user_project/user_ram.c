@@ -1,13 +1,15 @@
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 This test is developed for testing RAM used inside the user area by swift 2 release
 */
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     configure_all_gpios(GPIO_MODE_MGMT_STD_OUTPUT);
+    gpio_config_load();      
     set_gpio_l(0);
     unsigned int *dff_start_address =  (unsigned int *) AHB_EXT_BASE_ADDR;
     unsigned int dff_size =  2048/4;

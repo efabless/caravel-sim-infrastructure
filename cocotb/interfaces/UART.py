@@ -1,9 +1,13 @@
 import cocotb
 from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles,Timer,Edge
 from interfaces.common import Macros
+from interfaces.caravel import Caravel_env
 
 class UART():
-    def __init__(self,caravelEnv) -> None:
+    """UART Verification environment to provide APIs to communicate with caravel uart through caravel gpios
+    
+    :param Caravel_env caravelEnv: caravel environment """
+    def __init__(self,caravelEnv:Caravel_env) -> None:
         self.caravelEnv = caravelEnv
         clock = caravelEnv.get_clock_obj()
         self.period = clock.period/1000
@@ -11,6 +15,9 @@ class UART():
         cocotb.log.info (f"[UART] configure uart bit_time_ns = {self.bit_time_ns}ns")
 
     async def get_line(self):
+        """Read line sent through UART (msg is sent by the software) 
+
+        - Line is a bunch of ASCII sybmols ended by linefeed '\\\\n' """
         line =''
         while(True):
             new_char = await self.get_char()
@@ -18,12 +25,14 @@ class UART():
             if new_char == "\n":
                 break
             line += new_char 
-            cocotb.log.info (f"[UART] new char again = {new_char}")
-            cocotb.log.info (f"[UART] line recieved = {line}")
+            cocotb.log.debug (f"[UART] part of the line recieved = {line}")
         cocotb.log.info (f"[UART] line recieved = {line}")
-        return line
+        return line[0:-1]
 
     async def get_char(self):
+        """Read character sent through UART (character is sent by the software) 
+
+        - Character is a 8 bit ASCII symbol """
         await self.start_of_tx()
         char =''
         for i in range(8):
@@ -40,6 +49,9 @@ class UART():
 
     
     async def uart_send_char(self,char):
+        """Send character to UART (character is sent to the software) 
+
+        - Character is a 8 bit ASCII symbol """
         char_bits = [int(x) for x in '{:08b}'.format(ord(char))]
         cocotb.log.info (f"[TEST] start sending on uart {char}")
         #send start bit
@@ -66,6 +78,10 @@ class UART():
         await Timer(self.bit_time_ns, units='ns')
 
     async def uart_send_line(self,line):
+        """Send line to UART (msg is sent to the software) 
+
+        - Line is a bunch of ASCII sybmols ended by linefeed '\\\\n' 
+        """
         for char in line: 
             await self.uart_send_char(char)
 

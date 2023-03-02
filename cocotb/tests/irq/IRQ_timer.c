@@ -15,7 +15,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "../common_functions/common.c"
+#include <common.h>
+
 
 void main(){
     enable_debug();
@@ -24,7 +25,7 @@ void main(){
 
     clear_flag();
     /* Configure timer for a single-shot countdown */
-    enable_timer0_irq();
+    enable_timer0_irq(1);
     timer0_oneshot_configure(500);
     // Loop, waiting for the interrupt to change reg_mprj_datah
     char is_pass = 0;
@@ -43,7 +44,7 @@ void main(){
     clear_flag();
     // test interrupt doesn't happened when timer isnt used
     set_debug_reg2(0xBB);
-    timer0_disable(); // disable counter
+    enable_timer0(0); // disable counter
     clear_flag();
     // Loop, waiting for the interrupt to change reg_mprj_datah
     is_pass = 0;

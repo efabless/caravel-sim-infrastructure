@@ -15,8 +15,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 
 // --------------------------------------------------------
 
@@ -28,7 +29,7 @@
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
 
     configure_gpio(34,GPIO_MODE_MGMT_STD_INPUT_NOPULL); // SDI
     configure_gpio(35,GPIO_MODE_MGMT_STD_OUTPUT);       // SDO
@@ -40,7 +41,7 @@ void main(){
 
     set_debug_reg2(0xAA);
 
-    spi_en();
+    enable_spi(1);
 
 
     // For SPI operation, GPIO 1 should be an input, and GPIOs 2 to 4
@@ -61,7 +62,7 @@ void main(){
     // bit 15:		(unused)
 
 
-    CS_en();  // sel=0, manual CS
+    enable_CS(1);  // sel=0, manual CS
 
     spi_write(0x03);        // Write 0x03 (read mode)
     spi_write(0x00);        // Write 0x00 (start address high byte)
@@ -84,8 +85,8 @@ void main(){
     // set_debug_reg2(0x55); // value is ready to be read
     // wait_debug_reg2(0xCC) // testbench has read the value
 
-    CS_dis();  // release CS
-    CS_en();  // sel=0, manual CS
+    enable_CS(0);  // release CS
+    enable_CS(1);  // sel=0, manual CS
 
     spi_write(0x03);        // Write 0x03 (read mode)
     spi_write(0x00);        // Write 0x00 (start address high byte)
@@ -103,8 +104,8 @@ void main(){
     // set_debug_reg2(0x55); // value is ready to be read
     // wait_debug_reg2(0xCC) // testbench has read the value
 
-    CS_dis();  // release CS
-    CS_en();  // sel=0, manual CS
+    enable_CS(0);  // release CS
+    enable_CS(1);  // sel=0, manual CS
 
     spi_write(0x03);        // Write 0x03 (read mode)
     spi_write(0x00);        // Write 0x00 (start address high byte)
@@ -142,8 +143,8 @@ void main(){
     // set_debug_reg2(0x55); // value is ready to be read
     // wait_debug_reg2(0xCC) // testbench has read the value
 
-    CS_dis();  // release CS
-    CS_en();  // sel=0, manual CS
+    enable_CS(0);  // release CS
+    enable_CS(1);  // sel=0, manual CS
 
     dummy_delay(100000000);
 }

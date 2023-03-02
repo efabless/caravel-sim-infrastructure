@@ -1,40 +1,42 @@
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 void main(){
     enable_debug();
-    unsigned int *dff_start_address =  (unsigned int *) DFF1_START_ADDR;
-    unsigned int dff_size =  DFF1_SIZE/4;
-    unsigned int data = 0x55555555;
-    unsigned int mask = 0xFFFFFFFF;
-    unsigned int shifting =0;
-    unsigned int data_used = 0;
+    #define dff_start_address  (*(unsigned int*)0x0)  
+    dff_start_address = DFF1_START_ADDR;
+    #define dff_size  (*(unsigned int*)0x4)  
+    dff_size = DFF1_SIZE /4;
 
-    for (unsigned int i = 0; i < dff_size; i++){
-        shifting = mask - (0x1 << i%32);
-        data_used = data & shifting;
-      *(dff_start_address+i) = data_used; 
+    #define shifting  (*(unsigned int*)0x8)  
+    #define data_used  (*(unsigned int*)0xC)  
+    #define i  (*(volatile uint32_t*)0x10)  
+
+    for (i = 0x14; i < dff_size; i++){
+        shifting = 0xFFFFFFFF - (0x1 << i%32);
+        data_used = 0x55555555 & shifting;
+      *((unsigned int *) dff_start_address+i) = data_used; 
     }
-    for (unsigned int i = 0; i < dff_size; i++){
-        shifting = mask - (0x1 << i%32);
-        data_used = data & shifting;
-        if (data_used != *(dff_start_address+i)){
+    for (i = 0x14; i < dff_size; i++){
+        shifting = 0xFFFFFFFF - (0x1 << i%32);
+        data_used = 0x55555555 & shifting;
+        if (data_used != *((unsigned int *) dff_start_address+i)){
             set_debug_reg2(dff_start_address+ i);
             set_debug_reg1(0x1E); 
             return;
         }
     }
     
-    data = 0xAAAAAAAA;
-    for (unsigned int i = 0; i < dff_size; i++){
-        shifting = mask - (0x1 << i%32);
-        data_used = data & shifting;
-      *(dff_start_address+i) = data_used; 
+    for (i = 0x14; i < dff_size; i++){
+        shifting = 0xFFFFFFFF - (0x1 << i%32);
+        data_used = 0xAAAAAAAA & shifting;
+      *((unsigned int *)dff_start_address+i) = data_used; 
     }
-    for (unsigned int i = 0; i < dff_size; i++){
-        shifting = mask - (0x1 << i%32);
-        data_used = data & shifting;
-        if (data_used != *(dff_start_address+i)){
-            set_debug_reg2(dff_start_address+ i);
+    for (i = 0x14; i < dff_size; i++){
+        shifting = 0xFFFFFFFF - (0x1 << i%32);
+        data_used = 0xAAAAAAAA & shifting;
+        if (data_used != *((unsigned int *)dff_start_address+i)){
+            set_debug_reg2((unsigned int *)dff_start_address+ i);
             set_debug_reg1(0x1E); 
             return;
         }

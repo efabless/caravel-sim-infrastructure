@@ -63,7 +63,7 @@ async def mgmt_gpio_out(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_in(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=11281094)
+    caravelEnv = await test_configure(dut,timeout_cycles=102492)
     caravelEnv.drive_mgmt_gpio(0)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
@@ -113,7 +113,7 @@ async def mgmt_gpio_in(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_bidir(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=11223191)
+    caravelEnv = await test_configure(dut,timeout_cycles=524825)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

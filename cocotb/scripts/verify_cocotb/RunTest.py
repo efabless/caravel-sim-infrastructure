@@ -8,8 +8,8 @@ class RunTest:
         self.args  = args
         self.paths = paths
         self.test  = test
-        self.hex_generate()
-        self.runTest()
+        if self.hex_generate() == "hex_generated": # run test only if hex is generated
+            self.runTest()
         self.test.end_of_test()
 
     def hex_riscv32_command_gen(self): 
@@ -17,7 +17,7 @@ class RunTest:
         GCC_PREFIX = "riscv32-unknown-linux-gnu"
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
-        LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.paths.FIRMWARE_PATH}/sections.lds,--strip-debug "
+        LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = f"-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
@@ -30,7 +30,7 @@ class RunTest:
     def hex_arm_command_gen(self): 
         GCC_COMPILE = f"arm-none-eabi"
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/cm0_start.s"
-        LINKER_SCRIPT = f"-T {self.paths.FIRMWARE_PATH}/link.ld"
+        LINKER_SCRIPT = f"-T {self.test.linker_script_file}"
         CPUFLAGS = f"-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
         includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
@@ -43,9 +43,9 @@ class RunTest:
     def hex_generate(self):
         #open docker 
         test_path =self.test_path()
-        if not os.path.exists(f"{self.paths.COCOTB_PATH}/hex_files"):
-            os.makedirs(f"{self.paths.COCOTB_PATH}/hex_files") # Create a new hex_files directory because it does not exist 
-        self.hex_dir = f"{self.paths.COCOTB_PATH}/hex_files/"
+        if not os.path.exists(f"{self.paths.SIM_PATH}/hex_files"):
+            os.makedirs(f"{self.paths.SIM_PATH}/hex_files") # Create a new hex_files directory because it does not exist 
+        self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.c_file = f"{test_path}/{self.test.name}.c"
         test_dir = f"{self.paths.VERILOG_PATH}/dv/tests-caravel/mem" # linker script include // TODO: to fix this in the future from the mgmt repo
         if self.args.arm : 
@@ -53,7 +53,7 @@ class RunTest:
         else: 
             command = self.hex_riscv32_command_gen()
 
-        docker_dir = f"-v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} "
+        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} "
         docker_dir = docker_dir if not self.args.user_test else docker_dir + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} ' >> {self.test.full_log}"
         
@@ -66,13 +66,18 @@ class RunTest:
         self.test.full_terminal.write(os.path.expandvars(command_slipt[1])+"\n\n")
         self.test.full_terminal.write("hex file generation command:\n% ")
         self.test.full_terminal.write(os.path.expandvars(command_slipt[2])+"\n\n")
-        self.test.full_terminal.close()
         if not self.args.arm : # TODO add arm processor to docker
             hex_gen_state = os.system(docker_command)
         else:
             hex_gen_state = os.system(f" {command} ")
         if hex_gen_state != 0 :
-            raise RuntimeError (f"Error when generating hex")
+            print (f"Error when generating hex")
+            self.test.full_terminal.write (f"Error when generating hex")
+            self.test.full_terminal.close()
+            return "hex_error"
+        self.test.full_terminal.close()
+        return "hex_generated"
+        
         
 
     def test_path(self):
@@ -96,7 +101,7 @@ class RunTest:
     # iverilog function
     def runTest_iverilog(self):
         macros = ' -D' + ' -D'.join(self.test.macros)
-        env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
+        env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
 
         if(self.test.sim=="RTL"): 
             includes = f" -f {self.paths.VERILOG_PATH}/includes/includes.rtl.caravel"
@@ -126,14 +131,11 @@ class RunTest:
         dirs = f'+incdir+\\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\\" '
         if self.test.sim == "RTL":
             shutil.copyfile(f'{self.paths.VERILOG_PATH}/includes/rtl_caravel_vcs.v', f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{self.paths.VERILOG_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel/verilog",new_str=f"\"{self.paths.CARAVEL_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
-            shutil.copyfile(f"{self.paths.COCOTB_PATH}/includes.v", f"{self.test.test_dir}/includes.v")
-
         else: 
-            shutil.copyfile(f'{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v', f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{self.paths.VERILOG_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
-            change_str(str="\"caravel/verilog",new_str=f"\"{self.paths.CARAVEL_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")   
+            shutil.copyfile(f'{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v', f"{self.paths.COCOTB_PATH}/includes.v") 
+        change_str(str="\"caravel/verilog",new_str=f"\"{self.paths.CARAVEL_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
+        change_str(str="\"caravel_mgmt_soc_litex/verilog",new_str=f"\"{self.paths.VERILOG_PATH}",file_path=f"{self.paths.COCOTB_PATH}/includes.v")
+        shutil.copyfile(f"{self.paths.COCOTB_PATH}/includes.v", f"{self.test.test_dir}/includes.v")
         macros = ' +define+' + ' +define+'.join(self.test.macros)
         coverage_command = ""
         if self.args.cov: 

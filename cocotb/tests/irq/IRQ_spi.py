@@ -17,7 +17,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def IRQ_spi(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=11155225)
+    caravelEnv = await test_configure(dut,timeout_cycles=380308)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

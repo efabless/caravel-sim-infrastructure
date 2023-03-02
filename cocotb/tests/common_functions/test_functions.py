@@ -29,7 +29,7 @@ from importlib import import_module
 import yaml
 def read_config_file():
     cocotb.plusargs["TAG"]
-    config_file = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yalm".replace('"', '')
+    config_file = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yaml".replace('"', '')
 
     with open(config_file) as file:
         # The FullLoader parameter handles the conversion from YAML
@@ -39,15 +39,24 @@ def read_config_file():
         print(configs)
         return configs
 
-
+CLOCK_GLOBAL = 25
 active_gpios_num = 37 # number of active gpios
-async def test_configure(dut,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err'])):
+# async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err']))-> caravel.Caravel_env:
+async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=25,timeout_precision=0.2,num_error=3)-> caravel.Caravel_env:
+    """
+    Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.
+
+    :param SimHandle dut: dut handle
+    :param int timeout_cycles: Number of cycles before reporting timeout and exit the test default = 1000000 cycles 
+    :param int clk: The clock period to be used in the design in ``'ns'`` default 12.5 ``'ns'``
+    :param int timeout_precision: Precision of logging how many cycle left until the timeout default is 0.2 meaning if time is 100 cycle every 20 cycles there would be a warning message for timeout 
+    :param int num_error: Maximum number of errors reported before terminate the test  
+    :return: Object of type Caravel_env (caravel environment)
+    """
     caravelEnv = caravel.Caravel_env(dut)
     Timeout(caravelEnv.clk,timeout_cycles,timeout_precision)
     cocotb.scheduler.add(max_num_error(num_error,caravelEnv.clk))
-    clock = Clock(caravelEnv.clk, clk, units="ns")  # Create a 25ns period clock on port clk
-    cocotb.start_soon(clock.start())  # Start the clock
-    caravelEnv.set_clock_obj(clock)
+    caravelEnv.setup_clock(clk)
     await caravelEnv.start_up()
     await ClockCycles(caravelEnv.clk, 10)
     coverage = Macros['COVERAGE']
@@ -61,6 +70,11 @@ async def test_configure(dut,timeout_cycles=1000000,clk=read_config_file()['cloc
     if  Macros['ARM']:
         global active_gpios_num
         active_gpios_num = 34 # with ARM the last 3 gpios are not configurable
+
+    # For calculating recommended timeout
+    global CLOCK_GLOBAL
+    CLOCK_GLOBAL = clk
+
     return caravelEnv
     
 class CallCounted:
@@ -80,7 +94,7 @@ def repot_test(func):
         ## configure logging 
         COCOTB_ANSI_OUTPUT=0
         TESTFULLNAME = cocotb.plusargs['FTESTNAME']
-        sim_dir = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}"
+        sim_dir = f"{cocotb.plusargs['SIM_PATH']}/{cocotb.plusargs['TAG']}"
         TestName = func.__name__
         logger_file= f"{sim_dir}/{TESTFULLNAME}/{TestName}.log".replace('"', '')
         cocotb.log.setLevel(logging.INFO)
@@ -100,7 +114,8 @@ def repot_test(func):
         if cocotb.log.error.counter > 0 or cocotb.log.critical.counter >0:
             raise cocotb.result.TestComplete(f'Test failed {msg}')
         else: 
-            raise cocotb.result.TestComplete(f'Test passed {msg}')
+            cocotb.log.info(f'Test passed {msg}')
+            cocotb.log.info(f'Recommeneded timeout to use {int(cocotb.utils.get_sim_time("ns")*1.01/CLOCK_GLOBAL)} cycles')
     return wrapper_func
 
 async def max_num_error(num_error,clk):

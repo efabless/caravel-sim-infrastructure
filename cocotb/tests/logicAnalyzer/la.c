@@ -1,6 +1,7 @@
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 user exmple
 assign la0 to la1 if la0 output enable
@@ -10,22 +11,22 @@ assign la3 to la2 if la3 output enable
 */
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
 
     // Configure LA probes [63:32] and [127:96] as inputs to the cpu 
 	// Configure LA probes [31:0] and [63:32] as outputs from the cpu
     // 0 as input
     set_la_ien(0,0xFFFFFFFF);
-    set_la_oenb(0,0xFFFFFFFF);
+    set_la_oen(0,0x0);
     // 1 as output 
     set_la_ien(1,0x0);
-    set_la_oenb(1,0x0);
+    set_la_oen(1,0xFFFFFFFF);
     // 2 as input
     set_la_ien(2,0xFFFFFFFF);
-    set_la_oenb(2,0xFFFFFFFF);
+    set_la_oen(2,0x0);
     // 3 as output 
     set_la_ien(3,0x0);
-    set_la_oenb(3,0x0);
+    set_la_oen(3,0xFFFFFFFF);
     // set LA 0,2
     set_la_reg(0,0xAAAAAAAA);
     set_la_reg(2,0xAAAAAAAA);
@@ -69,16 +70,16 @@ void main(){
 	// Configure LA probes [63:32] and [127:96] as outputs from the cpu
     // 0 as output
     set_la_ien(0,0x0);
-    set_la_oenb(0,0x0);
+    set_la_oen(0,0xFFFFFFFF);
     // 1 as input 
     set_la_ien(1,0xFFFFFFFF);
-    set_la_oenb(1,0xFFFFFFFF);
+    set_la_oen(1,0x0);
     // 2 as output
     set_la_ien(2,0x0);
-    set_la_oenb(2,0x0);
+    set_la_oen(2,0xFFFFFFFF);
     // 3 as input 
     set_la_ien(3,0xFFFFFFFF);
-    set_la_oenb(3,0xFFFFFFFF);
+    set_la_oen(3,0x0);
 
     // set LA 1,3
     set_la_reg(1,0xAAAAAAAA);

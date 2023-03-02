@@ -13,7 +13,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def mem_dff2_W(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=111803911)
+    caravelEnv = await test_configure(dut,timeout_cycles=305429)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -37,7 +37,7 @@ async def mem_dff2_W(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff2_HW(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=113589591)
+    caravelEnv = await test_configure(dut,timeout_cycles=360575)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -62,7 +62,7 @@ async def mem_dff2_HW(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff2_B(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=114883401)
+    caravelEnv = await test_configure(dut,timeout_cycles=592471)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -87,7 +87,7 @@ async def mem_dff2_B(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff_W(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=113591611)
+    caravelEnv = await test_configure(dut,timeout_cycles=587118)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -110,7 +110,7 @@ async def mem_dff_W(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff_HW(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=117161961)
+    caravelEnv = await test_configure(dut,timeout_cycles=491269)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -133,7 +133,7 @@ async def mem_dff_HW(dut):
 @cocotb.test()
 @repot_test
 async def mem_dff_B(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=119752611)
+    caravelEnv = await test_configure(dut,timeout_cycles=118049)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()

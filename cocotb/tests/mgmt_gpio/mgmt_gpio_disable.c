@@ -16,8 +16,9 @@
  */
 
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 // --------------------------------------------------------
 
 /*
@@ -28,7 +29,7 @@
 void main()
 {
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     // enable input
     mgmt_gpio_i_enable();
     if (mgmt_gpio_rd() == 1)

@@ -1,10 +1,12 @@
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     configure_all_gpios(GPIO_MODE_MGMT_STD_INPUT_NOPULL);
+    gpio_config_load();      
     // low
     wait_over_input_l(0xAA,0xFFFFFFFF);
     wait_over_input_l(0XBB,0xAAAAAAAA);

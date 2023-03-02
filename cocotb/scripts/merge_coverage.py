@@ -100,7 +100,7 @@ with open(f"{path}/merged.ylm") as file:
             tree[key] = Node(key=key,parent=tree[key_parent])
 
     for key in yaml_file_object:
-        # print(f"{key}  level = {key.count('.')}  yalm: {yaml_file_object[key]} children {tree[key].children}" )
+        # print(f"{key}  level = {key.count('.')}  yaml: {yaml_file_object[key]} children {tree[key].children}" )
         body_st = []
         prettyTable = PrettyTable()
         body_st.append("<h2>" + key + "</h2>")

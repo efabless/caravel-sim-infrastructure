@@ -1,10 +1,11 @@
-#include "../../common_functions/common.c"
+#include <common.h>
+
 
 
 // access all housekeeping registers that can be access through firmware and change it's value
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     // store RO value regs 
     int old_reg_hkspi_status = reg_hkspi_status;
     int old_reg_hkspi_chip_id = reg_hkspi_chip_id;

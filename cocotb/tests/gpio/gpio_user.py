@@ -34,7 +34,7 @@ async def gpio_all_i_pu_user(dut):
 @cocotb.test()
 @repot_test
 async def gpio_all_i_pd_user(dut):
-    caravelEnv = await test_configure(dut,timeout_cycles=1154138)
+    caravelEnv = await test_configure(dut,timeout_cycles=67759)
     await gpio_all_i_pd_seq(dut,caravelEnv)
     
 @cocotb.test()

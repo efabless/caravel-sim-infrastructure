@@ -1,9 +1,10 @@
-#include "../common_functions/common.c"
-#include "../common_functions/bitbang.c"
+#include <common.h>
+
+#include <bitbang.h>
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     bb_configure_all_gpios(GPIO_MODE_MGMT_STD_INPUT_NOPULL);
     // low
     wait_over_input_l(0xAA,0xFFFFFFFF);

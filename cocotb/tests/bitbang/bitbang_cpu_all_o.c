@@ -1,9 +1,10 @@
-#include "../common_functions/common.c"
-#include "../common_functions/bitbang.c"
+#include <common.h>
+
+#include <bitbang.h>
 void main(){
         unsigned int i,i_temp, j, active_gpio_num,num_high_gpio;
         enable_debug();
-        hk_spi_disable();
+        enable_hk_spi(0);
         bb_configure_all_gpios(GPIO_MODE_MGMT_STD_OUTPUT);        
         set_debug_reg1(0xAA); // finish configuration 
         set_gpio_l(0x0);

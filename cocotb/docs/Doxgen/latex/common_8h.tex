@@ -1,0 +1,72 @@
+\hypertarget{common_8h}{}\section{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/common.h File Reference}
+\label{common_8h}\index{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/common.\+h@{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/common.\+h}}
+{\ttfamily \#include $<$defs.\+h$>$}\newline
+{\ttfamily \#include $<$stub.\+c$>$}\newline
+{\ttfamily \#include $<$uart.\+h$>$}\newline
+{\ttfamily \#include $<$irq\+\_\+vex.\+h$>$}\newline
+{\ttfamily \#include $<$gpios.\+h$>$}\newline
+{\ttfamily \#include $<$timer0.\+h$>$}\newline
+{\ttfamily \#include $<$mgmt\+\_\+gpio.\+h$>$}\newline
+{\ttfamily \#include $<$irq\+\_\+api.\+h$>$}\newline
+{\ttfamily \#include $<$la.\+h$>$}\newline
+{\ttfamily \#include $<$uart\+\_\+api.\+h$>$}\newline
+{\ttfamily \#include $<$spi\+\_\+master.\+h$>$}\newline
+{\ttfamily \#include $<$user\+\_\+addr\+\_\+space.\+h$>$}\newline
+Include dependency graph for common.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{common_8h__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{common_8h_af79fbe355fd538621db12e3ae9e3e6b8}{enable\+\_\+user\+\_\+interface} ()
+\item 
+void \hyperlink{common_8h_a37a92e81df76732622207204976178f9}{enable\+\_\+hk\+\_\+spi} (bool is\+\_\+enable)
+\item 
+void \hyperlink{common_8h_a875e99bdc81b2f0c925af03d4881438c}{dummy\+\_\+delay} (int num)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{common_8h_a875e99bdc81b2f0c925af03d4881438c}\label{common_8h_a875e99bdc81b2f0c925af03d4881438c}} 
+\index{common.\+h@{common.\+h}!dummy\+\_\+delay@{dummy\+\_\+delay}}
+\index{dummy\+\_\+delay@{dummy\+\_\+delay}!common.\+h@{common.\+h}}
+\subsubsection{\texorpdfstring{dummy\+\_\+delay()}{dummy\_delay()}}
+{\footnotesize\ttfamily void dummy\+\_\+delay (\begin{DoxyParamCaption}\item[{int}]{num }\end{DoxyParamCaption})}
+
+Insert delay
+
+
+\begin{DoxyParams}{Parameters}
+{\em num} & number of delays steps. step is increment local variable and check it\textquotesingle{}s value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{common_8h_a37a92e81df76732622207204976178f9}\label{common_8h_a37a92e81df76732622207204976178f9}} 
+\index{common.\+h@{common.\+h}!enable\+\_\+hk\+\_\+spi@{enable\+\_\+hk\+\_\+spi}}
+\index{enable\+\_\+hk\+\_\+spi@{enable\+\_\+hk\+\_\+spi}!common.\+h@{common.\+h}}
+\subsubsection{\texorpdfstring{enable\+\_\+hk\+\_\+spi()}{enable\_hk\_spi()}}
+{\footnotesize\ttfamily void enable\+\_\+hk\+\_\+spi (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+Enable or disable the housekeeping S\+PI This function writes to the housekeeping disenable register inside the housekeeping \begin{DoxyNote}{Note}
+When this register asserted housekeeping S\+PI can\textquotesingle{}t be used and G\+P\+I\+Os\mbox{[}3\mbox{]} which is C\+SB can be used as any other Caravel G\+P\+I\+Os
+\end{DoxyNote}
+\begin{DoxyWarning}{Warning}
+By default the housekeeping S\+PI is enabled to use G\+P\+I\+Os\mbox{[}3\mbox{]} freely it should be disabled.
+\end{DoxyWarning}
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1 (true) housekeeping is active, 0 (false) housekeeping is disabled \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{common_8h_af79fbe355fd538621db12e3ae9e3e6b8}\label{common_8h_af79fbe355fd538621db12e3ae9e3e6b8}} 
+\index{common.\+h@{common.\+h}!enable\+\_\+user\+\_\+interface@{enable\+\_\+user\+\_\+interface}}
+\index{enable\+\_\+user\+\_\+interface@{enable\+\_\+user\+\_\+interface}!common.\+h@{common.\+h}}
+\subsubsection{\texorpdfstring{enable\+\_\+user\+\_\+interface()}{enable\_user\_interface()}}
+{\footnotesize\ttfamily void enable\+\_\+user\+\_\+interface (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Enable communication between software and user project \begin{DoxyWarning}{Warning}
+This necessary when reading or writing are needed between wishbone and user project if interface isn\textquotesingle{}t enabled no ack would be receive and the writing or reading command will be stuck 
+\end{DoxyWarning}

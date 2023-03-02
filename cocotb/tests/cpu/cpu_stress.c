@@ -1,4 +1,5 @@
-#include "../common_functions/common.c"
+#include <common.h>
+
 
 
 int A[]={1, 40, 2, 5, 22, 11, 90, 200, 10, 20, 25};

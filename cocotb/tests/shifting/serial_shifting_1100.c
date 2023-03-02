@@ -1,9 +1,10 @@
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     int counter = 0;
     for (int i =0;i<19;i++){
         if(counter == 0)

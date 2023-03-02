@@ -15,8 +15,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 /*
 Testing spi interrupt
 */
@@ -24,7 +25,7 @@ Testing spi interrupt
 
 void main(){
     enable_debug();
-    enable_hk_spi_irq();
+    enable_hk_spi_irq(1);
 
     // test interrrupt happen when spi_irq reg got set
     clear_flag();

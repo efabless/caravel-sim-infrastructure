@@ -14,8 +14,9 @@
  * limitations under the License.
  * SPDX-License-Identifier: Apache-2.0
  */
-#include "../common_functions/common.c"
-#include "../common_functions/gpios.c"
+#include <common.h>
+
+
 
 // --------------------------------------------------------
 
@@ -26,13 +27,13 @@
 
 void main(){
     enable_debug();
-    hk_spi_disable();
+    enable_hk_spi(0);
     mgmt_gpio_i_enable();
     int num_blinks = 0;
     set_debug_reg1(0XAA); // start of the test
 	while (1) {
-        wait_on_gpio_mgmt(0);
-        wait_on_gpio_mgmt(1);
+        wait_gpio_mgmt(0);
+        wait_gpio_mgmt(1);
         num_blinks++;
         if (get_debug_reg1() == 0xFF)
             break;
