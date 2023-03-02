@@ -12,14 +12,19 @@ parser.add_argument(
     "-test",
     "-t",
     nargs="+",
-    help="name of test if no --sim provided RTL will be run <takes list as input>",
+    help=("name of test or tests.",
+          "if no --sim provided RTL will be run <takes list as input>"),
 )
 parser.add_argument(
     "-sim",
     nargs="+",
-    help="Simulation type to be run RTL,GL&GL_SDF provided only when run -test <takes list as input>",
+    help=("Simulation type",
+          "run RTL,GL & GL_SDF provided only when run -test",
+          " <takes list as input>"),
 )
-parser.add_argument("-testlist", "-tl", nargs="+", help="path of testlist to be run ")
+parser.add_argument("-testlist", "-tl", nargs="+", 
+        help="path of testlist to be run "
+)
 parser.add_argument(
     "-tag",
     help="provide tag of the run default would be regression name and if no regression is provided would be run_<random float>_<timestamp>_",

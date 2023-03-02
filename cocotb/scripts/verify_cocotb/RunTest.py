@@ -35,10 +35,10 @@ class RunTest:
         return f" {elf_command} && {lst_command} && {hex_command} && {sed_command}"
 
     def hex_arm_command_gen(self):
-        GCC_COMPILE = f"arm-none-eabi"
+        GCC_COMPILE = "arm-none-eabi"
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/cm0_start.s"
         LINKER_SCRIPT = f"-T {self.test.linker_script_file}"
-        CPUFLAGS = f"-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
+        CPUFLAGS = "-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
         includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
