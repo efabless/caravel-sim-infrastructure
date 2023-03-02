@@ -36,7 +36,7 @@ class RunRegression:
         simulation_macros = ["USE_POWER_PINS","UNIT_DELAY=#1","COCOTB_SIM"]
         paths_macros      = [f'MAIN_PATH=\\\"{self.paths.COCOTB_PATH}\\\"',f'TAG=\\\"{self.args.tag}\\\"',f'CARAVEL_ROOT=\\\"{os.getenv("CARAVEL_ROOT")}\\\"']
         paths_macros.append(f'SIM_PATH=\\\"{self.paths.SIM_PATH}/\\\"')
-        if self.args.pdk is not "gf180":
+        if self.args.pdk != "gf180":
             simulation_macros.append("FUNCTIONAL")
 
         if self.args.caravan:
