@@ -16,7 +16,7 @@ MCW_ROOT: "/home/rady/caravel/caravel_orginal/caravel_mgmt_soc_litex/"
 # USER_PROJECT_ROOT: None
 # USER_PROJECT_ROOT: "/home/rady/caravel/caravel_multi_projects/mpc/"
 # USER_PROJECT_ROOT: None
-USER_PROJECT_ROOT: "/home/rady/caravel/swift/caravel_user_project/"
+USER_PROJECT_ROOT: None
 
 
 

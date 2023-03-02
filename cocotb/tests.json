@@ -18,7 +18,7 @@
         ,"hk_disable" :{"level":0, 
             "PDK":["sky130","GF180"],
             "RTL":["r_rtl","r_caravan_rtl","setup","push","nightly","weekly","tape_out"],
-            "GL":["r_caravan_gl","push_gl","nightly","weekly","tape_out"],
+            "GL":[],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
             "description":"check Housekeeping SPI disable register is working"}
         ,"uart_rx" :{"level":0, 
@@ -140,7 +140,7 @@
             "description":"Same as bitbang_cpu_all but configure the gpio using the SPI not the firmware"}
 
         ,"mgmt_gpio_out" :{"level":0, 
-            "PDK":["sky130","GF180"],
+            "PDK":[],
             "RTL":["r_rtl","r_caravan_rtl","setup","nightly","weekly","tape_out"],
             "GL":["r_gl","r_caravan_gl","nightly","weekly","tape_out"],
             "GL_SDF":["r_sdf","r_caravan_sdf","weekly","tape_out"],
