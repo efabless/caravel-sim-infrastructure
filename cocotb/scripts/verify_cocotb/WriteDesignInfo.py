@@ -34,30 +34,40 @@ caravan: false
 # optional email address to send the results to 
 emailto: [None]
 """
-EnvironmentPaths=namedtuple("EnvironmentPaths","CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK USER_PROJECT_ROOT")
+EnvironmentPaths = namedtuple(
+    "EnvironmentPaths", "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK USER_PROJECT_ROOT"
+)
 
-class WriteDesignInfo: 
-    def __init__(self,cocotb_path,env_paths:EnvironmentPaths,clk=25,is_caravan=False,Emailto=None) -> None:
-        self.update_yaml_args(env_paths,clk,is_caravan,Emailto)
+
+class WriteDesignInfo:
+    def __init__(
+        self,
+        cocotb_path,
+        env_paths: EnvironmentPaths,
+        clk=25,
+        is_caravan=False,
+        Emailto=None,
+    ) -> None:
+        self.update_yaml_args(env_paths, clk, is_caravan, Emailto)
         self.write_yaml_f(cocotb_path)
 
-
-    def update_yaml_args(self,env_paths:EnvironmentPaths,clk,is_caravan=False,Emailto=None):
+    def update_yaml_args(
+        self, env_paths: EnvironmentPaths, clk, is_caravan=False, Emailto=None
+    ):
         self.yaml = ruamel.yaml.YAML()  # defaults to round-trip if no parameters given
         self.code = self.yaml.load(yaml_str)
-        self.code['CARAVEL_ROOT'] = env_paths.CARAVEL_ROOT
-        self.code['MCW_ROOT'] = env_paths.MCW_ROOT
-        self.code['USER_PROJECT_ROOT'] = env_paths.USER_PROJECT_ROOT
-        self.code['PDK'] = env_paths.PDK
-        self.code['PDK_ROOT'] = env_paths.PDK_ROOT
-        self.code['clk'] = clk
-        self.code['caravan'] = is_caravan
-        self.code['emailto'] = [None] if Emailto is None else Emailto
+        self.code["CARAVEL_ROOT"] = env_paths.CARAVEL_ROOT
+        self.code["MCW_ROOT"] = env_paths.MCW_ROOT
+        self.code["USER_PROJECT_ROOT"] = env_paths.USER_PROJECT_ROOT
+        self.code["PDK"] = env_paths.PDK
+        self.code["PDK_ROOT"] = env_paths.PDK_ROOT
+        self.code["clk"] = clk
+        self.code["caravan"] = is_caravan
+        self.code["emailto"] = [None] if Emailto is None else Emailto
 
-
-    def write_yaml_f(self,cocotb_path):
+    def write_yaml_f(self, cocotb_path):
         file_path = f"{cocotb_path}/design_info.yaml"
-        with open(file_path, 'w') as outfile:
+        with open(file_path, "w") as outfile:
             self.yaml.dump(self.code, outfile)
 
 
