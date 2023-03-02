@@ -35,7 +35,7 @@ class RunFLow():
         if all(v is  None for v in [self.args.regression, self.args.test, self.args.testlist]):
             raise EnvironmentError("Should provide at least one of the following options regression, test or testlist for more info use --help")
         if self.args.sim is not None:
-            self.args.sim = list(self.args.sim) if not isinstance(self.args.sim, list) else self.args.sim
+            self.args.sim = [self.args.sim] if not isinstance(self.args.sim, list) else self.args.sim
             for sim in self.args.sim:
                 if sim not in ["RTL","GL","GL_SDF"]:
                     raise ValueError(f"{self.args.sim} isnt a correct value for -sim it should be one or combination of the following RTL, GL or GL_SDF")
