@@ -1,11 +1,11 @@
 import random
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles,Timer
+from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles, Timer
 import cocotb.log
 import cocotb.simulator
 from cocotb.handle import SimHandleBase
-from cocotb.handle import Force , Release ,Deposit
+from cocotb.handle import Force, Release, Deposit
 from cocotb.binary import BinaryValue
 import enum
 from cocotb.handle import (
@@ -26,56 +26,60 @@ from interfaces.common import Macros
 from interfaces.common import sky
 from collections.abc import Iterable
 
-def gpio_mode(gpios_values:list):
-    gpios=[]
+
+def gpio_mode(gpios_values: list):
+    gpios = []
     for array in gpios_values:
         gpio_value = GPIO_MODE(array[1]).name
         for gpio in array[0]:
-            gpios.append((gpio,gpio_value))
-    cocotb.log.info(f'[caravel][gpio_mode] gpios {gpios}')
+            gpios.append((gpio, gpio_value))
+    cocotb.log.info(f"[caravel][gpio_mode] gpios {gpios}")
     return gpios
+
 
 class Caravel_env:
     """
-    Verification environment for caraval 
+    Verification environment for caraval
 
-    - provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins 
+    - provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins
 
     :param SimHandle dut: dut handle
     """
-    def __init__(self,dut:SimHandleBase):
-        self.dut         = dut
-        self.clk         = dut.clock_tb
+
+    def __init__(self, dut: SimHandleBase):
+        self.dut = dut
+        self.clk = dut.clock_tb
         self.caravel_hdl = dut.uut.chip_core
-        self.hk_hdl      = dut.uut.chip_core.housekeeping
-        self.user_hdl    = dut.uut.chip_core.mprj
+        self.hk_hdl = dut.uut.chip_core.housekeeping
+        self.user_hdl = dut.uut.chip_core.mprj
 
     """start carvel by insert power then reset"""
+
     async def start_up(self):
-        """Start carvel by insert power then reset """
+        """Start carvel by insert power then reset"""
         await self.power_up()
-        await self.disable_csb() # no need for this anymore as default for gpio3 is now pullup
+        await self.disable_csb()  # no need for this anymore as default for gpio3 is now pullup
         await self.reset()
         await self.disable_bins()
-        common.fill_macros(self.dut.macros) # get macros value
+        common.fill_macros(self.dut.macros)  # get macros value
 
     async def disable_bins(self):
         for i in range(38):
-            if i in [3,4]: #CSB and SCK
+            if i in [3, 4]:  # CSB and SCK
                 continue
-            common.drive_hdl(self.dut._id(f"bin{i}_en",False),(0,0),0) 
+            common.drive_hdl(self.dut._id(f"bin{i}_en", False), (0, 0), 0)
 
     async def power_up(self):
         """Setup the vdd and vcc power bins"""
-        cocotb.log.info(f' [caravel] start powering up')
+        cocotb.log.info(f" [caravel] start powering up")
         self.set_vdd(0)
         if sky:
             self.set_vcc(0)
         await ClockCycles(self.clk, 10)
-        cocotb.log.info(f' [caravel] power up -> connect vdd' )
+        cocotb.log.info(f" [caravel] power up -> connect vdd")
         self.set_vdd(1)
         # await ClockCycles(self.clk, 10)
-        cocotb.log.info(f' [caravel] power up -> connect vcc' )
+        cocotb.log.info(f" [caravel] power up -> connect vcc")
         if sky:
             self.set_vcc(1)
         await ClockCycles(self.clk, 10)
@@ -83,66 +87,63 @@ class Caravel_env:
     async def reset(self):
         """Reset caravel"""
         # initial value of reset is x
-        cocotb.log.info(f' [caravel] start resetting')
+        cocotb.log.info(f" [caravel] start resetting")
         self.dut.resetb_tb.value = 0
         await ClockCycles(self.clk, 20)
         self.dut.resetb_tb.value = 1
         await ClockCycles(self.clk, 1)
-        cocotb.log.info(f' [caravel] finish resetting')
+        cocotb.log.info(f" [caravel] finish resetting")
 
-
-    def set_vdd(self,value:bool):
-        self.dut.vddio_tb.value   = value
-        self.dut.vssio_tb.value   = 0
+    def set_vdd(self, value: bool):
+        self.dut.vddio_tb.value = value
+        self.dut.vssio_tb.value = 0
         if sky:
             self.dut.vddio_2_tb.value = value
             self.dut.vssio_2_tb.value = 0
-            self.dut.vdda_tb.value    = value
-            self.dut.vssa_tb.value    = 0
-            self.dut.vdda1_tb.value   = value
-            self.dut.vssa1_tb.value   = 0
+            self.dut.vdda_tb.value = value
+            self.dut.vssa_tb.value = 0
+            self.dut.vdda1_tb.value = value
+            self.dut.vssa1_tb.value = 0
             self.dut.vdda1_2_tb.value = value
             self.dut.vssa1_2_tb.value = 0
-            self.dut.vdda2_tb.value   = value
-            self.dut.vssa2_tb.value   = 0
+            self.dut.vdda2_tb.value = value
+            self.dut.vssa2_tb.value = 0
 
-    def set_vcc(self , value:bool):
-        self.dut.vccd_tb.value    = value
-        self.dut.vssd_tb.value    = 0
-        self.dut.vccd1_tb.value   = value
-        self.dut.vssd1_tb.value   = 0
-        self.dut.vccd2_tb.value   = value
-        self.dut.vssd2_tb.value   = 0
+    def set_vcc(self, value: bool):
+        self.dut.vccd_tb.value = value
+        self.dut.vssd_tb.value = 0
+        self.dut.vccd1_tb.value = value
+        self.dut.vssd1_tb.value = 0
+        self.dut.vccd2_tb.value = value
+        self.dut.vssd2_tb.value = 0
 
-    async def drive_csb(self,bit): 
+    async def drive_csb(self, bit):
         """Drive csb signal bin E8 mprj[3]"""
-        self.drive_gpio_in((3,3),bit)
-        self.drive_gpio_in((4,4),0)
+        self.drive_gpio_in((3, 3), bit)
+        self.drive_gpio_in((4, 4), 0)
         await ClockCycles(self.clk, 1)
 
-
-    async def disable_csb(self ):
+    async def disable_csb(self):
         """Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
-        cocotb.log.info(f' [caravel] disable housekeeping spi transmission')
+        cocotb.log.info(f" [caravel] disable housekeeping spi transmission")
         await self.drive_csb(1)
         await self.release_csb()
         await ClockCycles(self.clk, 1)
 
-    async def release_csb(self ):
-        """Set the spi vsb signal high impedance """
-        cocotb.log.info(f' [caravel] release housekeeping spi transmission')
+    async def release_csb(self):
+        """Set the spi vsb signal high impedance"""
+        cocotb.log.info(f" [caravel] release housekeeping spi transmission")
         self.release_gpio(2)
         self.release_gpio(3)
         self.release_gpio(4)
         await ClockCycles(self.clk, 1)
 
-    async def enable_csb(self ):
+    async def enable_csb(self):
         """Set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]"""
-        cocotb.log.info(f' [caravel] enable housekeeping spi transmission')
+        cocotb.log.info(f" [caravel] enable housekeeping spi transmission")
         await self.drive_csb(0)
-        
 
-    def monitor_gpio(self,h_bit,l_bit=None) -> cocotb.binary.BinaryValue:
+    def monitor_gpio(self, h_bit, l_bit=None) -> cocotb.binary.BinaryValue:
         """monitor GPIOs output value
 
         :param h_bit: highest GPIO number of the tuple of (high gpio, low gpio)
@@ -161,194 +162,258 @@ class Caravel_env:
 
         """
         mprj = self.dut.mprj_io_tb.value
-        size =mprj.n_bits -1 #size of bins array
-        if  isinstance(h_bit, Iterable):
+        size = mprj.n_bits - 1  # size of bins array
+        if isinstance(h_bit, Iterable):
             l_bit = h_bit[1]
             h_bit = h_bit[0]
         if l_bit is None:
-            l_bit = h_bit 
-        mprj_out= self.dut.mprj_io_tb.value[size - h_bit:size - l_bit]
-        if(mprj_out.is_resolvable):
-            cocotb.log.debug(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {hex(mprj_out)}')
+            l_bit = h_bit
+        mprj_out = self.dut.mprj_io_tb.value[size - h_bit : size - l_bit]
+        if mprj_out.is_resolvable:
+            cocotb.log.debug(
+                f" [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {hex(mprj_out)}"
+            )
         else:
-            cocotb.log.debug(f' [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {mprj_out}')
+            cocotb.log.debug(f" [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {mprj_out}")
         return mprj_out
 
     """return the value of management gpio"""
-    def monitor_mgmt_gpio(self)->str:
-        """monitor management GPIO output 
+
+    def monitor_mgmt_gpio(self) -> str:
+        """monitor management GPIO output
 
         :return: return the value of management GPIO in string format possible values ``"0"`` ``"1"`` ``"X"`` ``"Z"``
         """
         data = self.dut.gpio_tb.value.binstr
-        cocotb.log.debug(f' [caravel] Monitor mgmt GPIO = {data}')
+        cocotb.log.debug(f" [caravel] Monitor mgmt GPIO = {data}")
         return data
 
-    async def wait_mgmt_gpio(self,data:int) -> None:
-        """wait for specific management GPIO value 
+    async def wait_mgmt_gpio(self, data: int) -> None:
+        """wait for specific management GPIO value
 
         :param data: data to wait for possible inputs ``"0"`` ``"1"`` ``0`` ``1``
         :type data: int or str
         """
         data_s = str(data)
-        while True: 
-            if data_s == self.monitor_mgmt_gpio(): 
+        while True:
+            if data_s == self.monitor_mgmt_gpio():
                 break
             await ClockCycles(self.clk, 1)
-            
-
 
     """change the configration of the gpios by overwrite their defaults value then reset
         need to take at least 1 cycle for reset """
-    ### dont use back door accessing 
-    async def configure_gpio_defaults(self,gpios_values: list):
+
+    ### dont use back door accessing
+    async def configure_gpio_defaults(self, gpios_values: list):
         gpio_defaults = self.caravel_hdl.gpio_defaults.value
-        cocotb.log.info(f' [caravel] start cofigure gpio gpios ')
-        size = gpio_defaults.n_bits -1 #number of bins in gpio_defaults
+        cocotb.log.info(f" [caravel] start cofigure gpio gpios ")
+        size = gpio_defaults.n_bits - 1  # number of bins in gpio_defaults
         # list example [[(gpios),value],[(gpios),value],[(gpios),value]]
         for array in gpios_values:
             gpio_value = array[1]
             for gpio in array[0]:
-                gpio_defaults[size - (gpio*13 + 12): size -gpio*13] = gpio_value.value
-                #cocotb.log.info(f' [caravel] gpio_defaults[{size - (gpio*13 + 12)}:{size -gpio*13}] = {gpio_value.value} ')
+                gpio_defaults[
+                    size - (gpio * 13 + 12) : size - gpio * 13
+                ] = gpio_value.value
+                # cocotb.log.info(f' [caravel] gpio_defaults[{size - (gpio*13 + 12)}:{size -gpio*13}] = {gpio_value.value} ')
         self.caravel_hdl.gpio_defaults.value = gpio_defaults
-        #reset
+        # reset
         self.caravel_hdl.gpio_resetn_1_shifted.value = 0
         self.caravel_hdl.gpio_resetn_2_shifted.value = 0
         await ClockCycles(self.clk, 1)
         self.caravel_hdl.gpio_resetn_1_shifted.value = 1
         self.caravel_hdl.gpio_resetn_2_shifted.value = 1
-        cocotb.log.info(f' [caravel] finish configuring gpios, the curret gpios value: ')
-        self.print_gpios_ctrl_val()    
-        
+        cocotb.log.info(
+            f" [caravel] finish configuring gpios, the curret gpios value: "
+        )
+        self.print_gpios_ctrl_val()
+
     """change the configration of the gpios by overwrite the register value 
         in control registers and housekeeping regs, don't consume simulation cycles"""
-        ### dont use back door accessing 
-    def configure_gpios_regs(self,gpios_values: list):
-        cocotb.log.info(f' [caravel] start cofigure gpio gpios ')
+
+    ### dont use back door accessing
+    def configure_gpios_regs(self, gpios_values: list):
+        cocotb.log.info(f" [caravel] start cofigure gpio gpios ")
         control_modules = self.control_blocks_paths()
         # list example [[(gpios),value],[(gpios),value],[(gpios),value]]
         for array in gpios_values:
             gpio_value = array[1]
             for gpio in array[0]:
-                self.gpio_control_reg_write(control_modules[gpio],gpio_value.value) # for control blocks regs
-                self.caravel_hdl.housekeeping.gpio_configure[gpio].value = gpio_value.value # for house keeping regs
-        cocotb.log.info(f' [caravel] finish configuring gpios, the curret gpios value: ')
-        self.print_gpios_ctrl_val()    
+                self.gpio_control_reg_write(
+                    control_modules[gpio], gpio_value.value
+                )  # for control blocks regs
+                self.caravel_hdl.housekeeping.gpio_configure[
+                    gpio
+                ].value = gpio_value.value  # for house keeping regs
+        cocotb.log.info(
+            f" [caravel] finish configuring gpios, the curret gpios value: "
+        )
+        self.print_gpios_ctrl_val()
         self.print_gpios_HW_val()
 
-    def print_gpios_default_val(self,print=1):
+    def print_gpios_default_val(self, print=1):
         gpio_defaults = self.caravel_hdl.gpio_defaults.value
-        size = gpio_defaults.n_bits -1 #number of bins in gpio_defaults
+        size = gpio_defaults.n_bits - 1  # number of bins in gpio_defaults
         gpios = []
-        for gpio in range(Macros['MPRJ_IO_PADS']):
-            gpio_value = gpio_defaults[size - (gpio*13 + 12): size -gpio*13]
+        for gpio in range(Macros["MPRJ_IO_PADS"]):
+            gpio_value = gpio_defaults[size - (gpio * 13 + 12) : size - gpio * 13]
             gpio_enum = GPIO_MODE(gpio_value.integer)
-            gpios.append((gpio,gpio_enum))
-        group_bins = groupby(gpios,key=lambda x: x[1])
-        for key,value in group_bins:
-            gpios=[]
+            gpios.append((gpio, gpio_enum))
+        group_bins = groupby(gpios, key=lambda x: x[1])
+        for key, value in group_bins:
+            gpios = []
             for gpio in list(value):
                 gpios.append(gpio[0])
-            if (print):
-                cocotb.log.info(f' [caravel] gpios[{gpios}] are  {key} ')
+            if print:
+                cocotb.log.info(f" [caravel] gpios[{gpios}] are  {key} ")
         return gpios
 
     """print the values return in the gpio of control block mode in GPIO Mode format"""
+
     def print_gpios_ctrl_val(self, print=1):
         control_modules = self.control_blocks_paths()
         gpios = []
-        for i , gpio in enumerate(control_modules):
-            gpios.append((i,self.gpio_control_reg_read(gpio)))
-        group_bins = groupby(gpios,key=lambda x: x[1])
-        for key,value in group_bins:
-            gpios=[]
+        for i, gpio in enumerate(control_modules):
+            gpios.append((i, self.gpio_control_reg_read(gpio)))
+        group_bins = groupby(gpios, key=lambda x: x[1])
+        for key, value in group_bins:
+            gpios = []
             for gpio in list(value):
                 gpios.append(gpio[0])
-            if (print):
-                cocotb.log.info(f' [caravel] gpios[{gpios}] are  {key} ')
+            if print:
+                cocotb.log.info(f" [caravel] gpios[{gpios}] are  {key} ")
         return gpios
 
     def _check_gpio_ctrl_eq_HW(self):
-        assert self.print_gpios_ctrl_val(1) == self.print_gpios_HW_val(1), f'there is an issue while configuration the control block register value isn\'t the same as the house keeping gpio register' 
+        assert self.print_gpios_ctrl_val(1) == self.print_gpios_HW_val(
+            1
+        ), f"there is an issue while configuration the control block register value isn't the same as the house keeping gpio register"
 
     """print the values return in the GPIO of housekeeping block mode in GPIO Mode format"""
-    def print_gpios_HW_val(self,print=1):
+
+    def print_gpios_HW_val(self, print=1):
         gpios = []
-        for pin  in range(Macros['MPRJ_IO_PADS']):
-            gpios.append((pin,GPIO_MODE(self.caravel_hdl.housekeeping.gpio_configure[pin].value)))
-        group_bins = groupby(gpios,key=lambda x: x[1])
-        for key,value in group_bins:
-            gpios=[]
+        for pin in range(Macros["MPRJ_IO_PADS"]):
+            gpios.append(
+                (
+                    pin,
+                    GPIO_MODE(self.caravel_hdl.housekeeping.gpio_configure[pin].value),
+                )
+            )
+        group_bins = groupby(gpios, key=lambda x: x[1])
+        for key, value in group_bins:
+            gpios = []
             for gpio in list(value):
                 gpios.append(gpio[0])
-            if (print):
-                cocotb.log.info(f' [caravel] gpios[{gpios}] are  {key} ')
+            if print:
+                cocotb.log.info(f" [caravel] gpios[{gpios}] are  {key} ")
         return gpios
 
-            
     """return the paths of the control blocks"""
-    def control_blocks_paths(self)-> list:
+
+    def control_blocks_paths(self) -> list:
         car = self.caravel_hdl
-        control_modules =[car._id("gpio_control_bidir_1[0]",False),car._id("gpio_control_bidir_1[1]",False)]
-        #add gpio_control_in_1a (GPIO 2 to 7)
+        control_modules = [
+            car._id("gpio_control_bidir_1[0]", False),
+            car._id("gpio_control_bidir_1[1]", False),
+        ]
+        # add gpio_control_in_1a (GPIO 2 to 7)
         for i in range(6):
-            control_modules.append(car._id(f'gpio_control_in_1a[{i}]',False))
-        #add gpio_control_in_1 (GPIO 8 to 18)
-        for i in range(Macros['MPRJ_IO_PADS_1']-9+1):
-            control_modules.append(car._id(f'gpio_control_in_1[{i}]',False))        
-        #add gpio_control_in_2 (GPIO 19 to 34)
-        for i in range(Macros['MPRJ_IO_PADS_2']-4+1):
-            control_modules.append(car._id(f'gpio_control_in_2[{i}]',False))
+            control_modules.append(car._id(f"gpio_control_in_1a[{i}]", False))
+        # add gpio_control_in_1 (GPIO 8 to 18)
+        for i in range(Macros["MPRJ_IO_PADS_1"] - 9 + 1):
+            control_modules.append(car._id(f"gpio_control_in_1[{i}]", False))
+        # add gpio_control_in_2 (GPIO 19 to 34)
+        for i in range(Macros["MPRJ_IO_PADS_2"] - 4 + 1):
+            control_modules.append(car._id(f"gpio_control_in_2[{i}]", False))
         # Last three GPIOs (spi_sdo, flash_io2, and flash_io3) gpio_control_bidir_2
         for i in range(3):
-            control_modules.append(car._id(f'gpio_control_bidir_2[{i}]',False))
+            control_modules.append(car._id(f"gpio_control_bidir_2[{i}]", False))
         return control_modules
 
     """read the control register and return a GPIO Mode it takes the path to the control reg"""
-    def gpio_control_reg_read(self,path:SimHandleBase) -> GPIO_MODE:
-        gpio_mgmt_en     = path.mgmt_ena.value          << MASK_GPIO_CTRL.MASK_GPIO_CTRL_MGMT_EN.value
-        gpio_out_dis     = path.gpio_outenb.value       << MASK_GPIO_CTRL.MASK_GPIO_CTRL_OUT_DIS.value
-        gpio_holdover    = path.gpio_holdover.value     << MASK_GPIO_CTRL.MASK_GPIO_CTRL_OVERRIDE.value
-        gpio_in_dis      = path.gpio_inenb.value        << MASK_GPIO_CTRL.MASK_GPIO_CTRL_INP_DIS.value
-        gpio_mode_sel    = path.gpio_ib_mode_sel.value  << MASK_GPIO_CTRL.MASK_GPIO_CTRL_MOD_SEL.value
-        gpio_anlg_en     = path.gpio_ana_en.value       << MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_EN.value
-        gpio_anlg_sel    = path.gpio_ana_sel.value      << MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_SEL.value
-        gpio_anlg_pol    = path.gpio_ana_pol.value      << MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_POL.value
-        gpio_slow_sel    = path.gpio_slow_sel.value     << MASK_GPIO_CTRL.MASK_GPIO_CTRL_SLOW.value
-        gpio_vtrip_sel   = path.gpio_vtrip_sel.value    << MASK_GPIO_CTRL.MASK_GPIO_CTRL_TRIP.value
-        gpio_dgtl_mode   = path.gpio_dm.value           << MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value
-        control_reg = (gpio_mgmt_en | gpio_out_dis | gpio_holdover| gpio_in_dis | gpio_mode_sel | gpio_anlg_en
-        |gpio_anlg_sel|gpio_anlg_pol|gpio_slow_sel|gpio_vtrip_sel|gpio_dgtl_mode)
-        return(GPIO_MODE(control_reg))
-        
+
+    def gpio_control_reg_read(self, path: SimHandleBase) -> GPIO_MODE:
+        gpio_mgmt_en = (
+            path.mgmt_ena.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_MGMT_EN.value
+        )
+        gpio_out_dis = (
+            path.gpio_outenb.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_OUT_DIS.value
+        )
+        gpio_holdover = (
+            path.gpio_holdover.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_OVERRIDE.value
+        )
+        gpio_in_dis = (
+            path.gpio_inenb.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_INP_DIS.value
+        )
+        gpio_mode_sel = (
+            path.gpio_ib_mode_sel.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_MOD_SEL.value
+        )
+        gpio_anlg_en = (
+            path.gpio_ana_en.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_EN.value
+        )
+        gpio_anlg_sel = (
+            path.gpio_ana_sel.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_SEL.value
+        )
+        gpio_anlg_pol = (
+            path.gpio_ana_pol.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_POL.value
+        )
+        gpio_slow_sel = (
+            path.gpio_slow_sel.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_SLOW.value
+        )
+        gpio_vtrip_sel = (
+            path.gpio_vtrip_sel.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_TRIP.value
+        )
+        gpio_dgtl_mode = (
+            path.gpio_dm.value << MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value
+        )
+        control_reg = (
+            gpio_mgmt_en
+            | gpio_out_dis
+            | gpio_holdover
+            | gpio_in_dis
+            | gpio_mode_sel
+            | gpio_anlg_en
+            | gpio_anlg_sel
+            | gpio_anlg_pol
+            | gpio_slow_sel
+            | gpio_vtrip_sel
+            | gpio_dgtl_mode
+        )
+        return GPIO_MODE(control_reg)
+
     """read the control register and return a GPIO Mode it takes the path to the control reg"""
-    def gpio_control_reg_write(self,path:SimHandleBase,data) :
-        bits =common.int_to_bin_list(data,14)
-        path.mgmt_ena.value          = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_MGMT_EN.value]
-        path.gpio_outenb.value       = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_OUT_DIS.value]
-        path.gpio_holdover.value     = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_OVERRIDE.value]
-        path.gpio_inenb.value        = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_INP_DIS.value]
-        path.gpio_ib_mode_sel.value  = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_MOD_SEL.value]
-        path.gpio_ana_en.value       = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_EN.value]
-        path.gpio_ana_sel.value      = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_SEL.value]
-        path.gpio_ana_pol.value      = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_POL.value]
-        path.gpio_slow_sel.value     = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_SLOW.value]
-        path.gpio_vtrip_sel.value    = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_TRIP.value]
-        gpio_dm   =bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value:MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value+3]        
-        gpio_dm   =sum(d * 2**i for i, d in enumerate(gpio_dm)) # convert list to binary int
-        path.gpio_dm.value           = gpio_dm
-        
+
+    def gpio_control_reg_write(self, path: SimHandleBase, data):
+        bits = common.int_to_bin_list(data, 14)
+        path.mgmt_ena.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_MGMT_EN.value]
+        path.gpio_outenb.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_OUT_DIS.value]
+        path.gpio_holdover.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_OVERRIDE.value]
+        path.gpio_inenb.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_INP_DIS.value]
+        path.gpio_ib_mode_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_MOD_SEL.value]
+        path.gpio_ana_en.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_EN.value]
+        path.gpio_ana_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_SEL.value]
+        path.gpio_ana_pol.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_ANLG_POL.value]
+        path.gpio_slow_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_SLOW.value]
+        path.gpio_vtrip_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_TRIP.value]
+        gpio_dm = bits[
+            MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value : MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value
+            + 3
+        ]
+        gpio_dm = sum(
+            d * 2**i for i, d in enumerate(gpio_dm)
+        )  # convert list to binary int
+        path.gpio_dm.value = gpio_dm
+
     # """drive the value of mprj bits with specific data  at the top"""
     # def release_gpio(self):
     #     io = self.caravel_hdl.padframe.mprj_pads.io
     #     mprj , n_bits = common.signal_valueZ_size(io)
     #     io.value  =  mprj
-    #     cocotb.log.info(f' [caravel] drive_gpio_in pad mprj with {mprj}')          
+    #     cocotb.log.info(f' [caravel] drive_gpio_in pad mprj with {mprj}')
 
-    
-    def drive_gpio_in(self,bits,data) -> None:
-        """drive input gpios with specific data 
+    def drive_gpio_in(self, bits, data) -> None:
+        """drive input gpios with specific data
 
         :param bits: gpios to drive
         :param int data: data to drive the gpios with
@@ -366,133 +431,155 @@ class Caravel_env:
         # cocotb.log.debug(f' [caravel] before mprj with {mprj} and data = {data} bit [{n_bits-1-bits[0]}]:[{n_bits-1-bits[1]}]')
         # mprj[n_bits-1-bits[0]:n_bits-1-bits[1]] = data
         # io.value  =  mprj
-        # cocotb.log.info(f' [caravel] drive_gpio_in pad mprj with {mprj}')  
+        # cocotb.log.info(f' [caravel] drive_gpio_in pad mprj with {mprj}')
         data_bits = []
-        is_list  = isinstance(bits, (list,tuple)) 
-        if is_list : 
-            cocotb.log.debug(f'[caravel] [drive_gpio_in] start bits[1] = {bits[1]} bits[0]= {bits[0]}')
-            data_bits = BinaryValue(value = data, n_bits =bits[0]-bits[1]+1 ,bigEndian=(bits[0]<bits[1]))
-            for i,bits2 in enumerate(range(bits[1],bits[0]+1)):
-                self.dut._id(f"bin{bits2}",False).value = data_bits[i]
-                self.dut._id(f"bin{bits2}_en",False).value = 1
-                cocotb.log.debug(f'[caravel] [drive_gpio_in] drive bin{bits2} with {data_bits[i]} and bin{bits2}_en with 1')
+        is_list = isinstance(bits, (list, tuple))
+        if is_list:
+            cocotb.log.debug(
+                f"[caravel] [drive_gpio_in] start bits[1] = {bits[1]} bits[0]= {bits[0]}"
+            )
+            data_bits = BinaryValue(
+                value=data, n_bits=bits[0] - bits[1] + 1, bigEndian=(bits[0] < bits[1])
+            )
+            for i, bits2 in enumerate(range(bits[1], bits[0] + 1)):
+                self.dut._id(f"bin{bits2}", False).value = data_bits[i]
+                self.dut._id(f"bin{bits2}_en", False).value = 1
+                cocotb.log.debug(
+                    f"[caravel] [drive_gpio_in] drive bin{bits2} with {data_bits[i]} and bin{bits2}_en with 1"
+                )
         else:
-            self.dut._id(f'bin{bits}',False).value = data
-            self.dut._id(f'bin{bits}_en',False).value = 1
-            cocotb.log.debug(f'[caravel] [drive_gpio_in] drive bin{bits} with {data} and bin{bits}_en with 1')
+            self.dut._id(f"bin{bits}", False).value = data
+            self.dut._id(f"bin{bits}_en", False).value = 1
+            cocotb.log.debug(
+                f"[caravel] [drive_gpio_in] drive bin{bits} with {data} and bin{bits}_en with 1"
+            )
 
-    def release_gpio(self,bits):
-        """ release driving the value of mprj bits 
+    def release_gpio(self, bits):
+        """release driving the value of mprj bits
         :param bits: gpios to drive
         :type bits: int or tuple(int, int)
-         """
+        """
         data_bits = []
-        is_list  = isinstance(bits, (list,tuple)) 
-        if is_list : 
-            cocotb.log.debug(f'[caravel] [drive_gpio_disable] start bits[1] = {bits[1]} bits[0]= {bits[0]}')
-            for i,bits2 in enumerate(range(bits[1],bits[0]+1)):
-                self.dut._id(f"bin{bits2}_en",False).value = 0
-                cocotb.log.debug(f'[caravel] [drive_gpio_disable] release driving bin{bits2}')
+        is_list = isinstance(bits, (list, tuple))
+        if is_list:
+            cocotb.log.debug(
+                f"[caravel] [drive_gpio_disable] start bits[1] = {bits[1]} bits[0]= {bits[0]}"
+            )
+            for i, bits2 in enumerate(range(bits[1], bits[0] + 1)):
+                self.dut._id(f"bin{bits2}_en", False).value = 0
+                cocotb.log.debug(
+                    f"[caravel] [drive_gpio_disable] release driving bin{bits2}"
+                )
         else:
-            self.dut._id(f'bin{bits}_en',False).value = 0
-            cocotb.log.debug(f'[caravel] [drive_gpio_disable] release driving bin{bits}')
+            self.dut._id(f"bin{bits}_en", False).value = 0
+            cocotb.log.debug(
+                f"[caravel] [drive_gpio_disable] release driving bin{bits}"
+            )
 
     def get_mgmt_gpi_hdl(self):
         return self.dut.gpio_tb
+
     """drive the value of  GPIO management"""
-    def drive_mgmt_gpio(self,data):
-        """drive GPIO management with specific data 
+
+    def drive_mgmt_gpio(self, data):
+        """drive GPIO management with specific data
 
         :param int data: data to drive the gpios with
         """
-        self.get_mgmt_gpi_hdl().value  =  BinaryValue(value = data,n_bits=1)
-        cocotb.log.info(f' [caravel] drive_mgmt_gpio through management area mprj with {data}')
+        self.get_mgmt_gpi_hdl().value = BinaryValue(value=data, n_bits=1)
+        cocotb.log.info(
+            f" [caravel] drive_mgmt_gpio through management area mprj with {data}"
+        )
 
     """update the value of mprj bits with specific data then after certain number of cycle drive z to free the signal"""
-    async def drive_gpio_in_with_cycles(self,bits,data,num_cycles):
-        self.drive_gpio_in(bits,data)
-        cocotb.log.info(f' [caravel] wait {num_cycles} cycles')
-        await cocotb.start(self.wait_then_undrive(bits,num_cycles))
-        cocotb.log.info(f' [caravel] finish drive_gpio_with_in_cycles ')
+
+    async def drive_gpio_in_with_cycles(self, bits, data, num_cycles):
+        self.drive_gpio_in(bits, data)
+        cocotb.log.info(f" [caravel] wait {num_cycles} cycles")
+        await cocotb.start(self.wait_then_undrive(bits, num_cycles))
+        cocotb.log.info(f" [caravel] finish drive_gpio_with_in_cycles ")
 
     """drive the value of mprj bits with specific data from management area then after certain number of cycle drive z to free the signal"""
-    async def drive_mgmt_gpio_with_cycles(self,bits,data,num_cycles):
-        self.drive_mgmt_gpio(bits,data)
-        cocotb.log.info(f' [caravel] wait {num_cycles} cycles')
-        await cocotb.start(self.wait_then_undrive(bits,num_cycles))
-        cocotb.log.info(f' [caravel] finish drive_gpio_with_in_cycles ') 
 
-    async def wait_then_undrive(self,bits,num_cycles):
+    async def drive_mgmt_gpio_with_cycles(self, bits, data, num_cycles):
+        self.drive_mgmt_gpio(bits, data)
+        cocotb.log.info(f" [caravel] wait {num_cycles} cycles")
+        await cocotb.start(self.wait_then_undrive(bits, num_cycles))
+        cocotb.log.info(f" [caravel] finish drive_gpio_with_in_cycles ")
+
+    async def wait_then_undrive(self, bits, num_cycles):
         await ClockCycles(self.clk, num_cycles)
-        n_bits = bits[0]-bits[1]+1
-        self.drive_gpio_in(bits, (n_bits)* 'z')
-        cocotb.log.info(f' [caravel] finish wait_then_drive ')
+        n_bits = bits[0] - bits[1] + 1
+        self.drive_gpio_in(bits, (n_bits) * "z")
+        cocotb.log.info(f" [caravel] finish wait_then_drive ")
 
     async def hk_write_byte(self, data):
         self.path = self.dut.mprj_io_tb
-        data_bit = BinaryValue(value = data , n_bits = 8,bigEndian=False)
-        for i in range(7,-1,-1):
+        data_bit = BinaryValue(value=data, n_bits=8, bigEndian=False)
+        for i in range(7, -1, -1):
             #  for j in range(4):
             #     await FallingEdge(self.clk)
             # await Timer(7, units='ns')
             await FallingEdge(self.clk)
             await FallingEdge(self.clk)
-            #common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
-            self.drive_gpio_in((2,2),int(data_bit[i]))
-            self.drive_gpio_in((4,4),0)
+            # common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
+            self.drive_gpio_in((2, 2), int(data_bit[i]))
+            self.drive_gpio_in((4, 4), 0)
 
             await RisingEdge(self.clk)
             await RisingEdge(self.clk)
-            self.drive_gpio_in((4,4),1)
+            self.drive_gpio_in((4, 4), 1)
         await FallingEdge(self.clk)
         await FallingEdge(self.clk)
 
     async def hk_write_read_byte(self, data):
-        read_data =''
+        read_data = ""
         self.path = self.dut.mprj_io_tb
-        data_bit = BinaryValue(value = data , n_bits = 8,bigEndian=False)
-        for i in range(7,-1,-1):
+        data_bit = BinaryValue(value=data, n_bits=8, bigEndian=False)
+        for i in range(7, -1, -1):
             #  for j in range(4):
             #     await FallingEdge(self.clk)
             # await Timer(7, units='ns')
             await FallingEdge(self.clk)
             await FallingEdge(self.clk)
-            #common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
-            self.drive_gpio_in((2,2),int(data_bit[i]))
-            self.drive_gpio_in((4,4),0)
+            # common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
+            self.drive_gpio_in((2, 2), int(data_bit[i]))
+            self.drive_gpio_in((4, 4), 0)
 
             await RisingEdge(self.clk)
             await RisingEdge(self.clk)
-            read_data= f'{read_data}{self.dut.mprj_io_tb.value[37-1]}'
-            self.drive_gpio_in((4,4),1)
+            read_data = f"{read_data}{self.dut.mprj_io_tb.value[37-1]}"
+            self.drive_gpio_in((4, 4), 1)
         await FallingEdge(self.clk)
         await FallingEdge(self.clk)
-        return int(read_data,2)
-        
+        return int(read_data, 2)
+
     """ read byte using housekeeping spi 
         when writing to SCK we can't use mprj[4] as there is a limitation in cocotb for accessing pack array #2587
         so use back door access to write the clock then read the output from the SDO mprj[1] value"""
-    async def hk_read_byte(self,last_read= False):
-        read_data =''
-        for i in range(8,0,-1):
-            self.drive_gpio_in((4,4),1)# SCK
+
+    async def hk_read_byte(self, last_read=False):
+        read_data = ""
+        for i in range(8, 0, -1):
+            self.drive_gpio_in((4, 4), 1)  # SCK
             await FallingEdge(self.clk)
             await FallingEdge(self.clk)
-            self.drive_gpio_in((4,4),0)# SCK
+            self.drive_gpio_in((4, 4), 0)  # SCK
             await RisingEdge(self.clk)
             await RisingEdge(self.clk)
-            read_data= f'{read_data}{self.dut.mprj_io_tb.value[37-1]}'
+            read_data = f"{read_data}{self.dut.mprj_io_tb.value[37-1]}"
         await FallingEdge(self.clk)
         await FallingEdge(self.clk)
-        self.drive_gpio_in((4,4),0) # SCK
+        self.drive_gpio_in((4, 4), 0)  # SCK
         # if (last_read):
         #     common.drive_hdl(self.dut.bin4_en,(0,0),'z') #4 = SCK
-        #     common.drive_hdl(self.path,[(1,1)],'z') 
+        #     common.drive_hdl(self.path,[(1,1)],'z')
 
-        return int(read_data,2)
-        
-    """write to the house keeping registers by back door no need for commands and waiting for the data to show on mprj"""    
-    async def hk_write_backdoor(self,addr, data):
+        return int(read_data, 2)
+
+    """write to the house keeping registers by back door no need for commands and waiting for the data to show on mprj"""
+
+    async def hk_write_backdoor(self, addr, data):
         await RisingEdge(self.dut.wb_clk_i)
         self.hk_hdl.wb_stb_i.value = 1
         self.hk_hdl.wb_cyc_i.value = 1
@@ -500,31 +587,31 @@ class Caravel_env:
         self.hk_hdl.wb_we_i.value = 1
         self.hk_hdl.wb_adr_i.value = addr
         self.hk_hdl.wb_dat_i.value = data
-        cocotb.log.info(f'Monitor: Start Writing to {hex(addr)} -> {data}')
-        await FallingEdge(self.dut.wb_ack_o) # wait for acknowledge
+        cocotb.log.info(f"Monitor: Start Writing to {hex(addr)} -> {data}")
+        await FallingEdge(self.dut.wb_ack_o)  # wait for acknowledge
         self.hk_hdl.wb_stb_i.value = 0
         self.hk_hdl.wb_cyc_i.value = 0
-        cocotb.log.info(f'Monitor: End writing {hex(addr)} -> {data}')
+        cocotb.log.info(f"Monitor: End writing {hex(addr)} -> {data}")
 
+    """read from the house keeping registers by back door no need for commands and waiting for the data to show on mprj"""
 
-    """read from the house keeping registers by back door no need for commands and waiting for the data to show on mprj"""    
-    async def hk_read_backdoor(self,addr):
+    async def hk_read_backdoor(self, addr):
         await RisingEdge(self.clk)
         self.hk_hdl.wb_stb_i.value = 1
         self.hk_hdl.wb_cyc_i.value = 1
         self.hk_hdl.wb_sel_i.value = 0
         self.hk_hdl.wb_we_i.value = 0
         self.hk_hdl.wb_adr_i.value = addr
-        cocotb.log.info(f' [housekeeping] Monitor: Start reading from {hex(addr)}')
+        cocotb.log.info(f" [housekeeping] Monitor: Start reading from {hex(addr)}")
         await FallingEdge(self.hk_hdl.wb_ack_o)
         self.hk_hdl.wb_stb_i.value = 0
         self.hk_hdl.wb_cyc_i.value = 0
-        cocotb.log.info(f' [housekeeping] Monitor: read from {hex(addr)} value {(self.hk_hdl.wb_dat_o.value)}')
+        cocotb.log.info(
+            f" [housekeeping] Monitor: read from {hex(addr)} value {(self.hk_hdl.wb_dat_o.value)}"
+        )
         return self.hk_hdl.wb_dat_o.value
 
-
-
-    def setup_clock(self,period,unit="ns") -> cocotb.clock.Clock: 
+    def setup_clock(self, period, unit="ns") -> cocotb.clock.Clock:
         """
         Configure caravel clock and start it
 
@@ -532,10 +619,11 @@ class Caravel_env:
         :param str unit: One of ``'step'``, ``'fs'``, ``'ps'``, ``'ns'``, ``'us'``, ``'ms'``, ``'sec'``.When *unit* is ``'step'``,the timestep is determined by the simulator.
         :return: Object of type Caravel_env (caravel environment)
         """
-        self.clock_obj = Clock(self.clk, period, unit)  # Create a 25ns period clock on port clk
+        self.clock_obj = Clock(
+            self.clk, period, unit
+        )  # Create a 25ns period clock on port clk
         cocotb.start_soon(self.clock_obj.start())  # Start the clock
         return self.clock_obj
-
 
     def get_clock_obj(self) -> cocotb.clock.Clock:
         """return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info"""

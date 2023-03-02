@@ -2,12 +2,12 @@ from cgitb import handler
 import random
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import FallingEdge,RisingEdge,ClockCycles
+from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles
 import cocotb.log
 import cocotb.simulator
 from cocotb_coverage.coverage import *
 from cocotb.binary import BinaryValue
-import interfaces.caravel 
+import interfaces.caravel
 from interfaces.logic_analyzer import LA
 from interfaces.caravel import GPIO_MODE, Caravel_env
 from wb_models.housekeepingWB.housekeepingWB import HK_whiteBox
@@ -21,6 +21,7 @@ from tests.common_functions.Timeout import Timeout
 from cocotb.result import TestSuccess
 import inspect
 import os
+
 # tests
 from tests.bitbang.bitbang_tests import *
 from tests.bitbang.bitbang_tests_cpu import *
