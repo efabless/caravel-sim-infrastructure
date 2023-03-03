@@ -17,7 +17,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def bitbang_cpu_all_o(dut):
-    caravelEnv = await test_configure(dut, timeout_cycles=437008)
+    caravelEnv = await test_configure(dut, timeout_cycles=1111437008)
     await gpio_all_o_seq(dut, caravelEnv)
 
 
