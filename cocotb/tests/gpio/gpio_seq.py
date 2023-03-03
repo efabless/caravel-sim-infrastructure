@@ -20,7 +20,7 @@ async def gpio_all_i_seq(dut, caravelEnv, after_config_callback=None):
     caravelEnv.drive_gpio_in((active_gpios_num, 0), 0)
     await wait_reg1(cpu, caravelEnv, 0xAA)
     cocotb.log.info(f"[TEST] configuration finished")
-    if after_config_callback != None:
+    if after_config_callback is not None:
         await after_config_callback(caravelEnv, cpu)
     data_in = 0xFFFFFFFF
     cocotb.log.info(f"[TEST] drive {hex(data_in)} to gpio[31:0]")
@@ -146,7 +146,7 @@ async def gpio_all_o_seq(dut, caravelEnv, after_config_callback=None):
     cpu.cpu_release_reset()
 
     await wait_reg1(cpu, caravelEnv, 0xAA)
-    if after_config_callback != None:
+    if after_config_callback is not None:
         await after_config_callback(caravelEnv, cpu)
     await caravelEnv.release_csb()
     cocotb.log.info("[TEST] finish configuring output")

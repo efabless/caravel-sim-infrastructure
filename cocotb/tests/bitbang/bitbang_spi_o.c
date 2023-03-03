@@ -4,8 +4,8 @@
 void main(){
         unsigned int i,i_temp, j, active_gpio_num,num_high_gpio;
         enable_debug();
-        configure_all_gpios(GPIO_MODE_MGMT_STD_OUTPUT);  
-        gpio_config_load();      
+        // configure_all_gpios(GPIO_MODE_MGMT_STD_OUTPUT);  
+        // gpio_config_load();      
         set_debug_reg1(0xAA); // finish configuration 
         wait_debug_reg2(0xDD);
         enable_hk_spi(0);

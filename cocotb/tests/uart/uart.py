@@ -45,9 +45,8 @@ async def uart_rx(dut):
     cpu.cpu_release_reset()
     uart = UART(caravelEnv)
     cocotb.log.info(f"[TEST] Start uart test")
-    caravelEnv.drive_gpio_in(
-        (0, 0), 0
-    )  # IO[0] affects the uart selecting btw system and debug
+    # IO[0] affects the uart selecting btw system and debug
+    caravelEnv.drive_gpio_in((0, 0), 0)
     caravelEnv.drive_gpio_in((5, 5), 1)
     # send first char
     await wait_reg1(cpu, caravelEnv, 0xAA)

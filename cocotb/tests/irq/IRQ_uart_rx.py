@@ -28,7 +28,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def IRQ_uart_rx(dut):
-    caravelEnv = await test_configure(dut, timeout_cycles=883076)
+    caravelEnv = await test_configure(dut, timeout_cycles=545363)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -40,13 +40,17 @@ async def IRQ_uart_rx(dut):
     phases_passes = 0
     reg1 = 0  # buffer
     reg2 = 0  # buffer
+
+    # IO[0] affects the uart selecting btw system and debug
+    caravelEnv.drive_gpio_in((0, 0), 0)
+    caravelEnv.drive_gpio_in((5, 5), 1)
     while True:
         if reg2 != cpu.read_debug_reg2():
             reg2 = cpu.read_debug_reg2()
             if reg2 == 0xFF:  # test finish
                 break
             if reg2 == 0xAA:
-                cocotb.log.info(f"[TEST] start sending through uart")
+                cocotb.log.info("[TEST] start sending through uart")
                 await cocotb.start(uart.uart_send_char("B"))
 
         if reg1 != cpu.read_debug_reg1():

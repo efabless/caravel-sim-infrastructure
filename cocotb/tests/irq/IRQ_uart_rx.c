@@ -20,16 +20,18 @@
 void main(){
     enable_debug();
     clear_flag();
+    enable_hk_spi(0);
     configure_gpio(6,GPIO_MODE_MGMT_STD_OUTPUT);
     configure_gpio(5,GPIO_MODE_MGMT_STD_INPUT_NOPULL);
     gpio_config_load();
+    uart_RX_enable(1);
     enable_uart_rx_irq(1);
 
     set_debug_reg2(0xAA); //start sending data through the uart
 
     // Loop, waiting for the interrupt to change reg_mprj_datah
     char is_pass = 0;
-    int timeout = 100; 
+    int timeout = 50; 
     uart_getc();
     for (int i = 0; i < timeout; i++){
         if (get_flag() == 1){

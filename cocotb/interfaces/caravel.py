@@ -127,7 +127,7 @@ class Caravel_env:
         """Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
         cocotb.log.info(f" [caravel] disable housekeeping spi transmission")
         await self.drive_csb(1)
-        await self.release_csb()
+        # await self.release_csb()
         await ClockCycles(self.clk, 1)
 
     async def release_csb(self):
