@@ -17,7 +17,7 @@ reg = Regs()
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_out(dut):
-    caravelEnv = await test_configure(dut, timeout_cycles=1191385)
+    caravelEnv = await test_configure(dut, timeout_cycles=377618)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
@@ -73,12 +73,12 @@ async def mgmt_gpio_out(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_in(dut):
-    caravelEnv = await test_configure(dut, timeout_cycles=1111102492)
+    caravelEnv = await test_configure(dut, timeout_cycles=1024924)
     caravelEnv.drive_mgmt_gpio(0)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
-    cocotb.log.info(f"[TEST] Start mgmt_gpio_in test")
+    cocotb.log.info("[TEST] Start mgmt_gpio_in test")
     phases_fails = 3
     phases_passes = 0
     pass_list = (0x1B, 0x2B, 0xFF)
@@ -96,11 +96,11 @@ async def mgmt_gpio_in(dut):
                 if reg2 == 0xFF:  # test finish
                     break
                 elif reg2 == 0x1B:
-                    cocotb.log.info(f"[TEST] pass sending 10 blink ")
+                    cocotb.log.info("[TEST] pass sending 10 blink ")
                 elif reg2 == 0x2B:
-                    cocotb.log.info(f"[TEST] pass sending 20 blink ")
+                    cocotb.log.info("[TEST] pass sending 20 blink ")
             if reg2 in fail_list:
-                cocotb.log.error(f"[TEST] gpio change without sending anything")
+                cocotb.log.error("[TEST] gpio change without sending anything")
         if reg1 != cpu.read_debug_reg1():
             reg1 = cpu.read_debug_reg1()
             cocotb.log.info(f"[TEST] start sending {reg1} blinks")
@@ -125,7 +125,7 @@ async def mgmt_gpio_in(dut):
 @cocotb.test()
 @repot_test
 async def mgmt_gpio_bidir(dut):
-    caravelEnv = await test_configure(dut, timeout_cycles=524825)
+    caravelEnv = await test_configure(dut, timeout_cycles=1672194)
     cpu = RiskV(dut)
     cpu.cpu_force_reset()
     cpu.cpu_release_reset()
