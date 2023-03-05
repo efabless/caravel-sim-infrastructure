@@ -45,7 +45,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../usage.html">Quickstart Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api.html">Python APIs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../C_api.html">Software APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../C_api.html">Firmware APIs</a></li>
 </ul>
 
         </div>
@@ -74,95 +74,99 @@
              
   <h1>Source code for interfaces.UART</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">cocotb</span>
-<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">FallingEdge</span><span class="p">,</span><span class="n">RisingEdge</span><span class="p">,</span><span class="n">ClockCycles</span><span class="p">,</span><span class="n">Timer</span><span class="p">,</span><span class="n">Edge</span>
+<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">FallingEdge</span><span class="p">,</span> <span class="n">RisingEdge</span><span class="p">,</span> <span class="n">ClockCycles</span><span class="p">,</span> <span class="n">Timer</span><span class="p">,</span> <span class="n">Edge</span>
 <span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">Macros</span>
 <span class="kn">from</span> <span class="nn">interfaces.caravel</span> <span class="kn">import</span> <span class="n">Caravel_env</span>
 
-<div class="viewcode-block" id="UART"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART">[docs]</a><span class="k">class</span> <span class="nc">UART</span><span class="p">():</span>
+
+<div class="viewcode-block" id="UART"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART">[docs]</a><span class="k">class</span> <span class="nc">UART</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;UART Verification environment to provide APIs to communicate with caravel uart through caravel gpios</span>
-<span class="sd">    </span>
-<span class="sd">    :param Caravel_env caravelEnv: caravel environment &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">caravelEnv</span><span class="p">:</span><span class="n">Caravel_env</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="sd">    :param Caravel_env caravelEnv: caravel environment&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caravelEnv</span><span class="p">:</span> <span class="n">Caravel_env</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span> <span class="o">=</span> <span class="n">caravelEnv</span>
         <span class="n">clock</span> <span class="o">=</span> <span class="n">caravelEnv</span><span class="o">.</span><span class="n">get_clock_obj</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">clock</span><span class="o">.</span><span class="n">period</span><span class="o">/</span><span class="mi">1000</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span> <span class="mf">1.01</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">/</span> <span class="p">(</span><span class="mi">96</span><span class="p">))</span>  <span class="c1"># 10% factor of safety</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] configure uart bit_time_ns = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="si">}</span><span class="s2">ns&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">=</span> <span class="n">clock</span><span class="o">.</span><span class="n">period</span> <span class="o">/</span> <span class="mi">1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
+            <span class="mf">1.01</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">/</span> <span class="p">(</span><span class="mi">96</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># 10% factor of safety</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] configure uart bit_time_ns = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="si">}</span><span class="s2">ns&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="UART.get_line"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART.get_line">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read line sent through UART (msg is sent by the software) </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read line sent through UART (msg is sent by the software)</span>
 
-<span class="sd">        - Line is a bunch of ASCII sybmols ended by linefeed &#39;\\\\n&#39; &quot;&quot;&quot;</span>
-        <span class="n">line</span> <span class="o">=</span><span class="s1">&#39;&#39;</span>
-        <span class="k">while</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+<span class="sd">        - Line is a bunch of ASCII sybmols ended by linefeed &#39;\\\\n&#39;&quot;&quot;&quot;</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">new_char</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_char</span><span class="p">()</span>
-            <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] new char = </span><span class="si">{</span><span class="n">new_char</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] new char = </span><span class="si">{</span><span class="n">new_char</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">new_char</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="n">line</span> <span class="o">+=</span> <span class="n">new_char</span> 
-            <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] part of the line recieved = </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] line recieved = </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">line</span> <span class="o">+=</span> <span class="n">new_char</span>
+            <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] part of the line recieved = </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UART] line recieved = </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="UART.get_char"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART.get_char">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_char</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read character sent through UART (character is sent by the software) </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read character sent through UART (character is sent by the software)</span>
 
-<span class="sd">        - Character is a 8 bit ASCII symbol &quot;&quot;&quot;</span>
+<span class="sd">        - Character is a 8 bit ASCII symbol&quot;&quot;&quot;</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_of_tx</span><span class="p">()</span>
-        <span class="n">char</span> <span class="o">=</span><span class="s1">&#39;&#39;</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
-            <span class="n">char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">monitor_gpio</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">binstr</span> <span class="o">+</span> <span class="n">char</span>
-            <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">char</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span></div>
+            <span class="n">char</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">monitor_gpio</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">binstr</span> <span class="o">+</span> <span class="n">char</span>
+            <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">char</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span></div>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">start_of_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">while</span> <span class="p">(</span><span class="kc">True</span><span class="p">):</span> <span class="c1"># wait for the start of the transimission it 1 then 0</span>
-            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">monitor_gpio</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">integer</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># wait for the start of the transimission it 1 then 0</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">monitor_gpio</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span><span class="o">.</span><span class="n">integer</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="o">/</span><span class="mi">100</span><span class="p">),</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span> 
+            <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span> <span class="o">/</span> <span class="mi">100</span><span class="p">),</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
 
-    
-<div class="viewcode-block" id="UART.uart_send_char"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART.uart_send_char">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">uart_send_char</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">char</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send character to UART (character is sent to the software) </span>
+<div class="viewcode-block" id="UART.uart_send_char"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART.uart_send_char">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">uart_send_char</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">char</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send character to UART (character is sent to the software)</span>
 
-<span class="sd">        - Character is a 8 bit ASCII symbol &quot;&quot;&quot;</span>
-        <span class="n">char_bits</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="s1">&#39;</span><span class="si">{:08b}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">))]</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[TEST] start sending on uart </span><span class="si">{</span><span class="n">char</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="c1">#send start bit</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span>
+<span class="sd">        - Character is a 8 bit ASCII symbol&quot;&quot;&quot;</span>
+        <span class="n">char_bits</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot;</span><span class="si">{:08b}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">))]</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[TEST] start sending on uart </span><span class="si">{</span><span class="n">char</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># send start bit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">extra_time</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">Macros</span><span class="p">[</span><span class="s1">&#39;ARM&#39;</span><span class="p">]:</span>
-            <span class="n">extra_time</span><span class="o">=</span> <span class="o">-</span><span class="mi">479</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>  <span class="c1"># there is state 1 which takes 11975 ns and this time isn&#39;t in ARM only</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[TEST] extra_time = </span><span class="si">{</span><span class="n">extra_time</span><span class="si">}</span><span class="s2">ns&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Macros</span><span class="p">[</span><span class="s2">&quot;ARM&quot;</span><span class="p">]:</span>
+            <span class="n">extra_time</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="o">-</span><span class="mi">479</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
+            <span class="p">)</span>  <span class="c1"># there is state 1 which takes 11975 ns and this time isn&#39;t in ARM only</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[TEST] extra_time = </span><span class="si">{</span><span class="n">extra_time</span><span class="si">}</span><span class="s2">ns&quot;</span><span class="p">)</span>
 
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span> <span class="o">+</span> <span class="n">extra_time</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
-        <span class="c1">#send bits </span>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span> <span class="o">+</span> <span class="n">extra_time</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="c1"># send bits</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="n">char_bits</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">char_bits</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
 
         <span class="c1"># stop of frame</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
         <span class="c1"># insert 4 bit delay just for debugging</span>
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;ns&#39;</span><span class="p">)</span></div>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="UART.uart_send_line"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART.uart_send_line">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">uart_send_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">line</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send line to UART (msg is sent to the software) </span>
+<div class="viewcode-block" id="UART.uart_send_line"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART.uart_send_line">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">uart_send_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send line to UART (msg is sent to the software)</span>
 
-<span class="sd">        - Line is a bunch of ASCII sybmols ended by linefeed &#39;\\\\n&#39; </span>
+<span class="sd">        - Line is a bunch of ASCII sybmols ended by linefeed &#39;\\\\n&#39;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span> 
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">uart_send_char</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
 
-        <span class="c1"># end of line \n </span>
+        <span class="c1"># end of line \n</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">uart_send_char</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
-        
 </pre></div>
 
            </div>

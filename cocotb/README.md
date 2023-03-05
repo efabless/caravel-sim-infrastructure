@@ -6,20 +6,26 @@ This project aims to provide a user friendly environment for adding and running 
 Prerequisites
 =============================
 
-- Docker: [Linux](https://hub.docker.com/search?q=&type=edition&offering=community&operating_system=linux&utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) ||  [Windows](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with Intel Chip](https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with M1 Chip](https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header)
-- Python 3.6+ with PIP
-- ```docker pull efabless/dv:cocotb```
-- Clone of caravel 
-- Clone of caravel managment repo
-- Clone of PDK from volare
-- Clone of caravel user project 
+* Docker: [Linux](https://hub.docker.com/search?q=&type=edition&offering=community&operating_system=linux&utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) ||  [Windows](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with Intel Chip](https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with M1 Chip](https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) 
+<!-- start configure the repo include0 -->
+* Python 3.6+ with PIP
+* ```docker pull efabless/dv:cocotb```
+* Clone of caravel 
+* Clone of caravel managment repo
+* Clone of PDK from volare
+* Clone of caravel user project 
+<!-- end configure the repo include0 -->
+
 
 Configure the repo
 ===================
 
-Fill the ``design_info.yaml`` file with repos used as following:
+<!-- start configure the repo include1 -->
 
-```
+Fill the ``design_info.yaml`` file with repos used as following:
+<!-- end configure the repo include1 -->
+
+```yaml <!-- start configure the repo include2 -->
 
   #yaml file contain general design information that would mostly need to be updated in the first run only 
   #eg CARAVEL_ROOT: "/usr/Desktop/caravel_project/caravel/" 
@@ -52,7 +58,7 @@ Fill the ``design_info.yaml`` file with repos used as following:
   # optional email address to send the results to 
   emailto: [None,example@efabless.com]
 ```
-
+<!-- end configure the repo include2 -->
 Creating a Test
 =================
 
@@ -76,15 +82,28 @@ Refer to [creating a testlist](docs/build/html/_sources/usage.rst.txt#creating-a
 run a test  
 =============================
 
+<!-- start run a test include1 -->
 Tests can run individually or as a test group using ``testlist``. Test can also run in RTL, GL or SDF sims with 8 different coreners.
 
 To a test use run script verify_cocotb: 
+<!-- end run a test include1 -->
 
-```
-optional arguments:
+
+
+```bash <!-- start run a test include2 -->
+usage: verify_cocotb.py [-h] [-regression REGRESSION] [-test TEST [TEST ...]]
+                        [-sim SIM [SIM ...]]
+                        [-testlist TESTLIST [TESTLIST ...]] [-tag TAG]
+                        [-maxerr MAXERR] [-vcs] [-cov] [-checkers_en]
+                        [-corner CORNER [CORNER ...]] [-zip_passed]
+                        [-emailto EMAILTO [EMAILTO ...]] [-seed SEED]
+                        [-no_wave] [-sdf_setup] [-clk CLK] [-lint] [-arm]
+                        [-macros MACROS [MACROS ...]] [-sim_path SIM_PATH]
+
+Run caravel cocotb tests
+
+Arguments:
   -h, --help            show this help message and exit
-  -regression REGRESSION, -r REGRESSION
-                        name of regression can found in tests.json
   -test TEST [TEST ...], -t TEST [TEST ...]
                         name of test if no --sim provided RTL will be run
                         <takes list as input>
@@ -98,9 +117,6 @@ optional arguments:
   -maxerr MAXERR        max number of errors for every test before simulation
                         breaks default = 3
   -vcs, -v              use vcs as compiler if not used iverilog would be used
-  -cov                  enable code coverage
-  -checkers_en          enable whitebox models checkers and coverage no need
-                        to use -cov
   -corner CORNER [CORNER ...], -c CORNER [CORNER ...]
                         Corner type in case of GL_SDF run has to be provided
   -zip_passed           zip the waves and logs of passed tests. by default if
@@ -110,34 +126,46 @@ optional arguments:
                         mails to send results to when results finish
   -seed SEED            run with specific seed
   -no_wave              disable dumping waves
-  -sdf_setup            targeting setup violations by taking the sdf mamximum
-                        values
   -clk CLK              define the clock period in ns default defined at
                         design_info.yaml
   -lint                 generate lint log -v must be used
-  -arm                  generate lint log -v must be used
   -macros MACROS [MACROS ...]
                         Add addtional verilog macros for the design
   -sim_path SIM_PATH    directory where simulation result directory "sim"
                         would be created if None it would be created under
-                        cocotb folder
-                        
+                        cocotb folder                    
 ```
+<!-- end run a test include2 -->
+
 
 Example 
-=============
-## run one test in RTL
-``` python3 verify_cocotb.py -t <testname> -tag run_one_test ```
-## run 2 tests in GL
-``` python3 verify_cocotb.py -t <test1> <test2>  -sim GL ```
-## running testlist
+-----------
+<!-- start run a test include3 -->
+#### Run one test in RTL
+
+
+```python3 verify_cocotb.py -t <testname> -tag run_one_test```
+
+#### Run 2 tests in GL
+
+
+```python3 verify_cocotb.py -t <test1> <test2>  -sim GL```
+
+#### Run testlist
+
 ``` python3 verify_cocotb.py -tl <path to testlist> -tag all_rtl ```
+
+<!-- end run a test include3 -->
 
 Results 
 ===============
-New directory named ``sim`` would be created under ``<repo root>/cocotb/`` and it will have all the results. 
+<!-- start result include1 -->
 
-```
+New directory named ``sim`` would be created under ``<repo root>/cocotb/`` or to the path passed to ``-sim_path`` and it will have all the results. 
+<!-- end result include1 -->
+
+
+```bash <!-- start result include2 -->
 
 | sim #  directory get generate when run a test
 │ ├── <tag> # tag of the run  
@@ -154,4 +182,6 @@ New directory named ``sim`` would be created under ``<repo root>/cocotb/`` and i
 │ ├── hex_files # directory contain all the generated hex files for the runs   
 │ 
 │ 
-```
+``` 
+<!-- end result include2 -->
+

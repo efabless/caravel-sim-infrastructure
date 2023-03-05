@@ -1,9 +1,8 @@
 
 .. _usage:
 
-****************
 Quickstart Guide
-****************
+##################
 
 This project aims to provide a user friendly environment for adding and running cocotb tests for *Caravel user projects*. 
 
@@ -21,7 +20,7 @@ Please setup your project through ``ChipCraft`` as this project is setuped and r
 .. _create_test:
 
 Creating a Test
-===============
+***************
 
 A typical test for *Caravel* consists of 2 parts: ``Python/cocotb`` code and ``C`` code. 
 
@@ -47,7 +46,7 @@ Tests files has to located under ``<caravel_user_project>/verilog/dv/cocotb/``
    The name of ``C`` file must match the name of ``cocotb`` test function 
 
 Python Template
-++++++++++++++++
+-----------------------------------------------------------------------------------------------
 
 The template for ``python`` test:
 
@@ -76,7 +75,7 @@ Commonly used APIs to monitor or drive the hardware can be found in :doc:`python
 
 
 C Template
-++++++++++++++++
+----------------------
 
 The template for Code test:
 
@@ -95,7 +94,10 @@ Commonly used APIs for firmware can be found in :doc:`C_api`
 .. _run_test:
 
 Running a Test
-===============
+***************
+
+Run with ChipCraft 
+--------------------------------
 
 ``chipcraft verify <testname> --design <design name>``
 
@@ -105,10 +107,54 @@ Running a Test
       Add how to run test using chipcraft
 
 
+Run without ChipCraft 
+-------------------------
+
+Check prerequisites
+^^^^^^^^^^^^^^^^^^^^
+* Docker: `Linux <https://hub.docker.com/search?q=&type=edition&offering=community&operating_system=linux&utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header>`__ || `Windows <https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header>`__ || `Mac with Intel Chip <https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header>`__ || `Mac with M1 Chip <https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header>`__
+
+.. include:: ../../README.md
+   :start-after: <!-- start configure the repo include0 -->
+   :end-before: <!-- end configure the repo include0 -->
+
+Configure the repo
+^^^^^^^^^^^^^^^^^^^^
+.. note:: 
+
+      This step is only when first clone the repo.
+
+.. include:: ../../README.md
+   :start-after: <!-- start configure the repo include1 -->
+   :end-before: <!-- end configure the repo include1 -->
+
+.. literalinclude:: ../../README.md
+   :start-after: <!-- start configure the repo include2 -->
+   :end-before: <!-- end configure the repo include2 -->
+
+Run test/tests
+^^^^^^^^^^^^^^^^^^^^
+
+.. include:: ../../README.md
+   :start-after: <!-- start run a test include1 -->
+   :end-before: <!-- end run a test include1 -->
+
+
+.. literalinclude:: ../../README.md
+   :start-after: <!-- start run a test include2 -->
+   :end-before: <!-- end run a test include2 -->
+
+Example
+"""""""""""
+
+.. include:: ../../README.md
+   :start-after: <!-- start run a test include3 -->
+   :end-before: <!-- end run a test include3 -->
+
 .. _create_testlist:
 
 Creating a Testlist
-=======================
+*********************
 
 Testlist is a file that contain a collection of test names to run together. 
 
@@ -136,16 +182,19 @@ The syntax is simple as ``YAML`` is used to write the testlist
 
       Add support for more elements for the test like clock, seed 
 
-Running a Testlist
-=====================
-
-.. todo::
-
-      Add how to run testlist using chipcraft
 
 
 Checking Results
-=====================
+*********************
+
+.. include:: ../../README.md
+   :start-after: <!-- start result include1 -->
+   :end-before: <!-- end result include1 -->
+
+.. literalinclude:: ../../README.md
+   :start-after: <!-- start result include2 -->
+   :end-before: <!-- end result include2 -->
+
 
 .. todo::
 
