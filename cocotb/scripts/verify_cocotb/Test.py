@@ -117,7 +117,7 @@ class Test:
 
     def start_of_test(self):
         print(
-            f"Start running test: {bcolors.OKGREEN  } {self.full_name} {bcolors.ENDC}"
+            f"Start running test: {bcolors.OKBLUE  } {self.full_name} {bcolors.ENDC}"
         )
         self.start_time_t = datetime.now()
         self.create_logs()
@@ -144,25 +144,37 @@ class Test:
             )
         else:
             Test.failed_count += 1
-            print(
-                f"{bcolors.FAIL }Test: {self.sim}-{self.name} has Failed please check logs under {bcolors.ENDC}{bcolors.OKCYAN }{self.test_dir}{bcolors.ENDC}"
-            )
+            if os.path.isfile(self.firmware_log):
+                pass
+            elif os.path.isfile(self.test_log):
+                print(
+                    f"{bcolors.FAIL }Fail{bcolors.ENDC}: Test {self.sim}-{self.name} has Failed for more info refer to {bcolors.OKCYAN }{self.test_log}{bcolors.ENDC}"
+                )
+            else:
+                print(
+                    f"{bcolors.FAIL }Error{bcolors.ENDC}: Fail to compile the verilog code for more info refer to {bcolors.OKCYAN }{self.full_log}{bcolors.ENDC}"
+                )
+
         if self.args.lint:
             self.create_lint_log()
         if is_pass[1] and self.args.zip_passed:
             self.tar_large_files()
-        shutil.copyfile(
-            f"{self.hex_dir}/{self.name}.hex", f"{self.test_dir}/{self.name}.hex"
-        )
+
+        if os.path.isfile(f"{self.hex_dir}/{self.name}.hex"):
+            shutil.copyfile(
+                f"{self.hex_dir}/{self.name}.hex", f"{self.test_dir}/{self.name}.hex"
+            )
         self.set_rerun_script()
 
     # create and open full terminal log to be able to use it before run the test
     def create_logs(self):
-        os.makedirs(
-            f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}", exist_ok=True
-        )
         self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
+        # remove if already exists
+        if os.path.isdir(self.test_dir):
+            shutil.rmtree(self.test_dir)
+        os.mkdir(self.test_dir)
         self.test_log = f"{self.test_dir}/{self.name}.log"
+        self.firmware_log = f"{self.test_dir}/firmware_error.log"
         # self.test_log=open(test_log, "w")
         self.full_log = f"{self.test_dir}/full.log"
         self.full_terminal = open(self.full_log, "w")

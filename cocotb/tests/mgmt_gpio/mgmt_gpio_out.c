@@ -28,7 +28,7 @@
 
 void main()
 {
-    enable_debug();
+    enable_debug()
     enable_hk_spi(0);
     mgmt_gpio_o_enable();
     set_debug_reg1(10);

@@ -2,7 +2,8 @@ import os
 import shutil
 import sys
 from fnmatch import fnmatch
-
+import subprocess
+import re
 
 class RunTest:
     def __init__(self, args, paths, test) -> None:
@@ -71,8 +72,8 @@ class RunTest:
             else docker_dir
             + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
         )
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} ' >> {self.test.full_log}"
-
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} '"
+        
         command_slipt = command.split("&&")
         self.test.full_terminal.write("docker for hex command:\n% ")
         self.test.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
@@ -82,16 +83,21 @@ class RunTest:
         self.test.full_terminal.write(os.path.expandvars(command_slipt[1]) + "\n\n")
         self.test.full_terminal.write("hex file generation command:\n% ")
         self.test.full_terminal.write(os.path.expandvars(command_slipt[2]) + "\n\n")
-        if not self.args.arm:  # TODO add arm processor to docker
-            hex_gen_state = os.system(docker_command)
-        else:
-            hex_gen_state = os.system(f" {command} ")
+
+        # don't run with docker with arm
+        cmd = command if self.args.arm else docker_command
+        docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        docker_process.wait()
+        stdout, _ = docker_process.communicate()
+        ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+        stdout = ansi_escape.sub('', stdout.decode('utf-8'))
+        self.test.full_terminal.write(stdout)
+        hex_gen_state = docker_process.returncode
         if hex_gen_state != 0:
-            print(f"Error when generating hex")
-            self.test.full_terminal.write(f"Error when generating hex")
-            self.test.full_terminal.close()
+            open(self.test.firmware_log, "w").write(stdout)
+            print(f"{bcolors.FAIL}Error:{bcolors.ENDC} Fail to compile the C code for more info refer to {bcolors.OKCYAN }{self.test.firmware_log}{bcolors.ENDC } ")
+            self.test.full_terminal.write("Error when generating hex")
             return "hex_error"
-        self.test.full_terminal.close()
         return "hex_generated"
 
     def test_path(self):
@@ -139,14 +145,12 @@ class RunTest:
             docker_dir += (
                 f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
             )
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} {docker_dir} efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}' >> {self.test.full_log}"
-        self.test.full_terminal = open(self.test.full_log, "a")
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} {docker_dir} efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}'"
         self.test.full_terminal.write(
             f"docker command for running iverilog and cocotb:\n% "
         )
         self.test.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
-        self.test.full_terminal.close()
-        os.system(docker_command)
+        run_command_write_to_file(docker_command, self.test.full_terminal)
 
     # vcs function
     def runTest_vcs(self):
@@ -154,25 +158,22 @@ class RunTest:
         if self.test.sim == "RTL":
             shutil.copyfile(
                 f"{self.paths.VERILOG_PATH}/includes/rtl_caravel_vcs.v",
-                f"{self.paths.COCOTB_PATH}/includes.v",
+                f"{self.test.test_dir}/includes.v",
             )
         else:
             shutil.copyfile(
                 f"{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v",
-                f"{self.paths.COCOTB_PATH}/includes.v",
+                f"{self.test.test_dir}/includes.v",
             )
         change_str(
             str='"caravel/verilog',
             new_str=f'"{self.paths.CARAVEL_PATH}',
-            file_path=f"{self.paths.COCOTB_PATH}/includes.v",
+            file_path=f"{self.test.test_dir}/includes.v",
         )
         change_str(
             str='"caravel_mgmt_soc_litex/verilog',
             new_str=f'"{self.paths.VERILOG_PATH}',
-            file_path=f"{self.paths.COCOTB_PATH}/includes.v",
-        )
-        shutil.copyfile(
-            f"{self.paths.COCOTB_PATH}/includes.v", f"{self.test.test_dir}/includes.v"
+            file_path=f"{self.test.test_dir}/includes.v",
         )
         macros = " +define+" + " +define+".join(self.test.macros)
         coverage_command = ""
@@ -182,24 +183,29 @@ class RunTest:
         os.environ["MODULE"] = f"module_trail"
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
-        user_project = self.test.set_user_project()
-        os.system(
-            f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} >> {self.test.full_log}"
-        )
-
-        lint = ""
-        if self.args.lint:
-            lint = "+lint=all"
-
-        os.system(
-            f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} >> {self.test.full_log}"
-        )
+        user_project = self.test.set_user_project()            
+        vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
+        run_command_write_to_file(vlogan_cmd, self.test.full_terminal)
+        lint = "+lint=all" if self.args.lint else ""
+        vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)}"
+        run_command_write_to_file(vcs_cmd, self.test.full_terminal)
 
     def find(self, name, path):
         for root, dirs, files in os.walk(path):
             if name in files:
                 return os.path.join(root, name)
         print(f"Test {name} doesn't exist or don't have a C file ")
+
+
+def run_command_write_to_file(cmd, file):
+    """run command and write output to file return 0 if no error"""
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process.wait()
+    stdout, _ = process.communicate()
+    ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+    stdout = ansi_escape.sub('', stdout.decode('utf-8'))
+    file.write(stdout)
+    return process.returncode
 
 
 class bcolors:
