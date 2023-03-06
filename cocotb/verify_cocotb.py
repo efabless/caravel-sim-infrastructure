@@ -4,7 +4,7 @@ from scripts.verify_cocotb.RunFlow import RunFLow, CocotbArgs
 
 import argparse
 
-parser = argparse.ArgumentParser(description="Run cocotb tests")
+parser = argparse.ArgumentParser(description="Run cocotb tests" )
 parser.add_argument(
     "-regression", "-r", help="name of regression can found in tests.json"
 )
@@ -12,22 +12,19 @@ parser.add_argument(
     "-test",
     "-t",
     nargs="+",
-    help=("name of test or tests.",
-          "if no --sim provided RTL will be run <takes list as input>"),
+    help="name of test or tests.if no --sim provided RTL will be run <takes list as input>",
 )
 parser.add_argument(
     "-sim",
     nargs="+",
-    help=("Simulation type",
-          "run RTL,GL & GL_SDF provided only when run -test",
-          " <takes list as input>"),
+    help="Simulation typerun RTL,GL & GL_SDF provided only when run -test<takes list as input>",
 )
 parser.add_argument("-testlist", "-tl", nargs="+", 
         help="path of testlist to be run "
 )
 parser.add_argument(
     "-tag",
-    help="provide tag of the run default would be regression name and if no regression is provided would be run_<random float>_<timestamp>_",
+    help="provide tag of the run default would be regression name and if no regression is provided would be run_<random float>_<timestamp>_"
 )
 parser.add_argument(
     "-maxerr",
