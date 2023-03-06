@@ -219,7 +219,10 @@ class Test:
 
     def check_test_pass(self):
         pass_pattern = "Test passed with (0)criticals (0)errors"
-        with open(self.full_log, "r") as file:
+        # if file doesn't exist
+        if not os.path.isfile(self.test_log):
+            return ("failed", False)
+        with open(self.test_log, "r") as file:
             # read all content of a file
             content = file.read()
             # check if string present in a file
