@@ -119,8 +119,6 @@
 
 
 <span class="n">CLOCK_GLOBAL</span> <span class="o">=</span> <span class="mi">25</span>
-<span class="n">active_gpios_num</span> <span class="o">=</span> <span class="mi">37</span>  <span class="c1"># number of active gpios</span>
-
 
 <span class="c1"># async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=read_config_file()[&#39;clock&#39;],timeout_precision=0.2,num_error=int(read_config_file()[&#39;max_err&#39;]))-&gt; caravel.Caravel_env:</span>
 <div class="viewcode-block" id="test_configure"><a class="viewcode-back" href="../python_api.html#test_functions.test_configure">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">test_configure</span><span class="p">(</span>
@@ -155,8 +153,7 @@
         <span class="n">HK_whiteBox</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
         <span class="n">GPIOs_ctrlWB</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">Macros</span><span class="p">[</span><span class="s2">&quot;ARM&quot;</span><span class="p">]:</span>
-        <span class="k">global</span> <span class="n">active_gpios_num</span>
-        <span class="n">active_gpios_num</span> <span class="o">=</span> <span class="mi">34</span>  <span class="c1"># with ARM the last 3 gpios are not configurable</span>
+        <span class="n">caravelEnv</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="mi">34</span>  <span class="c1"># with ARM the last 3 gpios are not configurable</span>
 
     <span class="c1"># For calculating recommended timeout</span>
     <span class="k">global</span> <span class="n">CLOCK_GLOBAL</span>
@@ -206,7 +203,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test passed </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s1">&#39;Recommeneded timeout to use </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">cocotb</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_sim_time</span><span class="p">(</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span><span class="o">*</span><span class="mf">1.01</span><span class="o">/</span><span class="n">CLOCK_GLOBAL</span><span class="p">)</span><span class="si">}</span><span class="s1"> cycles&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;Cycles consumed = </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">cocotb</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_sim_time</span><span class="p">(</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span><span class="o">/</span><span class="n">CLOCK_GLOBAL</span><span class="p">)</span><span class="si">}</span><span class="s1"> recommened timeout = </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">cocotb</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_sim_time</span><span class="p">(</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span><span class="o">*</span><span class="mf">1.01</span><span class="o">/</span><span class="n">CLOCK_GLOBAL</span><span class="p">)</span><span class="si">}</span><span class="s1"> cycles&#39;</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">wrapper_func</span>
@@ -218,20 +215,6 @@
         <span class="k">if</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">counter</span> <span class="o">+</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">critical</span><span class="o">.</span><span class="n">counter</span> <span class="o">&gt;</span> <span class="n">num_error</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Test failed with max number of errors </span><span class="si">{</span><span class="n">num_error</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">critical</span><span class="o">.</span><span class="n">counter</span><span class="si">}</span><span class="s2">)criticals (</span><span class="si">{</span><span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">counter</span><span class="si">}</span><span class="s2">)errors (</span><span class="si">{</span><span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="o">.</span><span class="n">counter</span><span class="si">}</span><span class="s2">)warnings &quot;</span>
             <span class="k">raise</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">TestFailure</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">wait_reg1</span><span class="p">(</span><span class="n">cpu</span><span class="p">,</span> <span class="n">caravelEnv</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">cpu</span><span class="o">.</span><span class="n">read_debug_reg1</span><span class="p">()</span> <span class="o">==</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">wait_reg2</span><span class="p">(</span><span class="n">cpu</span><span class="p">,</span> <span class="n">caravelEnv</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">cpu</span><span class="o">.</span><span class="n">read_debug_reg2</span><span class="p">()</span> <span class="o">==</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
            </div>

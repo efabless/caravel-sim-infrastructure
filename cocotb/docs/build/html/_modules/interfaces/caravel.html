@@ -127,6 +127,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hk_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">housekeeping</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">mprj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="mi">37</span>  <span class="c1"># number of active gpios</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;start carvel by insert power then reset&quot;&quot;&quot;</span>
 
@@ -199,14 +200,14 @@
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Caravel_env.disable_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.disable_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">disable_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal high to disable housekeeping spi transmission bin E8 mprj[3]&quot;&quot;&quot;</span>
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] disable housekeeping spi transmission&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_csb</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># await self.release_csb()</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Caravel_env.release_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.release_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">release_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the spi vsb signal high impedance&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal high impedance&quot;&quot;&quot;</span>
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] release housekeeping spi transmission&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -214,7 +215,7 @@
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Caravel_env.enable_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.enable_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">enable_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal low to enable housekeeping spi transmission bin E8 mprj[3]&quot;&quot;&quot;</span>
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] enable housekeeping spi transmission&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_csb</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
