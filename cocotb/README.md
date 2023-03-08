@@ -5,9 +5,9 @@ This project aims to provide a user friendly environment for adding and running 
 
 Prerequisites
 =============================
+<!-- start configure the repo include0 -->
 
 * Docker: [Linux](https://hub.docker.com/search?q=&type=edition&offering=community&operating_system=linux&utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) ||  [Windows](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with Intel Chip](https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with M1 Chip](https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) 
-<!-- start configure the repo include0 -->
 * Python 3.6+ with PIP
 * ```docker pull efabless/dv:cocotb```
 * Clone of caravel 
@@ -20,13 +20,11 @@ Prerequisites
 Configure the repo
 ===================
 
-<!-- start configure the repo include1 -->
+<!-- start configure the repo include-->
 
 Fill the ``design_info.yaml`` file with repos used as following:
-<!-- end configure the repo include1 -->
 
-```yaml <!-- start configure the repo include2 -->
-
+```yaml
   #yaml file contain general design information that would mostly need to be updated in the first run only 
   #eg CARAVEL_ROOT: "/usr/Desktop/caravel_project/caravel/" 
   #like repo https://github.com/efabless/caravel
@@ -58,19 +56,87 @@ Fill the ``design_info.yaml`` file with repos used as following:
   # optional email address to send the results to 
   emailto: [None,example@efabless.com]
 ```
-<!-- end configure the repo include2 -->
+> **Note**: This step is only when first clone the repo.
+
+<!-- end configure the repo include -->
 Creating a Test
 =================
 
-Refer to [creating a test](docs/build/html/_sources/usage.rst.txt#creating-a-test) for where and how to create a test 
+<!-- start create a test include1 -->
 
-Refer to [cocotb based APIs](docs/build/html/python_api.html) for APIs to monitor or drive the hardware
+This section explains the the steps needed to create a test.
 
-Refer to [firmware APIs](docs/build/html/C_api.html) for APIs for firmware
+A typical test for *Caravel* consists of 2 parts: ``Python/cocotb`` code and ``C`` code. 
 
+* ``Python/cocotb`` code is for communicating with *Caravel* hardware interface inputs, outputs, clock, reset, and power ports/bins. ``cocotb`` here replaces the ``verilog`` code.
+
+* ``C`` code provides firmware code that would be loaded into the *Caravel* CPU.
+
+Tests files has to located under ``<caravel_user_project>/verilog/dv/cocotb/`` 
+
+```bash
+| dv
+| ├── cocotb
+| │   ├── <new_test>
+| │   │   └── <new_test.py>
+| │   │   └── <new_test.c>
+| │   └── cocotb_tests.py
+| 
+```
+> **Note**: The name of ``C`` file must match the name of ``cocotb`` test function
+
+Python Template
+--------------------------
+
+The template for ``python`` test:
+
+```python
+
+   from cocotb_includes import * # import python APIs 
+   import cocotb
+
+   @cocotb.test() # cocotb test marker
+   @repot_test # wrapper for configure test reporting files
+   async def <test_name>(dut):
+      caravelEnv = await test_configure(dut) #configure, start up and reset caravel
+
+      ######################## add test sequence ###################### 
+
+```
+<!-- end create a test include1 -->
+
+Commonly used APIs to monitor or drive the hardware can be found in [`python_api`](docs/build/html/python_api.html)
+
+<!-- start create a test include2 -->
+
+> ! **Warning:** New test python function should be imported into cocotb_tests.py 
+
+```python
+  from <new_test>.<new_test> import <new_test>
+```
+C Template
+----------------------
+
+The template for Code test:
+
+```C++
+
+   #include <common.h> // include required APIs 
+   void main(){
+      //////////////////////add test here////////////////////// 
+      return;
+   }
+```
+<!-- end create a test include2 -->
+
+Commonly used APIs for firmware can be found in [`C_api`](docs/build/html/C_api.html)
+
+
+<!-- start create a test include3 -->
 # Test Examples
 
 Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb) for tests example generated for 16bit counter
+<!-- end create a test include3 -->
 
 
 Creating a Testlist
@@ -82,15 +148,14 @@ Refer to [creating a testlist](docs/build/html/_sources/usage.rst.txt#creating-a
 run a test  
 =============================
 
-<!-- start run a test include1 -->
+<!-- start run a test include -->
 Tests can run individually or as a test group using ``testlist``. Test can also run in RTL, GL or SDF sims with 8 different coreners.
 
 To a test use run script verify_cocotb: 
-<!-- end run a test include1 -->
 
 
 
-```bash <!-- start run a test include2 -->
+```bash 
 usage: verify_cocotb.py [-h] [-regression REGRESSION] [-test TEST [TEST ...]]
                         [-sim SIM [SIM ...]]
                         [-testlist TESTLIST [TESTLIST ...]] [-tag TAG]
@@ -135,7 +200,7 @@ Arguments:
                         would be created if None it would be created under
                         cocotb folder                    
 ```
-<!-- end run a test include2 -->
+<!-- end run a test include -->
 
 
 Example 
@@ -143,11 +208,9 @@ Example
 <!-- start run a test include3 -->
 #### Run one test in RTL
 
-
 ```python3 verify_cocotb.py -t <testname> -tag run_one_test```
 
 #### Run 2 tests in GL
-
 
 ```python3 verify_cocotb.py -t <test1> <test2>  -sim GL```
 
@@ -157,15 +220,41 @@ Example
 
 <!-- end run a test include3 -->
 
+Creating a Testlist
+==============================
+<!-- start testlist include -->
+
+Testlist is a file that contains a collection of test names to run together. 
+
+The syntax is simple as ``YAML`` is used to write the testlist  
+
+``` yaml
+
+   # Testlist Can has only 2 elements Tests or includes 
+
+   # Test element has list of dictionaries of tests to include 
+   Tests: 
+      - {name: <test1>, sim: RTL} 
+      - {name: <test1>, sim: GL} 
+      - {name: <test2>, sim: RTL} 
+
+   # include has paths  for other testlist to include in this test list 
+   # paths are relative to the location of this yaml file
+   includes: 
+      - <test4>/<testlist>.yaml
+      - <testlist>.yaml
+      - ../<test5>/<testlist>.yaml
+```
+<!-- end testlist include -->
+
 Results 
 ===============
-<!-- start result include1 -->
+<!-- start result include -->
 
 New directory named ``sim`` would be created under ``<repo root>/cocotb/`` or to the path passed to ``-sim_path`` and it will have all the results. 
-<!-- end result include1 -->
 
 
-```bash <!-- start result include2 -->
+```bash 
 
 | sim #  directory get generate when run a test
 │ ├── <tag> # tag of the run  
@@ -183,5 +272,5 @@ New directory named ``sim`` would be created under ``<repo root>/cocotb/`` or to
 │ 
 │ 
 ``` 
-<!-- end result include2 -->
+<!-- end result include -->
 
