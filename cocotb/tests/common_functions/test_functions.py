@@ -44,8 +44,6 @@ def read_config_file():
 
 
 CLOCK_GLOBAL = 25
-active_gpios_num = 37  # number of active gpios
-
 
 # async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err']))-> caravel.Caravel_env:
 async def test_configure(
@@ -80,8 +78,7 @@ async def test_configure(
         HK_whiteBox(dut)
         GPIOs_ctrlWB(dut)
     if Macros["ARM"]:
-        global active_gpios_num
-        active_gpios_num = 34  # with ARM the last 3 gpios are not configurable
+        caravelEnv.active_gpios_num = 34  # with ARM the last 3 gpios are not configurable
 
     # For calculating recommended timeout
     global CLOCK_GLOBAL
@@ -131,7 +128,7 @@ def repot_test(func):
         else:
             cocotb.log.info(f"Test passed {msg}")
             cocotb.log.info(
-                f'Recommeneded timeout to use {int(cocotb.utils.get_sim_time("ns")*1.01/CLOCK_GLOBAL)} cycles'
+                f'Cycles consumed = {int(cocotb.utils.get_sim_time("ns")/CLOCK_GLOBAL)} recommened timeout = {int(cocotb.utils.get_sim_time("ns")*1.01/CLOCK_GLOBAL)} cycles'
             )
 
     return wrapper_func
@@ -143,17 +140,3 @@ async def max_num_error(num_error, clk):
         if cocotb.log.error.counter + cocotb.log.critical.counter > num_error:
             msg = f"Test failed with max number of errors {num_error} ({cocotb.log.critical.counter})criticals ({cocotb.log.error.counter})errors ({cocotb.log.warning.counter})warnings "
             raise cocotb.result.TestFailure(msg)
-
-
-async def wait_reg1(cpu, caravelEnv, data):
-    while True:
-        if cpu.read_debug_reg1() == data:
-            return
-        await ClockCycles(caravelEnv.clk, 1)
-
-
-async def wait_reg2(cpu, caravelEnv, data):
-    while True:
-        if cpu.read_debug_reg2() == data:
-            return
-        await ClockCycles(caravelEnv.clk, 1)

@@ -52,6 +52,7 @@ class Caravel_env:
         self.caravel_hdl = dut.uut.chip_core
         self.hk_hdl = dut.uut.chip_core.housekeeping
         self.user_hdl = dut.uut.chip_core.mprj
+        self.active_gpios_num = 37  # number of active gpios
 
     """start carvel by insert power then reset"""
 
@@ -124,14 +125,14 @@ class Caravel_env:
         await ClockCycles(self.clk, 1)
 
     async def disable_csb(self):
-        """Set the spi vsb signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
+        """Set the SPI CSB  signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
         cocotb.log.info(f" [caravel] disable housekeeping spi transmission")
         await self.drive_csb(1)
         # await self.release_csb()
         await ClockCycles(self.clk, 1)
 
     async def release_csb(self):
-        """Set the spi vsb signal high impedance"""
+        """Set the SPI CSB  signal high impedance"""
         cocotb.log.info(f" [caravel] release housekeeping spi transmission")
         self.release_gpio(2)
         self.release_gpio(3)
@@ -139,7 +140,7 @@ class Caravel_env:
         await ClockCycles(self.clk, 1)
 
     async def enable_csb(self):
-        """Set the spi vsb signal low to enable housekeeping spi transmission bin E8 mprj[3]"""
+        """Set the SPI CSB  signal low to enable housekeeping spi transmission bin E8 mprj[3]"""
         cocotb.log.info(f" [caravel] enable housekeeping spi transmission")
         await self.drive_csb(0)
 

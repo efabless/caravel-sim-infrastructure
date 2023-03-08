@@ -4,6 +4,7 @@ import sys
 from fnmatch import fnmatch
 import subprocess
 import re
+import threading
 
 class RunTest:
     def __init__(self, args, paths, test) -> None:
@@ -48,7 +49,7 @@ class RunTest:
         lst_command = f"{GCC_COMPILE}-objdump -d -S {self.hex_dir}/{self.test.name}.elf > {self.hex_dir}/{self.test.name}.lst "
         hex_command = f"{GCC_COMPILE}-objcopy -O verilog {self.hex_dir}/{self.test.name}.elf {self.hex_dir}/{self.test.name}.hex "
         sed_command = f'sed -ie "s/@10/@00/g" {self.hex_dir}/{self.test.name}.hex'
-        return f" {elf_command} &>> {self.test.full_log}&&{lst_command}&& {hex_command}&& {sed_command}"
+        return f" {elf_command} &&{lst_command}&& {hex_command}&& {sed_command}"
 
     def hex_generate(self):
         # open docker
@@ -72,32 +73,37 @@ class RunTest:
             else docker_dir
             + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
         )
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} '"
-        
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} '"       
         command_slipt = command.split("&&")
-        self.test.full_terminal.write("docker for hex command:\n% ")
-        self.test.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
-        self.test.full_terminal.write("elf file generation command:\n% ")
-        self.test.full_terminal.write(os.path.expandvars(command_slipt[0]) + "\n\n")
-        self.test.full_terminal.write("lst file generation command:\n% ")
-        self.test.full_terminal.write(os.path.expandvars(command_slipt[1]) + "\n\n")
-        self.test.full_terminal.write("hex file generation command:\n% ")
-        self.test.full_terminal.write(os.path.expandvars(command_slipt[2]) + "\n\n")
-
+        self.firmware_log = open(self.test.hex_log, "w")
+        self.firmware_log.write("docker for hex command:\n% ")
+        self.firmware_log.write(os.path.expandvars(docker_command) + "\n\n")
+        self.firmware_log.write("elf file generation command:\n% ")
+        self.firmware_log.write(os.path.expandvars(command_slipt[0]) + "\n\n")
+        self.firmware_log.write("lst file generation command:\n% ")
+        self.firmware_log.write(os.path.expandvars(command_slipt[1]) + "\n\n")
+        self.firmware_log.write("hex file generation command:\n% ")
+        self.firmware_log.write(os.path.expandvars(command_slipt[2]) + "\n\n")
+        self.firmware_log.close()
         # don't run with docker with arm
         cmd = command if self.args.arm else docker_command
-        docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        docker_process.wait()
-        stdout, _ = docker_process.communicate()
-        ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
-        stdout = ansi_escape.sub('', stdout.decode('utf-8'))
-        self.test.full_terminal.write(stdout)
-        hex_gen_state = docker_process.returncode
+        hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log)
+        # docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # docker_process.wait()
+        # stdout, _ = docker_process.communicate()
+        # ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+        # stdout = ansi_escape.sub('', stdout.decode('utf-8'))
+        # self.firmware_log.write(stdout)
+        # hex_gen_state = docker_process.returncode
+        self.firmware_log = open(self.test.hex_log, "a")
         if hex_gen_state != 0:
-            open(self.test.firmware_log, "w").write(stdout)
-            print(f"{bcolors.FAIL}Error:{bcolors.ENDC} Fail to compile the C code for more info refer to {bcolors.OKCYAN }{self.test.firmware_log}{bcolors.ENDC } ")
-            self.test.full_terminal.write("Error when generating hex")
+            # open(self.test.firmware_log, "w").write(stdout)
+            print(f"{bcolors.FAIL}Error:{bcolors.ENDC} Fail to compile the C code for more info refer to {bcolors.OKCYAN }{self.test.hex_log}{bcolors.ENDC } ")
+            self.firmware_log.write("Error: when generating hex")
+            self.firmware_log.close()
             return "hex_error"
+        self.firmware_log.write("Pass: hex generation")
+        self.firmware_log.close()
         return "hex_generated"
 
     def test_path(self):
@@ -146,11 +152,13 @@ class RunTest:
                 f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
             )
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} {docker_dir} efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}'"
-        self.test.full_terminal.write(
-            f"docker command for running iverilog and cocotb:\n% "
+        self.full_terminal = open(self.test.compilation_log, "w")
+        self.full_terminal.write(
+            "docker command for running iverilog and cocotb:\n% "
         )
-        self.test.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
-        run_command_write_to_file(docker_command, self.test.full_terminal)
+        self.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
+        self.full_terminal.close()
+        run_command_write_to_file(docker_command, self.test.compilation_log, wait=True, file_generated=self.test.test_log)
 
     # vcs function
     def runTest_vcs(self):
@@ -185,10 +193,10 @@ class RunTest:
             os.environ["RANDOM_SEED"] = self.args.seed
         user_project = self.test.set_user_project()            
         vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
-        run_command_write_to_file(vlogan_cmd, self.test.full_terminal)
+        run_command_write_to_file(vlogan_cmd, self.test.compilation_log)
         lint = "+lint=all" if self.args.lint else ""
         vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)}"
-        run_command_write_to_file(vcs_cmd, self.test.full_terminal)
+        run_command_write_to_file(vcs_cmd, self.test.compilation_log, wait=True, file_generated=self.test.test_log)
 
     def find(self, name, path):
         for root, dirs, files in os.walk(path):
@@ -197,15 +205,58 @@ class RunTest:
         print(f"Test {name} doesn't exist or don't have a C file ")
 
 
-def run_command_write_to_file(cmd, file):
+def run_command_write_to_file(cmd, file, wait=False, file_generated=None):
     """run command and write output to file return 0 if no error"""
-    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    process.wait()
-    stdout, _ = process.communicate()
-    ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
-    stdout = ansi_escape.sub('', stdout.decode('utf-8'))
-    file.write(stdout)
+    with open(file, "a") as f:
+
+        #     # Start the subprocess and redirect its output to a pipe
+        #     process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
+        #     # process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
+        #     output_thread = threading.Thread(target=capture_output, args=(process, f))
+        #     error_thread = threading.Thread(target=capture_error, args=(process, f))
+        #     output_thread.start()
+        #     error_thread.start()
+        #     stdout, stderr = process.communicate()
+        #     exit_code = process.returncode
+        #     output_thread.join()
+        #     error_thread.join()
+        #     if exit_code == 0:
+        #         print("Process completed successfully.")
+        #     else:
+        #         print(f"Process failed with exit code {exit_code}.")
+        #         file.write(stderr.decode())
+        #         print(stderr.decode())
+        #     return process.returncode
+
+        process = subprocess.Popen(cmd, shell=True, stdout=f, stderr=f, bufsize=1)
+        # for line in iter(process.stdout.readline, b''):
+        #     f.write(line.decode())
+        #     if "Starting the cocotb test" in line.decode():
+        #         print("Hex generated and RTL compiled")
+        # process.wait()
+        if wait:
+            while (True):
+                if os.path.isfile(file_generated):
+                    print("Hex generated and RTL compiled")
+                    break
+        stdout, _ = process.communicate()
+    # ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+    # stdout = ansi_escape.sub('', stdout.decode('utf-8'))
+    # # file.write(stdout)
+    # print(stdout)
     return process.returncode
+
+
+def capture_output(process, file):
+    for line in iter(process.stdout.readline, b''):
+        file.write(line.decode())
+        print(line.decode(), end='')
+
+
+def capture_error(process, file):
+    for line in iter(process.stderr.readline, b''):
+        file.write(line.decode())
+        print(line.decode(), end='')
 
 
 class bcolors:

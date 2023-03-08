@@ -144,7 +144,7 @@ class Test:
             )
         else:
             Test.failed_count += 1
-            if os.path.isfile(self.firmware_log):
+            if not os.path.isfile(self.compilation_log):
                 pass
             elif os.path.isfile(self.test_log):
                 print(
@@ -152,7 +152,7 @@ class Test:
                 )
             else:
                 print(
-                    f"{bcolors.FAIL }Error{bcolors.ENDC}: Fail to compile the verilog code for more info refer to {bcolors.OKCYAN }{self.full_log}{bcolors.ENDC}"
+                    f"{bcolors.FAIL }Error{bcolors.ENDC}: Fail to compile the verilog code for more info refer to {bcolors.OKCYAN }{self.compilation_log}{bcolors.ENDC}"
                 )
 
         if self.args.lint:
@@ -176,8 +176,9 @@ class Test:
         self.test_log = f"{self.test_dir}/{self.name}.log"
         self.firmware_log = f"{self.test_dir}/firmware_error.log"
         # self.test_log=open(test_log, "w")
-        self.full_log = f"{self.test_dir}/full.log"
-        self.full_terminal = open(self.full_log, "w")
+        self.compilation_log = f"{self.test_dir}/compilation.log"
+        self.hex_log = f"{self.test_dir}/firmware.log"
+        # self.full_terminal = open(self.compilation_log, "w")
 
     def create_lint_log(self):
         lint_file = open(f"{self.test_dir}/lint.log", "w")
@@ -200,8 +201,10 @@ class Test:
             os.remove(f"{self.test_dir}/analysis.log")
             file_obj.add(f"{self.test_dir}/test.log")
             os.remove(f"{self.test_dir}/test.log")
-        file_obj.add(f"{self.test_dir}/full.log")
-        os.remove(f"{self.test_dir}/full.log")
+        file_obj.add(f"{self.test_dir}/compilation.log")
+        os.remove(f"{self.test_dir}/compilation.log")
+        file_obj.add(f"{self.test_dir}/firmware.log")
+        os.remove(f"{self.test_dir}/firmware.log")
 
         for root, dirs, files in os.walk(f"{self.test_dir}"):
             for file in files:
