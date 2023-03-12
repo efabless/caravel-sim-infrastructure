@@ -3,7 +3,6 @@
 from datetime import datetime
 import os
 import sys
-from fnmatch import fnmatch
 from pathlib import Path
 import tarfile
 import shutil
@@ -79,7 +78,7 @@ class Test:
             testmacros.append("ADDR_SPACE_TESTING")
 
         if "user_ram" in self.name:
-            testmacros.append(f"USE_USER_WRAPPER")
+            testmacros.append("USE_USER_WRAPPER")
 
         self.macros = self.args.macros + testmacros
 
@@ -104,6 +103,7 @@ class Test:
                 user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
 
             user_project = f" -f {user_include}"
+            self.write_includes_file(user_include)
             if self.args.vcs:
                 user_project = ""
                 lines = open(user_include, "r").readlines()
@@ -144,7 +144,7 @@ class Test:
             )
         else:
             Test.failed_count += 1
-            if os.path.isfile(self.firmware_log):
+            if not os.path.isfile(self.compilation_log):
                 pass
             elif os.path.isfile(self.test_log):
                 print(
@@ -152,7 +152,7 @@ class Test:
                 )
             else:
                 print(
-                    f"{bcolors.FAIL }Error{bcolors.ENDC}: Fail to compile the verilog code for more info refer to {bcolors.OKCYAN }{self.full_log}{bcolors.ENDC}"
+                    f"{bcolors.FAIL }Error{bcolors.ENDC}: Fail to compile the verilog code for more info refer to {bcolors.OKCYAN }{self.compilation_log}{bcolors.ENDC}"
                 )
 
         if self.args.lint:
@@ -176,8 +176,9 @@ class Test:
         self.test_log = f"{self.test_dir}/{self.name}.log"
         self.firmware_log = f"{self.test_dir}/firmware_error.log"
         # self.test_log=open(test_log, "w")
-        self.full_log = f"{self.test_dir}/full.log"
-        self.full_terminal = open(self.full_log, "w")
+        self.compilation_log = f"{self.test_dir}/compilation.log"
+        self.hex_log = f"{self.test_dir}/firmware.log"
+        # self.full_terminal = open(self.compilation_log, "w")
 
     def create_lint_log(self):
         lint_file = open(f"{self.test_dir}/lint.log", "w")
@@ -200,8 +201,10 @@ class Test:
             os.remove(f"{self.test_dir}/analysis.log")
             file_obj.add(f"{self.test_dir}/test.log")
             os.remove(f"{self.test_dir}/test.log")
-        file_obj.add(f"{self.test_dir}/full.log")
-        os.remove(f"{self.test_dir}/full.log")
+        file_obj.add(f"{self.test_dir}/compilation.log")
+        os.remove(f"{self.test_dir}/compilation.log")
+        file_obj.add(f"{self.test_dir}/firmware.log")
+        os.remove(f"{self.test_dir}/firmware.log")
 
         for root, dirs, files in os.walk(f"{self.test_dir}"):
             for file in files:
@@ -288,8 +291,8 @@ class Test:
 
     def create_module_trail(self):
         f = open(f"{self.test_dir}/module_trail.py", "w")
-        f.write(f"from os import path\n")
-        f.write(f"import sys\n")
+        f.write("from os import path\n")
+        f.write("import sys\n")
         if self.args.user_test:
             f.write(
                 f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n"
@@ -340,6 +343,29 @@ class Test:
                 new_str="LENGTH(dff2)",
                 file_path=self.linker_script_file,
             )
+
+    # takes command file and write file for includes
+    def write_includes_file(self, file):
+        paths = ''
+        with open(file, 'r') as f:
+            for line in f:
+                # Remove leading and trailing whitespace
+                line = line.strip()
+                # Check if line is not empty or a comment
+                if line and not line.startswith('#'):
+                    # Replace $(VERILOG_PATH) with actual path
+                    line = line.replace('$(VERILOG_PATH)', self.paths.VERILOG_PATH)
+                    line = line.replace('$(CARAVEL_PATH)', self.paths.CARAVEL_PATH)
+                    line = line.replace('$(USER_PROJECT_VERILOG)', f"{self.paths.USER_PROJECT_ROOT}/verilog")
+                    line = line.replace('$(PDK_ROOT)', f"{self.paths.PDK_ROOT}")
+                    line = line.replace('$(PDK)', f"{self.paths.PDK}")
+                    # Extract file path from command
+                    if line.startswith('-v'):
+                        file_path = line.split(' ')[1]
+                        paths += f'`include "{file_path}"\n'
+        # write to include file
+        self.includes_file = f"{self.test_dir}/includes.v"
+        open(self.includes_file, 'a').write(paths)
 
 
 def remove_argument(to_remove, patt):

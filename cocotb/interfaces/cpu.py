@@ -24,7 +24,8 @@ from itertools import groupby, product
 import interfaces.common as common
 from interfaces.common import GPIO_MODE
 from interfaces.common import MASK_GPIO_CTRL
-from interfaces.common import Macros
+
+""" this module isn't used it needs to be updated"""
 
 
 class RiskV:
@@ -204,25 +205,6 @@ class RiskV:
         # return data
         return int(str(bin(data.integer)[2:]).zfill(32), 2)
         # return int(str(bin(data.integer)[2:]).zfill(32)[::-1],2)
-
-    def read_debug_reg1(self):
-        return self.debug_hdl.debug_reg_1.value.integer
-
-    def read_debug_reg2(self):
-        return self.debug_hdl.debug_reg_2.value.integer
-
-    def read_debug_reg1_str(self):
-        return self.debug_hdl.debug_reg_1.value.binstr
-
-    def read_debug_reg2_str(self):
-        return self.debug_hdl.debug_reg_2.value.binstr
-
-    # writing debug registers using backdoor because in GL cpu can't be disabled for now because of different netlist names
-    def write_debug_reg1_backdoor(self, data):
-        self.debug_hdl.debug_reg_1.value = data
-
-    def write_debug_reg2_backdoor(self, data):
-        self.debug_hdl.debug_reg_2.value = data
 
     async def force_reset_fun(self):
         first_time_force = True

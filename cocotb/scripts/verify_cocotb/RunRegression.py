@@ -36,32 +36,34 @@ class RunRegression:
             self.args.macros = list()
         simulation_macros = ["USE_POWER_PINS", "UNIT_DELAY=#1", "COCOTB_SIM"]
         paths_macros = [
-            f'MAIN_PATH=\\"{self.paths.COCOTB_PATH}\\"',
+            f'COCOTB_PATH=\\"{self.paths.COCOTB_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
-            f'CARAVEL_ROOT=\\"{os.getenv("CARAVEL_ROOT")}\\"',
+            f'CARAVEL_ROOT=\\"{self.paths.CARAVEL_ROOT}\\"',
+            f'MCW_ROOT=\\"{self.paths.MCW_ROOT}\\"',
+            f'USER_PROJECT_ROOT=\\"{self.paths.USER_PROJECT_ROOT}\\"',
         ]
         paths_macros.append(f'SIM_PATH=\\"{self.paths.SIM_PATH}/\\"')
         if self.args.pdk != "gf180":
             simulation_macros.append("FUNCTIONAL")
 
         if self.args.caravan:
-            simulation_macros.append(f"CARAVAN")
+            simulation_macros.append("CARAVAN")
 
         if not self.args.no_wave:
-            simulation_macros.append(f"WAVE_GEN")
+            simulation_macros.append("WAVE_GEN")
 
         if self.args.sdf_setup:
-            simulation_macros.append(f"MAX_SDF")
+            simulation_macros.append("MAX_SDF")
 
         if self.args.cov:
-            simulation_macros.append(f"COVERAGE")
+            simulation_macros.append("COVERAGE")
         if self.args.checkers_en:
-            simulation_macros.append(f"CHECKERS")
+            simulation_macros.append("CHECKERS")
 
         if self.args.iverilog:
-            simulation_macros.append(f"IVERILOG")
+            simulation_macros.append("IVERILOG")
         elif self.args.vcs:
-            simulation_macros.append(f"VCS")
+            simulation_macros.append("VCS")
 
         simulation_macros.append(self.args.pdk)
         if self.args.arm:
@@ -242,7 +244,7 @@ class RunRegression:
     def write_command_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/command.log"
         f = open(file_name, "w")
-        f.write(f"command used to run this sim:\n% ")
+        f.write("command used to run this sim:\n% ")
         f.write(f"{' '.join(sys.argv)}")
         f.close()
 
