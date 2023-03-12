@@ -1,22 +1,16 @@
-import random
 import cocotb
-from cocotb.clock import Clock
 import cocotb.log
 import interfaces.caravel as caravel
-from interfaces.logic_analyzer import LA
 from wb_models.housekeepingWB.housekeepingWB import HK_whiteBox
 from wb_models.gpio_controlWB.GPIO_ctrlWB import GPIOs_ctrlWB
-import interfaces.common as common
 import logging
-from interfaces.cpu import RiskV
 from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
 from tests.common_functions.Timeout import Timeout
-import os
-from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles
+from cocotb.triggers import  ClockCycles
 from cocotb_coverage.coverage import *
 from interfaces.common import Macros
-from importlib import import_module
+import yaml
 
 """configure the test log file location and log verbosity 
    configure the test clock 
@@ -25,12 +19,11 @@ from importlib import import_module
    start up the test connecting power vdd to the design then reset and disable the CSB bit 
    return the caravel environmnet with clock and start up
 """
-import yaml
 
 
 def read_config_file():
     cocotb.plusargs["TAG"]
-    config_file = f"{cocotb.plusargs['MAIN_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yaml".replace(
+    config_file = f"{cocotb.plusargs['COCOTB_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yaml".replace(
         '"', ""
     )
 
@@ -44,6 +37,7 @@ def read_config_file():
 
 
 CLOCK_GLOBAL = 25
+
 
 # async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err']))-> caravel.Caravel_env:
 async def test_configure(
@@ -69,15 +63,16 @@ async def test_configure(
     caravelEnv.setup_clock(clk)
     await caravelEnv.start_up()
     await ClockCycles(caravelEnv.clk, 10)
-    coverage = Macros["COVERAGE"]
-    checker = Macros["CHECKERS"]
+    coverage = 'COVERAGE' in caravelEnv.design_macros._asdict() 
+    checker = 'CHECKERS' in caravelEnv.design_macros._asdict()
     if checker:
         HK_whiteBox(dut, checkers=True)
         GPIOs_ctrlWB(dut, checkers=True)
     elif coverage:
         HK_whiteBox(dut)
         GPIOs_ctrlWB(dut)
-    if Macros["ARM"]:
+    cocotb.log.info(caravelEnv.design_macros)
+    if caravelEnv.design_macros.ARM:
         caravelEnv.active_gpios_num = 34  # with ARM the last 3 gpios are not configurable
 
     # For calculating recommended timeout
@@ -117,7 +112,7 @@ def repot_test(func):
         cocotb.log.addHandler(handler)
         ## call test
         await func(*args, **kwargs)
-        if Macros["COVERAGE"] or Macros["CHECKERS"]:
+        if 'COVERAGE' in cocotb.plusargs or "CHECKERS" in cocotb.plusargs:
             coverage_db.export_to_yaml(
                 filename=f"{sim_dir}/{TESTFULLNAME}/coverage.ylm"
             )

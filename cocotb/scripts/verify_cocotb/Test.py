@@ -3,7 +3,6 @@
 from datetime import datetime
 import os
 import sys
-from fnmatch import fnmatch
 from pathlib import Path
 import tarfile
 import shutil
@@ -79,7 +78,7 @@ class Test:
             testmacros.append("ADDR_SPACE_TESTING")
 
         if "user_ram" in self.name:
-            testmacros.append(f"USE_USER_WRAPPER")
+            testmacros.append("USE_USER_WRAPPER")
 
         self.macros = self.args.macros + testmacros
 
@@ -104,6 +103,7 @@ class Test:
                 user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
 
             user_project = f" -f {user_include}"
+            self.write_includes_file(user_include)
             if self.args.vcs:
                 user_project = ""
                 lines = open(user_include, "r").readlines()
@@ -291,8 +291,8 @@ class Test:
 
     def create_module_trail(self):
         f = open(f"{self.test_dir}/module_trail.py", "w")
-        f.write(f"from os import path\n")
-        f.write(f"import sys\n")
+        f.write("from os import path\n")
+        f.write("import sys\n")
         if self.args.user_test:
             f.write(
                 f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n"
@@ -343,6 +343,29 @@ class Test:
                 new_str="LENGTH(dff2)",
                 file_path=self.linker_script_file,
             )
+
+    # takes command file and write file for includes
+    def write_includes_file(self, file):
+        paths = ''
+        with open(file, 'r') as f:
+            for line in f:
+                # Remove leading and trailing whitespace
+                line = line.strip()
+                # Check if line is not empty or a comment
+                if line and not line.startswith('#'):
+                    # Replace $(VERILOG_PATH) with actual path
+                    line = line.replace('$(VERILOG_PATH)', self.paths.VERILOG_PATH)
+                    line = line.replace('$(CARAVEL_PATH)', self.paths.CARAVEL_PATH)
+                    line = line.replace('$(USER_PROJECT_VERILOG)', f"{self.paths.USER_PROJECT_ROOT}/verilog")
+                    line = line.replace('$(PDK_ROOT)', f"{self.paths.PDK_ROOT}")
+                    line = line.replace('$(PDK)', f"{self.paths.PDK}")
+                    # Extract file path from command
+                    if line.startswith('-v'):
+                        file_path = line.split(' ')[1]
+                        paths += f'`include "{file_path}"\n'
+        # write to include file
+        self.includes_file = f"{self.test_dir}/includes.v"
+        open(self.includes_file, 'a').write(paths)
 
 
 def remove_argument(to_remove, patt):

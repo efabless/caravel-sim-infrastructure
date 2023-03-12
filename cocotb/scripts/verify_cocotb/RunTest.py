@@ -1,10 +1,8 @@
 import os
 import shutil
-import sys
-from fnmatch import fnmatch
 import subprocess
-import re
-import threading
+from scripts.verify_cocotb.read_defines import GetDefines
+
 
 class RunTest:
     def __init__(self, args, paths, test) -> None:
@@ -24,7 +22,7 @@ class RunTest:
         )
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = (
-            f"-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
+            "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         )
         includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (
@@ -131,20 +129,24 @@ class RunTest:
         env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
 
         if self.test.sim == "RTL":
-            includes = f" -f {self.paths.VERILOG_PATH}/includes/includes.rtl.caravel"
+            include_file = f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel"
         elif self.test.sim == "GL":
-            includes = f"-f {self.paths.VERILOG_PATH}/includes/includes.gl.caravel"
+            include_file = f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel"
+
         elif self.test.sim == "GL_SDF":
             print(
                 f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc"
             )
             return
+        includes = f"-f {include_file} "
+        self.test.write_includes_file(include_file)
         user_project = self.test.set_user_project()
+        defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (
             f"iverilog -Ttyp {macros} {includes}  -o {self.test.test_dir}/sim.vvp"
             f" {user_project}  {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
-            f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros)}"
+            f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         )
         docker_dir = f"-v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} "
         if self.args.user_test:
@@ -188,14 +190,15 @@ class RunTest:
         if self.args.cov:
             coverage_command = "-cm line+tgl+cond+fsm+branch+assert"
         os.environ["TESTCASE"] = f"{self.test.name}"
-        os.environ["MODULE"] = f"module_trail"
+        os.environ["MODULE"] = "module_trail"
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
         user_project = self.test.set_user_project()            
+        defines = GetDefines(self.test.includes_file)
         vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
         run_command_write_to_file(vlogan_cmd, self.test.compilation_log)
         lint = "+lint=all" if self.args.lint else ""
-        vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)}"
+        vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         run_command_write_to_file(vcs_cmd, self.test.compilation_log, wait=True, file_generated=self.test.test_log)
 
     def find(self, name, path):

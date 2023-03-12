@@ -1,6 +1,6 @@
 from cocotb.handle import SimHandleBase
 from cocotb.binary import BinaryValue
-from enum import Enum
+from enum import Enum, EnumMeta
 import cocotb
 from importlib import import_module
 import os
@@ -42,7 +42,7 @@ def drive_hdl(path, bits, data):
         for i, bits2 in enumerate(bits):
             hdl[n_bits - 1 - bits2[0] : n_bits - 1 - bits2[1]] = data[i]
     else:
-        hdl[n_bits - 1 - bits[0] : n_bits - 1 - bits[1]] = data
+        hdl[n_bits - 1 - bits[0]: n_bits - 1 - bits[1]] = data
     path.value = hdl
     cocotb.log.debug(f" [common] drive { path._path }  with {hdl}")
 
@@ -50,37 +50,30 @@ def drive_hdl(path, bits, data):
 """Enum for GPIO modes valus used to configured the pins"""
 tag = os.getenv("RUNTAG")
 # config_file = f"sim.{tag.replace('/','.')}.configs" // TODO: fix this
-sky = 1
-if 1:
 
-    class GPIO_MODE(Enum):
-        GPIO_MODE_MGMT_STD_INPUT_NOPULL = 0x0403
-        GPIO_MODE_MGMT_STD_INPUT_PULLDOWN = 0x0C01
-        GPIO_MODE_MGMT_STD_INPUT_PULLUP = 0x0801
-        GPIO_MODE_MGMT_STD_OUTPUT = 0x1809
-        GPIO_MODE_MGMT_STD_BIDIRECTIONAL = 0x1801
-        GPIO_MODE_MGMT_STD_ANALOG = 0x000B
-        GPIO_MODE_USER_STD_INPUT_NOPULL = 0x0402
-        GPIO_MODE_USER_STD_INPUT_PULLDOWN = 0x0C00
-        GPIO_MODE_USER_STD_INPUT_PULLUP = 0x0800
-        GPIO_MODE_USER_STD_OUTPUT = 0x1808
-        GPIO_MODE_USER_STD_BIDIRECTIONAL = 0x1800
-        GPIO_MODE_USER_STD_OUT_MONITORED = 0x1802
-        GPIO_MODE_USER_STD_ANALOG = 0x000A
 
-else:
+# class GPIO_MODEMeta(EnumMeta):
+#     def __call__(cls, *args, **kwargs):
+#         value = kwargs.pop('value', None)
+#         obj = super().__call__(*args, **kwargs)
+#         obj._value_ = value
+#         return obj
 
-    class GPIO_MODE(Enum):
-        GPIO_MODE_MGMT_STD_INPUT_NOPULL = 0x007
-        GPIO_MODE_MGMT_STD_INPUT_PULLDOWN = 0x047
-        GPIO_MODE_MGMT_STD_INPUT_PULLUP = 0x087
-        GPIO_MODE_MGMT_STD_OUTPUT = 0x00B
-        GPIO_MODE_MGMT_STD_BIDIRECTIONAL = 0x009
-        GPIO_MODE_USER_STD_INPUT_NOPULL = 0x006
-        GPIO_MODE_USER_STD_INPUT_PULLDOWN = 0x046
-        GPIO_MODE_USER_STD_INPUT_PULLUP = 0x086
-        GPIO_MODE_USER_STD_OUTPUT = 0x00A
-        GPIO_MODE_USER_STD_BIDIRECTIONAL = 0x00C
+
+class GPIO_MODE(Enum):
+    GPIO_MODE_MGMT_STD_INPUT_NOPULL = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_NOPULL"])
+    GPIO_MODE_MGMT_STD_INPUT_PULLDOWN = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLDOWN"])
+    GPIO_MODE_MGMT_STD_INPUT_PULLUP = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLUP"])
+    GPIO_MODE_MGMT_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_OUTPUT"])
+    GPIO_MODE_MGMT_STD_BIDIRECTIONAL = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_BIDIRECTIONAL"])
+    GPIO_MODE_MGMT_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_ANALOG"])
+    GPIO_MODE_USER_STD_INPUT_NOPULL = int(cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_NOPULL"])
+    GPIO_MODE_USER_STD_INPUT_PULLDOWN = int(cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLDOWN"])
+    GPIO_MODE_USER_STD_INPUT_PULLUP = int(cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLUP"])
+    GPIO_MODE_USER_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_USER_STD_OUTPUT"])
+    GPIO_MODE_USER_STD_BIDIRECTIONAL = int(cocotb.plusargs["GPIO_MODE_USER_STD_BIDIRECTIONAL"])
+    GPIO_MODE_USER_STD_OUT_MONITORED = int(cocotb.plusargs["GPIO_MODE_USER_STD_OUT_MONITORED"])
+    GPIO_MODE_USER_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_USER_STD_ANALOG"])
 
 
 class MASK_GPIO_CTRL(Enum):
@@ -107,24 +100,12 @@ class SPI_COMMAND(Enum):
 
 
 def get_gpio_num_bit():
-    if sky:
+    if 1:
         return 13
     else:
         return 10
+    
 
+Macros ={}
 
-Macros = {}
-
-
-def fill_macros(macros_hdl):
-    Macros["MPRJ_IO_PADS_1"] = macros_hdl.MPRJ_IO_PADS_1.value.integer
-    Macros["MPRJ_IO_PADS_2"] = macros_hdl.MPRJ_IO_PADS_2.value.integer
-    Macros["MPRJ_IO_PADS"] = macros_hdl.MPRJ_IO_PADS.value.integer
-    Macros["GL"] = macros_hdl.GL.value.integer
-    Macros["CARAVAN"] = macros_hdl.CARAVAN.value.integer
-    Macros["CHECKERS"] = macros_hdl.CHECKERS.value.integer
-    Macros["COVERAGE"] = macros_hdl.COVERAGE.value.integer
-    Macros["ARM"] = macros_hdl.ARM.value.integer
-    Macros["LA_SIZE"] = macros_hdl.LA_SIZE.value.integer
-    Macros["USER_SPACE_ADDR"] = macros_hdl.USER_SPACE_ADDR.value.integer
-    Macros["USER_SPACE_SIZE"] = macros_hdl.USER_SPACE_SIZE.value.integer
+sky =1

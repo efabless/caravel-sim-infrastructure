@@ -22,9 +22,8 @@ from itertools import groupby, product
 import interfaces.common as common
 from interfaces.common import GPIO_MODE
 from interfaces.common import MASK_GPIO_CTRL
-from interfaces.common import Macros
-from interfaces.common import sky
 from collections.abc import Iterable
+from collections import namedtuple
 
 
 def gpio_mode(gpios_values: list):
@@ -53,6 +52,14 @@ class Caravel_env:
         self.hk_hdl = dut.uut.chip_core.housekeeping
         self.user_hdl = dut.uut.chip_core.mprj
         self.active_gpios_num = 37  # number of active gpios
+        self.get_macros()
+
+    def get_macros(self):
+        valid_macros = {k: v for k, v in cocotb.plusargs.items() if not k.startswith("_") and "+" not in k}
+        Macros = namedtuple('Macros', valid_macros.keys())
+        self.design_macros = Macros(**valid_macros)
+        cocotb.log.info(f"used macros are{self.design_macros}")
+
 
     """start carvel by insert power then reset"""
 
@@ -62,7 +69,6 @@ class Caravel_env:
         await self.disable_csb()  # no need for this anymore as default for gpio3 is now pullup
         await self.reset()
         await self.disable_bins()
-        common.fill_macros(self.dut.macros)  # get macros value
 
     async def disable_bins(self):
         for i in range(38):
@@ -74,6 +80,7 @@ class Caravel_env:
         """Setup the vdd and vcc power bins"""
         cocotb.log.info(f" [caravel] start powering up")
         self.set_vdd(0)
+        sky = 1
         if sky:
             self.set_vcc(0)
         await ClockCycles(self.clk, 10)
@@ -98,6 +105,7 @@ class Caravel_env:
     def set_vdd(self, value: bool):
         self.dut.vddio_tb.value = value
         self.dut.vssio_tb.value = 0
+        sky = 1
         if sky:
             self.dut.vddio_2_tb.value = value
             self.dut.vssio_2_tb.value = 0
@@ -256,7 +264,7 @@ class Caravel_env:
         gpio_defaults = self.caravel_hdl.gpio_defaults.value
         size = gpio_defaults.n_bits - 1  # number of bins in gpio_defaults
         gpios = []
-        for gpio in range(Macros["MPRJ_IO_PADS"]):
+        for gpio in range(self.design_macros["MPRJ_IO_PADS"]):
             gpio_value = gpio_defaults[size - (gpio * 13 + 12) : size - gpio * 13]
             gpio_enum = GPIO_MODE(gpio_value.integer)
             gpios.append((gpio, gpio_enum))
@@ -294,7 +302,7 @@ class Caravel_env:
 
     def print_gpios_HW_val(self, print=1):
         gpios = []
-        for pin in range(Macros["MPRJ_IO_PADS"]):
+        for pin in range(self.design_macros["MPRJ_IO_PADS"]):
             gpios.append(
                 (
                     pin,
@@ -322,10 +330,10 @@ class Caravel_env:
         for i in range(6):
             control_modules.append(car._id(f"gpio_control_in_1a[{i}]", False))
         # add gpio_control_in_1 (GPIO 8 to 18)
-        for i in range(Macros["MPRJ_IO_PADS_1"] - 9 + 1):
+        for i in range(self.design_macros["MPRJ_IO_PADS_1"] - 9 + 1):
             control_modules.append(car._id(f"gpio_control_in_1[{i}]", False))
         # add gpio_control_in_2 (GPIO 19 to 34)
-        for i in range(Macros["MPRJ_IO_PADS_2"] - 4 + 1):
+        for i in range(self.design_macros["MPRJ_IO_PADS_2"] - 4 + 1):
             control_modules.append(car._id(f"gpio_control_in_2[{i}]", False))
         # Last three GPIOs (spi_sdo, flash_io2, and flash_io3) gpio_control_bidir_2
         for i in range(3):

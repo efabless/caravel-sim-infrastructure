@@ -24,7 +24,8 @@ from itertools import groupby, product
 import interfaces.common as common
 from interfaces.common import GPIO_MODE
 from interfaces.common import MASK_GPIO_CTRL
-from interfaces.common import Macros
+
+""" this module isn't used it needs to be updated"""
 
 
 class RiskV:

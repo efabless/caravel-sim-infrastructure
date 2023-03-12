@@ -60,7 +60,7 @@ class UART:
         # send start bit
         self.caravelEnv.drive_gpio_in((5, 5), 0)
         extra_time = 0
-        if Macros["ARM"]:
+        if self.caravelEnv.design_macros.ARM:
             extra_time = (
                 -479 * self.period
             )  # there is state 1 which takes 11975 ns and this time isn't in ARM only
