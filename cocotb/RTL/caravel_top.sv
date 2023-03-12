@@ -116,7 +116,7 @@ caravel uut (
 		`elsif gf180 
 		.VDD (vddio_tb),
 		.VSS (vssio_tb),
-		`endif // sky
+		`endif // sky130
 		.clock	  (clock_tb),
 		.gpio     (gpio_tb),
 		.mprj_io  (mprj_io_tb),

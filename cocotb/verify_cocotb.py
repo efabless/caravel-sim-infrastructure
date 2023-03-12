@@ -4,7 +4,7 @@ from scripts.verify_cocotb.RunFlow import RunFLow, CocotbArgs
 
 import argparse
 
-parser = argparse.ArgumentParser(description="Run cocotb tests" )
+parser = argparse.ArgumentParser(description="Run cocotb tests")
 parser.add_argument(
     "-regression", "-r", help="name of regression can found in tests.json"
 )
@@ -19,8 +19,8 @@ parser.add_argument(
     nargs="+",
     help="Simulation typerun RTL,GL & GL_SDF provided only when run -test<takes list as input>",
 )
-parser.add_argument("-testlist", "-tl", nargs="+", 
-        help="path of testlist to be run "
+parser.add_argument("-testlist", "-tl", nargs="+",
+        help="path of testlist to be run"
 )
 parser.add_argument(
     "-tag",
@@ -78,6 +78,11 @@ parser.add_argument(
 parser.add_argument(
     "-sim_path",
     help='directory where simulation result directory "sim" would be created if None it would be created under cocotb folder',
+)
+parser.add_argument(
+    "-quiet",
+    action="store_true",
+    help='Suppress output to the console',
 )
 args = parser.parse_args()
 # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  zip_passed caravan emailto seed no_wave clk lint arm sdf_setup")

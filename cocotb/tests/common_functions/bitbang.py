@@ -1,11 +1,9 @@
-from interfaces.defsParser import Regs
-from interfaces.common import sky
 from interfaces.common import SPI_COMMAND
 
 
 """
-reg_mprj_xfer contain 
-bit 0 : busy 
+reg_mprj_xfer contain
+bit 0 : busy
 bit 1 : bitbang enable
 bit 2 : bitbang reset active low
 bit 3 : bitbang load registers

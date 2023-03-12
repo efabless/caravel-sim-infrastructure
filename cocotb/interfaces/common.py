@@ -121,8 +121,3 @@ def get_gpio_num_bit():
         return 13
     else:
         return 10
-
-
-Macros = {}
-
-sky = 1

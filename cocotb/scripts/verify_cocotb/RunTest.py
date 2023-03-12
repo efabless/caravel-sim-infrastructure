@@ -84,7 +84,7 @@ class RunTest:
         self.firmware_log.close()
         # don't run with docker with arm
         cmd = command if self.args.arm else docker_command
-        hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log)
+        hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, self.args.quiet)
         # docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # docker_process.wait()
         # stdout, _ = docker_process.communicate()
@@ -162,8 +162,7 @@ class RunTest:
         run_command_write_to_file(
             docker_command,
             self.test.compilation_log,
-            wait=True,
-            file_generated=self.test.test_log,
+            self.args.quiet
         )
 
     # vcs function
@@ -200,14 +199,13 @@ class RunTest:
         user_project = self.test.set_user_project()
         defines = GetDefines(self.test.includes_file)
         vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
-        run_command_write_to_file(vlogan_cmd, self.test.compilation_log)
+        run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.args.quiet)
         lint = "+lint=all" if self.args.lint else ""
         vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         run_command_write_to_file(
             vcs_cmd,
             self.test.compilation_log,
-            wait=True,
-            file_generated=self.test.test_log,
+            self.args.quiet
         )
 
     def find(self, name, path):
@@ -217,7 +215,7 @@ class RunTest:
         print(f"Test {name} doesn't exist or don't have a C file ")
 
 
-def run_command_write_to_file(cmd, file, wait=False, file_generated=None):
+def run_command_write_to_file(cmd, file, quiet):
     """run command and write output to file return 0 if no error"""
     process = subprocess.Popen(
         cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
@@ -225,14 +223,13 @@ def run_command_write_to_file(cmd, file, wait=False, file_generated=None):
     with open(file, "a") as f:
         while True:
             out = process.stdout.readline().decode("utf-8")
-            # print(out)
-            # exit()
             ansi_escape = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
             stdout = ansi_escape.sub("", out)
             if process.poll() is not None:
                 break
             if out:
-                print(out)
+                if not quiet:
+                    print(out)
                 f.write(stdout)
     return process.returncode
 

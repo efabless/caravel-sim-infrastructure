@@ -69,16 +69,11 @@ class Caravel_env:
         """Setup the vdd and vcc power bins"""
         cocotb.log.info(" [caravel] start powering up")
         self.set_vdd(0)
-        sky = 1
-        if sky:
-            self.set_vcc(0)
         await ClockCycles(self.clk, 10)
         cocotb.log.info(" [caravel] power up -> connect vdd")
         self.set_vdd(1)
         # await ClockCycles(self.clk, 10)
         cocotb.log.info(" [caravel] power up -> connect vcc")
-        if sky:
-            self.set_vcc(1)
         await ClockCycles(self.clk, 10)
 
     async def reset(self):
@@ -94,8 +89,7 @@ class Caravel_env:
     def set_vdd(self, value: bool):
         self.dut.vddio_tb.value = value
         self.dut.vssio_tb.value = 0
-        sky = 1
-        if sky:
+        if int(self.design_macros.POWER_DOMAINS) == 3:
             self.dut.vddio_2_tb.value = value
             self.dut.vssio_2_tb.value = 0
             self.dut.vdda_tb.value = value
@@ -106,14 +100,12 @@ class Caravel_env:
             self.dut.vssa1_2_tb.value = 0
             self.dut.vdda2_tb.value = value
             self.dut.vssa2_tb.value = 0
-
-    def set_vcc(self, value: bool):
-        self.dut.vccd_tb.value = value
-        self.dut.vssd_tb.value = 0
-        self.dut.vccd1_tb.value = value
-        self.dut.vssd1_tb.value = 0
-        self.dut.vccd2_tb.value = value
-        self.dut.vssd2_tb.value = 0
+            self.dut.vccd_tb.value = value
+            self.dut.vssd_tb.value = 0
+            self.dut.vccd1_tb.value = value
+            self.dut.vssd1_tb.value = 0
+            self.dut.vccd2_tb.value = value
+            self.dut.vssd2_tb.value = 0
 
     async def drive_csb(self, bit):
         """Drive csb signal bin E8 mprj[3]"""
@@ -166,7 +158,7 @@ class Caravel_env:
             h_bit = h_bit[0]
         if l_bit is None:
             l_bit = h_bit
-        mprj_out = self.dut.mprj_io_tb.value[size - h_bit : size - l_bit]
+        mprj_out = self.dut.mprj_io_tb.value[size - h_bit: size - l_bit]
         if mprj_out.is_resolvable:
             cocotb.log.debug(
                 f" [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {hex(mprj_out)}"
@@ -211,7 +203,7 @@ class Caravel_env:
             gpio_value = array[1]
             for gpio in array[0]:
                 gpio_defaults[
-                    size - (gpio * 13 + 12) : size - gpio * 13
+                    size - (gpio * 13 + 12): size - gpio * 13
                 ] = gpio_value.value
                 # cocotb.log.info(f' [caravel] gpio_defaults[{size - (gpio*13 + 12)}:{size -gpio*13}] = {gpio_value.value} ')
         self.caravel_hdl.gpio_defaults.value = gpio_defaults
@@ -250,7 +242,7 @@ class Caravel_env:
         size = gpio_defaults.n_bits - 1  # number of bins in gpio_defaults
         gpios = []
         for gpio in range(self.design_macros["MPRJ_IO_PADS"]):
-            gpio_value = gpio_defaults[size - (gpio * 13 + 12) : size - gpio * 13]
+            gpio_value = gpio_defaults[size - (gpio * 13 + 12): size - gpio * 13]
             gpio_enum = GPIO_MODE(gpio_value.integer)
             gpios.append((gpio, gpio_enum))
         group_bins = groupby(gpios, key=lambda x: x[1])
@@ -391,7 +383,7 @@ class Caravel_env:
         path.gpio_slow_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_SLOW.value]
         path.gpio_vtrip_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_TRIP.value]
         gpio_dm = bits[
-            MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value : MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value
+            MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value: MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value
             + 3
         ]
         gpio_dm = sum(

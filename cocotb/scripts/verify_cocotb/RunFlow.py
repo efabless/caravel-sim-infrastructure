@@ -206,6 +206,7 @@ class CocotbArgs:
         macros=None,
         sim_path=None,
         cocotb_root=".",
+        quiet=False,
     ) -> None:
         self.regression = None
         self.test = test
@@ -224,6 +225,7 @@ class CocotbArgs:
         self.macros = macros
         self.sim_path = sim_path
         self.cocotb_path = cocotb_root
+        self.quiet = quiet
         # dev only
         self.cov = None
         self.checkers_en = None
@@ -252,3 +254,4 @@ class CocotbArgs:
         self.lint = args.lint
         self.arm = args.arm
         self.cocotb_path = os.getcwd()
+        self.quiet = args.quiet
