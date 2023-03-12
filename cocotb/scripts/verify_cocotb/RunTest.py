@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 from scripts.verify_cocotb.read_defines import GetDefines
-
+import re
 
 class RunTest:
     def __init__(self, args, paths, test) -> None:
@@ -85,6 +85,7 @@ class RunTest:
         self.firmware_log.close()
         # don't run with docker with arm
         cmd = command if self.args.arm else docker_command
+        # command_split = docker_run("efabless/dv","cocotb",docker_dir,None,[f"sh -c 'cd {test_dir} && {command} '"])
         hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log)
         # docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # docker_process.wait()
@@ -160,6 +161,7 @@ class RunTest:
         )
         self.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
         self.full_terminal.close()
+        # command_split = docker_run("efabless/dv","cocotb",docker_dir,env_vars,[f"sh -c 'cd {self.test.test_dir} && {iverilog_command}"])
         run_command_write_to_file(docker_command, self.test.compilation_log, wait=True, file_generated=self.test.test_log)
 
     # vcs function
@@ -210,39 +212,54 @@ class RunTest:
 
 def run_command_write_to_file(cmd, file, wait=False, file_generated=None):
     """run command and write output to file return 0 if no error"""
-    with open(file, "a") as f:
+    #     # Start the subprocess and redirect its output to a pipe
+    #     process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
+    #     # process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
+    #     output_thread = threading.Thread(target=capture_output, args=(process, f))
+    #     error_thread = threading.Thread(target=capture_error, args=(process, f))
+    #     output_thread.start()
+    #     error_thread.start()
+    #     stdout, stderr = process.communicate()
+    #     exit_code = process.returncode
+    #     output_thread.join()
+    #     error_thread.join()
+    #     if exit_code == 0:
+    #         print("Process completed successfully.")
+    #     else:
+    #         print(f"Process failed with exit code {exit_code}.")
+    #         file.write(stderr.decode())
+    #         print(stderr.decode())
+    #     return process.returncode
 
-        #     # Start the subprocess and redirect its output to a pipe
-        #     process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
-        #     # process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
-        #     output_thread = threading.Thread(target=capture_output, args=(process, f))
-        #     error_thread = threading.Thread(target=capture_error, args=(process, f))
-        #     output_thread.start()
-        #     error_thread.start()
-        #     stdout, stderr = process.communicate()
-        #     exit_code = process.returncode
-        #     output_thread.join()
-        #     error_thread.join()
-        #     if exit_code == 0:
-        #         print("Process completed successfully.")
-        #     else:
-        #         print(f"Process failed with exit code {exit_code}.")
-        #         file.write(stderr.decode())
-        #         print(stderr.decode())
-        #     return process.returncode
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    with open(file,'a') as f: 
+        while True: 
+            out = process.stdout.readline().decode('utf-8',errors='replace')
+            # print(out)
+            # exit()
+            ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+            stdout = ansi_escape.sub('', out)
+            if process.poll() is not None:
+                break 
+            if out:
+                print(out)
+                f.write(stdout)
+            
 
-        process = subprocess.Popen(cmd, shell=True, stdout=f, stderr=f, bufsize=1)
-        # for line in iter(process.stdout.readline, b''):
-        #     f.write(line.decode())
-        #     if "Starting the cocotb test" in line.decode():
-        #         print("Hex generated and RTL compiled")
-        # process.wait()
-        if wait:
-            while (True):
-                if os.path.isfile(file_generated):
-                    print("Hex generated and RTL compiled")
-                    break
-        stdout, _ = process.communicate()
+
+
+    # for line in iter(process.stdout.readline, b''):
+    #     f.write(line.decode())
+    #     if "Starting the cocotb test" in line.decode():
+    #         print("Hex generated and RTL compiled")
+    # process.wait()
+    # if wait:
+    #     while (True):
+    #         if os.path.isfile(file_generated):
+    #             print("Hex generated and RTL compiled")
+    #             break
+    # stdout, _ = process.communicate()
+    
     # ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
     # stdout = ansi_escape.sub('', stdout.decode('utf-8'))
     # # file.write(stdout)
@@ -284,3 +301,31 @@ def change_str(str, new_str, file_path):
     # Write the file out again
     with open(file_path, "w") as file:
         file.write(filedata)
+
+
+def docker_run(name, tag, mounts, exports, commands, working_directory=""):
+    docker_cmd = [
+        "docker",
+        "run",
+        "-it",
+    ]
+    for mount in mounts:
+        docker_cmd.append("-v")
+        docker_cmd.append(f"{mount}:{mount}")
+    for export in exports:
+        docker_cmd.append("-e")
+        docker_cmd.append(f"{export}")
+
+    docker_cmd.append("-w")
+    docker_cmd.append(f"{working_directory}")
+    docker_cmd.append("-u")
+    docker_cmd.append(f"{os.geteuid()}:{os.geteuid()}")
+    docker_cmd.append(f"{name}:{tag}")
+    docker_cmd.append("sh")
+    docker_cmd.append("-c")
+
+    for command in commands:
+        docker_cmd.append(f"{command}")
+        docker_cmd.append(";")
+
+    return  docker_cmd

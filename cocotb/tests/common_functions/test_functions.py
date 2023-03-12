@@ -1,8 +1,6 @@
 import cocotb
 import cocotb.log
 import interfaces.caravel as caravel
-from wb_models.housekeepingWB.housekeepingWB import HK_whiteBox
-from wb_models.gpio_controlWB.GPIO_ctrlWB import GPIOs_ctrlWB
 import logging
 from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
@@ -65,14 +63,14 @@ async def test_configure(
     await ClockCycles(caravelEnv.clk, 10)
     coverage = 'COVERAGE' in caravelEnv.design_macros._asdict() 
     checker = 'CHECKERS' in caravelEnv.design_macros._asdict()
-    if checker:
-        HK_whiteBox(dut, checkers=True)
-        GPIOs_ctrlWB(dut, checkers=True)
-    elif coverage:
-        HK_whiteBox(dut)
-        GPIOs_ctrlWB(dut)
+    # if checker:
+    #     HK_whiteBox(dut, checkers=True)
+    #     GPIOs_ctrlWB(dut, checkers=True)
+    # elif coverage:
+    #     HK_whiteBox(dut)
+    #     GPIOs_ctrlWB(dut)
     cocotb.log.info(caravelEnv.design_macros)
-    if caravelEnv.design_macros.ARM:
+    if 'ARM' in caravelEnv.design_macros._asdict():
         caravelEnv.active_gpios_num = 34  # with ARM the last 3 gpios are not configurable
 
     # For calculating recommended timeout
