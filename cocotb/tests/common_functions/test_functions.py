@@ -5,16 +5,16 @@ import logging
 from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
 from tests.common_functions.Timeout import Timeout
-from cocotb.triggers import  ClockCycles
-from cocotb_coverage.coverage import *
-from interfaces.common import Macros
+from cocotb.triggers import ClockCycles
 import yaml
+from cocotb_coverage.coverage import coverage_db
 
-"""configure the test log file location and log verbosity 
-   configure the test clock 
-   configure the test timeout 
+
+"""configure the test log file location and log verbosity
+   configure the test clock
+   configure the test timeout
    configure whitbox models
-   start up the test connecting power vdd to the design then reset and disable the CSB bit 
+   start up the test connecting power vdd to the design then reset and disable the CSB bit
    return the caravel environmnet with clock and start up
 """
 
@@ -61,17 +61,18 @@ async def test_configure(
     caravelEnv.setup_clock(clk)
     await caravelEnv.start_up()
     await ClockCycles(caravelEnv.clk, 10)
-    coverage = 'COVERAGE' in caravelEnv.design_macros._asdict() 
-    checker = 'CHECKERS' in caravelEnv.design_macros._asdict()
+    # coverage = 'COVERAGE' in caravelEnv.design_macros._asdict()
+    # checker = 'CHECKERS' in caravelEnv.design_macros._asdict()
     # if checker:
     #     HK_whiteBox(dut, checkers=True)
     #     GPIOs_ctrlWB(dut, checkers=True)
     # elif coverage:
     #     HK_whiteBox(dut)
     #     GPIOs_ctrlWB(dut)
-    cocotb.log.info(caravelEnv.design_macros)
-    if 'ARM' in caravelEnv.design_macros._asdict():
-        caravelEnv.active_gpios_num = 34  # with ARM the last 3 gpios are not configurable
+    if "ARM" in caravelEnv.design_macros._asdict():
+        caravelEnv.active_gpios_num = (
+            34  # with ARM the last 3 gpios are not configurable
+        )
 
     # For calculating recommended timeout
     global CLOCK_GLOBAL
@@ -94,8 +95,7 @@ class CallCounted:
 
 def repot_test(func):
     async def wrapper_func(*args, **kwargs):
-        ## configure logging
-        COCOTB_ANSI_OUTPUT = 0
+        # configure logging
         TESTFULLNAME = cocotb.plusargs["FTESTNAME"]
         sim_dir = f"{cocotb.plusargs['SIM_PATH']}/{cocotb.plusargs['TAG']}"
         TestName = func.__name__
@@ -108,20 +108,20 @@ def repot_test(func):
         handler.addFilter(SimTimeContextFilter())
         handler.setFormatter(SimLogFormatter())
         cocotb.log.addHandler(handler)
-        ## call test
+        # call test
         await func(*args, **kwargs)
-        if 'COVERAGE' in cocotb.plusargs or "CHECKERS" in cocotb.plusargs:
+        if "COVERAGE" in cocotb.plusargs or "CHECKERS" in cocotb.plusargs:
             coverage_db.export_to_yaml(
                 filename=f"{sim_dir}/{TESTFULLNAME}/coverage.ylm"
             )
-        ## report after finish simulation
+        # report after finish simulation
         msg = f"with ({cocotb.log.critical.counter})criticals ({cocotb.log.error.counter})errors ({cocotb.log.warning.counter})warnings "
         if cocotb.log.error.counter > 0 or cocotb.log.critical.counter > 0:
             raise cocotb.result.TestComplete(f"Test failed {msg}")
         else:
             cocotb.log.info(f"Test passed {msg}")
             cocotb.log.info(
-                f'Cycles consumed = {int(cocotb.utils.get_sim_time("ns")/CLOCK_GLOBAL)} recommened timeout = {int(cocotb.utils.get_sim_time("ns")*1.01/CLOCK_GLOBAL)} cycles'
+                f'Cycles consumed = {int(cocotb.utils.get_sim_time("ns")/CLOCK_GLOBAL)} recommened timeout = {int(cocotb.utils.get_sim_time("ns")*1.01/CLOCK_GLOBAL)+1} cycles'
             )
 
     return wrapper_func

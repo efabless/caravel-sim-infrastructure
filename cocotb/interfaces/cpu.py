@@ -1,29 +1,11 @@
-from operator import add
-import random
 import cocotb
-from cocotb.clock import Clock
-from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles
+from cocotb.triggers import RisingEdge, ClockCycles
 import cocotb.log
 import cocotb.simulator
 from cocotb.handle import SimHandleBase
-from cocotb.handle import Force
-from cocotb_coverage.coverage import *
 from cocotb.binary import BinaryValue
-import enum
-from cocotb.handle import (
-    ConstantObject,
-    HierarchyArrayObject,
-    HierarchyObject,
-    ModifiableObject,
-    NonHierarchyIndexableObject,
-    SimHandle,
-)
-
-from itertools import groupby, product
-
 import interfaces.common as common
-from interfaces.common import GPIO_MODE
-from interfaces.common import MASK_GPIO_CTRL
+
 
 """ this module isn't used it needs to be updated"""
 

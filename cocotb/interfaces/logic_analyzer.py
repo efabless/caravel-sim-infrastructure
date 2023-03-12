@@ -1,29 +1,9 @@
-import random
 import cocotb
-from cocotb.clock import Clock
-from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles
+from cocotb.triggers import ClockCycles
 import cocotb.log
 import cocotb.simulator
 from cocotb.handle import SimHandleBase
-from cocotb.handle import Force
-from cocotb_coverage.coverage import *
-from cocotb.binary import BinaryValue
-import enum
-from cocotb.handle import (
-    ConstantObject,
-    HierarchyArrayObject,
-    HierarchyObject,
-    ModifiableObject,
-    NonHierarchyIndexableObject,
-    SimHandle,
-)
-
-from itertools import groupby, product
-
 import interfaces.common as common
-from interfaces.common import GPIO_MODE
-from interfaces.common import MASK_GPIO_CTRL
-from interfaces.common import Macros
 
 
 class LA:
@@ -32,8 +12,8 @@ class LA:
         self.clk = dut.clock_tb
         self.core_hdl = dut.uut.chip_core.soc.core
 
-    """ Configure the value of LA probes [0:127] 
-        writing 1 to any bit means bit acts as outputs from the cpu 
+    """ Configure the value of LA probes [0:127]
+        writing 1 to any bit means bit acts as outputs from the cpu
         writing 0 to any bit means bit acts as inputs to the cpu """
 
     async def configure_la_en(self, bits, data):

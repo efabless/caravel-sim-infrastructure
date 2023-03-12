@@ -3,6 +3,12 @@ import os
 import os.path
 import logging
 import argparse
+from pathlib import Path
+import oyaml as yaml
+from prettytable import PrettyTable
+from anytree import NodeMixin
+import html
+
 
 parser = argparse.ArgumentParser(description="merge cocotb functional coverage")
 parser.add_argument("-path", "-p", help="name of regression can found in tests.json")
@@ -19,12 +25,6 @@ merge_coverage(logger.info, f"{path}/merged.ylm", *cov_files)
 
 
 """ add HTML reports """
-import sys
-from pathlib import Path
-import oyaml as yaml
-from prettytable import PrettyTable
-from anytree import NodeMixin, RenderTree
-import html
 
 reports_path = f"{path}/coverageReports"
 Path(f"{reports_path}").mkdir(parents=True, exist_ok=True)
@@ -43,12 +43,10 @@ CSS_TEXT = """
         th:nth-child(1) {
           width: 200px;
           }
-        
         /* the second */
         th:nth-child(2) {
           width: 200px;
         }
-        
         /* the third */
         th:nth-child(3) {
           width: 100px;
@@ -57,7 +55,6 @@ CSS_TEXT = """
          th:nth-child(4) {
           width: 420px;
          }
-         
          pre {
             white-space: -moz-pre-wrap; /* Mozilla, supported since 1999 */
             white-space: -pre-wrap; /* Opera */

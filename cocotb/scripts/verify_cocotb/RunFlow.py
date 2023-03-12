@@ -1,15 +1,10 @@
-import sys
 import os
-from fnmatch import fnmatch
 from datetime import datetime
 from pathlib import Path
-import smtplib
-import socket
 from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
-import fileinput
 
 
 def check_valid_mail_addr(address):
@@ -129,7 +124,7 @@ class RunFLow:
         if self.args.sim is None:
             self.args.sim = ["RTL"]
 
-        if self.args.corner == None:
+        if self.args.corner is None:
             self.args.corner = ["nom-t"]
 
         if "sky130" in design_info["PDK"]:

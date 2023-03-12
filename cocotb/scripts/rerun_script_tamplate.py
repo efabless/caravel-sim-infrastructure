@@ -1,4 +1,3 @@
-import sys
 import os
 import shutil
 import argparse
@@ -13,8 +12,8 @@ os.environ["MCW_ROOT"] = "replace by mgmt Root"
 os.chdir("replace by cocotb path")
 
 command = "replace by test command"
-if args.extend != None:
+if args.extend is None:
     command += f" {args.extend}"
 os.system(command)
 
-shutil.copyfile(f"replace by orignal rerun script", f"replace by new rerun script")
+shutil.copyfile("replace by orignal rerun script", "replace by new rerun script")

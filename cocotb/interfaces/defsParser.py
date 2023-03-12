@@ -1,7 +1,5 @@
 import re
 import sys
-from tokenize import group
-from unittest.util import _MIN_COMMON_LEN
 import string
 import cocotb
 import os

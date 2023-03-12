@@ -1,6 +1,5 @@
 import cocotb
-from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles, Timer, Edge
-from interfaces.common import Macros
+from cocotb.triggers import Timer
 from interfaces.caravel import Caravel_env
 
 

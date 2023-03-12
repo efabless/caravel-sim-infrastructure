@@ -148,10 +148,10 @@ class RunRegression:
                 self.get_testlist(testlist)
             if len(self.tests) == 0:
                 raise RuntimeError(
-                    f"test list {self.args.testlist} doesn't have any valid tests please review the format of the yalm file"
+                    "test list {self.args.testlist} doesn't have any valid tests please review the format of the yalm file"
                 )
         if len(self.tests) == 0:
-            raise RuntimeError(f"There is no test provided to run")
+            raise RuntimeError("There is no test provided to run")
         self.update_run_log()
         # zip pass tests if running more than 7 tests
         if len(self.tests) > 7:
@@ -184,7 +184,7 @@ class RunRegression:
                 self.add_new_test(**data)
 
     def run_regression(self):
-        threads = list()
+        # threads = list()
         for test in self.tests:
             if self.args.iverilog:  # threading
                 # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
@@ -206,7 +206,7 @@ class RunRegression:
                 f"{self.paths.SIM_PATH}/{self.args.tag}/command.log", "a"
             )
             self.full_terminal.write(
-                f"\n\ndocker command for merge functional coverage:\n% "
+                "\n\ndocker command for merge functional coverage:\n% "
             )
             self.full_terminal.write(os.path.expandvars(merge_fun_cov_command) + "\n")
             self.full_terminal.close()
@@ -220,7 +220,7 @@ class RunRegression:
 
     def generate_cov(self):
         os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
-        os.system(f"urg -dir RTL*/*.vdb -format both -show tests -report coverageRTL/")
+        os.system("urg -dir RTL*/*.vdb -format both -show tests -report coverageRTL/")
         # os.system(f"urg -dir GL*/*.vdb -format both -show tests -report coverageGL/")
         # os.system(f"urg -dir SDF*/*.vdb -format both -show tests -report coverageSDF/")
         os.chdir(self.cocotb_path)
@@ -368,7 +368,7 @@ class RunRegression:
             f"{commits}</table> "
         )
         mail_sub += self.set_html_test_table()
-        mail_sub += f"<p>best regards, </p></body></html>"
+        mail_sub += "<p>best regards, </p></body></html>"
         # print(mail_sub)
         msg = MIMEMultipart("alternative", None, [MIMEText(mail_sub, "html")])
         all_pass = self.tests[0].failed_count == 0 and self.tests[0].unknown_count == 0
@@ -391,9 +391,9 @@ class RunRegression:
             s.quit()
 
     def set_html_test_table(self):
-        html_test_table = f"<h2>Tests Table:</h2><table border=2 bgcolor=#D6EEEE>"
+        html_test_table = "<h2>Tests Table:</h2><table border=2 bgcolor=#D6EEEE>"
         html_test_table += (
-            f"<th>Test</th> <th>duration</th> <th>status</th> <th>seed</th> <tr> "
+            "<th>Test</th> <th>duration</th> <th>status</th> <th>seed</th> <tr> "
         )
         for test in self.tests:
             if test.passed == "passed":

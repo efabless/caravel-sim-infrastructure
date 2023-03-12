@@ -4,6 +4,7 @@ import subprocess
 from scripts.verify_cocotb.read_defines import GetDefines
 import re
 
+
 class RunTest:
     def __init__(self, args, paths, test) -> None:
         self.args = args
@@ -21,9 +22,7 @@ class RunTest:
             f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
         )
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
-        CPUFLAGS = (
-            "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        )
+        CPUFLAGS = "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/tests/common_functions/"
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
@@ -71,7 +70,7 @@ class RunTest:
             else docker_dir
             + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
         )
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} '"       
+        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} '"
         command_slipt = command.split("&&")
         self.firmware_log = open(self.test.hex_log, "w")
         self.firmware_log.write("docker for hex command:\n% ")
@@ -85,7 +84,6 @@ class RunTest:
         self.firmware_log.close()
         # don't run with docker with arm
         cmd = command if self.args.arm else docker_command
-        # command_split = docker_run("efabless/dv","cocotb",docker_dir,None,[f"sh -c 'cd {test_dir} && {command} '"])
         hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log)
         # docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # docker_process.wait()
@@ -97,7 +95,9 @@ class RunTest:
         self.firmware_log = open(self.test.hex_log, "a")
         if hex_gen_state != 0:
             # open(self.test.firmware_log, "w").write(stdout)
-            print(f"{bcolors.FAIL}Error:{bcolors.ENDC} Fail to compile the C code for more info refer to {bcolors.OKCYAN }{self.test.hex_log}{bcolors.ENDC } ")
+            print(
+                f"{bcolors.FAIL}Error:{bcolors.ENDC} Fail to compile the C code for more info refer to {bcolors.OKCYAN }{self.test.hex_log}{bcolors.ENDC } "
+            )
             self.firmware_log.write("Error: when generating hex")
             self.firmware_log.close()
             return "hex_error"
@@ -156,13 +156,15 @@ class RunTest:
             )
         docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} {docker_dir} efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}'"
         self.full_terminal = open(self.test.compilation_log, "w")
-        self.full_terminal.write(
-            "docker command for running iverilog and cocotb:\n% "
-        )
+        self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
         self.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
         self.full_terminal.close()
-        # command_split = docker_run("efabless/dv","cocotb",docker_dir,env_vars,[f"sh -c 'cd {self.test.test_dir} && {iverilog_command}"])
-        run_command_write_to_file(docker_command, self.test.compilation_log, wait=True, file_generated=self.test.test_log)
+        run_command_write_to_file(
+            docker_command,
+            self.test.compilation_log,
+            wait=True,
+            file_generated=self.test.test_log,
+        )
 
     # vcs function
     def runTest_vcs(self):
@@ -195,13 +197,18 @@ class RunTest:
         os.environ["MODULE"] = "module_trail"
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
-        user_project = self.test.set_user_project()            
+        user_project = self.test.set_user_project()
         defines = GetDefines(self.test.includes_file)
         vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
         run_command_write_to_file(vlogan_cmd, self.test.compilation_log)
         lint = "+lint=all" if self.args.lint else ""
         vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
-        run_command_write_to_file(vcs_cmd, self.test.compilation_log, wait=True, file_generated=self.test.test_log)
+        run_command_write_to_file(
+            vcs_cmd,
+            self.test.compilation_log,
+            wait=True,
+            file_generated=self.test.test_log,
+        )
 
     def find(self, name, path):
         for root, dirs, files in os.walk(path):
@@ -212,71 +219,34 @@ class RunTest:
 
 def run_command_write_to_file(cmd, file, wait=False, file_generated=None):
     """run command and write output to file return 0 if no error"""
-    #     # Start the subprocess and redirect its output to a pipe
-    #     process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1)
-    #     # process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
-    #     output_thread = threading.Thread(target=capture_output, args=(process, f))
-    #     error_thread = threading.Thread(target=capture_error, args=(process, f))
-    #     output_thread.start()
-    #     error_thread.start()
-    #     stdout, stderr = process.communicate()
-    #     exit_code = process.returncode
-    #     output_thread.join()
-    #     error_thread.join()
-    #     if exit_code == 0:
-    #         print("Process completed successfully.")
-    #     else:
-    #         print(f"Process failed with exit code {exit_code}.")
-    #         file.write(stderr.decode())
-    #         print(stderr.decode())
-    #     return process.returncode
-
-    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    with open(file,'a') as f: 
-        while True: 
-            out = process.stdout.readline().decode('utf-8',errors='replace')
+    process = subprocess.Popen(
+        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+    )
+    with open(file, "a") as f:
+        while True:
+            out = process.stdout.readline().decode("utf-8")
             # print(out)
             # exit()
-            ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
-            stdout = ansi_escape.sub('', out)
+            ansi_escape = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
+            stdout = ansi_escape.sub("", out)
             if process.poll() is not None:
-                break 
+                break
             if out:
                 print(out)
                 f.write(stdout)
-            
-
-
-
-    # for line in iter(process.stdout.readline, b''):
-    #     f.write(line.decode())
-    #     if "Starting the cocotb test" in line.decode():
-    #         print("Hex generated and RTL compiled")
-    # process.wait()
-    # if wait:
-    #     while (True):
-    #         if os.path.isfile(file_generated):
-    #             print("Hex generated and RTL compiled")
-    #             break
-    # stdout, _ = process.communicate()
-    
-    # ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
-    # stdout = ansi_escape.sub('', stdout.decode('utf-8'))
-    # # file.write(stdout)
-    # print(stdout)
     return process.returncode
 
 
 def capture_output(process, file):
-    for line in iter(process.stdout.readline, b''):
+    for line in iter(process.stdout.readline, b""):
         file.write(line.decode())
-        print(line.decode(), end='')
+        print(line.decode(), end="")
 
 
 def capture_error(process, file):
-    for line in iter(process.stderr.readline, b''):
+    for line in iter(process.stderr.readline, b""):
         file.write(line.decode())
-        print(line.decode(), end='')
+        print(line.decode(), end="")
 
 
 class bcolors:
@@ -301,31 +271,3 @@ def change_str(str, new_str, file_path):
     # Write the file out again
     with open(file_path, "w") as file:
         file.write(filedata)
-
-
-def docker_run(name, tag, mounts, exports, commands, working_directory=""):
-    docker_cmd = [
-        "docker",
-        "run",
-        "-it",
-    ]
-    for mount in mounts:
-        docker_cmd.append("-v")
-        docker_cmd.append(f"{mount}:{mount}")
-    for export in exports:
-        docker_cmd.append("-e")
-        docker_cmd.append(f"{export}")
-
-    docker_cmd.append("-w")
-    docker_cmd.append(f"{working_directory}")
-    docker_cmd.append("-u")
-    docker_cmd.append(f"{os.geteuid()}:{os.geteuid()}")
-    docker_cmd.append(f"{name}:{tag}")
-    docker_cmd.append("sh")
-    docker_cmd.append("-c")
-
-    for command in commands:
-        docker_cmd.append(f"{command}")
-        docker_cmd.append(";")
-
-    return  docker_cmd

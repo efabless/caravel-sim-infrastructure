@@ -1,24 +1,11 @@
-import random
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles, Timer
+from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles
 import cocotb.log
 import cocotb.simulator
 from cocotb.handle import SimHandleBase
-from cocotb.handle import Force, Release, Deposit
 from cocotb.binary import BinaryValue
-import enum
-from cocotb.handle import (
-    ConstantObject,
-    HierarchyArrayObject,
-    HierarchyObject,
-    ModifiableObject,
-    NonHierarchyIndexableObject,
-    SimHandle,
-)
-
-from itertools import groupby, product
-
+from itertools import groupby
 import interfaces.common as common
 from interfaces.common import GPIO_MODE
 from interfaces.common import MASK_GPIO_CTRL
@@ -55,11 +42,13 @@ class Caravel_env:
         self.get_macros()
 
     def get_macros(self):
-        valid_macros = {k: v for k, v in cocotb.plusargs.items() if not k.startswith("_") and "+" not in k}
-        Macros = namedtuple('Macros', valid_macros.keys())
+        valid_macros = {
+            k: v
+            for k, v in cocotb.plusargs.items()
+            if not k.startswith("_") and "+" not in k
+        }
+        Macros = namedtuple("Macros", valid_macros.keys())
         self.design_macros = Macros(**valid_macros)
-        cocotb.log.info(f"used macros are{self.design_macros}")
-
 
     """start carvel by insert power then reset"""
 
@@ -78,16 +67,16 @@ class Caravel_env:
 
     async def power_up(self):
         """Setup the vdd and vcc power bins"""
-        cocotb.log.info(f" [caravel] start powering up")
+        cocotb.log.info(" [caravel] start powering up")
         self.set_vdd(0)
         sky = 1
         if sky:
             self.set_vcc(0)
         await ClockCycles(self.clk, 10)
-        cocotb.log.info(f" [caravel] power up -> connect vdd")
+        cocotb.log.info(" [caravel] power up -> connect vdd")
         self.set_vdd(1)
         # await ClockCycles(self.clk, 10)
-        cocotb.log.info(f" [caravel] power up -> connect vcc")
+        cocotb.log.info(" [caravel] power up -> connect vcc")
         if sky:
             self.set_vcc(1)
         await ClockCycles(self.clk, 10)
@@ -95,12 +84,12 @@ class Caravel_env:
     async def reset(self):
         """Reset caravel"""
         # initial value of reset is x
-        cocotb.log.info(f" [caravel] start resetting")
+        cocotb.log.info(" [caravel] start resetting")
         self.dut.resetb_tb.value = 0
         await ClockCycles(self.clk, 20)
         self.dut.resetb_tb.value = 1
         await ClockCycles(self.clk, 1)
-        cocotb.log.info(f" [caravel] finish resetting")
+        cocotb.log.info(" [caravel] finish resetting")
 
     def set_vdd(self, value: bool):
         self.dut.vddio_tb.value = value
@@ -134,14 +123,14 @@ class Caravel_env:
 
     async def disable_csb(self):
         """Set the SPI CSB  signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
-        cocotb.log.info(f" [caravel] disable housekeeping spi transmission")
+        cocotb.log.info(" [caravel] disable housekeeping spi transmission")
         await self.drive_csb(1)
         # await self.release_csb()
         await ClockCycles(self.clk, 1)
 
     async def release_csb(self):
         """Set the SPI CSB  signal high impedance"""
-        cocotb.log.info(f" [caravel] release housekeeping spi transmission")
+        cocotb.log.info(" [caravel] release housekeeping spi transmission")
         self.release_gpio(2)
         self.release_gpio(3)
         self.release_gpio(4)
@@ -149,7 +138,7 @@ class Caravel_env:
 
     async def enable_csb(self):
         """Set the SPI CSB  signal low to enable housekeeping spi transmission bin E8 mprj[3]"""
-        cocotb.log.info(f" [caravel] enable housekeeping spi transmission")
+        cocotb.log.info(" [caravel] enable housekeeping spi transmission")
         await self.drive_csb(0)
 
     def monitor_gpio(self, h_bit, l_bit=None) -> cocotb.binary.BinaryValue:
@@ -212,10 +201,10 @@ class Caravel_env:
     """change the configration of the gpios by overwrite their defaults value then reset
         need to take at least 1 cycle for reset """
 
-    ### dont use back door accessing
+    # dont use back door accessing
     async def configure_gpio_defaults(self, gpios_values: list):
         gpio_defaults = self.caravel_hdl.gpio_defaults.value
-        cocotb.log.info(f" [caravel] start cofigure gpio gpios ")
+        cocotb.log.info("[caravel] start cofigure gpio gpios ")
         size = gpio_defaults.n_bits - 1  # number of bins in gpio_defaults
         # list example [[(gpios),value],[(gpios),value],[(gpios),value]]
         for array in gpios_values:
@@ -232,17 +221,15 @@ class Caravel_env:
         await ClockCycles(self.clk, 1)
         self.caravel_hdl.gpio_resetn_1_shifted.value = 1
         self.caravel_hdl.gpio_resetn_2_shifted.value = 1
-        cocotb.log.info(
-            f" [caravel] finish configuring gpios, the curret gpios value: "
-        )
+        cocotb.log.info(" [caravel] finish configuring gpios, the curret gpios value: ")
         self.print_gpios_ctrl_val()
 
-    """change the configration of the gpios by overwrite the register value 
+    """change the configration of the gpios by overwrite the register value
         in control registers and housekeeping regs, don't consume simulation cycles"""
 
-    ### dont use back door accessing
+    # dont use back door accessing
     def configure_gpios_regs(self, gpios_values: list):
-        cocotb.log.info(f" [caravel] start cofigure gpio gpios ")
+        cocotb.log.info(" [caravel] start cofigure gpio gpios ")
         control_modules = self.control_blocks_paths()
         # list example [[(gpios),value],[(gpios),value],[(gpios),value]]
         for array in gpios_values:
@@ -254,9 +241,7 @@ class Caravel_env:
                 self.caravel_hdl.housekeeping.gpio_configure[
                     gpio
                 ].value = gpio_value.value  # for house keeping regs
-        cocotb.log.info(
-            f" [caravel] finish configuring gpios, the curret gpios value: "
-        )
+        cocotb.log.info(" [caravel] finish configuring gpios, the curret gpios value: ")
         self.print_gpios_ctrl_val()
         self.print_gpios_HW_val()
 
@@ -296,7 +281,7 @@ class Caravel_env:
     def _check_gpio_ctrl_eq_HW(self):
         assert self.print_gpios_ctrl_val(1) == self.print_gpios_HW_val(
             1
-        ), f"there is an issue while configuration the control block register value isn't the same as the house keeping gpio register"
+        ), "there is an issue while configuration the control block register value isn't the same as the house keeping gpio register"
 
     """print the values return in the GPIO of housekeeping block mode in GPIO Mode format"""
 
@@ -468,7 +453,6 @@ class Caravel_env:
         :param bits: gpios to drive
         :type bits: int or tuple(int, int)
         """
-        data_bits = []
         is_list = isinstance(bits, (list, tuple))
         if is_list:
             cocotb.log.debug(
@@ -506,7 +490,7 @@ class Caravel_env:
         self.drive_gpio_in(bits, data)
         cocotb.log.info(f" [caravel] wait {num_cycles} cycles")
         await cocotb.start(self.wait_then_undrive(bits, num_cycles))
-        cocotb.log.info(f" [caravel] finish drive_gpio_with_in_cycles ")
+        cocotb.log.info(" [caravel] finish drive_gpio_with_in_cycles ")
 
     """drive the value of mprj bits with specific data from management area then after certain number of cycle drive z to free the signal"""
 
@@ -514,13 +498,13 @@ class Caravel_env:
         self.drive_mgmt_gpio(bits, data)
         cocotb.log.info(f" [caravel] wait {num_cycles} cycles")
         await cocotb.start(self.wait_then_undrive(bits, num_cycles))
-        cocotb.log.info(f" [caravel] finish drive_gpio_with_in_cycles ")
+        cocotb.log.info(" [caravel] finish drive_gpio_with_in_cycles ")
 
     async def wait_then_undrive(self, bits, num_cycles):
         await ClockCycles(self.clk, num_cycles)
         n_bits = bits[0] - bits[1] + 1
         self.drive_gpio_in(bits, (n_bits) * "z")
-        cocotb.log.info(f" [caravel] finish wait_then_drive ")
+        cocotb.log.info(" [caravel] finish wait_then_drive ")
 
     async def hk_write_byte(self, data):
         self.path = self.dut.mprj_io_tb
@@ -563,7 +547,7 @@ class Caravel_env:
         await FallingEdge(self.clk)
         return int(read_data, 2)
 
-    """ read byte using housekeeping spi 
+    """ read byte using housekeeping spi
         when writing to SCK we can't use mprj[4] as there is a limitation in cocotb for accessing pack array #2587
         so use back door access to write the clock then read the output from the SDO mprj[1] value"""
 

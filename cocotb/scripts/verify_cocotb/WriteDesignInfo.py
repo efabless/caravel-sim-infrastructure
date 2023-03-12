@@ -2,22 +2,22 @@ from collections import namedtuple
 import ruamel.yaml
 
 yaml_str = """\
-#eg CARAVEL_ROOT: "/usr/Desktop/caravel_project/caravel/" 
+#eg CARAVEL_ROOT: "/usr/Desktop/caravel_project/caravel/"
 #like repo https://github.com/efabless/caravel
 CARAVEL_ROOT: "/home/rady/caravel/caravel_orginal/caravel/"
 
-#eg MCW_ROOT: "/usr/Desktop/caravel_project/caravel_mgmt_soc_litex/" 
-#like repo https://github.com/efabless/caravel_mgmt_soc_litex 
+#eg MCW_ROOT: "/usr/Desktop/caravel_project/caravel_mgmt_soc_litex/"
+#like repo https://github.com/efabless/caravel_mgmt_soc_litex
 MCW_ROOT: '/home/rady/caravel/caravel_orginal/caravel_mgmt_soc_litex/'
 
-#eg USER_PROJECT_ROOT: "/usr/Desktop/caravel_project/caravel_user_project/" 
+#eg USER_PROJECT_ROOT: "/usr/Desktop/caravel_project/caravel_user_project/"
 #like repo https://github.com/efabless/caravel_user_project
 
 USER_PROJECT_ROOT: "/home/rady/caravel/swift/caravel_user_project/"
 
 
 
-#eg PDK_ROOT: "/usr/Desktop/caravel_project/pdk/" 
+#eg PDK_ROOT: "/usr/Desktop/caravel_project/pdk/"
 #exported by volare
 PDK_ROOT: "/home/rady/caravel/files4vcs/pdk"
 
@@ -26,12 +26,12 @@ PDK: sky130A
 #PDK: gf180mcuC
 
 #clock in ns
-clk: 25  
+clk: 25
 
 # true when caravan are simulated instead of caravel
 caravan: false
 
-# optional email address to send the results to 
+# optional email address to send the results to
 emailto: [None]
 """
 EnvironmentPaths = namedtuple(
@@ -71,6 +71,9 @@ class WriteDesignInfo:
             self.yaml.dump(self.code, outfile)
 
 
-# paths = EnvironmentPaths("/home/rady/caravel/caravel_orginal/caravel/","/home/rady/caravel/caravel_orginal/caravel_mgmt_soc_litex/","/home/rady/caravel/files4vcs/pdk","sky130A", "/home/rady/caravel/swift/caravel_user_project/")
+# paths = EnvironmentPaths("/home/rady/caravel/caravel_orginal/caravel/",
+# "/home/rady/caravel/caravel_orginal/caravel_mgmt_soc_litex/",
+# "/home/rady/caravel/files4vcs/pdk","sky130A",
+# "/home/rady/caravel/swift/caravel_user_project/")
 
 # WriteDesignInfo("/home/Marwan/caravel/swift/caravel-dynamic-sims/cocotb/",paths,Emailto=["mostafa.rady@efabless.com"])

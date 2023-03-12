@@ -1,8 +1,7 @@
 from cocotb.handle import SimHandleBase
 from cocotb.binary import BinaryValue
-from enum import Enum, EnumMeta
+from enum import Enum
 import cocotb
-from importlib import import_module
 import os
 
 """return the value and the size of the signal"""
@@ -42,7 +41,7 @@ def drive_hdl(path, bits, data):
         for i, bits2 in enumerate(bits):
             hdl[n_bits - 1 - bits2[0] : n_bits - 1 - bits2[1]] = data[i]
     else:
-        hdl[n_bits - 1 - bits[0]: n_bits - 1 - bits[1]] = data
+        hdl[n_bits - 1 - bits[0] : n_bits - 1 - bits[1]] = data
     path.value = hdl
     cocotb.log.debug(f" [common] drive { path._path }  with {hdl}")
 
@@ -61,18 +60,36 @@ tag = os.getenv("RUNTAG")
 
 
 class GPIO_MODE(Enum):
-    GPIO_MODE_MGMT_STD_INPUT_NOPULL = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_NOPULL"])
-    GPIO_MODE_MGMT_STD_INPUT_PULLDOWN = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLDOWN"])
-    GPIO_MODE_MGMT_STD_INPUT_PULLUP = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLUP"])
+    GPIO_MODE_MGMT_STD_INPUT_NOPULL = int(
+        cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_NOPULL"]
+    )
+    GPIO_MODE_MGMT_STD_INPUT_PULLDOWN = int(
+        cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLDOWN"]
+    )
+    GPIO_MODE_MGMT_STD_INPUT_PULLUP = int(
+        cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLUP"]
+    )
     GPIO_MODE_MGMT_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_OUTPUT"])
-    GPIO_MODE_MGMT_STD_BIDIRECTIONAL = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_BIDIRECTIONAL"])
+    GPIO_MODE_MGMT_STD_BIDIRECTIONAL = int(
+        cocotb.plusargs["GPIO_MODE_MGMT_STD_BIDIRECTIONAL"]
+    )
     GPIO_MODE_MGMT_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_ANALOG"])
-    GPIO_MODE_USER_STD_INPUT_NOPULL = int(cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_NOPULL"])
-    GPIO_MODE_USER_STD_INPUT_PULLDOWN = int(cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLDOWN"])
-    GPIO_MODE_USER_STD_INPUT_PULLUP = int(cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLUP"])
+    GPIO_MODE_USER_STD_INPUT_NOPULL = int(
+        cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_NOPULL"]
+    )
+    GPIO_MODE_USER_STD_INPUT_PULLDOWN = int(
+        cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLDOWN"]
+    )
+    GPIO_MODE_USER_STD_INPUT_PULLUP = int(
+        cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLUP"]
+    )
     GPIO_MODE_USER_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_USER_STD_OUTPUT"])
-    GPIO_MODE_USER_STD_BIDIRECTIONAL = int(cocotb.plusargs["GPIO_MODE_USER_STD_BIDIRECTIONAL"])
-    GPIO_MODE_USER_STD_OUT_MONITORED = int(cocotb.plusargs["GPIO_MODE_USER_STD_OUT_MONITORED"])
+    GPIO_MODE_USER_STD_BIDIRECTIONAL = int(
+        cocotb.plusargs["GPIO_MODE_USER_STD_BIDIRECTIONAL"]
+    )
+    GPIO_MODE_USER_STD_OUT_MONITORED = int(
+        cocotb.plusargs["GPIO_MODE_USER_STD_OUT_MONITORED"]
+    )
     GPIO_MODE_USER_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_USER_STD_ANALOG"])
 
 
@@ -104,8 +121,8 @@ def get_gpio_num_bit():
         return 13
     else:
         return 10
-    
 
-Macros ={}
 
-sky =1
+Macros = {}
+
+sky = 1

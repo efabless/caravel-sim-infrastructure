@@ -1,12 +1,13 @@
 # from turtle import st
-from cocotb.triggers import FallingEdge, RisingEdge, ClockCycles
+from cocotb.triggers import ClockCycles
 import cocotb.log
 from cocotb.result import SimTimeoutError
 import cocotb
-import time
 
-"""class to handle timeout inside the tests. after the provided number of cycles (cycle_num) are exceeded test would fail 
-    precision would determine when to log timeout warning for example if cycle_num=1000 and percision = 10% so after each 1000*10% = 100 cycle log would be printed
+""" class to handle timeout inside the tests.
+    after the provided number of cycles (cycle_num) are exceeded test would fail
+    precision would determine when to log timeout warning for example 
+    if cycle_num=1000 and percision = 10% so after each 1000*10% = 100 cycle log would be printed
 """
 
 

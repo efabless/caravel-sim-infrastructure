@@ -116,9 +116,7 @@ class Test:
         return user_project.replace("\n", "")
 
     def start_of_test(self):
-        print(
-            f"Start running test: {bcolors.OKBLUE  } {self.full_name} {bcolors.ENDC}"
-        )
+        print(f"Start running test: {bcolors.OKBLUE  } {self.full_name} {bcolors.ENDC}")
         self.start_time_t = datetime.now()
         self.create_logs()
         self.create_module_trail()
@@ -346,26 +344,29 @@ class Test:
 
     # takes command file and write file for includes
     def write_includes_file(self, file):
-        paths = ''
-        with open(file, 'r') as f:
+        paths = ""
+        with open(file, "r") as f:
             for line in f:
                 # Remove leading and trailing whitespace
                 line = line.strip()
                 # Check if line is not empty or a comment
-                if line and not line.startswith('#'):
+                if line and not line.startswith("#"):
                     # Replace $(VERILOG_PATH) with actual path
-                    line = line.replace('$(VERILOG_PATH)', self.paths.VERILOG_PATH)
-                    line = line.replace('$(CARAVEL_PATH)', self.paths.CARAVEL_PATH)
-                    line = line.replace('$(USER_PROJECT_VERILOG)', f"{self.paths.USER_PROJECT_ROOT}/verilog")
-                    line = line.replace('$(PDK_ROOT)', f"{self.paths.PDK_ROOT}")
-                    line = line.replace('$(PDK)', f"{self.paths.PDK}")
+                    line = line.replace("$(VERILOG_PATH)", self.paths.VERILOG_PATH)
+                    line = line.replace("$(CARAVEL_PATH)", self.paths.CARAVEL_PATH)
+                    line = line.replace(
+                        "$(USER_PROJECT_VERILOG)",
+                        f"{self.paths.USER_PROJECT_ROOT}/verilog",
+                    )
+                    line = line.replace("$(PDK_ROOT)", f"{self.paths.PDK_ROOT}")
+                    line = line.replace("$(PDK)", f"{self.paths.PDK}")
                     # Extract file path from command
-                    if line.startswith('-v'):
-                        file_path = line.split(' ')[1]
+                    if line.startswith("-v"):
+                        file_path = line.split(" ")[1]
                         paths += f'`include "{file_path}"\n'
         # write to include file
         self.includes_file = f"{self.test_dir}/includes.v"
-        open(self.includes_file, 'a').write(paths)
+        open(self.includes_file, "a").write(paths)
 
 
 def remove_argument(to_remove, patt):
