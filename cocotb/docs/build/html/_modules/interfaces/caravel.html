@@ -73,33 +73,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for interfaces.caravel</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">import</span> <span class="nn">cocotb</span>
+<span></span><span class="kn">import</span> <span class="nn">cocotb</span>
 <span class="kn">from</span> <span class="nn">cocotb.clock</span> <span class="kn">import</span> <span class="n">Clock</span>
-<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">FallingEdge</span><span class="p">,</span> <span class="n">RisingEdge</span><span class="p">,</span> <span class="n">ClockCycles</span><span class="p">,</span> <span class="n">Timer</span>
+<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">FallingEdge</span><span class="p">,</span> <span class="n">RisingEdge</span><span class="p">,</span> <span class="n">ClockCycles</span>
 <span class="kn">import</span> <span class="nn">cocotb.log</span>
 <span class="kn">import</span> <span class="nn">cocotb.simulator</span>
 <span class="kn">from</span> <span class="nn">cocotb.handle</span> <span class="kn">import</span> <span class="n">SimHandleBase</span>
-<span class="kn">from</span> <span class="nn">cocotb.handle</span> <span class="kn">import</span> <span class="n">Force</span><span class="p">,</span> <span class="n">Release</span><span class="p">,</span> <span class="n">Deposit</span>
 <span class="kn">from</span> <span class="nn">cocotb.binary</span> <span class="kn">import</span> <span class="n">BinaryValue</span>
-<span class="kn">import</span> <span class="nn">enum</span>
-<span class="kn">from</span> <span class="nn">cocotb.handle</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ConstantObject</span><span class="p">,</span>
-    <span class="n">HierarchyArrayObject</span><span class="p">,</span>
-    <span class="n">HierarchyObject</span><span class="p">,</span>
-    <span class="n">ModifiableObject</span><span class="p">,</span>
-    <span class="n">NonHierarchyIndexableObject</span><span class="p">,</span>
-    <span class="n">SimHandle</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span><span class="p">,</span> <span class="n">product</span>
-
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
 <span class="kn">import</span> <span class="nn">interfaces.common</span> <span class="k">as</span> <span class="nn">common</span>
 <span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">GPIO_MODE</span>
 <span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">MASK_GPIO_CTRL</span>
-<span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">Macros</span>
-<span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">sky</span>
 <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
 
 <span class="k">def</span> <span class="nf">gpio_mode</span><span class="p">(</span><span class="n">gpios_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
@@ -128,6 +114,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">hk_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">housekeeping</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">user_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">mprj</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="mi">37</span>  <span class="c1"># number of active gpios</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_macros</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_macros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">valid_macros</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">plusargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;+&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">k</span>
+        <span class="p">}</span>
+        <span class="n">Macros</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Macros&quot;</span><span class="p">,</span> <span class="n">valid_macros</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span> <span class="o">=</span> <span class="n">Macros</span><span class="p">(</span><span class="o">**</span><span class="n">valid_macros</span><span class="p">)</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;start carvel by insert power then reset&quot;&quot;&quot;</span>
 
@@ -137,7 +133,6 @@
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_csb</span><span class="p">()</span>  <span class="c1"># no need for this anymore as default for gpio3 is now pullup</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_bins</span><span class="p">()</span>
-        <span class="n">common</span><span class="o">.</span><span class="n">fill_macros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">macros</span><span class="p">)</span>  <span class="c1"># get macros value</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">disable_bins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">38</span><span class="p">):</span>
@@ -147,33 +142,29 @@
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">power_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup the vdd and vcc power bins&quot;&quot;&quot;</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] start powering up&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] start powering up&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_vdd</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">sky</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_vcc</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] power up -&gt; connect vdd&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] power up -&gt; connect vdd&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_vdd</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># await ClockCycles(self.clk, 10)</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] power up -&gt; connect vcc&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">sky</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">set_vcc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] power up -&gt; connect vcc&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Caravel_env.reset"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.reset">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset caravel&quot;&quot;&quot;</span>
         <span class="c1"># initial value of reset is x</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] start resetting&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] start resetting&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">resetb_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">resetb_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] finish resetting&quot;</span><span class="p">)</span></div>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish resetting&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">set_vdd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vddio_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssio_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">sky</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">POWER_DOMAINS</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vddio_2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssio_2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vdda_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
@@ -184,14 +175,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssa1_2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vdda2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssa2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="nf">set_vcc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vccd_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssd_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vccd1_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssd1_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vccd2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssd2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vccd_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssd_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vccd1_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssd1_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vccd2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">vssd2_tb</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">drive_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bit</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Drive csb signal bin E8 mprj[3]&quot;&quot;&quot;</span>
@@ -201,14 +190,14 @@
 
 <div class="viewcode-block" id="Caravel_env.disable_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.disable_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">disable_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal high to disable housekeeping spi transmission bin E8 mprj[3]&quot;&quot;&quot;</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] disable housekeeping spi transmission&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] disable housekeeping spi transmission&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_csb</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># await self.release_csb()</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Caravel_env.release_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.release_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">release_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal high impedance&quot;&quot;&quot;</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] release housekeeping spi transmission&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] release housekeeping spi transmission&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -216,7 +205,7 @@
 
 <div class="viewcode-block" id="Caravel_env.enable_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.enable_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">enable_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal low to enable housekeeping spi transmission bin E8 mprj[3]&quot;&quot;&quot;</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] enable housekeeping spi transmission&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] enable housekeeping spi transmission&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_csb</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Caravel_env.monitor_gpio"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.monitor_gpio">[docs]</a>    <span class="k">def</span> <span class="nf">monitor_gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_bit</span><span class="p">,</span> <span class="n">l_bit</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">binary</span><span class="o">.</span><span class="n">BinaryValue</span><span class="p">:</span>
@@ -244,7 +233,7 @@
             <span class="n">h_bit</span> <span class="o">=</span> <span class="n">h_bit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">l_bit</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">l_bit</span> <span class="o">=</span> <span class="n">h_bit</span>
-        <span class="n">mprj_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="n">h_bit</span> <span class="p">:</span> <span class="n">size</span> <span class="o">-</span> <span class="n">l_bit</span><span class="p">]</span>
+        <span class="n">mprj_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="n">h_bit</span><span class="p">:</span> <span class="n">size</span> <span class="o">-</span> <span class="n">l_bit</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">mprj_out</span><span class="o">.</span><span class="n">is_resolvable</span><span class="p">:</span>
             <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot; [caravel] Monitor : mprj[</span><span class="si">{</span><span class="n">h_bit</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">l_bit</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="nb">hex</span><span class="p">(</span><span class="n">mprj_out</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -279,17 +268,17 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;change the configration of the gpios by overwrite their defaults value then reset</span>
 <span class="sd">        need to take at least 1 cycle for reset &quot;&quot;&quot;</span>
 
-    <span class="c1">### dont use back door accessing</span>
+    <span class="c1"># dont use back door accessing</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">configure_gpio_defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gpios_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">gpio_defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span><span class="o">.</span><span class="n">gpio_defaults</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] start cofigure gpio gpios &quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[caravel] start cofigure gpio gpios &quot;</span><span class="p">)</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">gpio_defaults</span><span class="o">.</span><span class="n">n_bits</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># number of bins in gpio_defaults</span>
         <span class="c1"># list example [[(gpios),value],[(gpios),value],[(gpios),value]]</span>
         <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">gpios_values</span><span class="p">:</span>
             <span class="n">gpio_value</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">gpio</span> <span class="ow">in</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
                 <span class="n">gpio_defaults</span><span class="p">[</span>
-                    <span class="n">size</span> <span class="o">-</span> <span class="p">(</span><span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span> <span class="o">+</span> <span class="mi">12</span><span class="p">)</span> <span class="p">:</span> <span class="n">size</span> <span class="o">-</span> <span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span>
+                    <span class="n">size</span> <span class="o">-</span> <span class="p">(</span><span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span> <span class="o">+</span> <span class="mi">12</span><span class="p">):</span> <span class="n">size</span> <span class="o">-</span> <span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span>
                 <span class="p">]</span> <span class="o">=</span> <span class="n">gpio_value</span><span class="o">.</span><span class="n">value</span>
                 <span class="c1"># cocotb.log.info(f&#39; [caravel] gpio_defaults[{size - (gpio*13 + 12)}:{size -gpio*13}] = {gpio_value.value} &#39;)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span><span class="o">.</span><span class="n">gpio_defaults</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">gpio_defaults</span>
@@ -299,17 +288,15 @@
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span><span class="o">.</span><span class="n">gpio_resetn_1_shifted</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span><span class="o">.</span><span class="n">gpio_resetn_2_shifted</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot; [caravel] finish configuring gpios, the curret gpios value: &quot;</span>
-        <span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish configuring gpios, the curret gpios value: &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_gpios_ctrl_val</span><span class="p">()</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;change the configration of the gpios by overwrite the register value </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;change the configration of the gpios by overwrite the register value</span>
 <span class="sd">        in control registers and housekeeping regs, don&#39;t consume simulation cycles&quot;&quot;&quot;</span>
 
-    <span class="c1">### dont use back door accessing</span>
+    <span class="c1"># dont use back door accessing</span>
     <span class="k">def</span> <span class="nf">configure_gpios_regs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gpios_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] start cofigure gpio gpios &quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] start cofigure gpio gpios &quot;</span><span class="p">)</span>
         <span class="n">control_modules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">control_blocks_paths</span><span class="p">()</span>
         <span class="c1"># list example [[(gpios),value],[(gpios),value],[(gpios),value]]</span>
         <span class="k">for</span> <span class="n">array</span> <span class="ow">in</span> <span class="n">gpios_values</span><span class="p">:</span>
@@ -321,9 +308,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span><span class="o">.</span><span class="n">housekeeping</span><span class="o">.</span><span class="n">gpio_configure</span><span class="p">[</span>
                     <span class="n">gpio</span>
                 <span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">gpio_value</span><span class="o">.</span><span class="n">value</span>  <span class="c1"># for house keeping regs</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot; [caravel] finish configuring gpios, the curret gpios value: &quot;</span>
-        <span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish configuring gpios, the curret gpios value: &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_gpios_ctrl_val</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_gpios_HW_val</span><span class="p">()</span>
 
@@ -331,8 +316,8 @@
         <span class="n">gpio_defaults</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span><span class="o">.</span><span class="n">gpio_defaults</span><span class="o">.</span><span class="n">value</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">gpio_defaults</span><span class="o">.</span><span class="n">n_bits</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># number of bins in gpio_defaults</span>
         <span class="n">gpios</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">gpio</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS&quot;</span><span class="p">]):</span>
-            <span class="n">gpio_value</span> <span class="o">=</span> <span class="n">gpio_defaults</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="p">(</span><span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span> <span class="o">+</span> <span class="mi">12</span><span class="p">)</span> <span class="p">:</span> <span class="n">size</span> <span class="o">-</span> <span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">gpio</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS&quot;</span><span class="p">]):</span>
+            <span class="n">gpio_value</span> <span class="o">=</span> <span class="n">gpio_defaults</span><span class="p">[</span><span class="n">size</span> <span class="o">-</span> <span class="p">(</span><span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span> <span class="o">+</span> <span class="mi">12</span><span class="p">):</span> <span class="n">size</span> <span class="o">-</span> <span class="n">gpio</span> <span class="o">*</span> <span class="mi">13</span><span class="p">]</span>
             <span class="n">gpio_enum</span> <span class="o">=</span> <span class="n">GPIO_MODE</span><span class="p">(</span><span class="n">gpio_value</span><span class="o">.</span><span class="n">integer</span><span class="p">)</span>
             <span class="n">gpios</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">gpio</span><span class="p">,</span> <span class="n">gpio_enum</span><span class="p">))</span>
         <span class="n">group_bins</span> <span class="o">=</span> <span class="n">groupby</span><span class="p">(</span><span class="n">gpios</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
@@ -363,13 +348,13 @@
     <span class="k">def</span> <span class="nf">_check_gpio_ctrl_eq_HW</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_gpios_ctrl_val</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_gpios_HW_val</span><span class="p">(</span>
             <span class="mi">1</span>
-        <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;there is an issue while configuration the control block register value isn&#39;t the same as the house keeping gpio register&quot;</span>
+        <span class="p">),</span> <span class="s2">&quot;there is an issue while configuration the control block register value isn&#39;t the same as the house keeping gpio register&quot;</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;print the values return in the GPIO of housekeeping block mode in GPIO Mode format&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">print_gpios_HW_val</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">print</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="n">gpios</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS&quot;</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS&quot;</span><span class="p">]):</span>
             <span class="n">gpios</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                 <span class="p">(</span>
                     <span class="n">pin</span><span class="p">,</span>
@@ -397,10 +382,10 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
             <span class="n">control_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">car</span><span class="o">.</span><span class="n">_id</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;gpio_control_in_1a[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
         <span class="c1"># add gpio_control_in_1 (GPIO 8 to 18)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS_1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS_1&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">9</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">control_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">car</span><span class="o">.</span><span class="n">_id</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;gpio_control_in_1[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
         <span class="c1"># add gpio_control_in_2 (GPIO 19 to 34)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS_2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="p">[</span><span class="s2">&quot;MPRJ_IO_PADS_2&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="n">control_modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">car</span><span class="o">.</span><span class="n">_id</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;gpio_control_in_2[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
         <span class="c1"># Last three GPIOs (spi_sdo, flash_io2, and flash_io3) gpio_control_bidir_2</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
@@ -473,7 +458,7 @@
         <span class="n">path</span><span class="o">.</span><span class="n">gpio_slow_sel</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">bits</span><span class="p">[</span><span class="n">MASK_GPIO_CTRL</span><span class="o">.</span><span class="n">MASK_GPIO_CTRL_SLOW</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
         <span class="n">path</span><span class="o">.</span><span class="n">gpio_vtrip_sel</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">bits</span><span class="p">[</span><span class="n">MASK_GPIO_CTRL</span><span class="o">.</span><span class="n">MASK_GPIO_CTRL_TRIP</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
         <span class="n">gpio_dm</span> <span class="o">=</span> <span class="n">bits</span><span class="p">[</span>
-            <span class="n">MASK_GPIO_CTRL</span><span class="o">.</span><span class="n">MASK_GPIO_CTRL_DGTL_MODE</span><span class="o">.</span><span class="n">value</span> <span class="p">:</span> <span class="n">MASK_GPIO_CTRL</span><span class="o">.</span><span class="n">MASK_GPIO_CTRL_DGTL_MODE</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">MASK_GPIO_CTRL</span><span class="o">.</span><span class="n">MASK_GPIO_CTRL_DGTL_MODE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">MASK_GPIO_CTRL</span><span class="o">.</span><span class="n">MASK_GPIO_CTRL_DGTL_MODE</span><span class="o">.</span><span class="n">value</span>
             <span class="o">+</span> <span class="mi">3</span>
         <span class="p">]</span>
         <span class="n">gpio_dm</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
@@ -535,7 +520,6 @@
 <span class="sd">        :param bits: gpios to drive</span>
 <span class="sd">        :type bits: int or tuple(int, int)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">data_bits</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">is_list</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">is_list</span><span class="p">:</span>
             <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
@@ -573,7 +557,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] wait </span><span class="si">{</span><span class="n">num_cycles</span><span class="si">}</span><span class="s2"> cycles&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wait_then_undrive</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">))</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] finish drive_gpio_with_in_cycles &quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish drive_gpio_with_in_cycles &quot;</span><span class="p">)</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;drive the value of mprj bits with specific data from management area then after certain number of cycle drive z to free the signal&quot;&quot;&quot;</span>
 
@@ -581,13 +565,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">drive_mgmt_gpio</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] wait </span><span class="si">{</span><span class="n">num_cycles</span><span class="si">}</span><span class="s2"> cycles&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wait_then_undrive</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">))</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] finish drive_gpio_with_in_cycles &quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish drive_gpio_with_in_cycles &quot;</span><span class="p">)</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">wait_then_undrive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bits</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">):</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">)</span>
         <span class="n">n_bits</span> <span class="o">=</span> <span class="n">bits</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">bits</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="p">(</span><span class="n">n_bits</span><span class="p">)</span> <span class="o">*</span> <span class="s2">&quot;z&quot;</span><span class="p">)</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] finish wait_then_drive &quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish wait_then_drive &quot;</span><span class="p">)</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">hk_write_byte</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span>
@@ -630,7 +614,7 @@
         <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">read_data</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; read byte using housekeeping spi </span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; read byte using housekeeping spi</span>
 <span class="sd">        when writing to SCK we can&#39;t use mprj[4] as there is a limitation in cocotb for accessing pack array #2587</span>
 <span class="sd">        so use back door access to write the clock then read the output from the SDO mprj[1] value&quot;&quot;&quot;</span>
 

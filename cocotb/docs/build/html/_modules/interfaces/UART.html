@@ -74,8 +74,7 @@
              
   <h1>Source code for interfaces.UART</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">cocotb</span>
-<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">FallingEdge</span><span class="p">,</span> <span class="n">RisingEdge</span><span class="p">,</span> <span class="n">ClockCycles</span><span class="p">,</span> <span class="n">Timer</span><span class="p">,</span> <span class="n">Edge</span>
-<span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">Macros</span>
+<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">Timer</span>
 <span class="kn">from</span> <span class="nn">interfaces.caravel</span> <span class="kn">import</span> <span class="n">Caravel_env</span>
 
 
@@ -135,7 +134,7 @@
         <span class="c1"># send start bit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">extra_time</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">Macros</span><span class="p">[</span><span class="s2">&quot;ARM&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">ARM</span><span class="p">:</span>
             <span class="n">extra_time</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="o">-</span><span class="mi">479</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
             <span class="p">)</span>  <span class="c1"># there is state 1 which takes 11975 ns and this time isn&#39;t in ARM only</span>

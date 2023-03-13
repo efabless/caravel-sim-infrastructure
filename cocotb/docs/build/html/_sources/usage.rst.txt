@@ -77,7 +77,7 @@ Configure the repo
 
 
 Run test/tests
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^
 
 .. include:: ../../README.md
    :parser: markdown
@@ -106,7 +106,7 @@ Creating a Testlist
 
 
 Results
-*********************
+**********
 
 .. include:: ../../README.md
    :parser: markdown

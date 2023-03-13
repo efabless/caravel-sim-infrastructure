@@ -170,10 +170,10 @@ Run caravel cocotb tests
 Arguments:
   -h, --help            show this help message and exit
   -test TEST [TEST ...], -t TEST [TEST ...]
-                        name of test if no --sim provided RTL will be run
-                        <takes list as input>
-  -sim SIM [SIM ...]    Simulation type to be run RTL,GL&GL_SDF provided only
-                        when run -test <takes list as input>
+                        name of test or tests.if no --sim provided RTL will be
+                        run <takes list as input>
+  -sim SIM [SIM ...]    Simulation typerun RTL,GL & GL_SDF provided only when
+                        run -test<takes list as input>
   -testlist TESTLIST [TESTLIST ...], -tl TESTLIST [TESTLIST ...]
                         path of testlist to be run
   -tag TAG              provide tag of the run default would be regression
@@ -191,14 +191,17 @@ Arguments:
                         mails to send results to when results finish
   -seed SEED            run with specific seed
   -no_wave              disable dumping waves
+  -sdf_setup            targeting setup violations by taking the sdf mamximum
+                        values
   -clk CLK              define the clock period in ns default defined at
                         design_info.yaml
-  -lint                 generate lint log -v must be used
+  -lint                 generate lint log vcs must be used
   -macros MACROS [MACROS ...]
                         Add addtional verilog macros for the design
   -sim_path SIM_PATH    directory where simulation result directory "sim"
                         would be created if None it would be created under
-                        cocotb folder                    
+                        cocotb folder
+  -quiet                Suppress output to the console                  
 ```
 <!-- end run a test include -->
 
@@ -261,7 +264,8 @@ New directory named ``sim`` would be created under ``<repo root>/cocotb/`` or to
 │ │   ├── <sim type>-<test name> # test result directory contain all logs and wave related to the test
 │ │   │   └── <test name>.hex  # hex file used in running this test
 │ │   │   └── <test name>.log  # log file generated from cocotb 
-│ │   │   └── full.log         # log file has all the command and warning happened if C compilation error happened this file will contain the error msg 
+│ │   │   └── compilation.log  # log file has all the commands used to run iverilog and any compilation error or warning
+│ │   │   └── firmware.log     # log file has all the commands used to compile the C code and any compilation error or warning
 │ │   │   └── <test name>.vcd  # waves can be opened by gtkwave
 │ │   │   └── rerun.py         # script to rerun the test
 │ │   └── command.log    # command use for this run 
