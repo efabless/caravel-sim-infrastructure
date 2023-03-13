@@ -6,9 +6,6 @@ import argparse
 
 parser = argparse.ArgumentParser(description="Run cocotb tests")
 parser.add_argument(
-    "-regression", "-r", help="name of regression can found in tests.json"
-)
-parser.add_argument(
     "-test",
     "-t",
     nargs="+",
@@ -36,12 +33,6 @@ parser.add_argument(
     action="store_true",
     help="use vcs as compiler if not used iverilog would be used",
 )
-parser.add_argument("-cov", action="store_true", help="enable code coverage")
-parser.add_argument(
-    "-checkers_en",
-    action="store_true",
-    help="enable whitebox models checkers and coverage no need to use -cov ",
-)
 parser.add_argument(
     "-corner",
     "-c",
@@ -67,10 +58,7 @@ parser.add_argument(
     "-clk", help="define the clock period in ns default defined at design_info.yaml"
 )
 parser.add_argument(
-    "-lint", action="store_true", help="generate lint log -v must be used"
-)
-parser.add_argument(
-    "-arm", action="store_true", help="generate lint log -v must be used"
+    "-lint", action="store_true", help="generate lint log vcs must be used"
 )
 parser.add_argument(
     "-macros", nargs="+", help="Add addtional verilog macros for the design "
@@ -89,7 +77,7 @@ args = parser.parse_args()
 # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en  ,args.zip_passed ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)
 # print(args)
 print(
-    f"regression:{args.regression}, test:{args.test}, testlist:{args.testlist} sim: {args.sim}"
+    f"test:{args.test}, testlist:{args.testlist} sim: {args.sim}"
 )
 cocotb_args = CocotbArgs()
 cocotb_args.argparse_to_CocotbArgs(args)

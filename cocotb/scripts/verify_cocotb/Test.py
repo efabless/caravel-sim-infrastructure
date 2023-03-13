@@ -303,12 +303,12 @@ class Test:
     def set_linker_script(self):
         linker_script_orginal = (
             f"{self.paths.FIRMWARE_PATH}/sections.lds"
-            if not self.args.arm
+            if self.args.cpu_type == "VexRISC"
             else f"{self.paths.FIRMWARE_PATH}/link.ld"
         )
         self.linker_script_file = f"{self.test_dir}/linker_script.lds"
         shutil.copyfile(f"{linker_script_orginal}", self.linker_script_file)
-        if self.args.arm:
+        if self.args.cpu_type == "ARM":
             return
         if "mem_dff2_" in self.name:
             change_str(

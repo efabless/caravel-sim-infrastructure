@@ -5,6 +5,7 @@ from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
+import ctypes
 
 
 def check_valid_mail_addr(address):
@@ -23,6 +24,7 @@ class RunFLow:
         self.check_valid_args()
         design_info = self.get_design_info()
         self.set_paths(design_info)
+        self.set_cpu_type()
         self.set_tag()
         self.set_args(design_info)
         self.set_config_script(design_info)
@@ -31,10 +33,10 @@ class RunFLow:
     def check_valid_args(self):
         if all(
             v is None
-            for v in [self.args.regression, self.args.test, self.args.testlist]
+            for v in [self.args.test, self.args.testlist]
         ):
             raise EnvironmentError(
-                "Should provide at least one of the following options regression, test or testlist for more info use --help"
+                "Should provide at least one of the following options test or testlist for more info use --help"
             )
         if self.args.sim is not None:
             self.args.sim = (
@@ -50,12 +52,7 @@ class RunFLow:
 
     def set_tag(self):
         if self.args.tag is None:
-            if self.args.regression is not None:
-                self.args.tag = f'{self.args.regression}_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
-            else:
-                self.args.tag = (
-                    f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
-                )
+            self.args.tag = (f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}')
         Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(
             parents=True, exist_ok=True
         )
@@ -88,7 +85,7 @@ class RunFLow:
         CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
         VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
         CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
-        if self.args.arm:
+        if self.args.cpu_type == "ARM":
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
@@ -112,6 +109,17 @@ class RunFLow:
             SIM_PATH,
         )
 
+    def set_cpu_type(self):
+        def_h_file = f'{self.paths.FIRMWARE_PATH}/defs.h'
+        pattern = r'^#define CPU_TYPE\s+(\w+)$'
+        with open(def_h_file, "r") as f:
+            for line in f:
+                match = re.match(pattern, line)
+                if match:
+                    self.args.cpu_type = match.group(1)
+                    return
+        raise EnvironmentError("Can't find cpu type please add #define CPU_TYPE to defs.h in managment repo")
+    
     def set_args(self, design_info):
         if self.args.clk is None:
             self.args.clk = design_info["clk"]
@@ -208,7 +216,6 @@ class CocotbArgs:
         cocotb_root=".",
         quiet=False,
     ) -> None:
-        self.regression = None
         self.test = test
         self.sim = sim
         self.testlist = testlist
@@ -227,13 +234,12 @@ class CocotbArgs:
         self.cocotb_path = cocotb_root
         self.quiet = quiet
         # dev only
-        self.cov = None
-        self.checkers_en = None
         self.lint = None
         self.arm = None
+        # related to repos
+        self.cpu_type = None  # would be filled by other class 
 
     def argparse_to_CocotbArgs(self, args):
-        self.regression = args.regression
         self.test = args.test
         self.sim = args.sim
         self.testlist = args.testlist
@@ -249,9 +255,6 @@ class CocotbArgs:
         self.clk = args.clk
         self.macros = args.macros
         self.sim_path = args.sim_path
-        self.cov = args.cov
-        self.checkers_en = args.checkers_en
         self.lint = args.lint
-        self.arm = args.arm
         self.cocotb_path = os.getcwd()
         self.quiet = args.quiet

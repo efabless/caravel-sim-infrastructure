@@ -22,10 +22,6 @@ class RunRegression:
         self.total_start_time = datetime.now()
         self.write_command_log()
         self.write_git_log()
-        if args.regression:
-            with open(f"{self.paths.COCOTB_PATH}/tests.json") as f:
-                self.tests_json = json.load(f)
-                self.tests_json = self.tests_json["Tests"]
         self.set_common_macros()
         self.get_tests()
         self.run_regression()
@@ -55,19 +51,14 @@ class RunRegression:
         if self.args.sdf_setup:
             simulation_macros.append("MAX_SDF")
 
-        if self.args.cov:
-            simulation_macros.append("COVERAGE")
-        if self.args.checkers_en:
-            simulation_macros.append("CHECKERS")
-
         if self.args.iverilog:
             simulation_macros.append("IVERILOG")
         elif self.args.vcs:
             simulation_macros.append("VCS")
 
         simulation_macros.append(self.args.pdk)
-        if self.args.arm:
-            simulation_macros.extend(["ARM", "AHB"])
+
+        simulation_macros.extend([f'CPU_TYPE=\\"{self.args.cpu_type}\\"'])
 
         self.args.macros += simulation_macros + paths_macros
 
@@ -75,31 +66,6 @@ class RunRegression:
         self.tests = list()
         self.passed_tests = 0
         self.failed_tests = 0
-        # regression
-        if self.args.regression is not None:
-            sim_types = ("RTL", "GL", "GL_SDF")
-            for test, test_elements in self.tests_json.items():
-                if fnmatch(test, "_*"):  # skip comments
-                    continue
-                if self.args.pdk not in test_elements["PDK"]:
-                    continue  # test is not valid for this pdk
-                for sim_type in sim_types:
-                    if sim_type == "GL_SDF":
-                        if self.args.regression in test_elements[sim_type]:
-                            for corner in self.args.corner:
-                                self.add_new_test(
-                                    test_name=test, sim_type=sim_type, corner=corner
-                                )
-                    else:
-                        if self.args.regression in test_elements[sim_type]:
-                            self.add_new_test(
-                                test_name=test, sim_type=sim_type, corner="-"
-                            )
-            if len(self.tests) == 0:
-                print(
-                    f"fatal:{self.args.regression} is not a valid regression name please input a valid regression \ncheck tests.json for more info"
-                )
-                sys.exit()
         # test
         if self.args.test is not None:
             if isinstance(self.args.test, list):
@@ -196,21 +162,21 @@ class RunRegression:
                 self.test_run_function(test)
         # for index, thread in enumerate(threads):
         #     thread.join()
-
-        if self.args.cov:
-            if self.args.vcs:
-                self.generate_cov()
-            # merge functional coverage
-            merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.cocotb_path}:{self.cocotb_path}  efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && python3 scripts/merge_coverage.py -p {self.paths.SIM_PATH}/{self.args.tag}'"
-            self.full_terminal = open(
-                f"{self.paths.SIM_PATH}/{self.args.tag}/command.log", "a"
-            )
-            self.full_terminal.write(
-                "\n\ndocker command for merge functional coverage:\n% "
-            )
-            self.full_terminal.write(os.path.expandvars(merge_fun_cov_command) + "\n")
-            self.full_terminal.close()
-            os.system(merge_fun_cov_command)
+        # # Coverage
+        # if self.args.cov:
+        #     if self.args.vcs:
+        #         self.generate_cov()
+        #     # merge functional coverage
+        #     merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.cocotb_path}:{self.cocotb_path}  efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && python3 scripts/merge_coverage.py -p {self.paths.SIM_PATH}/{self.args.tag}'"
+        #     self.full_terminal = open(
+        #         f"{self.paths.SIM_PATH}/{self.args.tag}/command.log", "a"
+        #     )
+        #     self.full_terminal.write(
+        #         "\n\ndocker command for merge functional coverage:\n% "
+        #     )
+        #     self.full_terminal.write(os.path.expandvars(merge_fun_cov_command) + "\n")
+        #     self.full_terminal.close()
+        #     os.system(merge_fun_cov_command)
 
     def test_run_function(self, test):
         test.start_of_test()

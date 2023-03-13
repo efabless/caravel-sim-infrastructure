@@ -58,7 +58,7 @@ class RunTest:
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.c_file = f"{test_path}/{self.test.name}.c"
         test_dir = f"{self.paths.VERILOG_PATH}/dv/tests-caravel/mem"  # linker script include // TODO: to fix this in the future from the mgmt repo
-        if self.args.arm:
+        if self.args.cpu_type == "ARM":
             command = self.hex_arm_command_gen()
         else:
             command = self.hex_riscv32_command_gen()
@@ -83,7 +83,7 @@ class RunTest:
         self.firmware_log.write(os.path.expandvars(command_slipt[2]) + "\n\n")
         self.firmware_log.close()
         # don't run with docker with arm
-        cmd = command if self.args.arm else docker_command
+        cmd = command if self.args.cpu_type == "ARM" else docker_command
         hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, self.args.quiet)
         # docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # docker_process.wait()
@@ -189,9 +189,8 @@ class RunTest:
             file_path=f"{self.test.test_dir}/includes.v",
         )
         macros = " +define+" + " +define+".join(self.test.macros)
-        coverage_command = ""
-        if self.args.cov:
-            coverage_command = "-cm line+tgl+cond+fsm+branch+assert"
+        coverage_command = '' 
+        # coverage_command = "-cm line+tgl+cond+fsm+branch+assert" if self.args.cov else '' 
         os.environ["TESTCASE"] = f"{self.test.name}"
         os.environ["MODULE"] = "module_trail"
         if self.args.seed is not None:
