@@ -134,7 +134,7 @@
         <span class="c1"># send start bit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">extra_time</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">ARM</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;CPU_TYPE_ARM&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">_asdict</span><span class="p">():</span>
             <span class="n">extra_time</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="o">-</span><span class="mi">479</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
             <span class="p">)</span>  <span class="c1"># there is state 1 which takes 11975 ns and this time isn&#39;t in ARM only</span>

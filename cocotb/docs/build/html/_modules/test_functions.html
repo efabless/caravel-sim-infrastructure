@@ -144,7 +144,7 @@
     <span class="c1"># elif coverage:</span>
     <span class="c1">#     HK_whiteBox(dut)</span>
     <span class="c1">#     GPIOs_ctrlWB(dut)</span>
-    <span class="k">if</span> <span class="s2">&quot;ARM&quot;</span> <span class="ow">in</span> <span class="n">caravelEnv</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">_asdict</span><span class="p">():</span>
+    <span class="k">if</span> <span class="s2">&quot;CPU_TYPE_ARM&quot;</span> <span class="ow">in</span> <span class="n">caravelEnv</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">_asdict</span><span class="p">():</span>
         <span class="n">caravelEnv</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="p">(</span>
             <span class="mi">34</span>  <span class="c1"># with ARM the last 3 gpios are not configurable</span>
         <span class="p">)</span>

@@ -156,14 +156,14 @@ To a test use run script verify_cocotb:
 
 
 ```bash 
-usage: verify_cocotb.py [-h] [-regression REGRESSION] [-test TEST [TEST ...]]
-                        [-sim SIM [SIM ...]]
+usage: verify_cocotb.py [-h] [-test TEST [TEST ...]] [-sim SIM [SIM ...]]
                         [-testlist TESTLIST [TESTLIST ...]] [-tag TAG]
-                        [-maxerr MAXERR] [-vcs] [-cov] [-checkers_en]
-                        [-corner CORNER [CORNER ...]] [-zip_passed]
-                        [-emailto EMAILTO [EMAILTO ...]] [-seed SEED]
-                        [-no_wave] [-sdf_setup] [-clk CLK] [-lint] [-arm]
-                        [-macros MACROS [MACROS ...]] [-sim_path SIM_PATH]
+                        [-maxerr MAXERR] [-vcs] [-corner CORNER [CORNER ...]]
+                        [-zip_passed] [-emailto EMAILTO [EMAILTO ...]]
+                        [-seed SEED] [-no_wave] [-sdf_setup] [-clk CLK]
+                        [-lint] [-macros MACROS [MACROS ...]]
+                        [-sim_path SIM_PATH] [-quiet]
+
 
 Run caravel cocotb tests
 
