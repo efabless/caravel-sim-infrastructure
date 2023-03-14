@@ -5,7 +5,6 @@ from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
-import ctypes
 
 
 def check_valid_mail_addr(address):
@@ -85,7 +84,7 @@ class RunFLow:
         CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
         VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
         CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
-        if self.args.cpu_type == "ARM":
+        if os.path.exists(f"{design_info['MCW_ROOT']}/verilog/dv/fw"):
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
@@ -235,7 +234,6 @@ class CocotbArgs:
         self.quiet = quiet
         # dev only
         self.lint = None
-        self.arm = None
         # related to repos
         self.cpu_type = None  # would be filled by other class 
 

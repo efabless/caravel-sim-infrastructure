@@ -85,15 +85,15 @@ end
     wire flash_clk_tb;
     wire flash_io0_tb;
     wire flash_io1_tb;
-`ifdef ARM 
+`ifdef CPU_TYPE_ARM
 swift_caravel uut (
-`else //ARM
+`else //CPU_TYPE_ARM
 `ifdef CARAVAN
 caravan uut (
 `else // caravan
 caravel uut (
 `endif // caravan
-`endif // ARM
+`endif // CPU_TYPE_ARM
 		`ifdef sky130
 		.vddio	  (vddio_tb),
 		.vddio_2  (vddio_2_tb),		
@@ -127,7 +127,7 @@ caravel uut (
 		.resetb	  (resetb_tb)
 	);
 	
-	`ifdef ARM 
+	`ifdef CPU_TYPE_ARM 
 	sst26wf080b flash(
 		.SCK (flash_clk_tb),
 		.SIO ({mprj_io_tb[37], mprj_io_tb[36], flash_io1_tb, flash_io0_tb} ),
@@ -156,7 +156,7 @@ caravel uut (
 		.io2(),			// not used
 		.io3()			// not used
 	);
-	`endif // ARM
+	`endif // CPU_TYPE_ARM
 	mac macros();
 
 
@@ -414,7 +414,7 @@ reg CARAVAN = `ifdef CARAVAN 1 `else 0 `endif;
 
 reg CHECKERS = `ifdef CHECKERS 1 `else 0 `endif;
 reg COVERAGE = `ifdef COVERAGE 1 `else 0 `endif;
-reg ARM      = `ifdef ARM      1 `else 0 `endif;
+reg ARM      = `ifdef CPU_TYPE_ARM      1 `else 0 `endif;
 
 reg [31:0] LA_SIZE  = `ifdef LA_SIZE `LA_SIZE `else 0 `endif;
 reg [31:0]USER_SPACE_ADDR  = `USER_SPACE_ADDR ;

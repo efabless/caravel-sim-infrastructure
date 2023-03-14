@@ -64,6 +64,8 @@ class Caravel_env:
             if i in [3, 4]:  # CSB and SCK
                 continue
             common.drive_hdl(self.dut._id(f"bin{i}_en", False), (0, 0), 0)
+        await ClockCycles(self.clk, 1)
+
 
     async def power_up(self):
         """Setup the vdd and vcc power bins"""

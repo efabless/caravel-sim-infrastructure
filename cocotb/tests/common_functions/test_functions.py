@@ -69,7 +69,7 @@ async def test_configure(
     # elif coverage:
     #     HK_whiteBox(dut)
     #     GPIOs_ctrlWB(dut)
-    if "ARM" in caravelEnv.design_macros._asdict():
+    if "CPU_TYPE_ARM" in caravelEnv.design_macros._asdict():
         caravelEnv.active_gpios_num = (
             34  # with ARM the last 3 gpios are not configurable
         )

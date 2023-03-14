@@ -57,9 +57,11 @@ class RunRegression:
             simulation_macros.append("VCS")
 
         simulation_macros.append(self.args.pdk)
-
-        simulation_macros.extend([f'CPU_TYPE=\\"{self.args.cpu_type}\\"'])
-
+        
+        simulation_macros.extend([f'CPU_TYPE_{self.args.cpu_type}'])
+        if self.args.cpu_type == "ARM":
+            simulation_macros.append("AHB")
+            
         self.args.macros += simulation_macros + paths_macros
 
     def get_tests(self):
