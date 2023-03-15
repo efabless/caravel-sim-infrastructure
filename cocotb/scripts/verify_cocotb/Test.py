@@ -112,7 +112,7 @@ class Test:
                         user_project += line.replace(
                             "$(USER_PROJECT_VERILOG)",
                             f"{self.paths.USER_PROJECT_ROOT}/verilog",
-                        )
+                        ) +" "
         return user_project.replace("\n", "")
 
     def start_of_test(self):

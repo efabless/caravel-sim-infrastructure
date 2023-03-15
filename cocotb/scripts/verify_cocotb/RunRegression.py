@@ -75,7 +75,7 @@ class RunRegression:
                     if isinstance(self.args.sim, list):
                         for sim_type in self.args.sim:
                             if sim_type == "GL_SDF":
-                                for corner in self.corners:
+                                for corner in self.args.corner:
                                     self.add_new_test(
                                         test_name=test, sim_type=sim_type, corner=corner
                                     )
@@ -87,7 +87,7 @@ class RunRegression:
                                 )
                     else:
                         if self.args.sim == "GL_SDF":
-                            for corner in self.corners:
+                            for corner in self.args.corner:
                                 self.add_new_test(
                                     test_name=test, sim_type=sim_type, corner=corner
                                 )

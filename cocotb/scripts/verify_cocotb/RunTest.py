@@ -178,6 +178,12 @@ class RunTest:
                 f"{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v",
                 f"{self.test.test_dir}/includes.v",
             )
+            if self.test.sim == "GL_SDF":
+                dirs += f'+incdir+\\"{self.paths.MCW_ROOT}/verilog/\\" '
+                shutil.copyfile(
+                    f"{self.paths.COCOTB_PATH}/sdf_includes.v",
+                    f"{self.test.test_dir}/sdf_includes.v",
+                )
         change_str(
             str='"caravel/verilog',
             new_str=f'"{self.paths.CARAVEL_PATH}',
