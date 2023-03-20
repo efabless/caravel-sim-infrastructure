@@ -45,6 +45,7 @@ class Test:
             f'SIM=\\"{self.sim}\\"',
             f'TESTNAME=\\"{self.name}\\"',
             f'FTESTNAME=\\"{self.full_name}\\"',
+            f'SIM_DIR=\\"{self.paths.SIM_PATH}/{self.args.tag}\\"'
         ]
         if self.sim == "GL":
             testmacros.append("GL")

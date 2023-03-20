@@ -73,7 +73,7 @@ end
 
     wire gpio_tb;		// Used for external LDO control
     wire [38-1:0] mprj_io_tb;
-    reg clock_tb;    	// CMOS core clock input; not a crystal
+    wire clock_tb;    	// CMOS core clock input; not a crystal
     wire resetb_tb;	// Reset input (sense inverted)
 
     // Note that only two flash data pins are dedicated to the

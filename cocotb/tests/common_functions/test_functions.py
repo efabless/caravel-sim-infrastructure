@@ -21,9 +21,7 @@ from cocotb_coverage.coverage import coverage_db
 
 def read_config_file():
     cocotb.plusargs["TAG"]
-    config_file = f"{cocotb.plusargs['COCOTB_PATH']}/sim/{cocotb.plusargs['TAG']}/configs.yaml".replace(
-        '"', ""
-    )
+    config_file = f"{cocotb.plusargs['SIM_DIR']}/configs.yaml".replace('"', "")
 
     with open(config_file) as file:
         # The FullLoader parameter handles the conversion from YAML

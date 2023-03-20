@@ -63,14 +63,14 @@ class RunTest:
         else:
             command = self.hex_riscv32_command_gen()
 
-        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} "
+        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
         docker_dir = (
             docker_dir
             if not self.args.user_test
             else docker_dir
             + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
         )
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {docker_dir}   efabless/dv:latest sh -c 'cd {test_dir} && {command} '"
+        docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {docker_dir}   efabless/dv:latest sh -ec 'cd {test_dir} && {command} '"
         command_slipt = command.split("&&")
         self.firmware_log = open(self.test.hex_log, "w")
         self.firmware_log.write("docker for hex command:\n% ")
@@ -145,7 +145,7 @@ class RunTest:
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (
-            f"iverilog -Ttyp {macros} {includes}  -o {self.test.test_dir}/sim.vvp"
+            f"iverilog -g2012 -Ttyp {macros} {includes}  -o {self.test.test_dir}/sim.vvp"
             f" {user_project}  {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
             f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         )
@@ -154,7 +154,7 @@ class RunTest:
             docker_dir += (
                 f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
             )
-        docker_command = f"docker run -u $(id -u $USER):$(id -g $USER) -it {env_vars} {docker_dir} efabless/dv:cocotb sh -c 'cd {self.test.test_dir} && {iverilog_command}'"
+        docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {env_vars} {docker_dir} efabless/dv:cocotb sh -ec 'cd {self.test.test_dir} && {iverilog_command}'"
         self.full_terminal = open(self.test.compilation_log, "w")
         self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
         self.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
@@ -222,20 +222,26 @@ class RunTest:
 
 def run_command_write_to_file(cmd, file, quiet):
     """run command and write output to file return 0 if no error"""
-    process = subprocess.Popen(
-        cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-    )
-    with open(file, "a") as f:
-        while True:
-            out = process.stdout.readline().decode("utf-8")
-            ansi_escape = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
-            stdout = ansi_escape.sub("", out)
-            if process.poll() is not None:
-                break
-            if out:
-                if not quiet:
-                    print(out)
-                f.write(stdout)
+    try:
+        process = subprocess.Popen(
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        with open(file, "a") as f:
+            while True:
+                out = process.stdout.readline().decode("utf-8")
+                ansi_escape = re.compile(r"\x1B[@-_][0-?]*[ -/]*[@-~]")
+                stdout = ansi_escape.sub("", out)
+                if process.poll() is not None:
+                    break
+                if out:
+                    if not quiet:
+                        print(out)
+                    f.write(stdout)
+    except Exception as e:
+        print(f"Docker process stopped by user {e}")
+        process.stdin.write(b'\x03') # Send the Ctrl+C signal to the Docker process
+        process.terminate()
+
     return process.returncode
 
 
