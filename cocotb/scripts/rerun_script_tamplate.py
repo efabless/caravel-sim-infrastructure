@@ -12,7 +12,7 @@ os.environ["MCW_ROOT"] = "replace by mgmt Root"
 os.chdir("replace by cocotb path")
 
 command = "replace by test command"
-if args.extend is None:
+if args.extend is not None:
     command += f" {args.extend}"
 os.system(command)
 

@@ -249,10 +249,16 @@ class Test:
     def set_rerun_script(self):
         to_remove = ["-no_wave"]
         remove_argument(to_remove, "-t")
+        remove_argument(to_remove, "-tl")
         remove_argument(to_remove, "-r")
         remove_argument(to_remove, "-tag")
+        remove_argument(to_remove, "-seed")
+        remove_argument(to_remove, "-sim")
+        remove_argument(to_remove, "-corner")
         command = " ".join([arg for arg in sys.argv if arg not in to_remove])
-        command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun -seed {self.get_seed()}  -sim {self.sim} -corner {self.corner} "
+        command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun   -sim {self.sim} -corner {self.corner} "
+        if self.get_seed().isdigit():
+            command += f" -seed {self.get_seed()} "
         shutil.copyfile(
             f"{self.paths.COCOTB_PATH}/scripts/rerun_script_tamplate.py",
             f"{self.test_dir}/rerun.py",
@@ -269,12 +275,12 @@ class Test:
         )
         change_str(
             str="replace by mgmt Root",
-            new_str=f"{os.getenv('MCW_ROOT')}",
+            new_str=f"{self.paths.MCW_ROOT}",
             file_path=f"{self.test_dir}/rerun.py",
         )
         change_str(
             str="replace by caravel Root",
-            new_str=f"{os.getenv('CARAVEL_ROOT')}",
+            new_str=f"{self.paths.CARAVEL_ROOT}",
             file_path=f"{self.test_dir}/rerun.py",
         )
         change_str(
