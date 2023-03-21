@@ -84,7 +84,7 @@ class RunTest:
         self.firmware_log.close()
         # don't run with docker with arm
         cmd = command if self.args.cpu_type == "ARM" else docker_command
-        hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, self.args.quiet)
+        hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, quiet=False if self.args.verbosity == "debug" else True)
         # docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # docker_process.wait()
         # stdout, _ = docker_process.communicate()
@@ -162,7 +162,7 @@ class RunTest:
         run_command_write_to_file(
             docker_command,
             self.test.compilation_log,
-            self.args.quiet
+            quiet=True if self.args.verbosity == "quiet" else False
         )
 
     # vcs function
@@ -204,13 +204,13 @@ class RunTest:
         user_project = self.test.set_user_project()
         defines = GetDefines(self.test.includes_file)
         vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
-        run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.args.quiet)
+        run_command_write_to_file(vlogan_cmd, self.test.compilation_log, quiet=False if self.args.verbosity == "debug" else True)
         lint = "+lint=all" if self.args.lint else ""
         vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         run_command_write_to_file(
             vcs_cmd,
             self.test.compilation_log,
-            self.args.quiet
+            quiet=True if self.args.verbosity == "quiet" else False
         )
 
     def find(self, name, path):
@@ -220,7 +220,7 @@ class RunTest:
         print(f"Test {name} doesn't exist or don't have a C file ")
 
 
-def run_command_write_to_file(cmd, file, quiet):
+def run_command_write_to_file(cmd, file, quiet=True):
     """run command and write output to file return 0 if no error"""
     try:
         process = subprocess.Popen(
@@ -235,7 +235,7 @@ def run_command_write_to_file(cmd, file, quiet):
                     break
                 if out:
                     if not quiet:
-                        print(out)
+                        print(out.replace("\n", "", 1))
                     f.write(stdout)
     except Exception as e:
         print(f"Docker process stopped by user {e}")

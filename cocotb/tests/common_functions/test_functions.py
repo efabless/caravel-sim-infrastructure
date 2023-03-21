@@ -20,7 +20,6 @@ from cocotb_coverage.coverage import coverage_db
 
 
 def read_config_file():
-    cocotb.plusargs["TAG"]
     config_file = f"{cocotb.plusargs['SIM_DIR']}/configs.yaml".replace('"', "")
 
     with open(config_file) as file:
@@ -35,7 +34,7 @@ def read_config_file():
 CLOCK_GLOBAL = 25
 
 
-# async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=read_config_file()['clock'],timeout_precision=0.2,num_error=int(read_config_file()['max_err']))-> caravel.Caravel_env:
+# async def test_configure(dut:cocotb.handle.SimHandle,timeout_cycles=1000000,clk=25,timeout_precision=0.2,num_error=3)-> caravel.Caravel_env:
 async def test_configure(
     dut: cocotb.handle.SimHandle,
     timeout_cycles=1000000,

@@ -5,9 +5,7 @@ from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
-import shutil
 import time
-import gzip
 
 
 def check_valid_mail_addr(address):
@@ -163,6 +161,9 @@ class RunFLow:
                     ]
                 ]  # if mail input aren't a valid mail will ignore it
 
+        if self.args.verbosity is None:
+            self.args.verbosity = "normal"
+
     def configure_user_files(self, user_path):
         file = f"{user_path}/verilog/dv/cocotb/cocotb_includes.py"
         with open(file, "r") as f:
@@ -246,7 +247,7 @@ class CocotbArgs:
         macros=None,
         sim_path=None,
         cocotb_root=".",
-        quiet=False,
+        verbosity="normal",
     ) -> None:
         self.test = test
         self.sim = sim
@@ -264,7 +265,7 @@ class CocotbArgs:
         self.macros = macros
         self.sim_path = sim_path
         self.cocotb_path = cocotb_root
-        self.quiet = quiet
+        self.verbosity = verbosity
         # dev only
         self.lint = None
         # related to repos
@@ -288,4 +289,4 @@ class CocotbArgs:
         self.sim_path = args.sim_path
         self.lint = args.lint
         self.cocotb_path = os.getcwd()
-        self.quiet = args.quiet
+        self.verbosity = args.verbosity

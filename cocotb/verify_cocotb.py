@@ -68,9 +68,8 @@ parser.add_argument(
     help='directory where simulation result directory "sim" would be created if None it would be created under cocotb folder',
 )
 parser.add_argument(
-    "-quiet",
-    action="store_true",
-    help='Suppress output to the console',
+    "-verbosity",
+    help='verbosity of the console output it can have one of 3 value debug, normal or quiet the default value is normal',
 )
 args = parser.parse_args()
 # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  zip_passed caravan emailto seed no_wave clk lint arm sdf_setup")
