@@ -145,8 +145,8 @@ class RunTest:
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (
-            f"iverilog -Ttyp {macros} {includes}  -o {self.test.test_dir}/sim.vvp"
-            f" {user_project}  {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
+            f"iverilog -Ttyp {macros} {user_project}  {includes}  -o {self.test.test_dir}/sim.vvp"
+            f" {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
             f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         )
         docker_dir = f"-v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} "
