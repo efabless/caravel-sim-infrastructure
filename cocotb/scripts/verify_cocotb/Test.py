@@ -373,7 +373,10 @@ class Test:
                         paths += f'`include "{file_path}"\n'
         # write to include file in the top of the file
         self.includes_file = f"{self.test_dir}/includes.v"
-        includes = open(self.includes_file, 'r').read()
+        if self.args.vcs:
+            includes = open(self.includes_file, 'r').read()
+        else:
+            includes = ""
         includes = paths + includes
         open(self.includes_file, "w").write(includes)
 
