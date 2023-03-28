@@ -201,9 +201,9 @@ class RunTest:
         os.environ["MODULE"] = "module_trail"
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
-        user_project = self.test.set_user_project()
+        self.test.set_user_project()
         defines = GetDefines(self.test.includes_file)
-        vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64  -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {user_project} {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
+        vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64 -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
         run_command_write_to_file(vlogan_cmd, self.test.compilation_log, quiet=False if self.args.verbosity == "debug" else True)
         lint = "+lint=all" if self.args.lint else ""
         vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"

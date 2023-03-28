@@ -371,9 +371,11 @@ class Test:
                     if line.startswith("-v"):
                         file_path = line.split(" ")[1]
                         paths += f'`include "{file_path}"\n'
-        # write to include file
+        # write to include file in the top of the file
         self.includes_file = f"{self.test_dir}/includes.v"
-        open(self.includes_file, "a").write(paths)
+        includes = open(self.includes_file, 'r').read()
+        includes = paths + includes
+        open(self.includes_file, "w").write(includes)
 
 
 def remove_argument(to_remove, patt):
