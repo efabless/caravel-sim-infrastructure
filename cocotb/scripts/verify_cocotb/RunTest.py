@@ -3,6 +3,7 @@ import shutil
 import subprocess
 from scripts.verify_cocotb.read_defines import GetDefines
 import re
+import time
 
 
 class RunTest:
@@ -23,7 +24,7 @@ class RunTest:
         )
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/tests/common_functions/"
+        includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/"
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
             f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}"
@@ -38,7 +39,7 @@ class RunTest:
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/cm0_start.s"
         LINKER_SCRIPT = f"-T {self.test.linker_script_file}"
         CPUFLAGS = "-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
-        includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.COCOTB_PATH}/tests/common_functions/"
+        includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.COCOTB_PATH}/interfaces/common_functions/"
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
             f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}"
@@ -224,7 +225,7 @@ def run_command_write_to_file(cmd, file, quiet=True):
     """run command and write output to file return 0 if no error"""
     try:
         process = subprocess.Popen(
-            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1024
         )
         with open(file, "a") as f:
             while True:
@@ -236,6 +237,7 @@ def run_command_write_to_file(cmd, file, quiet=True):
                 if out:
                     if not quiet:
                         print(out.replace("\n", "", 1))
+                        time.sleep(0.01)
                     f.write(stdout)
     except Exception as e:
         print(f"Docker process stopped by user {e}")

@@ -180,6 +180,23 @@ class Caravel_env:
         cocotb.log.debug(f" [caravel] Monitor mgmt GPIO = {data}")
         return data
 
+    def monitor_discontinuous_gpios(self, arr: list) -> str:
+        """monitor discontinuous GPIOs output value
+
+        :param arr: highest GPIO number of the tuple of (high gpio, low gpio)
+        :type arr: list(ints) or tuple(ints)
+        :return: str
+        Example:
+
+        .. code-block:: python
+
+            monitor_discontinuous_gpios([3,2,5]]) #return the value at 3,1,5 in str, str[0] = gpio[5], str[-1]=gpio[3]
+        """
+        val = ""
+        for i in arr:
+            val += self.monitor_gpio(i).binstr
+        return val
+
     async def wait_mgmt_gpio(self, data: int) -> None:
         """wait for specific management GPIO value
 

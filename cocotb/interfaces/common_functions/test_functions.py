@@ -4,7 +4,7 @@ import interfaces.caravel as caravel
 import logging
 from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
-from tests.common_functions.Timeout import Timeout
+from interfaces.common_functions.Timeout import Timeout
 from cocotb.triggers import ClockCycles
 import yaml
 from cocotb_coverage.coverage import coverage_db
