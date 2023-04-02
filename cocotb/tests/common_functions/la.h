@@ -11,7 +11,7 @@
     <tr><td>LA_REG_0<td>0<td>First LA register probs [31:0]
     <tr><td>LA_REG_1<td>1<td>Second LA register probs [63:32]
     <tr><td>LA_REG_2<td>2<td>Third LA register probs [95:64]
-    <tr><td>LA_REG_3<td>3<td>Fourth LA register probs [95:64]
+    <tr><td>LA_REG_3<td>3<td>Fourth LA register probs [127:96]
 
  */
 #ifdef DOXYGEN_DOCS_ONLY
