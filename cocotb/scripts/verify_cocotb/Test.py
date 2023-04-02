@@ -113,7 +113,7 @@ class Test:
                         user_project += line.replace(
                             "$(USER_PROJECT_VERILOG)",
                             f"{self.paths.USER_PROJECT_ROOT}/verilog",
-                        ) +" "
+                        ) + " "
         return user_project.replace("\n", "")
 
     def start_of_test(self):
@@ -351,6 +351,20 @@ class Test:
 
     # takes command file and write file for includes
     def write_includes_file(self, file):
+        paths = self.convert_list_to_include(file)
+        # write to include file in the top of the file
+        self.includes_file = f"{self.test_dir}/includes.v"
+        if self.args.vcs:
+            includes = open(self.includes_file, 'r').read()
+        else:
+            if self.sim == "RTL":
+                includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel")
+            elif self.sim == "GL":
+                includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel")
+        includes = paths + includes
+        open(self.includes_file, "w").write(includes)
+
+    def convert_list_to_include(self, file):
         paths = ""
         with open(file, "r") as f:
             for line in f:
@@ -371,10 +385,7 @@ class Test:
                     if line.startswith("-v"):
                         file_path = line.split(" ")[1]
                         paths += f'`include "{file_path}"\n'
-        # write to include file
-        self.includes_file = f"{self.test_dir}/includes.v"
-        open(self.includes_file, "a").write(paths)
-
+        return paths
 
 def remove_argument(to_remove, patt):
     test_name = False
