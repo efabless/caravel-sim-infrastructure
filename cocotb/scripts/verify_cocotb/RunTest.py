@@ -129,24 +129,16 @@ class RunTest:
     def runTest_iverilog(self):
         macros = " -D" + " -D".join(self.test.macros)
         env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
-
-        if self.test.sim == "RTL":
-            include_file = f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel"
-        elif self.test.sim == "GL":
-            include_file = f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel"
-
-        elif self.test.sim == "GL_SDF":
+        if self.test.sim == "GL_SDF":
             print(
                 f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc"
             )
             return
-        includes = f"-f {include_file} "
-        self.test.write_includes_file(include_file)
-        user_project = self.test.set_user_project()
+        self.test.set_user_project()
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (
-            f"iverilog -Ttyp {macros} {user_project}  {includes}  -o {self.test.test_dir}/sim.vvp"
+            f"iverilog -Ttyp {macros} -f {self.test.includes_list} -o {self.test.test_dir}/sim.vvp"
             f" {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
             f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         )

@@ -363,7 +363,20 @@ class Test:
                 includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel")
         includes = paths + includes
         open(self.includes_file, "w").write(includes)
-        move_defines_to_start(self.includes_file)
+        move_defines_to_start(self.includes_file, 'defines.v"')
+      
+        if self.args.iverilog:
+            # when running with iverilog add includes list also
+            paths = open(file, "r").read()
+            self.includes_list = f"{self.test_dir}/includes"
+            if self.sim == "RTL":
+                includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel", 'r').read()
+            elif self.sim == "GL":
+                includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", 'r').read()
+            includes = paths + includes
+            open(self.includes_list, "w").write(includes)
+            move_defines_to_start(self.includes_list, 'defines.v')
+        
 
     def convert_list_to_include(self, file):
         paths = ""
@@ -401,17 +414,17 @@ def remove_argument(to_remove, patt):
                 to_remove.append(arg)
 
 
-def move_defines_to_start(filename):
+def move_defines_to_start(filename, pattern):
     # Read the contents of the file into a list of lines
-    print(f"file name = {filename}")
+    # print(f"file name = {filename}")
     with open(filename, 'r') as f:
         lines = f.readlines()
 
     # Extract the lines that end with "defines.v"
-    defines_lines = [line for line in lines if line.strip().endswith('defines.v"')]
-    print(defines_lines)
+    defines_lines = [f"{line.strip()}\n" for line in lines if line.strip().endswith(pattern)]
+    # print(f"defines_lines {defines_lines}")
     # Remove the extracted lines from the original list
-    lines = [line for line in lines if line not in defines_lines]
+    lines = [f"{line.strip()}\n" for line in lines if line not in defines_lines]
 
     # Insert the extracted lines at the start of the list
     lines = defines_lines + lines
