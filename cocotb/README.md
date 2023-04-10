@@ -162,46 +162,59 @@ usage: verify_cocotb.py [-h] [-test TEST [TEST ...]] [-sim SIM [SIM ...]]
                         [-zip_passed] [-emailto EMAILTO [EMAILTO ...]]
                         [-seed SEED] [-no_wave] [-sdf_setup] [-clk CLK]
                         [-lint] [-macros MACROS [MACROS ...]]
-                        [-sim_path SIM_PATH] [-quiet]
+                        [-sim_path SIM_PATH] [-verbosity VERBOSITY]
 
 
 Run caravel cocotb tests
 
 Arguments:
   -h, --help            show this help message and exit
+
   -test TEST [TEST ...], -t TEST [TEST ...]
                         name of test or tests.if no --sim provided RTL will be
                         run <takes list as input>
+
   -sim SIM [SIM ...]    Simulation typerun RTL,GL & GL_SDF provided only when
                         run -test<takes list as input>
+                        
   -testlist TESTLIST [TESTLIST ...], -tl TESTLIST [TESTLIST ...]
                         path of testlist to be run
+
   -tag TAG              provide tag of the run default would be regression
                         name and if no regression is provided would be
                         run_<random float>_<timestamp>_
-  -maxerr MAXERR        max number of errors for every test before simulation
-                        breaks default = 3
+
+  -maxerr MAXERR        max number of errors for every test before simulation breaks default = 3
+
   -vcs, -v              use vcs as compiler if not used iverilog would be used
+
   -corner CORNER [CORNER ...], -c CORNER [CORNER ...]
                         Corner type in case of GL_SDF run has to be provided
-  -zip_passed           zip the waves and logs of passed tests. by default if
-                        the run has more than 7 tests pass tests results would
-                        be zipped automatically
+
+  -zip_passed           zip the waves and logs of passed tests. by default if the run 
+                        has more than 7 tests pass tests results would be zipped automatically
+
   -emailto EMAILTO [EMAILTO ...], -mail EMAILTO [EMAILTO ...]
                         mails to send results to when results finish
+
   -seed SEED            run with specific seed
+
   -no_wave              disable dumping waves
-  -sdf_setup            targeting setup violations by taking the sdf mamximum
-                        values
-  -clk CLK              define the clock period in ns default defined at
-                        design_info.yaml
+
+  -sdf_setup            targeting setup violations by taking the sdf mamximum values
+
+  -clk CLK              define the clock period in ns default defined at design_info.yaml
+
   -lint                 generate lint log vcs must be used
+
   -macros MACROS [MACROS ...]
                         Add addtional verilog macros for the design
+
   -sim_path SIM_PATH    directory where simulation result directory "sim"
-                        would be created if None it would be created under
-                        cocotb folder
-  -quiet                Suppress output to the console                  
+                        would be created if None it would be created under cocotb folder
+
+  -verbosity VERBOSITY  verbosity of the console output it can have one of 3
+                        value debug, normal or quiet the default value is normal               
 ```
 <!-- end run a test include -->
 
