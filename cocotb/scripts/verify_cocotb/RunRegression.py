@@ -382,8 +382,6 @@ class RunRegression:
 
     def unzip_sdf_files(self):
         # proceed only if sim type is GL_SDF
-        print("hererere")
-        print(self.args.sim)
         if isinstance(self.args.sim, list):
             if "GL_SDF" not in self.args.sim:
                 return

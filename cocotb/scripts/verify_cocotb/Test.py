@@ -403,13 +403,13 @@ def remove_argument(to_remove, patt):
 
 def move_defines_to_start(filename):
     # Read the contents of the file into a list of lines
-    print(f"file name = {filename}")
+    # print(f"file name = {filename}")
     with open(filename, 'r') as f:
         lines = f.readlines()
 
     # Extract the lines that end with "defines.v"
     defines_lines = [line for line in lines if line.strip().endswith('defines.v"')]
-    print(defines_lines)
+    # print(defines_lines)
     # Remove the extracted lines from the original list
     lines = [line for line in lines if line not in defines_lines]
 
