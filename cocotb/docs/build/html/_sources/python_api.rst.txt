@@ -7,7 +7,7 @@ Python APIs
 Common functions 
 -----------------
 
-.. currentmodule:: test_functions
+.. currentmodule:: interfaces.common_functions.test_functions
 
 .. autofunction::  test_configure
 

@@ -60,37 +60,38 @@ tag = os.getenv("RUNTAG")
 
 
 class GPIO_MODE(Enum):
-    GPIO_MODE_MGMT_STD_INPUT_NOPULL = int(
-        cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_NOPULL"]
-    )
-    GPIO_MODE_MGMT_STD_INPUT_PULLDOWN = int(
-        cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLDOWN"]
-    )
-    GPIO_MODE_MGMT_STD_INPUT_PULLUP = int(
-        cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLUP"]
-    )
-    GPIO_MODE_MGMT_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_OUTPUT"])
-    GPIO_MODE_MGMT_STD_BIDIRECTIONAL = int(
-        cocotb.plusargs["GPIO_MODE_MGMT_STD_BIDIRECTIONAL"]
-    )
-    GPIO_MODE_MGMT_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_ANALOG"])
-    GPIO_MODE_USER_STD_INPUT_NOPULL = int(
-        cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_NOPULL"]
-    )
-    GPIO_MODE_USER_STD_INPUT_PULLDOWN = int(
-        cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLDOWN"]
-    )
-    GPIO_MODE_USER_STD_INPUT_PULLUP = int(
-        cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLUP"]
-    )
-    GPIO_MODE_USER_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_USER_STD_OUTPUT"])
-    GPIO_MODE_USER_STD_BIDIRECTIONAL = int(
-        cocotb.plusargs["GPIO_MODE_USER_STD_BIDIRECTIONAL"]
-    )
-    GPIO_MODE_USER_STD_OUT_MONITORED = int(
-        cocotb.plusargs["GPIO_MODE_USER_STD_OUT_MONITORED"]
-    )
-    GPIO_MODE_USER_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_USER_STD_ANALOG"])
+    pass
+    # GPIO_MODE_MGMT_STD_INPUT_NOPULL = int(
+    #     cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_NOPULL"]
+    # )
+    # GPIO_MODE_MGMT_STD_INPUT_PULLDOWN = int(
+    #     cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLDOWN"]
+    # )
+    # GPIO_MODE_MGMT_STD_INPUT_PULLUP = int(
+    #     cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_PULLUP"]
+    # )
+    # GPIO_MODE_MGMT_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_OUTPUT"])
+    # GPIO_MODE_MGMT_STD_BIDIRECTIONAL = int(
+    #     cocotb.plusargs["GPIO_MODE_MGMT_STD_BIDIRECTIONAL"]
+    # )
+    # GPIO_MODE_MGMT_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_MGMT_STD_ANALOG"])
+    # GPIO_MODE_USER_STD_INPUT_NOPULL = int(
+    #     cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_NOPULL"]
+    # )
+    # GPIO_MODE_USER_STD_INPUT_PULLDOWN = int(
+    #     cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLDOWN"]
+    # )
+    # GPIO_MODE_USER_STD_INPUT_PULLUP = int(
+    #     cocotb.plusargs["GPIO_MODE_USER_STD_INPUT_PULLUP"]
+    # )
+    # GPIO_MODE_USER_STD_OUTPUT = int(cocotb.plusargs["GPIO_MODE_USER_STD_OUTPUT"])
+    # GPIO_MODE_USER_STD_BIDIRECTIONAL = int(
+    #     cocotb.plusargs["GPIO_MODE_USER_STD_BIDIRECTIONAL"]
+    # )
+    # GPIO_MODE_USER_STD_OUT_MONITORED = int(
+    #     cocotb.plusargs["GPIO_MODE_USER_STD_OUT_MONITORED"]
+    # )
+    # GPIO_MODE_USER_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_USER_STD_ANALOG"])
 
 
 class MASK_GPIO_CTRL(Enum):
