@@ -11,3 +11,4 @@ __pycache__
 AN.DB
 includes.v
 *.lst
+design_info.yaml

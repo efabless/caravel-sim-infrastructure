@@ -5,7 +5,6 @@ from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
-import time
 
 
 def check_valid_mail_addr(address):
@@ -28,7 +27,6 @@ class RunFLow:
         self.set_tag()
         self.set_args(design_info)
         self.set_config_script(design_info)
-        self.unzip_sdf_files()
         RunRegression(self.args, self.paths)
 
     def check_valid_args(self):
@@ -197,35 +195,6 @@ class RunFLow:
         yaml_file = open(f"{self.cocotb_path}/design_info.yaml", "r")
         design_info = yaml.safe_load(yaml_file)
         return design_info
-
-    def unzip_sdf_files(self):
-        # proceed only if sim type is GL_SDF
-        if isinstance(self.args.sim, list):
-            if "GL_SDF" not in self.args.sim:
-                return
-        elif self.args.sim != "GL_SDF":
-            return
-        # make corners list in case in is n't
-        if not isinstance(self.args.corner, list):
-            corners = [self.args.corner]
-        else:
-            corners = self.args.corner
-
-        sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/caravel/primetime/sdf"
-        for corner in corners:
-            start_time = time.time()
-            sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
-            sdf_prefix2 = f"{corner[0:3]}"
-            output_file = f"{sdf_dir}/{sdf_prefix1}/caravel.{sdf_prefix2}.sdf"
-            compress_file = output_file + ".gz"
-            # delete output file if exists 
-            if os.path.exists(output_file):
-                os.remove(output_file)
-            # compress the file
-            os.system(f"gzip -dc {compress_file} > {output_file}")
-            end_time = time.time()
-            execution_time = end_time - start_time
-            print(f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds")
 
 
 class CocotbArgs:

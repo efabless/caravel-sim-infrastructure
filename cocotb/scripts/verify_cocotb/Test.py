@@ -421,8 +421,8 @@ def move_defines_to_start(filename, pattern):
         lines = f.readlines()
 
     # Extract the lines that end with "defines.v"
-    defines_lines = [f"{line.strip()}\n" for line in lines if line.strip().endswith(pattern)]
-    # print(f"defines_lines {defines_lines}")
+    defines_lines = [line for line in lines if line.strip().endswith('defines.v"')]
+    # print(defines_lines)
     # Remove the extracted lines from the original list
     lines = [f"{line.strip()}\n" for line in lines if line not in defines_lines]
 
