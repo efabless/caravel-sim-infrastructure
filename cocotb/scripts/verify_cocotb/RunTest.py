@@ -24,7 +24,8 @@ class RunTest:
         )
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f"-I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/"
+        includes = f" -I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/ "
+        includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
             f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}"
@@ -110,7 +111,7 @@ class RunTest:
         test_name = self.test.name
         test_name += ".c"
         tests_path = os.path.abspath(f"{self.paths.COCOTB_PATH}/tests")
-        tests_path_user = os.path.abspath(f"{self.paths.USER_PROJECT_ROOT}")
+        tests_path_user = os.path.abspath(f"{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb")
         if self.args.user_test:
             test_file = self.find(test_name, tests_path_user)
         else:
