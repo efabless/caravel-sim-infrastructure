@@ -63,12 +63,12 @@ class Caravel_env:
         for i in range(38):
             if i in [3, 4]:  # CSB and SCK
                 continue
-            common.drive_hdl(self.dut._id(f"bin{i}_en", False), (0, 0), 0)
+            common.drive_hdl(self.dut._id(f"gpio{i}_en", False), (0, 0), 0)
         await ClockCycles(self.clk, 1)
 
 
     async def power_up(self):
-        """Setup the vdd and vcc power bins"""
+        """Setup the vdd and vcc power pins"""
         cocotb.log.info(" [caravel] start powering up")
         self.set_vdd(0)
         await ClockCycles(self.clk, 10)
@@ -110,13 +110,13 @@ class Caravel_env:
             self.dut.vssd2_tb.value = 0
 
     async def drive_csb(self, bit):
-        """Drive csb signal bin E8 mprj[3]"""
+        """Drive csb signal pin E8 mprj[3]"""
         self.drive_gpio_in((3, 3), bit)
         self.drive_gpio_in((4, 4), 0)
         await ClockCycles(self.clk, 1)
 
     async def disable_csb(self):
-        """Set the SPI CSB  signal high to disable housekeeping spi transmission bin E8 mprj[3]"""
+        """Set the SPI CSB  signal high to disable housekeeping spi transmission pin E8 mprj[3]"""
         cocotb.log.info(" [caravel] disable housekeeping spi transmission")
         await self.drive_csb(1)
         # await self.release_csb()
@@ -131,7 +131,7 @@ class Caravel_env:
         await ClockCycles(self.clk, 1)
 
     async def enable_csb(self):
-        """Set the SPI CSB  signal low to enable housekeeping spi transmission bin E8 mprj[3]"""
+        """Set the SPI CSB  signal low to enable housekeeping spi transmission pin E8 mprj[3]"""
         cocotb.log.info(" [caravel] enable housekeeping spi transmission")
         await self.drive_csb(0)
 
@@ -154,7 +154,7 @@ class Caravel_env:
 
         """
         mprj = self.dut.mprj_io_tb.value
-        size = mprj.n_bits - 1  # size of bins array
+        size = mprj.n_bits - 1  # size of pins array
         if isinstance(h_bit, Iterable):
             l_bit = h_bit[1]
             h_bit = h_bit[0]
@@ -264,8 +264,8 @@ class Caravel_env:
             gpio_value = gpio_defaults[size - (gpio * 13 + 12): size - gpio * 13]
             gpio_enum = GPIO_MODE(gpio_value.integer)
             gpios.append((gpio, gpio_enum))
-        group_bins = groupby(gpios, key=lambda x: x[1])
-        for key, value in group_bins:
+        group_pins = groupby(gpios, key=lambda x: x[1])
+        for key, value in group_pins:
             gpios = []
             for gpio in list(value):
                 gpios.append(gpio[0])
@@ -280,8 +280,8 @@ class Caravel_env:
         gpios = []
         for i, gpio in enumerate(control_modules):
             gpios.append((i, self.gpio_control_reg_read(gpio)))
-        group_bins = groupby(gpios, key=lambda x: x[1])
-        for key, value in group_bins:
+        group_pins = groupby(gpios, key=lambda x: x[1])
+        for key, value in group_pins:
             gpios = []
             for gpio in list(value):
                 gpios.append(gpio[0])
@@ -305,8 +305,8 @@ class Caravel_env:
                     GPIO_MODE(self.caravel_hdl.housekeeping.gpio_configure[pin].value),
                 )
             )
-        group_bins = groupby(gpios, key=lambda x: x[1])
-        for key, value in group_bins:
+        group_pins = groupby(gpios, key=lambda x: x[1])
+        for key, value in group_pins:
             gpios = []
             for gpio in list(value):
                 gpios.append(gpio[0])
@@ -447,16 +447,16 @@ class Caravel_env:
                 value=data, n_bits=bits[0] - bits[1] + 1, bigEndian=(bits[0] < bits[1])
             )
             for i, bits2 in enumerate(range(bits[1], bits[0] + 1)):
-                self.dut._id(f"bin{bits2}", False).value = data_bits[i]
-                self.dut._id(f"bin{bits2}_en", False).value = 1
+                self.dut._id(f"gpio{bits2}", False).value = data_bits[i]
+                self.dut._id(f"gpio{bits2}_en", False).value = 1
                 cocotb.log.debug(
-                    f"[caravel] [drive_gpio_in] drive bin{bits2} with {data_bits[i]} and bin{bits2}_en with 1"
+                    f"[caravel] [drive_gpio_in] drive gpio{bits2} with {data_bits[i]} and gpio{bits2}_en with 1"
                 )
         else:
-            self.dut._id(f"bin{bits}", False).value = data
-            self.dut._id(f"bin{bits}_en", False).value = 1
+            self.dut._id(f"gpio{bits}", False).value = data
+            self.dut._id(f"gpio{bits}_en", False).value = 1
             cocotb.log.debug(
-                f"[caravel] [drive_gpio_in] drive bin{bits} with {data} and bin{bits}_en with 1"
+                f"[caravel] [drive_gpio_in] drive gpio{bits} with {data} and gpio{bits}_en with 1"
             )
 
     def release_gpio(self, bits):
@@ -470,14 +470,14 @@ class Caravel_env:
                 f"[caravel] [drive_gpio_disable] start bits[1] = {bits[1]} bits[0]= {bits[0]}"
             )
             for i, bits2 in enumerate(range(bits[1], bits[0] + 1)):
-                self.dut._id(f"bin{bits2}_en", False).value = 0
+                self.dut._id(f"gpio{bits2}_en", False).value = 0
                 cocotb.log.debug(
-                    f"[caravel] [drive_gpio_disable] release driving bin{bits2}"
+                    f"[caravel] [drive_gpio_disable] release driving gpio{bits2}"
                 )
         else:
-            self.dut._id(f"bin{bits}_en", False).value = 0
+            self.dut._id(f"gpio{bits}_en", False).value = 0
             cocotb.log.debug(
-                f"[caravel] [drive_gpio_disable] release driving bin{bits}"
+                f"[caravel] [drive_gpio_disable] release driving gpio{bits}"
             )
 
     def get_mgmt_gpi_hdl(self):
@@ -576,7 +576,7 @@ class Caravel_env:
         await FallingEdge(self.clk)
         self.drive_gpio_in((4, 4), 0)  # SCK
         # if (last_read):
-        #     common.drive_hdl(self.dut.bin4_en,(0,0),'z') #4 = SCK
+        #     common.drive_hdl(self.dut.gpio4_en,(0,0),'z') #4 = SCK
         #     common.drive_hdl(self.path,[(1,1)],'z')
 
         return int(read_data, 2)

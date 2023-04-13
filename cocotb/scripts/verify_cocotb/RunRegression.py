@@ -4,8 +4,6 @@ from datetime import datetime
 import os
 import sys
 from subprocess import PIPE, run
-import json
-from fnmatch import fnmatch
 from scripts.verify_cocotb.RunTest import RunTest
 from scripts.verify_cocotb.Test import Test
 from email.mime.multipart import MIMEMultipart
@@ -13,6 +11,7 @@ from email.mime.text import MIMEText
 import smtplib
 import socket
 import yaml
+import time
 
 
 class RunRegression:
@@ -24,6 +23,7 @@ class RunRegression:
         self.write_git_log()
         self.set_common_macros()
         self.get_tests()
+        self.unzip_sdf_files()
         self.run_regression()
         self.send_mail()
 
@@ -140,16 +140,20 @@ class RunRegression:
                     self.get_testlist(f"{directory}/{include}")
         if "Tests" in testlist:
             for test in testlist["Tests"]:
-                data = {
-                    "test_name": test["name"],
-                    "sim_type": "RTL",
-                    "corner": self.args.corner[0],
-                }
-                if "sim" in test:
-                    data["sim_type"] = test["sim"]
-                if "corner" in test:
-                    data["corner"] = test["corner"]
-                self.add_new_test(**data)
+                for corner in self.args.corner:
+                    data = {
+                        "test_name": test["name"],
+                        "sim_type": "RTL",
+                        "corner": corner,
+                    }
+                    if "sim" in test:
+                        data["sim_type"] = test["sim"]
+                    if "corner" in test:
+                        data["corner"] = test["corner"]
+                    self.add_new_test(**data)
+                    # add sim to args to detect that this testlist has GL or sdf sims
+                    if data["sim_type"] not in self.args.sim:
+                        self.args.sim.append(data["sim_type"])
 
     def run_regression(self):
         # threads = list()
@@ -375,3 +379,34 @@ class RunRegression:
             f"<th style='background-color:#14E5F2'>{test.unknown_count}</th> <th>{('%.10s' % (datetime.now() - self.total_start_time))}</th> <tr></table>"
         )
         return html_test_table
+
+    def unzip_sdf_files(self):
+        # proceed only if sim type is GL_SDF
+        if isinstance(self.args.sim, list):
+            if "GL_SDF" not in self.args.sim:
+                return
+        elif self.args.sim != "GL_SDF":
+            return
+        # make corners list in case in is n't
+        if not isinstance(self.args.corner, list):
+            corners = [self.args.corner]
+        else:
+            corners = self.args.corner
+
+        sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/caravel/primetime/sdf"
+        sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/user_project_wrapper/primetime/sdf"
+        for corner in corners:
+            start_time = time.time()
+            sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
+            sdf_prefix2 = f"{corner[0:3]}"
+            output_files = [f"{sdf_dir}/{sdf_prefix1}/caravel.{sdf_prefix2}.sdf",f"{sdf_user_dir}/{sdf_prefix1}/user_project_wrapper.{sdf_prefix2}.sdf"]
+            for output_file in output_files:
+                compress_file = output_file + ".gz"
+                # delete output file if exists 
+                if os.path.exists(output_file):
+                    os.remove(output_file)
+                # compress the file
+                os.system(f"gzip -dc {compress_file} > {output_file}")
+                end_time = time.time()
+                execution_time = end_time - start_time
+                print(f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds")
