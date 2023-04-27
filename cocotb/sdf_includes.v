@@ -10,6 +10,6 @@ initial begin
     `endif
 
     // `ifdef USER_SDF_ENABLE
-    $sdf_annotate({`USER_PROJECT_ROOT,"/signoff/user_project_wrapper/primetime/sdf/",`SDF_POSTFIX,"/user_project_wrapper.", `CORNER,".sdf"}, uut.chip_core.mprj,,{`COCOTB_PATH,"/sim/",`TAG,"/",`FTESTNAME,"/user_prog_sdf.log"},`ifdef MAX_SDF "MAXIMUM" `else "MINIMUM" `endif ); 
+    // $sdf_annotate({`USER_PROJECT_ROOT,"/signoff/user_project_wrapper/primetime/sdf/",`SDF_POSTFIX,"/user_project_wrapper.", `CORNER,".sdf"}, uut.chip_core.mprj,,{`COCOTB_PATH,"/sim/",`TAG,"/",`FTESTNAME,"/user_prog_sdf.log"},`ifdef MAX_SDF "MAXIMUM" `else "MINIMUM" `endif ); 
     // `endif // USER_SDF_ENABLE
 end
