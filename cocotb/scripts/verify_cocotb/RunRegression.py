@@ -15,9 +15,10 @@ import time
 
 
 class RunRegression:
-    def __init__(self, args, paths) -> None:
+    def __init__(self, args, paths, logger) -> None:
         self.args = args
         self.paths = paths
+        self.logger = logger
         self.total_start_time = datetime.now()
         self.write_command_log()
         self.write_git_log()
@@ -187,7 +188,7 @@ class RunRegression:
     def test_run_function(self, test):
         test.start_of_test()
         self.update_run_log()
-        RunTest(self.args, self.paths, test)
+        RunTest(self.args, self.paths, test, self.logger)
         self.update_run_log()
 
     def generate_cov(self):
@@ -416,4 +417,4 @@ class RunRegression:
                 os.system(f"gzip -dc {compress_file} > {output_file}")
                 end_time = time.time()
                 execution_time = end_time - start_time
-                print(f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds")
+                self.logger.info(f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds")

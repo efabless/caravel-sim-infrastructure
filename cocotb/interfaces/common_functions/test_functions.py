@@ -27,7 +27,7 @@ def read_config_file():
         # scalar values to Python the dictionary format
         configs = yaml.load(file, Loader=yaml.FullLoader)
 
-        print(configs)
+        # print(configs)
         return configs
 
 
