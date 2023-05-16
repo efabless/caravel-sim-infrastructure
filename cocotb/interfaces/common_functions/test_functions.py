@@ -4,7 +4,7 @@ import interfaces.caravel as caravel
 import logging
 from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
-from tests.common_functions.Timeout import Timeout
+from interfaces.common_functions.Timeout import Timeout
 from cocotb.triggers import ClockCycles
 import yaml
 from cocotb_coverage.coverage import coverage_db
@@ -27,7 +27,7 @@ def read_config_file():
         # scalar values to Python the dictionary format
         configs = yaml.load(file, Loader=yaml.FullLoader)
 
-        print(configs)
+        # print(configs)
         return configs
 
 
@@ -41,6 +41,7 @@ async def test_configure(
     clk=read_config_file()['clock'],
     timeout_precision=0.2,
     num_error=int(read_config_file()['max_err']),
+    start_up=True
 ) -> caravel.Caravel_env:
     """
     Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.
@@ -50,14 +51,16 @@ async def test_configure(
     :param int clk: The clock period to be used in the design in ``'ns'`` default 12.5 ``'ns'``
     :param int timeout_precision: Precision of logging how many cycle left until the timeout default is 0.2 meaning if time is 100 cycle every 20 cycles there would be a warning message for timeout
     :param int num_error: Maximum number of errors reported before terminate the test
+    :param bool start_up: start up the test connecting power and reset
     :return: Object of type Caravel_env (caravel environment)
     """
     caravelEnv = caravel.Caravel_env(dut)
     Timeout(caravelEnv.clk, timeout_cycles, timeout_precision)
     cocotb.scheduler.add(max_num_error(num_error, caravelEnv.clk))
     caravelEnv.setup_clock(clk)
-    await caravelEnv.start_up()
-    await ClockCycles(caravelEnv.clk, 10)
+    if start_up:
+        await caravelEnv.start_up()
+        await ClockCycles(caravelEnv.clk, 10)
     # coverage = 'COVERAGE' in caravelEnv.design_macros._asdict()
     # checker = 'CHECKERS' in caravelEnv.design_macros._asdict()
     # if checker:
@@ -90,7 +93,7 @@ class CallCounted:
         return self.method(*args, **kwargs)
 
 
-def repot_test(func):
+def report_test(func):
     async def wrapper_func(*args, **kwargs):
         # configure logging
         TESTFULLNAME = cocotb.plusargs["FTESTNAME"]
