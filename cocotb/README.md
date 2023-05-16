@@ -96,7 +96,7 @@ The template for ``python`` test:
    import cocotb
 
    @cocotb.test() # decorator to mark the test function as cocotb test
-   @repot_test # wrapper for configure test reporting files
+   @report_test # wrapper for configure test reporting files
    async def <test_name>(dut):
       caravelEnv = await test_configure(dut) #configure, start up and reset Caravel
 
