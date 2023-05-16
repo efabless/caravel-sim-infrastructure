@@ -10,8 +10,10 @@
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
         <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -102,7 +104,7 @@
         <span class="c1"># scalar values to Python the dictionary format</span>
         <span class="n">configs</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">FullLoader</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span>
+        <span class="c1"># print(configs)</span>
         <span class="k">return</span> <span class="n">configs</span>
 
 
@@ -116,6 +118,7 @@
     <span class="n">clk</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
     <span class="n">timeout_precision</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
     <span class="n">num_error</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">start_up</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">caravel</span><span class="o">.</span><span class="n">Caravel_env</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.</span>
@@ -125,14 +128,16 @@
 <span class="sd">    :param int clk: The clock period to be used in the design in ``&#39;ns&#39;`` default 12.5 ``&#39;ns&#39;``</span>
 <span class="sd">    :param int timeout_precision: Precision of logging how many cycle left until the timeout default is 0.2 meaning if time is 100 cycle every 20 cycles there would be a warning message for timeout</span>
 <span class="sd">    :param int num_error: Maximum number of errors reported before terminate the test</span>
+<span class="sd">    :param bool start_up: start up the test connecting power and reset</span>
 <span class="sd">    :return: Object of type Caravel_env (caravel environment)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">caravelEnv</span> <span class="o">=</span> <span class="n">caravel</span><span class="o">.</span><span class="n">Caravel_env</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span>
     <span class="n">Timeout</span><span class="p">(</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="n">timeout_cycles</span><span class="p">,</span> <span class="n">timeout_precision</span><span class="p">)</span>
     <span class="n">cocotb</span><span class="o">.</span><span class="n">scheduler</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">max_num_error</span><span class="p">(</span><span class="n">num_error</span><span class="p">,</span> <span class="n">caravelEnv</span><span class="o">.</span><span class="n">clk</span><span class="p">))</span>
     <span class="n">caravelEnv</span><span class="o">.</span><span class="n">setup_clock</span><span class="p">(</span><span class="n">clk</span><span class="p">)</span>
-    <span class="k">await</span> <span class="n">caravelEnv</span><span class="o">.</span><span class="n">start_up</span><span class="p">()</span>
-    <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">start_up</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">caravelEnv</span><span class="o">.</span><span class="n">start_up</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
     <span class="c1"># coverage = &#39;COVERAGE&#39; in caravelEnv.design_macros._asdict()</span>
     <span class="c1"># checker = &#39;CHECKERS&#39; in caravelEnv.design_macros._asdict()</span>
     <span class="c1"># if checker:</span>

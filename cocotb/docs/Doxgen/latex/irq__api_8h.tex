@@ -1,10 +1,10 @@
-\hypertarget{irq__api_8h}{}\section{/home/rady/caravel/docs/caravel-\/sim-\/infrastructure/cocotb/interfaces/common\+\_\+functions/irq\+\_\+api.h File Reference}
-\label{irq__api_8h}\index{/home/rady/caravel/docs/caravel-\/sim-\/infrastructure/cocotb/interfaces/common\+\_\+functions/irq\+\_\+api.\+h@{/home/rady/caravel/docs/caravel-\/sim-\/infrastructure/cocotb/interfaces/common\+\_\+functions/irq\+\_\+api.\+h}}
+\hypertarget{irq__api_8h}{}\section{/home/rady/caravel/caravel\+\_\+release/caravel-\/dynamic-\/sims/cocotb/interfaces/common\+\_\+functions/irq\+\_\+api.h File Reference}
+\label{irq__api_8h}\index{/home/rady/caravel/caravel\+\_\+release/caravel-\/dynamic-\/sims/cocotb/interfaces/common\+\_\+functions/irq\+\_\+api.\+h@{/home/rady/caravel/caravel\+\_\+release/caravel-\/dynamic-\/sims/cocotb/interfaces/common\+\_\+functions/irq\+\_\+api.\+h}}
 This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=260pt]{irq__api_8h__dep__incl}
+\includegraphics[width=238pt]{irq__api_8h__dep__incl}
 \end{center}
 \end{figure}
 \subsection*{Functions}
@@ -13,6 +13,12 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 void \hyperlink{irq__api_8h_a21341597fad3b92332d60feaa5ceaf01}{enable\+\_\+external1\+\_\+irq} (bool is\+\_\+enable)
 \item 
 void \hyperlink{irq__api_8h_ae059d78d8da468ca24d853d9d573d1f6}{enable\+\_\+external2\+\_\+irq} (bool is\+\_\+enable)
+\item 
+void \hyperlink{irq__api_8h_adb52fc0c18ec040baf3f570d146c4860}{enable\+\_\+user0\+\_\+irq} (bool is\+\_\+enable)
+\item 
+void \hyperlink{irq__api_8h_ab8d9b3cf7899a7aaffb5c22d881a852d}{enable\+\_\+user1\+\_\+irq} (bool is\+\_\+enable)
+\item 
+void \hyperlink{irq__api_8h_a26224abf0d4e4285df5c607da63428f7}{enable\+\_\+user2\+\_\+irq} (bool is\+\_\+enable)
 \item 
 void \hyperlink{irq__api_8h_a5b50d14e7052f6375664a542de0b869b}{enable\+\_\+timer0\+\_\+irq} (bool is\+\_\+enable)
 \item 
@@ -97,6 +103,45 @@ Enable or disable U\+A\+RT rx interrupt
 {\footnotesize\ttfamily void enable\+\_\+uart\+\_\+tx\+\_\+irq (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
 
 Enable or disable U\+A\+RT tx interrupt
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{irq__api_8h_adb52fc0c18ec040baf3f570d146c4860}\label{irq__api_8h_adb52fc0c18ec040baf3f570d146c4860}} 
+\index{irq\+\_\+api.\+h@{irq\+\_\+api.\+h}!enable\+\_\+user0\+\_\+irq@{enable\+\_\+user0\+\_\+irq}}
+\index{enable\+\_\+user0\+\_\+irq@{enable\+\_\+user0\+\_\+irq}!irq\+\_\+api.\+h@{irq\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{enable\+\_\+user0\+\_\+irq()}{enable\_user0\_irq()}}
+{\footnotesize\ttfamily void enable\+\_\+user0\+\_\+irq (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+Enable or disable user0 interrupt
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{irq__api_8h_ab8d9b3cf7899a7aaffb5c22d881a852d}\label{irq__api_8h_ab8d9b3cf7899a7aaffb5c22d881a852d}} 
+\index{irq\+\_\+api.\+h@{irq\+\_\+api.\+h}!enable\+\_\+user1\+\_\+irq@{enable\+\_\+user1\+\_\+irq}}
+\index{enable\+\_\+user1\+\_\+irq@{enable\+\_\+user1\+\_\+irq}!irq\+\_\+api.\+h@{irq\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{enable\+\_\+user1\+\_\+irq()}{enable\_user1\_irq()}}
+{\footnotesize\ttfamily void enable\+\_\+user1\+\_\+irq (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+Enable or disable user1 interrupt
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{irq__api_8h_a26224abf0d4e4285df5c607da63428f7}\label{irq__api_8h_a26224abf0d4e4285df5c607da63428f7}} 
+\index{irq\+\_\+api.\+h@{irq\+\_\+api.\+h}!enable\+\_\+user2\+\_\+irq@{enable\+\_\+user2\+\_\+irq}}
+\index{enable\+\_\+user2\+\_\+irq@{enable\+\_\+user2\+\_\+irq}!irq\+\_\+api.\+h@{irq\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{enable\+\_\+user2\+\_\+irq()}{enable\_user2\_irq()}}
+{\footnotesize\ttfamily void enable\+\_\+user2\+\_\+irq (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+Enable or disable user1 interrupt
 
 
 \begin{DoxyParams}{Parameters}

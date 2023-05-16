@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>software_APIs: /home/rady/caravel/docs/caravel-sim-infrastructure/cocotb/interfaces/common_functions/irq_api.h File Reference</title>
+<title>software_APIs: /home/rady/caravel/caravel_release/caravel-dynamic-sims/cocotb/interfaces/common_functions/irq_api.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -72,9 +72,9 @@ $(function() {
 <div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><img src="irq__api_8h__dep__incl.png" border="0" usemap="#_2home_2rady_2caravel_2docs_2caravel-sim-infrastructure_2cocotb_2interfaces_2common__functions_2irq__api_8hdep" alt=""/></div>
-<map name="_2home_2rady_2caravel_2docs_2caravel-sim-infrastructure_2cocotb_2interfaces_2common__functions_2irq__api_8hdep" id="_2home_2rady_2caravel_2docs_2caravel-sim-infrastructure_2cocotb_2interfaces_2common__functions_2irq__api_8hdep">
-<area shape="rect" id="node2" href="common_8h.html" title="/home/rady/caravel\l/docs/caravel&#45;sim&#45;infrastructure\l/cocotb/interfaces/common_functions\l/common.h" alt="" coords="5,124,245,195"/>
+<div class="center"><img src="irq__api_8h__dep__incl.png" border="0" usemap="#_2home_2rady_2caravel_2caravel__release_2caravel-dynamic-sims_2cocotb_2interfaces_2common__functions_2irq__api_8hdep" alt=""/></div>
+<map name="_2home_2rady_2caravel_2caravel__release_2caravel-dynamic-sims_2cocotb_2interfaces_2common__functions_2irq__api_8hdep" id="_2home_2rady_2caravel_2caravel__release_2caravel-dynamic-sims_2cocotb_2interfaces_2common__functions_2irq__api_8hdep">
+<area shape="rect" id="node2" href="common_8h.html" title="/home/rady/caravel\l/caravel_release/caravel\l&#45;dynamic&#45;sims/cocotb/interfaces\l/common_functions/common.h" alt="" coords="5,124,216,195"/>
 </map>
 </div>
 </div>
@@ -86,6 +86,12 @@ Functions</h2></td></tr>
 <tr class="separator:a21341597fad3b92332d60feaa5ceaf01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae059d78d8da468ca24d853d9d573d1f6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="irq__api_8h.html#ae059d78d8da468ca24d853d9d573d1f6">enable_external2_irq</a> (bool is_enable)</td></tr>
 <tr class="separator:ae059d78d8da468ca24d853d9d573d1f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb52fc0c18ec040baf3f570d146c4860"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="irq__api_8h.html#adb52fc0c18ec040baf3f570d146c4860">enable_user0_irq</a> (bool is_enable)</td></tr>
+<tr class="separator:adb52fc0c18ec040baf3f570d146c4860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8d9b3cf7899a7aaffb5c22d881a852d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="irq__api_8h.html#ab8d9b3cf7899a7aaffb5c22d881a852d">enable_user1_irq</a> (bool is_enable)</td></tr>
+<tr class="separator:ab8d9b3cf7899a7aaffb5c22d881a852d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26224abf0d4e4285df5c607da63428f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="irq__api_8h.html#a26224abf0d4e4285df5c607da63428f7">enable_user2_irq</a> (bool is_enable)</td></tr>
+<tr class="separator:a26224abf0d4e4285df5c607da63428f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b50d14e7052f6375664a542de0b869b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="irq__api_8h.html#a5b50d14e7052f6375664a542de0b869b">enable_timer0_irq</a> (bool is_enable)</td></tr>
 <tr class="separator:a5b50d14e7052f6375664a542de0b869b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc59d7e9a7bdac60111985d56dcc7187"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="irq__api_8h.html#afc59d7e9a7bdac60111985d56dcc7187">enable_uart_tx_irq</a> (bool is_enable)</td></tr>
@@ -237,6 +243,81 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Enable or disable UART tx interrupt</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is_enable</td><td>when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adb52fc0c18ec040baf3f570d146c4860"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb52fc0c18ec040baf3f570d146c4860">&#9670;&nbsp;</a></span>enable_user0_irq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enable_user0_irq </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enable or disable user0 interrupt</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is_enable</td><td>when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab8d9b3cf7899a7aaffb5c22d881a852d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8d9b3cf7899a7aaffb5c22d881a852d">&#9670;&nbsp;</a></span>enable_user1_irq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enable_user1_irq </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enable or disable user1 interrupt</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is_enable</td><td>when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a26224abf0d4e4285df5c607da63428f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26224abf0d4e4285df5c607da63428f7">&#9670;&nbsp;</a></span>enable_user2_irq()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void enable_user2_irq </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enable or disable user1 interrupt</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">is_enable</td><td>when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </td></tr>

@@ -10,8 +10,10 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -99,14 +101,14 @@
 
 
 <div class="viewcode-block" id="Caravel_env"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env">[docs]</a><span class="k">class</span> <span class="nc">Caravel_env</span><span class="p">:</span>
+<span class="w">    </span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Verification environment for caraval</span>
 
-<span class="sd">    - provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins</span>
+<span class="sd">    - provide APIs for monitoring and driving caravel GPIOs, power pins, clock and reset pins</span>
 
 <span class="sd">    :param SimHandle dut: dut handle</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dut</span><span class="p">:</span> <span class="n">SimHandleBase</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dut</span> <span class="o">=</span> <span class="n">dut</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clk</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">clock_tb</span>
@@ -191,29 +193,29 @@
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Caravel_env.disable_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.disable_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">disable_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal high to disable housekeeping spi transmission pin E8 mprj[3]&quot;&quot;&quot;</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] disable housekeeping spi transmission&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal high to disable housekeeping SPI transmission pin E8 mprj[3]&quot;&quot;&quot;</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] disable housekeeping SPI transmission&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_csb</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="c1"># await self.release_csb()</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Caravel_env.release_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.release_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">release_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal high impedance&quot;&quot;&quot;</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] release housekeeping spi transmission&quot;</span><span class="p">)</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] release housekeeping SPI transmission&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">release_gpio</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Caravel_env.enable_csb"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.enable_csb">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">enable_csb</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal low to enable housekeeping spi transmission pin E8 mprj[3]&quot;&quot;&quot;</span>
-        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] enable housekeeping spi transmission&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the SPI CSB  signal low to enable housekeeping SPI transmission pin E8 mprj[3]&quot;&quot;&quot;</span>
+        <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] enable housekeeping SPI transmission&quot;</span><span class="p">)</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">drive_csb</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Caravel_env.monitor_gpio"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.monitor_gpio">[docs]</a>    <span class="k">def</span> <span class="nf">monitor_gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h_bit</span><span class="p">,</span> <span class="n">l_bit</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">binary</span><span class="o">.</span><span class="n">BinaryValue</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;monitor GPIOs output value</span>
 
-<span class="sd">        :param h_bit: highest GPIO number of the tuple of (high gpio, low gpio)</span>
+<span class="sd">        :param h_bit: highest GPIO number of the tuple of (high GPIO, low GPIO)</span>
 <span class="sd">        :param l_bit: lowest GPIO to monitor number</span>
 <span class="sd">        :type h_bit: int or tuple(int, int)</span>
 <span class="sd">        :raise exception: If h_bit is lower than l_bit</span>
@@ -223,9 +225,9 @@
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            monitor_gpio(7) #get output value of GPIO 7 (gpios[7])</span>
-<span class="sd">            monitor_gpio(7,0) # get output value from GPIO 7 to 0 (gpios[7:0])</span>
-<span class="sd">            monitor_gpio((7,0)) #get output value from GPIO 7 to 0 (gpios[7:0])</span>
+<span class="sd">            monitor_gpio(7) #get output value of GPIO 7 (GPIOs[7])</span>
+<span class="sd">            monitor_gpio(7,0) # get output value from GPIO 7 to 0 (GPIOs[7:0])</span>
+<span class="sd">            monitor_gpio((7,0)) #get output value from GPIO 7 to 0 (GPIOs[7:0])</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mprj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span><span class="o">.</span><span class="n">value</span>
@@ -244,7 +246,7 @@
             <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel] Monitor : mprj[</span><span class="si">{</span><span class="n">h_bit</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">l_bit</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">mprj_out</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">mprj_out</span></div>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;return the value of management gpio&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;return the value of management GPIO&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Caravel_env.monitor_mgmt_gpio"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.monitor_mgmt_gpio">[docs]</a>    <span class="k">def</span> <span class="nf">monitor_mgmt_gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;monitor management GPIO output</span>
@@ -258,7 +260,7 @@
 <div class="viewcode-block" id="Caravel_env.monitor_discontinuous_gpios"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.monitor_discontinuous_gpios">[docs]</a>    <span class="k">def</span> <span class="nf">monitor_discontinuous_gpios</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;monitor discontinuous GPIOs output value</span>
 
-<span class="sd">        :param arr: highest GPIO number of the tuple of (high gpio, low gpio)</span>
+<span class="sd">        :param arr: highest GPIO number of the tuple of (high GPIO, low GPIO)</span>
 <span class="sd">        :type arr: list(ints) or tuple(ints)</span>
 <span class="sd">        :return: str</span>
 <span class="sd">        Example:</span>
@@ -284,7 +286,7 @@
                 <span class="k">break</span>
             <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;change the configration of the gpios by overwrite their defaults value then reset</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;change the configration of the GPIOs by overwrite their defaults value then reset</span>
 <span class="sd">        need to take at least 1 cycle for reset &quot;&quot;&quot;</span>
 
     <span class="c1"># dont use back door accessing</span>
@@ -310,7 +312,7 @@
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish configuring gpios, the curret gpios value: &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_gpios_ctrl_val</span><span class="p">()</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;change the configration of the gpios by overwrite the register value</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;change the configration of the GPIOs by overwrite the register value</span>
 <span class="sd">        in control registers and housekeeping regs, don&#39;t consume simulation cycles&quot;&quot;&quot;</span>
 
     <span class="c1"># dont use back door accessing</span>
@@ -493,18 +495,18 @@
     <span class="c1">#     cocotb.log.info(f&#39; [caravel] drive_gpio_in pad mprj with {mprj}&#39;)</span>
 
 <div class="viewcode-block" id="Caravel_env.drive_gpio_in"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.drive_gpio_in">[docs]</a>    <span class="k">def</span> <span class="nf">drive_gpio_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bits</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;drive input gpios with specific data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;drive input GPIOs with specific data</span>
 
-<span class="sd">        :param bits: gpios to drive</span>
-<span class="sd">        :param int data: data to drive the gpios with</span>
+<span class="sd">        :param bits: GPIOs to drive</span>
+<span class="sd">        :param int data: data to drive the GPIOs with</span>
 <span class="sd">        :type bits: int or tuple(int, int)</span>
 
 <span class="sd">        Example:</span>
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            drive_gpio_in(7,0x1) # drive GPIO 7 with 1 (gpios[7]=1)</span>
-<span class="sd">            drive_gpio_in((31,0),0xFFFFFFFF) # drive GPIO 31 to 0 with ones (gpios[31:0]=32&#39;hFFFFFFFF)</span>
+<span class="sd">            drive_gpio_in(7,0x1) # drive GPIO 7 with 1 (GPIOs[7]=1)</span>
+<span class="sd">            drive_gpio_in((31,0),0xFFFFFFFF) # drive GPIO 31 to 0 with ones (GPIOs[31:0]=32&#39;hFFFFFFFF)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># io = self.caravel_hdl.padframe.mprj_pads.io</span>
         <span class="c1"># mprj , n_bits = common.signal_value_size(io)</span>
@@ -536,7 +538,7 @@
 
 <div class="viewcode-block" id="Caravel_env.release_gpio"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.release_gpio">[docs]</a>    <span class="k">def</span> <span class="nf">release_gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bits</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;release driving the value of mprj bits</span>
-<span class="sd">        :param bits: gpios to drive</span>
+<span class="sd">        :param bits: GPIOs to drive</span>
 <span class="sd">        :type bits: int or tuple(int, int)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">is_list</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">))</span>
@@ -563,7 +565,7 @@
 <div class="viewcode-block" id="Caravel_env.drive_mgmt_gpio"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.drive_mgmt_gpio">[docs]</a>    <span class="k">def</span> <span class="nf">drive_mgmt_gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;drive GPIO management with specific data</span>
 
-<span class="sd">        :param int data: data to drive the gpios with</span>
+<span class="sd">        :param int data: data to drive the GPIOs with</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_mgmt_gpi_hdl</span><span class="p">()</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">BinaryValue</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">n_bits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>

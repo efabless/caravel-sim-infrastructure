@@ -11,8 +11,10 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -206,7 +208,7 @@
 <dd><p>Configure all GPIOs with the config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a></p>
+<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a> </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -227,7 +229,7 @@
 <dd><p>Configure one GPIO with the input config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a></p>
+<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a> </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -244,15 +246,15 @@
 <span id="_CPPv310set_gpio_lj"></span><span id="_CPPv210set_gpio_lj"></span><span id="set_gpio_l__unsigned-i"></span><span class="target" id="gpios_8h_1a381a8a44c3dad81f0a46e202533dba8a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gpio_l</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_gpio_lj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the low 32 GPIOs GPIOS[31:0]</p>
 <p>Examples:</p>
-<ul>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">GPIOs</span> 
+<ul class="simple">
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">GPIOs</span>
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
-</li>
+ </p></li>
 </ul>
 </p>
 <div class="admonition note">
@@ -271,15 +273,15 @@
 <span id="_CPPv310set_gpio_hj"></span><span id="_CPPv210set_gpio_hj"></span><span id="set_gpio_h__unsigned-i"></span><span class="target" id="gpios_8h_1ac6950e132b8bd925bb1ede3d18631f05"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gpio_h</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_gpio_hj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the highest 6 GPIOs GPIOS[37:32]</p>
 <p>Examples:</p>
-<ul>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">GPIOs</span>
+<ul class="simple">
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">GPIOs</span>
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
-</li>
+ </p></li>
 </ul>
 </p>
 <div class="admonition note">
@@ -298,19 +300,19 @@
 <span id="_CPPv38set_gpiol"></span><span id="_CPPv28set_gpiol"></span><span id="set_gpio__l"></span><span class="target" id="gpios_8h_1a55f590722256813d85552b198b25440d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gpio</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48set_gpiol" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the 38 GPIOs GPIOS[37:0]</p>
 <p>Examples:</p>
-<ul>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">GPIOs</span> 
+<ul class="simple">
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
-</li>
+</p></li>
 </ul>
 <dl>
 <dt class="sig sig-object cpp">
@@ -355,15 +357,15 @@
 <span id="_CPPv311wait_gpio_lj"></span><span id="_CPPv211wait_gpio_lj"></span><span id="wait_gpio_l__unsigned-i"></span><span class="target" id="gpios_8h_1ae04c0971756bf7f833129bf0b6f6d547"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_l</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411wait_gpio_lj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the lowest 32 GPIOsto equal the data passed</p>
 <p>Examples:</p>
-<ul>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">GPIOs</span><span class="o">=</span> <span class="mi">0</span>  
+<ul class="simple">
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">GPIOs</span><span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
-</li>
+ </p></li>
 </ul>
 </p>
 <div class="admonition note">
@@ -382,15 +384,15 @@
 <span id="_CPPv311wait_gpio_hj"></span><span id="_CPPv211wait_gpio_hj"></span><span id="wait_gpio_h__unsigned-i"></span><span class="target" id="gpios_8h_1a9fb980ee2469d57c9d37eed263f1864d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_h</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411wait_gpio_hj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
-<ul>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span>  
+<ul class="simple">
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
-</li>
+ </p></li>
 </ul>
 </p>
 <div class="admonition note">
@@ -409,15 +411,15 @@
 <span id="_CPPv318wait_gpio_l_maskedjj"></span><span id="_CPPv218wait_gpio_l_maskedjj"></span><span id="wait_gpio_l_masked__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1a4f971ec71379f092d9b616ec6e40bde1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_l_masked</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418wait_gpio_l_maskedjj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the masked lowest 32 GPIOs to equal the data passed</p>
 <p>Examples:</p>
-<ul>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
+<ul class="simple">
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
-</li>
+ </p></li>
 </ul>
 </p>
 <div class="admonition note">
@@ -439,15 +441,15 @@
 <span id="_CPPv318wait_gpio_h_maskedjj"></span><span id="_CPPv218wait_gpio_h_maskedjj"></span><span id="wait_gpio_h_masked__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1ad071916d2d8c21af15b9dd1ed385b437"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_h_masked</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418wait_gpio_h_maskedjj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the masked highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
-<ul>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
+<ul class="simple">
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
-</li>
-<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
+ </p></li>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
-</li>
+ </p></li>
 </ul>
 </p>
 <div class="admonition note">
@@ -485,6 +487,39 @@
 <dt class="sig sig-object cpp" id="_CPPv420enable_external2_irqb">
 <span id="_CPPv320enable_external2_irqb"></span><span id="_CPPv220enable_external2_irqb"></span><span id="enable_external2_irq__b"></span><span class="target" id="irq__api_8h_1ae059d78d8da468ca24d853d9d573d1f6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_external2_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420enable_external2_irqb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable external2 interrupt GPIO[12]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416enable_user0_irqb">
+<span id="_CPPv316enable_user0_irqb"></span><span id="_CPPv216enable_user0_irqb"></span><span id="enable_user0_irq__b"></span><span class="target" id="irq__api_8h_1adb52fc0c18ec040baf3f570d146c4860"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user0_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416enable_user0_irqb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Enable or disable user0 interrupt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416enable_user1_irqb">
+<span id="_CPPv316enable_user1_irqb"></span><span id="_CPPv216enable_user1_irqb"></span><span id="enable_user1_irq__b"></span><span class="target" id="irq__api_8h_1ab8d9b3cf7899a7aaffb5c22d881a852d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user1_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416enable_user1_irqb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Enable or disable user1 interrupt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416enable_user2_irqb">
+<span id="_CPPv316enable_user2_irqb"></span><span id="_CPPv216enable_user2_irqb"></span><span id="enable_user2_irq__b"></span><span class="target" id="irq__api_8h_1a26224abf0d4e4285df5c607da63428f7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user2_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416enable_user2_irqb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Enable or disable user1 interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>is_enable</strong> – when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened </p>
