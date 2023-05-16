@@ -69,6 +69,7 @@ void enable_external1_irq(bool is_enable){
         #endif
     }
 }
+
 /**
  * Enable or disable external2 interrupt GPIO[12] 
  * 
@@ -92,6 +93,100 @@ void enable_external2_irq(bool is_enable){
         irq_setie(1);
         irq_setmask(irq_getmask() | (1 << USER_IRQ_5_INTERRUPT));
         reg_user5_irq_en =0;
+        #else
+        NVIC_DisableIRQ(HK_IRQ2);
+        __enable_irq();
+        #endif
+    }    
+}
+/**
+ * Enable or disable user0 interrupt 
+ * 
+ *  
+ * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
+ */
+void enable_user0_irq(bool is_enable){
+    if (is_enable){
+        #ifndef ARM
+        irq_setmask(0);
+        irq_setie(1);
+        irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
+        reg_user0_irq_en =1;
+        reg_user_irq_enable |=0x1;
+        #else
+        NVIC_EnableIRQ(HK_IRQ2);
+        __enable_irq();
+        #endif
+    }else{
+        #ifndef ARM
+        irq_setmask(0);
+        irq_setie(1);
+        irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
+        reg_user0_irq_en =0;
+        reg_user_irq_enable &=0x6;
+        #else
+        NVIC_DisableIRQ(HK_IRQ2);
+        __enable_irq();
+        #endif
+    }    
+}
+/**
+ * Enable or disable user1 interrupt 
+ * 
+ *  
+ * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
+ */
+void enable_user1_irq(bool is_enable){
+    if (is_enable){
+        #ifndef ARM
+        irq_setmask(0);
+        irq_setie(1);
+        irq_setmask(irq_getmask() | (1 << USER_IRQ_1_INTERRUPT));
+        reg_user1_irq_en =1;
+        reg_user_irq_enable |=0x2;
+        #else
+        NVIC_EnableIRQ(HK_IRQ2);
+        __enable_irq();
+        #endif
+    }else{
+        #ifndef ARM
+        irq_setmask(0);
+        irq_setie(1);
+        irq_setmask(irq_getmask() | (1 << USER_IRQ_1_INTERRUPT));
+        reg_user1_irq_en =0;
+        reg_user_irq_enable &=0x5;
+        #else
+        NVIC_DisableIRQ(HK_IRQ2);
+        __enable_irq();
+        #endif
+    }    
+}
+
+/**
+ * Enable or disable user1 interrupt 
+ * 
+ *  
+ * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
+ */
+void enable_user2_irq(bool is_enable){
+    if (is_enable){
+        #ifndef ARM
+        irq_setmask(0);
+        irq_setie(1);
+        irq_setmask(irq_getmask() | (1 << USER_IRQ_2_INTERRUPT));
+        reg_user2_irq_en =1;
+        reg_user_irq_enable |=0x4;
+        #else
+        NVIC_EnableIRQ(HK_IRQ2);
+        __enable_irq();
+        #endif
+    }else{
+        #ifndef ARM
+        irq_setmask(0);
+        irq_setie(1);
+        irq_setmask(irq_getmask() | (1 << USER_IRQ_2_INTERRUPT));
+        reg_user2_irq_en =0;
+        reg_user_irq_enable &=0x3;
         #else
         NVIC_DisableIRQ(HK_IRQ2);
         __enable_irq();

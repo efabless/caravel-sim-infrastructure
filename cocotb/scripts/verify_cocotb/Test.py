@@ -255,7 +255,7 @@ class Test:
         remove_argument(to_remove, "-seed")
         remove_argument(to_remove, "-sim")
         remove_argument(to_remove, "-corner")
-        command = " ".join([arg for arg in sys.argv if arg not in to_remove])
+        command = "python3 " + " ".join([arg for arg in sys.argv if arg not in to_remove])
         command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun   -sim {self.sim} -corner {self.corner} "
         if self.get_seed().isdigit():
             command += f" -seed {self.get_seed()} "

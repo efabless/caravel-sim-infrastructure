@@ -5,7 +5,7 @@ from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
-
+import logging 
 
 def check_valid_mail_addr(address):
     pat = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
@@ -14,12 +14,12 @@ def check_valid_mail_addr(address):
         return True
     print(f"invalid mail {address}")
     return False
-
-
+    
 class RunFLow:
     def __init__(self, args) -> None:
         self.args = args
         self.cocotb_path = self.args.cocotb_path
+        self.configure_logger()
         self.check_valid_args()
         design_info = self.get_design_info()
         self.set_paths(design_info)
@@ -27,7 +27,16 @@ class RunFLow:
         self.set_tag()
         self.set_args(design_info)
         self.set_config_script(design_info)
-        RunRegression(self.args, self.paths)
+        RunRegression(self.args, self.paths, self.logger)
+
+    def configure_logger(self):
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(message)s')
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.INFO)
+        console_handler.setFormatter(formatter)
+        self.logger.addHandler(console_handler)
 
     def check_valid_args(self):
         if all(
@@ -55,7 +64,7 @@ class RunFLow:
         Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(
             parents=True, exist_ok=True
         )
-        print(f"Run tag: {self.args.tag}")
+        self.logger.info(f"Run tag: {self.args.tag} ")
 
     def set_paths(self, design_info):
         if not os.path.exists(design_info["CARAVEL_ROOT"]) or not os.path.exists(

@@ -27,7 +27,7 @@ def read_config_file():
         # scalar values to Python the dictionary format
         configs = yaml.load(file, Loader=yaml.FullLoader)
 
-        print(configs)
+        # print(configs)
         return configs
 
 
@@ -41,6 +41,7 @@ async def test_configure(
     clk=25,
     timeout_precision=0.2,
     num_error=3,
+    start_up=True
 ) -> caravel.Caravel_env:
     """
     Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.
@@ -56,8 +57,9 @@ async def test_configure(
     Timeout(caravelEnv.clk, timeout_cycles, timeout_precision)
     cocotb.scheduler.add(max_num_error(num_error, caravelEnv.clk))
     caravelEnv.setup_clock(clk)
-    await caravelEnv.start_up()
-    await ClockCycles(caravelEnv.clk, 10)
+    if start_up:
+        await caravelEnv.start_up()
+        await ClockCycles(caravelEnv.clk, 10)
     # coverage = 'COVERAGE' in caravelEnv.design_macros._asdict()
     # checker = 'CHECKERS' in caravelEnv.design_macros._asdict()
     # if checker:
