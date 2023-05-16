@@ -93,7 +93,7 @@ class CallCounted:
         return self.method(*args, **kwargs)
 
 
-def repot_test(func):
+def report_test(func):
     async def wrapper_func(*args, **kwargs):
         # configure logging
         TESTFULLNAME = cocotb.plusargs["FTESTNAME"]
