@@ -97,7 +97,6 @@ The template for ``python`` test:
    import cocotb 
    # from cocotb_includes import UART
    # from cocotb_includes Caravel_env 
-   import cocotb
 
    @cocotb.test() # decorator to mark the test function as cocotb test
    @report_test # wrapper for configure test reporting files
