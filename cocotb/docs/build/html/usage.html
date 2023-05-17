@@ -136,7 +136,7 @@
    <span class="kn">import</span> <span class="nn">cocotb</span>
 
    <span class="nd">@cocotb</span><span class="o">.</span><span class="n">test</span><span class="p">()</span> <span class="c1"># decorator to mark the test function as cocotb test</span>
-   <span class="nd">@repot_test</span> <span class="c1"># wrapper for configure test reporting files</span>
+   <span class="nd">@report_test</span> <span class="c1"># wrapper for configure test reporting files</span>
    <span class="k">async</span> <span class="k">def</span> <span class="o">&lt;</span><span class="n">test_name</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dut</span><span class="p">):</span>
       <span class="n">caravelEnv</span> <span class="o">=</span> <span class="k">await</span> <span class="n">test_configure</span><span class="p">(</span><span class="n">dut</span><span class="p">)</span> <span class="c1">#configure, start up and reset caravel</span>
 
