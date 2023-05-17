@@ -95,7 +95,6 @@ class TestDefaults:
             self.run_gen_gpio_defaults()
 
             self.run_GL_test(i)
-            break
 
     def read_valid_modes(self):
         with open(f'{self.cocotb_path}/scripts/test_defaults/gpio_modes.yml') as modes_file:
@@ -160,7 +159,7 @@ class TestDefaults:
         os.system(f'python3 verify_cocotb.py -t check_defaults -tag default_run{i} -v -verbosity quiet -no_wave')
 
     def run_GL_test(self, i):
-        os.system(f'python3 verify_cocotb.py -t check_defaults -tag default_run{i} -v -verbosity quiet -sim GL ')
+        os.system(f'python3 verify_cocotb.py -t check_defaults -tag default_run{i} -v -verbosity quiet -sim GL -no_wave')
 
 
 x = TestDefaults()
