@@ -1,3 +1,4 @@
+design_info.yaml
 *.log
 sim_build
 sim
@@ -11,4 +12,3 @@ __pycache__
 AN.DB
 includes.v
 *.lst
-design_info.yaml
