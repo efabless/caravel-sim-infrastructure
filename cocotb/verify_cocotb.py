@@ -14,7 +14,7 @@ parser.add_argument(
 parser.add_argument(
     "-sim",
     nargs="+",
-    help="Simulation typerun RTL,GL & GL_SDF provided only when run -test<takes list as input>",
+    help="Simulation type RTL,GL & GL_SDF provided only when run -test<takes list as input>",
 )
 parser.add_argument("-testlist", "-tl", nargs="+",
         help="path of testlist to be run"
@@ -31,7 +31,7 @@ parser.add_argument(
     "-vcs",
     "-v",
     action="store_true",
-    help="use vcs as compiler if not used iverilog would be used",
+    help="use VCS as compiler if not used iverilog would be used",
 )
 parser.add_argument(
     "-corner",
@@ -52,16 +52,16 @@ parser.add_argument("-no_wave", action="store_true", help="disable dumping waves
 parser.add_argument(
     "-sdf_setup",
     action="store_true",
-    help="targeting setup violations by taking the sdf mamximum values",
+    help="targeting setup violations by taking the SDF maximum values",
 )
 parser.add_argument(
     "-clk", help="define the clock period in ns default defined at design_info.yaml"
 )
 parser.add_argument(
-    "-lint", action="store_true", help="generate lint log vcs must be used"
+    "-lint", action="store_true", help="generate lint log VCS must be used"
 )
 parser.add_argument(
-    "-macros", nargs="+", help="Add addtional verilog macros for the design "
+    "-macros", nargs="+", help="Add additional verilog macros for the design "
 )
 parser.add_argument(
     "-sim_path",

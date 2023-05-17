@@ -4,7 +4,7 @@ from interfaces.caravel import Caravel_env
 
 
 class UART:
-    """UART Verification environment to provide APIs to communicate with caravel uart through caravel gpios
+    """UART Verification environment to provide APIs to communicate with caravel UART through caravel gpios
 
     :param Caravel_env caravelEnv: caravel environment"""
 
@@ -15,7 +15,7 @@ class UART:
         self.bit_time_ns = round(
             1.01 * 10**5 * self.period / (96)
         )  # 10% factor of safety
-        cocotb.log.info(f"[UART] configure uart bit_time_ns = {self.bit_time_ns}ns")
+        cocotb.log.info(f"[UART] configure UART bit_time_ns = {self.bit_time_ns}ns")
 
     async def get_line(self):
         """Read line sent through UART (msg is sent by the software)
@@ -55,7 +55,7 @@ class UART:
 
         - Character is a 8 bit ASCII symbol"""
         char_bits = [int(x) for x in "{:08b}".format(ord(char))]
-        cocotb.log.info(f"[TEST] start sending on uart {char}")
+        cocotb.log.info(f"[TEST] start sending on UART {char}")
         # send start bit
         self.caravelEnv.drive_gpio_in((5, 5), 0)
         extra_time = 0
@@ -84,7 +84,7 @@ class UART:
     async def uart_send_line(self, line):
         """Send line to UART (msg is sent to the software)
 
-        - Line is a bunch of ASCII sybmols ended by linefeed '\\\\n'
+        - Line is a bunch of ASCII symbols  ended by linefeed '\\\\n'
         """
         for char in line:
             await self.uart_send_char(char)

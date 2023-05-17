@@ -51,6 +51,7 @@ async def test_configure(
     :param int clk: The clock period to be used in the design in ``'ns'`` default 12.5 ``'ns'``
     :param int timeout_precision: Precision of logging how many cycle left until the timeout default is 0.2 meaning if time is 100 cycle every 20 cycles there would be a warning message for timeout
     :param int num_error: Maximum number of errors reported before terminate the test
+    :param bool start_up: start up the test connecting power and reset
     :return: Object of type Caravel_env (caravel environment)
     """
     caravelEnv = caravel.Caravel_env(dut)
@@ -92,7 +93,7 @@ class CallCounted:
         return self.method(*args, **kwargs)
 
 
-def repot_test(func):
+def report_test(func):
     async def wrapper_func(*args, **kwargs):
         # configure logging
         TESTFULLNAME = cocotb.plusargs["FTESTNAME"]

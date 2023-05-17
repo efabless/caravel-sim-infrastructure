@@ -10,10 +10,10 @@ Prerequisites
 * Docker: [Linux](https://hub.docker.com/search?q=&type=edition&offering=community&operating_system=linux&utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) ||  [Windows](https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with Intel Chip](https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) || [Mac with M1 Chip](https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=header) 
 * Python 3.6+ with PIP
 * ```docker pull efabless/dv:cocotb```
-* Clone of caravel 
-* Clone of caravel managment repo
-* Clone of PDK from volare
-* Clone of caravel user project 
+* Clone of Caravel 
+* Clone of Caravel management repo
+* Clone of PDK from [volare](https://github.com/efabless/volare)
+* Clone of Caravel user project 
 <!-- end configure the repo include0 -->
 
 
@@ -50,13 +50,13 @@ Fill the ``design_info.yaml`` file with repos used as following:
   #clock in ns
   clk: 25  
 
-  # true when caravan are simulated instead of caravel
+  # true when caravan are simulated instead of Caravel
   caravan: false
 
   # optional email address to send the results to 
   emailto: [None,example@efabless.com]
 ```
-> **Note**: This step is only when first clone the repo.
+> **Note**: This step is required only the first time to run the project.
 
 <!-- end configure the repo include -->
 Creating a Test
@@ -64,7 +64,7 @@ Creating a Test
 
 <!-- start create a test include1 -->
 
-This section explains the the steps needed to create a test.
+This section explains the steps needed to create a test.
 
 A typical test for *Caravel* consists of 2 parts: ``Python/cocotb`` code and ``C`` code. 
 
@@ -96,9 +96,9 @@ The template for ``python`` test:
    import cocotb
 
    @cocotb.test() # decorator to mark the test function as cocotb test
-   @repot_test # wrapper for configure test reporting files
+   @report_test # wrapper for configure test reporting files
    async def <test_name>(dut):
-      caravelEnv = await test_configure(dut) #configure, start up and reset caravel
+      caravelEnv = await test_configure(dut) #configure, start up and reset Caravel
 
       ######################## add test sequence ###################### 
 
@@ -135,7 +135,7 @@ Commonly used APIs for firmware can be found in [`C_api`](docs/build/html/C_api.
 <!-- start create a test include3 -->
 # Test Examples
 
-Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb) for tests example generated for 16bit counter
+Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb) for tests example generated for 16-bit counter
 <!-- end create a test include3 -->
 
 
@@ -149,7 +149,7 @@ run a test
 =============================
 
 <!-- start run a test include -->
-Tests can run individually or as a test group using ``testlist``. Test can also run in RTL, GL or SDF sims with 8 different coreners.
+Tests can run individually or as a test group using ``testlist``. Tests can also run in RTL, GL or SDF sims with 9 different corners.
 
 To a test use run script verify_cocotb: 
 
@@ -165,7 +165,7 @@ usage: verify_cocotb.py [-h] [-test TEST [TEST ...]] [-sim SIM [SIM ...]]
                         [-sim_path SIM_PATH] [-verbosity VERBOSITY]
 
 
-Run caravel cocotb tests
+Run Caravel cocotb tests
 
 Arguments:
   -h, --help            show this help message and exit
@@ -173,48 +173,36 @@ Arguments:
   -test TEST [TEST ...], -t TEST [TEST ...]
                         name of test or tests.if no --sim provided RTL will be
                         run <takes list as input>
+  -sim SIM [SIM ...]    Simulation type RTL,GL & GL_SDF provided only when run
+                        -test<takes list as input>
 
-  -sim SIM [SIM ...]    Simulation typerun RTL,GL & GL_SDF provided only when
-                        run -test<takes list as input>
-                        
   -testlist TESTLIST [TESTLIST ...], -tl TESTLIST [TESTLIST ...]
                         path of testlist to be run
 
   -tag TAG              provide tag of the run default would be regression
                         name and if no regression is provided would be
                         run_<random float>_<timestamp>_
-
   -maxerr MAXERR        max number of errors for every test before simulation breaks default = 3
-
-  -vcs, -v              use vcs as compiler if not used iverilog would be used
+  -vcs, -v              use VCS as compiler if not used iverilog would be used
 
   -corner CORNER [CORNER ...], -c CORNER [CORNER ...]
                         Corner type in case of GL_SDF run has to be provided
-
-  -zip_passed           zip the waves and logs of passed tests. by default if the run 
-                        has more than 7 tests pass tests results would be zipped automatically
-
+  -zip_passed           zip the waves and logs of passed tests. by default if
+                        the run has more than 7 tests pass tests results would be zipped automatically
   -emailto EMAILTO [EMAILTO ...], -mail EMAILTO [EMAILTO ...]
                         mails to send results to when results finish
-
   -seed SEED            run with specific seed
-
   -no_wave              disable dumping waves
-
-  -sdf_setup            targeting setup violations by taking the sdf mamximum values
-
+  -sdf_setup            targeting setup violations by taking the SDF maximum values
   -clk CLK              define the clock period in ns default defined at design_info.yaml
-
-  -lint                 generate lint log vcs must be used
-
+  -lint                 generate lint log VCS must be used
   -macros MACROS [MACROS ...]
-                        Add addtional verilog macros for the design
-
+                        Add additional verilog macros for the design
   -sim_path SIM_PATH    directory where simulation result directory "sim"
                         would be created if None it would be created under cocotb folder
-
   -verbosity VERBOSITY  verbosity of the console output it can have one of 3
-                        value debug, normal or quiet the default value is normal               
+                        value debug, normal or quiet the default value is normal
+           
 ```
 <!-- end run a test include -->
 
