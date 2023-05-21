@@ -92,7 +92,11 @@ The template for ``python`` test:
 
 ```python
 
-   from cocotb_includes import * # import python APIs 
+   from cocotb_includes import test_configure
+   from cocotb_includes import report_test
+   import cocotb 
+   # from cocotb_includes import UART
+   # from cocotb_includes Caravel_env 
    import cocotb
 
    @cocotb.test() # decorator to mark the test function as cocotb test
