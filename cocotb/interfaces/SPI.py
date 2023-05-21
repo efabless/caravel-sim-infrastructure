@@ -7,19 +7,17 @@ from enum import IntEnum
 
 
 class SPI:
-    """The interface is acting as an spi master. It communicates mainly with the slave inside the housekeeping"""
+    """The interface is acting as an spi master. It communicates mainly with the slave inside the housekeeping
+
+    :param caravelEnv: The Caravel environment object to use.
+    :type caravelEnv: Caravel_env
+    :param clk_period: The clock period in microseconds, or None to use the default (3 times the Caravel clock period).
+    :type clk_period: float or None
+    :param spi_pins: The SPI pins to use, as a dictionary with keys "CSB", "SCK", "SDO", and "SDI".
+    :type spi_pins: dict[str, int]
+    """
 
     def __init__(self, caravelEnv: Caravel_env, clk_period=None, spi_pins={"CSB": 3, "SCK": 4, "SDO": 2, "SDI": 1}) -> None:
-        """
-        Initializes a new instance of the class.
-
-        :param caravelEnv: The Caravel environment object to use.
-        :type caravelEnv: Caravel_env
-        :param clk_period: The clock period in microseconds, or None to use the default (3 times the Caravel clock period).
-        :type clk_period: float or None
-        :param spi_pins: The SPI pins to use, as a dictionary with keys "CSB", "SCK", "SDO", and "SDI".
-        :type spi_pins: dict[str, int]
-        """
         self.caravelEnv = caravelEnv
         self.spi_pins = spi_pins
         # if clock period is not given, use caravel clock * 3
@@ -56,8 +54,10 @@ class SPI:
     async def _hk_write_byte(self, data):
         """
         Writes a byte of data to housekeeping slave using SDI
+
         Args:
         - data (int): The 8-bit data to be written.
+
         Returns:
         - None
         """
@@ -89,10 +89,8 @@ class SPI:
         """
         Disables the housekeeping SPI transmission by driving the CSB line high.
 
-        The function waits for 2 clock cycles before disabling to ensure that the prevous
-        writing command has been applied. It then drives the CSB line high and kills
-        the SPI clock. Finally, the function waits for some time to ensure that the
-        disable has taken effect.
+        **Note:** The function waits for 2 clock cycles before disabling to ensure that the previous writing command has been applied. 
+        It then drives the CSB line high and kills the SPI clock.Finally, the function waits for some time to ensure that the disable has taken effect.
         """
         cocotb.log.info("[SPI][disable_csb] disable housekeeping SPI transmission")
         # should wait for 2 clock cycles before disabling 
@@ -108,9 +106,7 @@ class SPI:
         """
         Enable the chip select bar (CSB) pin for SPI transmission.
 
-        This method drives the CSB pin low and sets up the SPI clock.
-        It also waits for some time after disabling the CSB pin for
-        the changes to take effect.
+        **Note:** This method drives the CSB pin low and sets up the SPI clock. It also waits for some time after disabling the CSB pin for the changes to take effect.
         """
         cocotb.log.info("[SPI][enable_csb] enable housekeeping SPI transmission")
         if self.caravelEnv.monitor_gpio(self.spi_pins["CSB"]) == 0:
@@ -125,14 +121,14 @@ class SPI:
         """
         Writes a register over SPI using the housekeeping SPI bus.
 
-        Args:
-            address (int): The address of the register to write.
-            data (int): The value to write to the register.
-            disable_csb (bool, optional): Whether to disable the chip select line after the write is complete.
-                Defaults to True.
+        :param address: The address of the register to write.
+        :type address: int
+        :param data: The value to write to the register.
+        :type data: int
+        :param disable_csb: Whether to disable the chip select line after the write is complete. Defaults to True.
+        :type disable_csb: bool
 
-        Returns:
-            None
+        :return: None
         """
         cocotb.log.info(f"[SPI][write_reg_spi] writing address {hex(address)}({bin(address)}) with data {hex(data)}({bin(data)}) using housekeeping SPI")
         await self.enable_csb()
@@ -146,13 +142,13 @@ class SPI:
         """
         Reads a byte from a register at the given address over the housekeeping SPI interface.
 
-        Args:
-            address (int): The address of the register to read from.
-            disable_csb (bool, optional): Whether to disable the chip select line after reading the byte.
-                Defaults to True.
+        
+        :param address: The address of the register to read from.
+        :type address: int
+        :param disable_csb: Whether to disable the chip select line after reading the byte. Defaults to True.
+        :type disable_csb: bool
 
-        Returns:
-            int: The byte read from the register.
+        :return: int: The byte read from the register.
         """
         cocotb.log.info(f"[SPI][read_reg_spi] reading {hex(address)} using housekeeping SPI")
         await self.enable_csb()
@@ -168,18 +164,16 @@ class SPI:
         """
         Writes to and reads from a register at the given SPI address using the housekeeping SPI.
 
-        Args:
-            address (int): The address of the register to write to/read from.
-            data (int): The data to write to the register.
-            disable_csb (bool): Whether to disable CSB after the operation. Default is True.
+        :param address: The address of the register to write to/read from.
+        :type address: int
+        :param data: The data to write to the register.
+        :type data: int
+        :param disable_csb: Whether to disable the chip select line after the operation. Defaults to True.
+        :type disable_csb: bool
+        :return: int: The data read from the register.
 
-        Returns:
-            int: The data read from the register.
+        :examples:
 
-        Raises:
-            SomeExceptionType: If some exceptional situation occurs.
-
-        Example:
             >>> result = await read_write_reg_spi(0x14, 0xAB)
             >>> print(hex(result))
             0x42
@@ -200,14 +194,15 @@ class SPI:
         """
         Writes to `n_bytes` bytes starting from the register at `address` over the housekeeping SPI.
 
-        Args:
-            address (int): The address of the register to write.
-            data (List[int]): The data to be written to the register.
-            n_bytes (int): The number of bytes to be written.
-            disable_csb (bool, optional): Whether to disable chip select after write. Defaults to True.
-
-        Returns:
-            None
+        :param address: The address of the register to write.
+        :type address: int
+        :param data: The data to be written to the register.
+        :type data: list(int)
+        :param n_bytes: The number of bytes to be written.
+        :type n_bytes: int
+        :param disable_csb: Whether to disable chip select after write. Defaults to True.
+        :type disable_csb: bool
+        :return: None
         """
         cocotb.log.info(f"[SPI][write_reg_spi_nbytes] writing address {hex(address)}({bin(address)}) with data {data} using housekeeping SPI")
         write_command = SPI.SPI_COMMAND.WRITE_STREAM.value | n_bytes << 3
@@ -223,13 +218,13 @@ class SPI:
         """
         Read `n_bytes` bytes starting from the register at `address` over the housekeeping SPI.
 
-        Args:
-            address: The address of the register to read.
-            n_bytes: The number of bytes to read.
-            disable_csb(bool, optional): Whether to disable the chip select (CSB) line after reading. Defaults to True.
-
-        Returns:
-            A list with `n_bytes` integers, where each integer is a byte read from the register.
+        :param address: The address of the register to read.
+        :type address: int
+        :param n_bytes: The number of bytes to read.
+        :type n_bytes: int
+        :param disable_csb: Whether to disable chip select after reading. Defaults to True.
+        :type disable_csb: bool
+        :return: A list with `n_bytes` integers, where each integer is a byte read from the register.
         """
         cocotb.log.info(f"[SPI][read_reg_spi_nbytes] reading {hex(address)}({bin(address)}) using housekeeping SPI")
         data = []
@@ -246,9 +241,13 @@ class SPI:
     async def reg_spi_user_pass_thru(self, send_data: list, read_byte_num: int = 0, disable_csb: bool = True):
         """
         Sends SPI data to a housekeeping SPI using user pass-thru command.
+        
         :param send_data: A list of data to be sent includeing the commands and addresses.
+        :type send_data: list
         :param read_byte_num: expected number of bytes to be read defaults to 0.
+        :type read_byte_num: int
         :param disable_csb: Whether to disable CSB after the transaction defaults to True.
+        :type disable_csb: bool
         :return: A list of read data if `read_byte_num` is not 0.
         """
         cocotb.log.info(f"[SPI][reg_spi_user_pass_thru] send data{send_data}")
@@ -269,19 +268,16 @@ class SPI:
 
     # use for configure in mgmt pass thru or user pass thru or any other command that doesn't have a function 
     async def reg_spi_op(self, command, address, disable_csb: bool = True):
-        """Perform a register SPI operation.
+        """
+        Perform a register SPI operation.
 
-        Args:
-            command (int): The SPI command byte.
-            address (int): The SPI address byte.
-            disable_csb (bool, optional): Whether to disable the chip select
-                line after the operation. Defaults to True.
-
-        Raises:
-            Any: Any exception raised by the underlying hardware driver.
-
-        Returns:
-            None: This function does not return anything.
+        :param command: The SPI command byte.
+        :type command: int
+        :param address: The SPI address byte.
+        :type address: int
+        :param disable_csb: Whether to disable the chip select line after the operation. Defaults to True.
+        :type disable_csb: bool
+        :return: None
         """
         await self.enable_csb()
         await self._hk_write_byte(command)
@@ -291,56 +287,20 @@ class SPI:
 
     class SPI_COMMAND(IntEnum):
         """
-        An example enum class representing SPI command bytes.
+        enum class representing SPI command bytes.
 
-        Attributes:
-            NO_OP (int): A command byte representing a no-op operation.
-            WRITE_STREAM (int): A command byte representing a write stream operation.
-            READ_STREAM (int): A command byte representing a read stream operation.
-            WRITE_READ (int): A command byte representing a write-and-read operation.
-            USER_PASS_THRU (int): A command byte representing a user pass-through operation.
-            MGMT_PATH_THRU (int): A command byte representing a management path pass-through operation.
+        members:
+            :NO_OP: A command byte representing a no-op operation.
+            :WRITE_STREAM: A command byte representing a write stream operation.
+            :READ_STREAM: A command byte representing a read stream operation.
+            :WRITE_READ: A command byte representing a write-and-read operation.
+            :USER_PASS_THRU: A command byte representing a user pass-through operation.
+            :MGMT_PATH_THRU: A command byte representing a management path pass-through operation.
         """
 
         NO_OP = 0x0
-        """
-        A command byte representing a no-op operation.
-
-        This command has a value of 0x0.
-        """
-
         WRITE_STREAM = 0x80
-        """
-        A command byte representing a write stream operation.
-
-        This command has a value of 0x80.
-        """
-
         READ_STREAM = 0x40
-        """
-        A command byte representing a read stream operation.
-
-        This command has a value of 0x40.
-        """
-
         WRITE_READ = 0xC0
-        """
-        A command byte representing a write-then-read operation.
-
-        This command has a value of 0xC0.
-        """
-
         USER_PASS_THRU = 0x02
-        """
-        A command byte representing a user pass-through operation.
-
-        This command has a value of 0x02.
-        """
-
         MGMT_PATH_THRU = 0xC4
-        """
-        A command byte representing a management path pass-through operation.
-
-        This command has a value of 0xC4.
-        """
-
