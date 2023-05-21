@@ -108,15 +108,6 @@ class MASK_GPIO_CTRL(Enum):
     MASK_GPIO_CTRL_DGTL_MODE = 10
 
 
-class SPI_COMMAND(Enum):
-    NO_OP = 0x0
-    WRITE_STREAM = 0x80
-    READ_STREAM = 0x40
-    READ_WRITE = 0xC0
-    USER_PASS_THRU = 0xC6
-    MGMT_PATH_THRU = 0xC4
-
-
 def get_gpio_num_bit():
     if 1:
         return 13
