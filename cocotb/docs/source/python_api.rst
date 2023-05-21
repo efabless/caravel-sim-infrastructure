@@ -22,6 +22,16 @@ Caravel Environment
    :exclude-members: drive_csb, power_up, start_up
 
 
+SPI Environment 
+-------------------
+
+.. currentmodule:: interfaces.SPI
+
+.. autoclass:: SPI
+   :members:
+   :member-order: bysource
+   :exclude-members: 
+
 UART Environment 
 -------------------
 

@@ -73,6 +73,22 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#spi-environment">SPI Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interfaces.SPI.SPI"><code class="docutils literal notranslate"><span class="pre">SPI</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.disable_csb"><code class="docutils literal notranslate"><span class="pre">SPI.disable_csb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.enable_csb"><code class="docutils literal notranslate"><span class="pre">SPI.enable_csb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.write_reg_spi"><code class="docutils literal notranslate"><span class="pre">SPI.write_reg_spi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.read_reg_spi"><code class="docutils literal notranslate"><span class="pre">SPI.read_reg_spi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.read_write_reg_spi"><code class="docutils literal notranslate"><span class="pre">SPI.read_write_reg_spi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.write_reg_spi_nbytes"><code class="docutils literal notranslate"><span class="pre">SPI.write_reg_spi_nbytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.read_reg_spi_nbytes"><code class="docutils literal notranslate"><span class="pre">SPI.read_reg_spi_nbytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.reg_spi_user_pass_thru"><code class="docutils literal notranslate"><span class="pre">SPI.reg_spi_user_pass_thru()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.reg_spi_op"><code class="docutils literal notranslate"><span class="pre">SPI.reg_spi_op()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.SPI.SPI.SPI_COMMAND"><code class="docutils literal notranslate"><span class="pre">SPI.SPI_COMMAND</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#uart-environment">UART Environment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#interfaces.UART.UART"><code class="docutils literal notranslate"><span class="pre">UART</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.get_line"><code class="docutils literal notranslate"><span class="pre">UART.get_line()</span></code></a></li>
@@ -306,11 +322,209 @@
 </dd></dl>
 
 </section>
+<section id="spi-environment">
+<h2>SPI Environment<a class="headerlink" href="#spi-environment" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.SPI.</span></span><span class="sig-name descname"><span class="pre">SPI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caravelEnv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><span class="pre">Caravel_env</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">clk_period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spi_pins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'CSB':</span> <span class="pre">3,</span> <span class="pre">'SCK':</span> <span class="pre">4,</span> <span class="pre">'SDI':</span> <span class="pre">1,</span> <span class="pre">'SDO':</span> <span class="pre">2}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI" title="Permalink to this definition"></a></dt>
+<dd><p>The interface is acting as an spi master. It communicates mainly with the slave inside the housekeeping</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>caravelEnv</strong> (<a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><em>Caravel_env</em></a>) – The Caravel environment object to use.</p></li>
+<li><p><strong>clk_period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><em>None</em>) – The clock period in microseconds, or None to use the default (3 times the Caravel clock period).</p></li>
+<li><p><strong>spi_pins</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em>) – The SPI pins to use, as a dictionary with keys “CSB”, “SCK”, “SDO”, and “SDI”.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.disable_csb">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">disable_csb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.disable_csb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.disable_csb" title="Permalink to this definition"></a></dt>
+<dd><p>Disables the housekeeping SPI transmission by driving the CSB line high.</p>
+<p><strong>Note:</strong> The function waits for 2 clock cycles before disabling to ensure that the previous writing command has been applied. 
+It then drives the CSB line high and kills the SPI clock.Finally, the function waits for some time to ensure that the disable has taken effect.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.enable_csb">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enable_csb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.enable_csb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.enable_csb" title="Permalink to this definition"></a></dt>
+<dd><p>Enable the chip select bar (CSB) pin for SPI transmission.</p>
+<p><strong>Note:</strong> This method drives the CSB pin low and sets up the SPI clock. It also waits for some time after disabling the CSB pin for the changes to take effect.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.write_reg_spi">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">write_reg_spi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_csb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.write_reg_spi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.write_reg_spi" title="Permalink to this definition"></a></dt>
+<dd><p>Writes a register over SPI using the housekeeping SPI bus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The address of the register to write.</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The value to write to the register.</p></li>
+<li><p><strong>disable_csb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to disable the chip select line after the write is complete. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.read_reg_spi">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_reg_spi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_csb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.read_reg_spi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.read_reg_spi" title="Permalink to this definition"></a></dt>
+<dd><p>Reads a byte from a register at the given address over the housekeeping SPI interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The address of the register to read from.</p></li>
+<li><p><strong>disable_csb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to disable the chip select line after reading the byte. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>int: The byte read from the register.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.read_write_reg_spi">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_write_reg_spi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_csb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.read_write_reg_spi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.read_write_reg_spi" title="Permalink to this definition"></a></dt>
+<dd><p>Writes to and reads from a register at the given SPI address using the housekeeping SPI.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The address of the register to write to/read from.</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The data to write to the register.</p></li>
+<li><p><strong>disable_csb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to disable the chip select line after the operation. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>int: The data read from the register.</p>
+</dd>
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
+<dd class="field-odd"><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">read_write_reg_spi</span><span class="p">(</span><span class="mh">0x14</span><span class="p">,</span> <span class="mh">0xAB</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+<span class="go">0x42</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">read_write_reg_spi</span><span class="p">(</span><span class="mh">0x14</span><span class="p">,</span> <span class="mh">0xD7</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+<span class="go">0xAB</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.write_reg_spi_nbytes">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">write_reg_spi_nbytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_csb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.write_reg_spi_nbytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.write_reg_spi_nbytes" title="Permalink to this definition"></a></dt>
+<dd><p>Writes to <cite>n_bytes</cite> bytes starting from the register at <cite>address</cite> over the housekeeping SPI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The address of the register to write.</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>)</em>) – The data to be written to the register.</p></li>
+<li><p><strong>n_bytes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The number of bytes to be written.</p></li>
+<li><p><strong>disable_csb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to disable chip select after write. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.read_reg_spi_nbytes">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read_reg_spi_nbytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_csb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.read_reg_spi_nbytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.read_reg_spi_nbytes" title="Permalink to this definition"></a></dt>
+<dd><p>Read <cite>n_bytes</cite> bytes starting from the register at <cite>address</cite> over the housekeeping SPI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The address of the register to read.</p></li>
+<li><p><strong>n_bytes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The number of bytes to read.</p></li>
+<li><p><strong>disable_csb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to disable chip select after reading. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list with <cite>n_bytes</cite> integers, where each integer is a byte read from the register.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.reg_spi_user_pass_thru">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reg_spi_user_pass_thru</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">send_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><span class="pre">list</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">read_byte_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_csb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.reg_spi_user_pass_thru"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.reg_spi_user_pass_thru" title="Permalink to this definition"></a></dt>
+<dd><p>Sends SPI data to a housekeeping SPI using user pass-thru command.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>send_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a>) – A list of data to be sent includeing the commands and addresses.</p></li>
+<li><p><strong>read_byte_num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – expected number of bytes to be read defaults to 0.</p></li>
+<li><p><strong>disable_csb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to disable CSB after the transaction defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of read data if <cite>read_byte_num</cite> is not 0.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.reg_spi_op">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">reg_spi_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disable_csb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.reg_spi_op"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.reg_spi_op" title="Permalink to this definition"></a></dt>
+<dd><p>Perform a register SPI operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>command</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The SPI command byte.</p></li>
+<li><p><strong>address</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – The SPI address byte.</p></li>
+<li><p><strong>disable_csb</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – Whether to disable the chip select line after the operation. Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.SPI.SPI.SPI_COMMAND">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SPI_COMMAND</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/SPI.html#SPI.SPI_COMMAND"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.SPI.SPI.SPI_COMMAND" title="Permalink to this definition"></a></dt>
+<dd><p>enum class representing SPI command bytes.</p>
+<dl class="simple">
+<dt>members:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">NO_OP<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A command byte representing a no-op operation.</p>
+</dd>
+<dt class="field-even">WRITE_STREAM<span class="colon">:</span></dt>
+<dd class="field-even"><p>A command byte representing a write stream operation.</p>
+</dd>
+<dt class="field-odd">READ_STREAM<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A command byte representing a read stream operation.</p>
+</dd>
+<dt class="field-even">WRITE_READ<span class="colon">:</span></dt>
+<dd class="field-even"><p>A command byte representing a write-and-read operation.</p>
+</dd>
+<dt class="field-odd">USER_PASS_THRU<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A command byte representing a user pass-through operation.</p>
+</dd>
+<dt class="field-even">MGMT_PATH_THRU<span class="colon">:</span></dt>
+<dd class="field-even"><p>A command byte representing a management path pass-through operation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="uart-environment">
 <h2>UART Environment<a class="headerlink" href="#uart-environment" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="interfaces.UART.UART">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.UART.</span></span><span class="sig-name descname"><span class="pre">UART</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caravelEnv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><span class="pre">Caravel_env</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.UART.</span></span><span class="sig-name descname"><span class="pre">UART</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caravelEnv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#interfaces.caravel.Caravel_env" title="interfaces.caravel.Caravel_env"><span class="pre">Caravel_env</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">uart_pins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'rx':</span> <span class="pre">5,</span> <span class="pre">'tx':</span> <span class="pre">6}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/UART.html#UART"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART" title="Permalink to this definition"></a></dt>
 <dd><p>UART Verification environment to provide APIs to communicate with caravel UART through caravel gpios</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
