@@ -106,6 +106,24 @@ void uart_pop_char(){
     return;
 }
 
+/**
+ * read full line msg and return it
+ * 
+ */
+char* uart_get_line(){
+    char* received_array =0;
+    char received_char;
+    int count = 0;
+    while ((received_char = uart_getc()) != '\n'){
+        received_array[count++] = received_char;
+        uart_pop_char();
+    }
+    received_array[count++] = received_char;
+    uart_pop_char();
+    return received_array;
+}
+
+
 #ifdef DOXYGEN_DOCS_ONLY
 /**
  * Send ASCII symbol or symbols through UART 
@@ -115,5 +133,15 @@ void uart_pop_char(){
 void print(const char *p){}
 // real function defined at caravel repo 
 #endif // DOXYGEN_DOCS_ONLY
+/**
+ * Send ASCII char through UART
+ * @param c ASCII char to send
+ * 
+ * TX mode have to be enabled
+ */
+void uart_putc(char c){
+    while (reg_uart_txfull == 1);
+	reg_uart_data = c;
+}
 
 #endif // UART_API_C_HEADER_FILE
