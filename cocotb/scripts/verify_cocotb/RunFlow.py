@@ -97,6 +97,9 @@ class RunFLow:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
+            # For openframe as the cpu is inside the user project the firmware files should be inside user project as well
+            if self.args.openframe: 
+                FIRMWARE_PATH = f"{design_info['USER_PROJECT_ROOT']}/verilog/dv/firmware"
         COCOTB_PATH = self.args.cocotb_path
         SIM_PATH = (
             f"{COCOTB_PATH}/sim"
@@ -226,6 +229,7 @@ class CocotbArgs:
         sim_path=None,
         cocotb_root=".",
         verbosity="normal",
+        openframe=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -247,7 +251,8 @@ class CocotbArgs:
         # dev only
         self.lint = None
         # related to repos
-        self.cpu_type = None  # would be filled by other class 
+        self.cpu_type = None  # would be filled by other class
+        self.openframe = openframe
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -268,3 +273,4 @@ class CocotbArgs:
         self.lint = args.lint
         self.cocotb_path = os.getcwd()
         self.verbosity = args.verbosity
+        self.openframe = args.openframe

@@ -1,3 +1,3 @@
 Overview
 ========
-This repo to add UVM verification For caravel in the future. 
+This folder will contain the UVM verification infrastucture For Caravel. 

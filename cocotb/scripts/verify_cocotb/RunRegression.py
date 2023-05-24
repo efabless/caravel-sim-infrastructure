@@ -32,6 +32,8 @@ class RunRegression:
         if self.args.macros is None:
             self.args.macros = list()
         simulation_macros = ["USE_POWER_PINS", "UNIT_DELAY=#1", "COCOTB_SIM"]
+        if self.args.openframe:
+            simulation_macros.append("OPENFRAME")
         paths_macros = [
             f'COCOTB_PATH=\\"{self.paths.COCOTB_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
