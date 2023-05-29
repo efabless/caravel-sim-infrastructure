@@ -1,5 +1,5 @@
 import cocotb
-from cocotb.triggers import Timer
+from cocotb.triggers import Timer, FallingEdge, NextTimeStep
 from interfaces.caravel import Caravel_env
 
 
@@ -45,11 +45,10 @@ class UART:
         return chr(int(char, 2))
 
     async def start_of_tx(self):
-        while True:  # wait for the start of the transimission it 1 then 0
-            if self.caravelEnv.monitor_gpio(self.uart_pins["tx"]).integer == 0:
-                break
-            await Timer(round(self.bit_time_ns / 100), units="ns")
+        await FallingEdge(self.caravelEnv.dut._id(f"gpio{self.uart_pins['tx']}_monitor",False))
         await Timer(self.bit_time_ns, units="ns")
+        await NextTimeStep()
+        await NextTimeStep()
 
     async def uart_send_char(self, char):
         """Send character to UART (character is sent to the software)
@@ -71,6 +70,7 @@ class UART:
         for i in reversed(range(8)):
             self.caravelEnv.drive_gpio_in(self.uart_pins["rx"], char_bits[i])
             await Timer(self.bit_time_ns, units="ns")
+            await NextTimeStep()
 
         # stop of frame
         self.caravelEnv.drive_gpio_in(self.uart_pins["rx"], 1)
