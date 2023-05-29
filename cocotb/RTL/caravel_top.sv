@@ -282,8 +282,8 @@ caravel uut (
 	wire gpio37;
 	wire gpio37_en;
 	`ifdef OPENFRAME 
-	wire gpio38;
-	wire gpio38_en;
+	wire gpio38 = 0;
+	wire gpio38_en = 0;
 	wire gpio39;
 	wire gpio39_en;
 	wire gpio40;
@@ -343,7 +343,7 @@ caravel uut (
 	assign mprj_io_tb[36] = (gpio36_en) ? gpio36 : 1'bz;
 	assign mprj_io_tb[37] = (gpio37_en) ? gpio37 : 1'bz;
 	`ifdef OPENFRAME 
-	assign mprj_io_tb[38] = (gpio38_en) ? gpio38 : 1'bz;
+	// assign mprj_io_tb[38] = (gpio38_en) ? gpio38 : 1'bz;
 	assign mprj_io_tb[39] = (gpio39_en) ? gpio39 : 1'bz;
 	assign mprj_io_tb[40] = (gpio40_en) ? gpio40 : 1'bz;
 	assign mprj_io_tb[41] = (gpio41_en) ? gpio41 : 1'bz;
