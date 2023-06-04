@@ -17,7 +17,7 @@
 #include <gpios.h>
 #include <timer0.h>
 #include <mgmt_gpio.h>
-#ifdef OPENFRAME
+#ifndef OPENFRAME
 #include <irq_api.h>
 #endif
 #include <la.h>
