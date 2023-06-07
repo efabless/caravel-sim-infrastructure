@@ -144,4 +144,29 @@ void uart_putc(char c){
 	reg_uart_data = c;
 }
 
+/**
+ * Send int through UART 
+ * the int would be sent as 8 hex characters
+ * @param c int to send
+ * 
+ * TX mode have to be enabled
+ */
+void uart_put_int(int data){
+ for (int i = 0; i < 8; i++) {
+        // Extract the current 4-bit chunk
+        int chunk = (data >> (i * 4)); 
+        if (chunk == 0) {
+            break;
+        }
+        chunk = chunk & 0x0F;
+        char ch; 
+        if (chunk >= 0 && chunk <= 9) {
+            ch = '0' + chunk;  // Convert to corresponding decimal digit character
+        } else {
+            ch = 'A' + (chunk - 10);  // Convert to corresponding hex character A-F
+        }
+        uart_putc(ch);
+    }
+    uart_putc('\n');
+}
 #endif // UART_API_C_HEADER_FILE
