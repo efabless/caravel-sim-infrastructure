@@ -255,7 +255,7 @@ class Test:
         remove_argument(to_remove, "-seed")
         remove_argument(to_remove, "-sim")
         remove_argument(to_remove, "-corner")
-        command = " ".join([arg for arg in sys.argv if arg not in to_remove])
+        command = "python3 " + " ".join([arg for arg in sys.argv if arg not in to_remove])
         command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun   -sim {self.sim} -corner {self.corner} "
         if self.get_seed().isdigit():
             command += f" -seed {self.get_seed()} "
@@ -358,7 +358,7 @@ class Test:
             includes = open(self.includes_file, 'r').read()
         else:
             if self.sim == "RTL":
-                includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel")
+                includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/{'includes.rtl.caravel' if not self.args.openframe else 'includes.rtl.openframe'}")
             elif self.sim == "GL":
                 includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel")
         includes = paths + includes
@@ -370,7 +370,7 @@ class Test:
             paths = open(file, "r").read()
             self.includes_list = f"{self.test_dir}/includes"
             if self.sim == "RTL":
-                includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel", 'r').read()
+                includes = open(f"{self.paths.VERILOG_PATH}/includes/{'includes.rtl.caravel' if not self.args.openframe else 'includes.rtl.openframe'}", 'r').read()
             elif self.sim == "GL":
                 includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", 'r').read()
             includes = paths + includes

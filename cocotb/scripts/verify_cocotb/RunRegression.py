@@ -15,9 +15,10 @@ import time
 
 
 class RunRegression:
-    def __init__(self, args, paths) -> None:
+    def __init__(self, args, paths, logger) -> None:
         self.args = args
         self.paths = paths
+        self.logger = logger
         self.total_start_time = datetime.now()
         self.write_command_log()
         self.write_git_log()
@@ -31,6 +32,8 @@ class RunRegression:
         if self.args.macros is None:
             self.args.macros = list()
         simulation_macros = ["USE_POWER_PINS", "UNIT_DELAY=#1", "COCOTB_SIM"]
+        if self.args.openframe:
+            simulation_macros.append("OPENFRAME")
         paths_macros = [
             f'COCOTB_PATH=\\"{self.paths.COCOTB_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
@@ -187,7 +190,7 @@ class RunRegression:
     def test_run_function(self, test):
         test.start_of_test()
         self.update_run_log()
-        RunTest(self.args, self.paths, test)
+        RunTest(self.args, self.paths, test, self.logger)
         self.update_run_log()
 
     def generate_cov(self):
@@ -393,8 +396,8 @@ class RunRegression:
         else:
             corners = self.args.corner
 
-        sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/caravel/primetime/sdf"
-        sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/caravel/primetime/sdf"
+        sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
+        sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/user_project_wrapper/primetime/sdf"
 
         # check if user sdf dir exists 
@@ -406,7 +409,7 @@ class RunRegression:
             start_time = time.time()
             sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
             sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [f"{sdf_dir}/{sdf_prefix1}/caravel.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/user_project_wrapper.{sdf_prefix2}.sdf"]
+            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/user_project_wrapper.{sdf_prefix2}.sdf"]
             for output_file in output_files:
                 compress_file = output_file + ".gz"
                 # delete output file if exists 
@@ -416,4 +419,4 @@ class RunRegression:
                 os.system(f"gzip -dc {compress_file} > {output_file}")
                 end_time = time.time()
                 execution_time = end_time - start_time
-                print(f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds")
+                self.logger.info(f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds")

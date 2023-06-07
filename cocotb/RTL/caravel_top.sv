@@ -1,6 +1,5 @@
 `timescale 1 ns / 1 ps
-`ifdef VCS
-	`include "includes.v" // in case of RTL coverage is needed and it doesn't work correctly without include files by this way
+`include "includes.v" // in case of RTL coverage is needed and it doesn't work correctly without include files by this way
 `ifdef sky130
 `ifndef ENABLE_SDF
 	`include "libs.ref/sky130_fd_io/verilog/sky130_fd_io.v"
@@ -25,7 +24,6 @@
 	// `include "libs.ref/gf180mcu_sc7_hv/verilog/GF018hv5v_mcu_sc7.v"
 	`include "libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1.v"
 `endif //sky180
-`endif // VCS
 
 
 module caravel_top ;
@@ -72,7 +70,11 @@ end
     wire vssd2_tb;	// User area 2 digital ground
 
     wire gpio_tb;		// Used for external LDO control
-    wire [38-1:0] mprj_io_tb;
+	`ifndef OPENFRAME 
+	wire [`MPRJ_IO_PADS-1:0] mprj_io_tb;
+	`else //OPENFRAME
+    wire [`OPENFRAME_IO_PADS-1:0] mprj_io_tb;
+	`endif //OPENFRAME
     reg clock_tb;    	// CMOS core clock input; not a crystal
     wire resetb_tb;	// Reset input (sense inverted)
 
@@ -85,6 +87,7 @@ end
     wire flash_clk_tb;
     wire flash_io0_tb;
     wire flash_io1_tb;
+`ifndef OPENFRAME 
 `ifdef CPU_TYPE_ARM
 swift_caravel uut (
 `else //CPU_TYPE_ARM
@@ -126,7 +129,7 @@ caravel uut (
 		.flash_io1(flash_io1_tb),
 		.resetb	  (resetb_tb)
 	);
-	
+
 	`ifdef CPU_TYPE_ARM 
 	sst26wf080b flash(
 		.SCK (flash_clk_tb),
@@ -157,7 +160,47 @@ caravel uut (
 		.io3()			// not used
 	);
 	`endif // CPU_TYPE_ARM
-	mac macros();
+`else // ! openframe
+	assign mprj_io_tb[38] = clock_tb;
+	caravel_openframe uut (
+		.vddio	  (vddio_tb),
+		.vssio	  (vssio_tb),
+		.vdda	  (vdda_tb),
+		.vssa	  (vssa_tb),
+		.vccd	  (vccd_tb),
+		.vssd	  (vssd_tb),
+		.vdda1    (vdda1_tb),
+		.vdda2    (vdda2_tb),
+		.vssa1	  (vssa1_tb),
+		.vssa2	  (vssa2_tb),
+		.vccd1	  (vccd1_tb),
+		.vccd2	  (vccd2_tb),
+		.vssd1	  (vssd1_tb),
+		.vssd2	  (vssd2_tb),
+		.gpio     (mprj_io_tb),
+		.resetb	  (resetb_tb)
+	);
+
+    spiflash #(
+        .FILENAME(FILENAME)
+    ) spiflash (
+        .csb(mprj_io_tb[39]),
+        .clk(mprj_io_tb[40]),
+        .io0(mprj_io_tb[41]),
+        .io1(mprj_io_tb[42]),
+        .io2(mprj_io_tb[36]),
+        .io3(mprj_io_tb[37])
+    );
+	// do anything to the unused wires so cocotb can read them when iverilog is used
+	// apparently iverilog can't read the unused wires and that causes an error in python 
+	assign gpio_tb = 0; 
+	assign vddio_2_tb = 0; 
+	assign vssio_2_tb = 0; 
+	assign vdda1_2_tb = 0; 
+	assign vssa1_2_tb = 0; 
+
+`endif // ! openframe
+
 
 
 	// make speical variables for the mprj input to assign the input without writing to the output gpios
@@ -238,6 +281,20 @@ caravel uut (
 	wire gpio36_en;	
 	wire gpio37;
 	wire gpio37_en;
+	`ifdef OPENFRAME 
+	wire gpio38;
+	wire gpio38_en;
+	wire gpio39;
+	wire gpio39_en;
+	wire gpio40;
+	wire gpio40_en;
+	wire gpio41;
+	wire gpio41_en;
+	wire gpio42;
+	wire gpio42_en;
+	wire gpio43;
+	wire gpio43_en;
+	`endif // OPENFRAME
 	
 
 	assign mprj_io_tb[0] = (gpio0_en) ? gpio0 : 1'bz;
@@ -285,7 +342,15 @@ caravel uut (
 	assign mprj_io_tb[35] = (gpio35_en) ? gpio35 : 1'bz;
 	assign mprj_io_tb[36] = (gpio36_en) ? gpio36 : 1'bz;
 	assign mprj_io_tb[37] = (gpio37_en) ? gpio37 : 1'bz;
-
+	`ifdef OPENFRAME 
+	assign mprj_io_tb[38] = (gpio38_en) ? gpio38 : 1'bz;
+	assign mprj_io_tb[39] = (gpio39_en) ? gpio39 : 1'bz;
+	assign mprj_io_tb[40] = (gpio40_en) ? gpio40 : 1'bz;
+	assign mprj_io_tb[41] = (gpio41_en) ? gpio41 : 1'bz;
+	assign mprj_io_tb[42] = (gpio42_en) ? gpio42 : 1'bz;
+	assign mprj_io_tb[43] = (gpio43_en) ? gpio43 : 1'bz;
+	`endif // OPENFRAME
+	
 
 
 	// to read from mprj array with iverilog  
@@ -327,6 +392,14 @@ caravel uut (
 	wire gpio35_monitor;
 	wire gpio36_monitor;
 	wire gpio37_monitor;
+	`ifdef OPENFRAME
+	wire gpio38_monitor;
+	wire gpio39_monitor;
+	wire gpio40_monitor;
+	wire gpio41_monitor;
+	wire gpio42_monitor;
+	wire gpio43_monitor;
+	`endif // OPENFRAME
 
 	assign gpio0_monitor = mprj_io_tb[0];
 	assign gpio1_monitor = mprj_io_tb[1];
@@ -366,58 +439,13 @@ caravel uut (
 	assign gpio35_monitor = mprj_io_tb[35];
 	assign gpio36_monitor = mprj_io_tb[36];
 	assign gpio37_monitor = mprj_io_tb[37];
+	`ifdef OPENFRAME 
+	assign gpio38_monitor = mprj_io_tb[38];
+	assign gpio39_monitor = mprj_io_tb[39];
+	assign gpio40_monitor = mprj_io_tb[40];
+	assign gpio41_monitor = mprj_io_tb[41];
+	assign gpio42_monitor = mprj_io_tb[42];
+	assign gpio43_monitor = mprj_io_tb[43];
+	`endif // OPENFRAME
 
-endmodule
-
-// module that has all needed macros by cocotb
-module mac;
-
-reg [7:0] MPRJ_IO_PADS_1  = `ifdef MPRJ_IO_PADS_1 `MPRJ_IO_PADS_1 `else 0 `endif;	/* number of user GPIO pads on user1 side */
-reg [7:0] MPRJ_IO_PADS_2  = `ifdef MPRJ_IO_PADS_2 `MPRJ_IO_PADS_2 `else 0 `endif;	/* number of user GPIO pads on user2 side */
-reg [7:0] MPRJ_IO_PADS    = `ifdef MPRJ_IO_PADS `MPRJ_IO_PADS `else 0 `endif;
-reg [7:0] MPRJ_PWR_PADS_1 =`ifdef MPRJ_PWR_PADS_1 `MPRJ_PWR_PADS_1 `else 0 `endif;	/* vdda1, vccd1 enable/disable control */
-reg [7:0] MPRJ_PWR_PADS_2 = `ifdef MPRJ_PWR_PADS_2 `MPRJ_PWR_PADS_2 `else 0 `endif;	/* vdda2, vccd2 enable/disable control */
-reg [7:0] MPRJ_PWR_PADS   =`ifdef MPRJ_PWR_PADS `MPRJ_PWR_PADS `else 0 `endif;
-// Analog pads are only used by the "caravan" module and associated
-// modules such as user_analog_project_wrapper and chip_io_alt.
-reg [7:0] ANALOG_PADS_1  = `ifdef ANALOG_PADS_1 `ANALOG_PADS_1 `else 0 `endif;
-reg [7:0] ANALOG_PADS_2  = `ifdef ANALOG_PADS_2 `ANALOG_PADS_2 `else 0 `endif;
-reg [7:0] ANALOG_PADS    = `ifdef ANALOG_PADS `ANALOG_PADS `else 0 `endif;
-
-// Type and size of soc_mem
-reg USE_CUSTOM_DFFRAM    = `ifdef USE_CUSTOM_DFFRAM 1 `else 0 `endif;
-// don't change the following without double checking addr widths
-reg [7:0] MEM_WORDS      = `ifdef MEM_WORDS `MEM_WORDS `else 0 `endif;
-// Number of columns in the custom memory; takes one of three values:
-// 1 column : 1 KB, 2 column: 2 KB, 4 column: 4KB
-reg [7:0] DFFRAM_WSIZE   = `ifdef DFFRAM_WSIZE `DFFRAM_WSIZE `else 0 `endif;
-reg [7:0] DFFRAM_USE_LATCH = `ifdef DFFRAM_USE_LATCH `DFFRAM_USE_LATCH `else 0 `endif;
-
-// not really parameterized but just to easily keep track of the number
-// of ram_block across different modules
-reg [7:0] RAM_BLOCKS = `ifdef RAM_BLOCKS `RAM_BLOCKS `else 0 `endif;
-
-// Clock divisor default value
-reg [7:0] CLK_DIV = `ifdef CLK_DIV `CLK_DIV `else 0 `endif;
-
-// GPIO control default mode and enable for most I/Os
-// Most I/Os set to be user bidirectional pins on power-up.
-reg [7:0] MGMT_INIT = `ifdef MGMT_INIT `MGMT_INIT `else 0 `endif;
-reg [7:0] OENB_INIT = `ifdef OENB_INIT `OENB_INIT `else 0 `endif;
-reg [7:0] DM_INIT   = `ifdef DM_INIT   `DM_INIT `else 0 `endif;
-
-// GL
-
-reg GL = `ifdef GL 1 `else 0 `endif;
-
-reg CARAVAN = `ifdef CARAVAN 1 `else 0 `endif;
-
-reg CHECKERS = `ifdef CHECKERS 1 `else 0 `endif;
-reg COVERAGE = `ifdef COVERAGE 1 `else 0 `endif;
-reg ARM      = `ifdef CPU_TYPE_ARM      1 `else 0 `endif;
-
-reg [31:0] LA_SIZE  = `ifdef LA_SIZE `LA_SIZE `else 0 `endif;
-reg [31:0]USER_SPACE_ADDR  = `USER_SPACE_ADDR ;
-reg [31:0]USER_SPACE_SIZE  = `USER_SPACE_SIZE ;
-reg [31:0]IO_CTRL_BITS  = `IO_CTRL_BITS;
 endmodule

@@ -27,7 +27,7 @@ class Caravel_env:
     """
     Verification environment for caraval
 
-    - provide APIs for monitoring and driving caravel gpios, power pins, clock and reset pins
+    - provide APIs for monitoring and driving caravel GPIOs, power pins, clock and reset pins
 
     :param SimHandle dut: dut handle
     """
@@ -35,9 +35,12 @@ class Caravel_env:
     def __init__(self, dut: SimHandleBase):
         self.dut = dut
         self.clk = dut.clock_tb
-        self.caravel_hdl = dut.uut.chip_core
-        self.hk_hdl = dut.uut.chip_core.housekeeping
-        self.user_hdl = dut.uut.chip_core.mprj
+        try:
+            self.caravel_hdl = dut.uut.chip_core
+            self.hk_hdl = dut.uut.chip_core.housekeeping
+            self.user_hdl = dut.uut.chip_core.mprj
+        except AttributeError:
+            pass
         self.active_gpios_num = 37  # number of active gpios
         self.get_macros()
 
@@ -116,29 +119,29 @@ class Caravel_env:
         await ClockCycles(self.clk, 1)
 
     async def disable_csb(self):
-        """Set the SPI CSB  signal high to disable housekeeping spi transmission pin E8 mprj[3]"""
-        cocotb.log.info(" [caravel] disable housekeeping spi transmission")
+        """Set the SPI CSB  signal high to disable housekeeping SPI transmission pin E8 mprj[3]"""
+        cocotb.log.info(" [caravel] disable housekeeping SPI transmission")
         await self.drive_csb(1)
         # await self.release_csb()
         await ClockCycles(self.clk, 1)
 
     async def release_csb(self):
         """Set the SPI CSB  signal high impedance"""
-        cocotb.log.info(" [caravel] release housekeeping spi transmission")
+        cocotb.log.info(" [caravel] release housekeeping SPI transmission")
         self.release_gpio(2)
         self.release_gpio(3)
         self.release_gpio(4)
         await ClockCycles(self.clk, 1)
 
     async def enable_csb(self):
-        """Set the SPI CSB  signal low to enable housekeeping spi transmission pin E8 mprj[3]"""
-        cocotb.log.info(" [caravel] enable housekeeping spi transmission")
+        """Set the SPI CSB  signal low to enable housekeeping SPI transmission pin E8 mprj[3]"""
+        cocotb.log.info(" [caravel] enable housekeeping SPI transmission")
         await self.drive_csb(0)
 
     def monitor_gpio(self, h_bit, l_bit=None) -> cocotb.binary.BinaryValue:
         """monitor GPIOs output value
 
-        :param h_bit: highest GPIO number of the tuple of (high gpio, low gpio)
+        :param h_bit: highest GPIO number of the tuple of (high GPIO, low GPIO)
         :param l_bit: lowest GPIO to monitor number
         :type h_bit: int or tuple(int, int)
         :raise exception: If h_bit is lower than l_bit
@@ -148,9 +151,9 @@ class Caravel_env:
 
         .. code-block:: python
 
-            monitor_gpio(7) #get output value of GPIO 7 (gpios[7])
-            monitor_gpio(7,0) # get output value from GPIO 7 to 0 (gpios[7:0])
-            monitor_gpio((7,0)) #get output value from GPIO 7 to 0 (gpios[7:0])
+            monitor_gpio(7) #get output value of GPIO 7 (GPIOs[7])
+            monitor_gpio(7,0) # get output value from GPIO 7 to 0 (GPIOs[7:0])
+            monitor_gpio((7,0)) #get output value from GPIO 7 to 0 (GPIOs[7:0])
 
         """
         mprj = self.dut.mprj_io_tb.value
@@ -169,7 +172,7 @@ class Caravel_env:
             cocotb.log.debug(f" [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {mprj_out}")
         return mprj_out
 
-    """return the value of management gpio"""
+    """return the value of management GPIO"""
 
     def monitor_mgmt_gpio(self) -> str:
         """monitor management GPIO output
@@ -183,7 +186,7 @@ class Caravel_env:
     def monitor_discontinuous_gpios(self, arr: list) -> str:
         """monitor discontinuous GPIOs output value
 
-        :param arr: highest GPIO number of the tuple of (high gpio, low gpio)
+        :param arr: highest GPIO number of the tuple of (high GPIO, low GPIO)
         :type arr: list(ints) or tuple(ints)
         :return: str
         Example:
@@ -194,6 +197,7 @@ class Caravel_env:
         """
         val = ""
         for i in arr:
+            cocotb.log.debug(f" [caravel][monitor_discontinuous_gpios] Monitor gpio[{i}] = {self.monitor_gpio(i).binstr}")
             val += self.monitor_gpio(i).binstr
         return val
 
@@ -209,7 +213,7 @@ class Caravel_env:
                 break
             await ClockCycles(self.clk, 1)
 
-    """change the configration of the gpios by overwrite their defaults value then reset
+    """change the configration of the GPIOs by overwrite their defaults value then reset
         need to take at least 1 cycle for reset """
 
     # dont use back door accessing
@@ -235,7 +239,7 @@ class Caravel_env:
         cocotb.log.info(" [caravel] finish configuring gpios, the curret gpios value: ")
         self.print_gpios_ctrl_val()
 
-    """change the configration of the gpios by overwrite the register value
+    """change the configration of the GPIOs by overwrite the register value
         in control registers and housekeeping regs, don't consume simulation cycles"""
 
     # dont use back door accessing
@@ -418,18 +422,18 @@ class Caravel_env:
     #     cocotb.log.info(f' [caravel] drive_gpio_in pad mprj with {mprj}')
 
     def drive_gpio_in(self, bits, data) -> None:
-        """drive input gpios with specific data
+        """drive input GPIOs with specific data
 
-        :param bits: gpios to drive
-        :param int data: data to drive the gpios with
+        :param bits: GPIOs to drive
+        :param int data: data to drive the GPIOs with
         :type bits: int or tuple(int, int)
 
         Example:
 
         .. code-block:: python
 
-            drive_gpio_in(7,0x1) # drive GPIO 7 with 1 (gpios[7]=1)
-            drive_gpio_in((31,0),0xFFFFFFFF) # drive GPIO 31 to 0 with ones (gpios[31:0]=32'hFFFFFFFF)
+            drive_gpio_in(7,0x1) # drive GPIO 7 with 1 (GPIOs[7]=1)
+            drive_gpio_in((31,0),0xFFFFFFFF) # drive GPIO 31 to 0 with ones (GPIOs[31:0]=32'hFFFFFFFF)
         """
         # io = self.caravel_hdl.padframe.mprj_pads.io
         # mprj , n_bits = common.signal_value_size(io)
@@ -461,7 +465,7 @@ class Caravel_env:
 
     def release_gpio(self, bits):
         """release driving the value of mprj bits
-        :param bits: gpios to drive
+        :param bits: GPIOs to drive
         :type bits: int or tuple(int, int)
         """
         is_list = isinstance(bits, (list, tuple))
@@ -488,7 +492,7 @@ class Caravel_env:
     def drive_mgmt_gpio(self, data):
         """drive GPIO management with specific data
 
-        :param int data: data to drive the gpios with
+        :param int data: data to drive the GPIOs with
         """
         self.get_mgmt_gpi_hdl().value = BinaryValue(value=data, n_bits=1)
         cocotb.log.info(
@@ -516,70 +520,6 @@ class Caravel_env:
         n_bits = bits[0] - bits[1] + 1
         self.drive_gpio_in(bits, (n_bits) * "z")
         cocotb.log.info(" [caravel] finish wait_then_drive ")
-
-    async def hk_write_byte(self, data):
-        self.path = self.dut.mprj_io_tb
-        data_bit = BinaryValue(value=data, n_bits=8, bigEndian=False)
-        for i in range(7, -1, -1):
-            #  for j in range(4):
-            #     await FallingEdge(self.clk)
-            # await Timer(7, units='ns')
-            await FallingEdge(self.clk)
-            await FallingEdge(self.clk)
-            # common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
-            self.drive_gpio_in((2, 2), int(data_bit[i]))
-            self.drive_gpio_in((4, 4), 0)
-
-            await RisingEdge(self.clk)
-            await RisingEdge(self.clk)
-            self.drive_gpio_in((4, 4), 1)
-        await FallingEdge(self.clk)
-        await FallingEdge(self.clk)
-
-    async def hk_write_read_byte(self, data):
-        read_data = ""
-        self.path = self.dut.mprj_io_tb
-        data_bit = BinaryValue(value=data, n_bits=8, bigEndian=False)
-        for i in range(7, -1, -1):
-            #  for j in range(4):
-            #     await FallingEdge(self.clk)
-            # await Timer(7, units='ns')
-            await FallingEdge(self.clk)
-            await FallingEdge(self.clk)
-            # common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK
-            self.drive_gpio_in((2, 2), int(data_bit[i]))
-            self.drive_gpio_in((4, 4), 0)
-
-            await RisingEdge(self.clk)
-            await RisingEdge(self.clk)
-            read_data = f"{read_data}{self.dut.mprj_io_tb.value[37-1]}"
-            self.drive_gpio_in((4, 4), 1)
-        await FallingEdge(self.clk)
-        await FallingEdge(self.clk)
-        return int(read_data, 2)
-
-    """ read byte using housekeeping spi
-        when writing to SCK we can't use mprj[4] as there is a limitation in cocotb for accessing pack array #2587
-        so use back door access to write the clock then read the output from the SDO mprj[1] value"""
-
-    async def hk_read_byte(self, last_read=False):
-        read_data = ""
-        for i in range(8, 0, -1):
-            self.drive_gpio_in((4, 4), 1)  # SCK
-            await FallingEdge(self.clk)
-            await FallingEdge(self.clk)
-            self.drive_gpio_in((4, 4), 0)  # SCK
-            await RisingEdge(self.clk)
-            await RisingEdge(self.clk)
-            read_data = f"{read_data}{self.dut.mprj_io_tb.value[37-1]}"
-        await FallingEdge(self.clk)
-        await FallingEdge(self.clk)
-        self.drive_gpio_in((4, 4), 0)  # SCK
-        # if (last_read):
-        #     common.drive_hdl(self.dut.gpio4_en,(0,0),'z') #4 = SCK
-        #     common.drive_hdl(self.path,[(1,1)],'z')
-
-        return int(read_data, 2)
 
     """write to the house keeping registers by back door no need for commands and waiting for the data to show on mprj"""
 

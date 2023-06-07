@@ -4,15 +4,17 @@ import subprocess
 from scripts.verify_cocotb.read_defines import GetDefines
 import re
 import time
-
+import logging
 
 class RunTest:
-    def __init__(self, args, paths, test) -> None:
+    def __init__(self, args, paths, test, logger) -> None:
         self.args = args
         self.paths = paths
         self.test = test
+        self.logger = logger
         if self.hex_generate() == "hex_generated":  # run test only if hex is generated
             self.runTest()
+        # self.runTest()
         self.test.end_of_test()
 
     def hex_riscv32_command_gen(self):
@@ -21,10 +23,10 @@ class RunTest:
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
         SOURCE_FILES = (
             f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
-        )
+        ) if not self.args.openframe else f"{self.paths.FIRMWARE_PATH}/start.s"
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f" -I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/ "
+        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/ "
         includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
@@ -86,7 +88,7 @@ class RunTest:
         self.firmware_log.close()
         # don't run with docker with arm
         cmd = command if self.args.cpu_type == "ARM" else docker_command
-        hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, quiet=False if self.args.verbosity == "debug" else True)
+        hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
         # docker_process = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # docker_process.wait()
         # stdout, _ = docker_process.communicate()
@@ -97,7 +99,7 @@ class RunTest:
         self.firmware_log = open(self.test.hex_log, "a")
         if hex_gen_state != 0:
             # open(self.test.firmware_log, "w").write(stdout)
-            print(
+            self.logger.error(
                 f"{bcolors.FAIL}Error:{bcolors.ENDC} Fail to compile the C code for more info refer to {bcolors.OKCYAN }{self.test.hex_log}{bcolors.ENDC } "
             )
             self.firmware_log.write("Error: when generating hex")
@@ -129,9 +131,10 @@ class RunTest:
     # iverilog function
     def runTest_iverilog(self):
         macros = " -D" + " -D".join(self.test.macros)
+        dirs = f'-I \"{self.paths.PDK_ROOT}/{self.paths.PDK}\" '
         env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
         if self.test.sim == "GL_SDF":
-            print(
+            self.logger.error(
                 f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc"
             )
             return
@@ -139,7 +142,7 @@ class RunTest:
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (
-            f"iverilog -Ttyp {macros} -f {self.test.includes_list} -o {self.test.test_dir}/sim.vvp"
+            f"iverilog -Ttyp {macros} {dirs} -o {self.test.test_dir}/sim.vvp"
             f" {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
             f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         )
@@ -156,6 +159,7 @@ class RunTest:
         run_command_write_to_file(
             docker_command,
             self.test.compilation_log,
+            self.logger,
             quiet=True if self.args.verbosity == "quiet" else False
         )
 
@@ -164,12 +168,12 @@ class RunTest:
         dirs = f'+incdir+\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\" '
         if self.test.sim == "RTL":
             shutil.copyfile(
-                f"{self.paths.VERILOG_PATH}/includes/rtl_caravel_vcs.v",
+                f"{self.paths.VERILOG_PATH}/includes/{'openframe_vcs.v' if self.args.openframe else 'rtl_caravel_vcs.v'}",
                 f"{self.test.test_dir}/includes.v",
             )
         else:
             shutil.copyfile(
-                f"{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v",
+                f"{self.paths.VERILOG_PATH}/includes/{'openframe_vcs.v' if self.args.openframe else 'gl_caravel_vcs.v'}",
                 f"{self.test.test_dir}/includes.v",
             )
             if self.test.sim == "GL_SDF":
@@ -198,12 +202,13 @@ class RunTest:
         self.test.set_user_project()
         defines = GetDefines(self.test.includes_file)
         vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64 -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
-        run_command_write_to_file(vlogan_cmd, self.test.compilation_log, quiet=False if self.args.verbosity == "debug" else True)
+        run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
         lint = "+lint=all" if self.args.lint else ""
         vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 +vcs+loopreport+1000000 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         run_command_write_to_file(
             vcs_cmd,
             self.test.compilation_log,
+            self.logger,
             quiet=True if self.args.verbosity == "quiet" else False
         )
 
@@ -211,11 +216,19 @@ class RunTest:
         for root, dirs, files in os.walk(path):
             if name in files:
                 return os.path.join(root, name)
-        print(f"Test {name} doesn't exist or don't have a C file ")
+        self.logger.error(f"Test {name} doesn't exist or don't have a C file ")
 
 
-def run_command_write_to_file(cmd, file, quiet=True):
+def run_command_write_to_file(cmd, file, logger, quiet=True):
     """run command and write output to file return 0 if no error"""
+    logger_file = logging.getLogger(file)
+    logger_file.setLevel(logging.INFO)
+    # Configure file handler for the logger
+    file_handler = logging.FileHandler(file)
+    file_handler.setLevel(logging.INFO)
+    file_formatter = logging.Formatter('%(message)s')
+    file_handler.setFormatter(file_formatter)
+    logger_file.addHandler(file_handler)
     try:
         process = subprocess.Popen(
             cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1024
@@ -229,27 +242,27 @@ def run_command_write_to_file(cmd, file, quiet=True):
                     break
                 if out:
                     if not quiet:
-                        print(out.replace("\n", "", 1))
+                        logger.info(stdout.replace("\n", "", 1))
                         time.sleep(0.01)
-                    f.write(stdout)
+                    logger_file.info(stdout.replace("\n", "", 1))
     except Exception as e:
-        print(f"Docker process stopped by user {e}")
+        logger(f"Docker process stopped by user {e}")
         process.stdin.write(b'\x03') # Send the Ctrl+C signal to the Docker process
         process.terminate()
 
     return process.returncode
 
 
-def capture_output(process, file):
+def capture_output(process, file, logger):
     for line in iter(process.stdout.readline, b""):
         file.write(line.decode())
-        print(line.decode(), end="")
+        logger.info(line.decode(), end="")
 
 
-def capture_error(process, file):
+def capture_error(process, file, logger):
     for line in iter(process.stderr.readline, b""):
         file.write(line.decode())
-        print(line.decode(), end="")
+        logger.info(line.decode(), end="")
 
 
 class bcolors:
