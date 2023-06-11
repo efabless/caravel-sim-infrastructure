@@ -22,6 +22,7 @@ class SPI:
         self.spi_pins = spi_pins
         # if clock period is not given, use caravel clock * 3
         self.clk_period = clk_period if clk_period is not None else self.caravelEnv.get_clock_obj().period*3 / 1000
+        self.caravelEnv.drive_gpio_in(self.spi_pins["SDO"], 0)
         # self._setup_spi_clk()
 
     def _setup_spi_clk(self):
@@ -46,8 +47,22 @@ class SPI:
         # self._setup_spi_clk()
         cocotb.log.debug(f"[SPI][_hk_read_byte] reading from SDI")
         for i in range(8):
+            await RisingEdge(self.clk)
+            # await cocotb.triggers.NextTimeStep()
+            read_data = f"{read_data}{self.caravelEnv.monitor_gpio(self.spi_pins['SDI'])}"
+        return int(read_data, 2)
+
+    async def _hk_read_byte_with_failing(self):
+        """Reads a byte from a housekeeping spi.
+        Returns:
+            int: The byte read from the spi.
+        """
+        read_data = ""
+        # self._setup_spi_clk()
+        cocotb.log.debug(f"[SPI][_hk_read_byte] reading from SDI")
+        for i in range(8):
             await FallingEdge(self.clk)
-            await cocotb.triggers.NextTimeStep()
+            # await cocotb.triggers.NextTimeStep()
             read_data = f"{read_data}{self.caravelEnv.monitor_gpio(self.spi_pins['SDI'])}"
         return int(read_data, 2)
 
@@ -64,7 +79,7 @@ class SPI:
         data_bit = BinaryValue(value=data, n_bits=8, bigEndian=False)
         cocotb.log.debug(f"[SPI][_hk_write_byte] writing {hex(data_bit)} to SDO")
         for i in range(7, -1, -1):
-            await RisingEdge(self.clk)
+            await FallingEdge(self.clk)
             self.caravelEnv.drive_gpio_in(self.spi_pins["SDO"], int(data_bit[i]))
 
     async def _hk_write_read_byte(self, data):
@@ -72,10 +87,10 @@ class SPI:
         data_bit = BinaryValue(value=data, n_bits=8, bigEndian=False)
         cocotb.log.debug(f"[SPI][_hk_write_read_byte] writing {hex(data_bit)} to SDO and reading back")
         for i in range(7, -1, -1):
-            await RisingEdge(self.clk)
-            self.caravelEnv.drive_gpio_in(self.spi_pins["SDO"], int(data_bit[i]))
             await FallingEdge(self.clk)
-            await cocotb.triggers.NextTimeStep()
+            self.caravelEnv.drive_gpio_in(self.spi_pins["SDO"], int(data_bit[i]))
+            await RisingEdge(self.clk)
+            # await cocotb.triggers.NextTimeStep()
             read_data = f"{read_data}{self.caravelEnv.monitor_gpio(self.spi_pins['SDI'])}"
         return int(read_data, 2)
 
@@ -114,8 +129,9 @@ class SPI:
             return
         # must wait for some time for the disable get affected
         await Timer(self.clk_period, "ns")
-        self.caravelEnv.drive_gpio_in(self.spi_pins["CSB"], 0)
         self._setup_spi_clk()
+        await Timer(self.clk_period*0.5, "ns")
+        self.caravelEnv.drive_gpio_in(self.spi_pins["CSB"], 0)
 
     async def write_reg_spi(self, address, data, disable_csb: bool = True):
         """
@@ -261,7 +277,7 @@ class SPI:
         # READ
         data = []
         for i in range(read_byte_num):
-            data.append(await self._hk_read_byte())
+            data.append(await self._hk_read_byte_with_failing())
         if disable_csb:
             await self.disable_csb()
         return data

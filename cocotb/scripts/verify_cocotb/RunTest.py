@@ -14,6 +14,7 @@ class RunTest:
         self.logger = logger
         if self.hex_generate() == "hex_generated":  # run test only if hex is generated
             self.runTest()
+        # self.runTest()
         self.test.end_of_test()
 
     def hex_riscv32_command_gen(self):
@@ -22,10 +23,10 @@ class RunTest:
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
         SOURCE_FILES = (
             f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
-        )
+        ) if not self.args.openframe else f"{self.paths.FIRMWARE_PATH}/start.s"
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f" -I{self.paths.VERILOG_PATH}/dv/firmware -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/ "
+        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/ "
         includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
@@ -130,6 +131,7 @@ class RunTest:
     # iverilog function
     def runTest_iverilog(self):
         macros = " -D" + " -D".join(self.test.macros)
+        dirs = f'-I \"{self.paths.PDK_ROOT}/{self.paths.PDK}\" '
         env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
         if self.test.sim == "GL_SDF":
             self.logger.error(
@@ -140,7 +142,7 @@ class RunTest:
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (
-            f"iverilog -Ttyp {macros}  -o {self.test.test_dir}/sim.vvp"
+            f"iverilog -Ttyp {macros} {dirs} -o {self.test.test_dir}/sim.vvp"
             f" {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
             f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         )
@@ -166,12 +168,12 @@ class RunTest:
         dirs = f'+incdir+\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\" '
         if self.test.sim == "RTL":
             shutil.copyfile(
-                f"{self.paths.VERILOG_PATH}/includes/rtl_caravel_vcs.v",
+                f"{self.paths.VERILOG_PATH}/includes/{'openframe_vcs.v' if self.args.openframe else 'rtl_caravel_vcs.v'}",
                 f"{self.test.test_dir}/includes.v",
             )
         else:
             shutil.copyfile(
-                f"{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v",
+                f"{self.paths.VERILOG_PATH}/includes/{'openframe_vcs.v' if self.args.openframe else 'gl_caravel_vcs.v'}",
                 f"{self.test.test_dir}/includes.v",
             )
             if self.test.sim == "GL_SDF":

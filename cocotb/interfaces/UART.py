@@ -25,13 +25,28 @@ class UART:
         line = ""
         while True:
             new_char = await self.get_char()
-            cocotb.log.info(f"[UART] new char = {new_char}")
             if new_char == "\n":
                 break
+            cocotb.log.info(f"[UART] new char = {new_char}")
             line += new_char
             cocotb.log.debug(f"[UART] part of the line recieved = {line}")
         cocotb.log.info(f"[UART] line recieved = {line}")
         return line[0:-1]
+
+    async def get_int(self) -> int:
+        """read int sent by firmware API uart_put_int
+        """
+        line = ""
+        while True:
+            new_char = await self.get_char()
+            if new_char == "\n":
+                break
+            cocotb.log.info(f"[UART] new hex = 0x{new_char}")
+            line += new_char
+            cocotb.log.debug(f"[UART] part of the line recieved = {line}")
+        line = line[::-1]
+        cocotb.log.info(f"[UART] line recieved = 0x{line}")
+        return int(line, 16)
 
     async def get_char(self):
         """Read character sent through UART (character is sent by the software)
