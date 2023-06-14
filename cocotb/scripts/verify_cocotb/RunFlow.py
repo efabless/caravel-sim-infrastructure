@@ -91,7 +91,7 @@ class RunFLow:
             raise NotADirectoryError(
                 f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}"
             )
-        if self.args.no_pull:
+        if not self.args.no_pull:
             GitRepoChecker(design_info["CARAVEL_ROOT"]) # check repo synced with last commit
             GitRepoChecker(design_info["MCW_ROOT"]) # check repo synced with last commit
         if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
@@ -107,7 +107,7 @@ class RunFLow:
                 )
             else:
                 self.configure_user_files(design_info["USER_PROJECT_ROOT"])
-                if self.args.no_pull:
+                if not self.args.no_pull:
                     GitRepoChecker(design_info["USER_PROJECT_ROOT"]) # check repo synced with last commit
         Paths = namedtuple(
             "Paths",
@@ -124,7 +124,7 @@ class RunFLow:
             if self.args.openframe: 
                 FIRMWARE_PATH = f"{design_info['USER_PROJECT_ROOT']}/verilog/dv/firmware"
         COCOTB_PATH = self.args.cocotb_path
-        if self.args.no_pull:
+        if not self.args.no_pull:
             GitRepoChecker(COCOTB_PATH) # check repo synced with last commit
         SIM_PATH = (
             f"{COCOTB_PATH}/sim"

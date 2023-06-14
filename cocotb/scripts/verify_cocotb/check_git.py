@@ -17,20 +17,22 @@ class GitRepoChecker:
 
             # Run git fetch command to update remote tracking branches
             subprocess.call(['git', 'fetch'])
-
+            try:
             # Get the local branch name
-            branch_output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD']).decode('utf-8')
-            branch_name = branch_output.strip()
+                branch_output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD']).decode('utf-8')
+                branch_name = branch_output.strip()
+            except:
+                raise RepoNotSyncedException(f"{TerminalColors.colorize(repo_name, TerminalColors.RED)} isn't synced any a known branch. please fix this. use -no_pull flag if you want to ignore this error.")
 
             # Compare local and remote commit hashes
             local_hash = self._get_commit_hash('HEAD')
             remote_hash = self._get_commit_hash(f'origin/{branch_name}')
 
             if local_hash == remote_hash:
-                print(f"{repo_name} is up to date.")
+                print(TerminalColors.colorize(f"{repo_name} is up to date.", TerminalColors.GREEN))
             else:
                 # Prompt the user to pull the latest changes
-                raise RepoNotSyncedException(f"{repo_name} is synced to commit {local_hash} while remote is at commit {remote_hash}. please pull the latest changes for {self.repo_path} or use --no-pull flag.")
+                raise RepoNotSyncedException(f"{TerminalColors.colorize(repo_name, TerminalColors.RED)} is synced to commit {local_hash} while remote is at commit {remote_hash}. please pull the latest changes for {TerminalColors.colorize(self.repo_path, TerminalColors.BLUE)} or use -no_pull flag if you want to ignore this error.")
         finally:
             # Change back to the original directory
             os.chdir(original_dir)
@@ -50,3 +52,30 @@ class RepoNotSyncedException(Exception):
     def __init__(self, message):
         self.message = message
         super().__init__(self.message)
+
+
+class TerminalColors:
+    """
+    Utility class for colorizing text in the terminal.
+    """
+    # ANSI escape codes for various colors
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    MAGENTA = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+    RESET = '\033[0m'
+
+
+    @classmethod
+    def colorize(cls, text, color):
+        """
+        Colorize the given text with the specified color.
+
+        :param text: The text to be colorized.
+        :param color: The color to apply.
+        :return: The colorized text.
+        """
+        return f"{color}{text}{cls.RESET}"
