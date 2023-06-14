@@ -59,10 +59,10 @@ class SPI:
         """
         read_data = ""
         # self._setup_spi_clk()
-        cocotb.log.debug(f"[SPI][_hk_read_byte] reading from SDI")
+        cocotb.log.debug("[SPI][_hk_read_byte] reading from SDI")
         for i in range(8):
             await FallingEdge(self.clk)
-            # await cocotb.triggers.NextTimeStep()
+            await Timer(10, "ns")
             read_data = f"{read_data}{self.caravelEnv.monitor_gpio(self.spi_pins['SDI'])}"
         return int(read_data, 2)
 

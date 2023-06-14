@@ -23,29 +23,16 @@
 #include <la.h>
 #include <uart_api.h>
 #include <spi_master.h>
-#include <user_addr_space.h>
+#include <user_space.h>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 void enable_debug(){
-    enable_user_interface();
+    User_enableIF();
     set_debug_reg1(0);
     set_debug_reg2(0);
     
 }
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
-/**
- * Enable communication  between firmware and user project 
- * \warning 
- * This necessary when reading or writing are needed between wishbone and user project 
- * if interface isn't enabled no ack would be receive  and the writing or reading command will be stuck
- */
-void enable_user_interface(){
-    #ifdef ARM // ARM use dirrent location 
-    reg_wb_enable = reg_wb_enable | 0x8; // for enable writing to reg_debug_1 and reg_debug_2
-    #else 
-    reg_wb_enable =1; // for enable writing to reg_debug_1 and reg_debug_2
-    #endif
-}
 /**
  * Enable or disable the housekeeping SPI 
  * This function writes to the housekeeping disenable register inside the housekeeping
@@ -57,7 +44,7 @@ void enable_user_interface(){
  * 
  * @param is_enable when 1 (true) housekeeping is active, 0 (false) housekeeping is disabled
  */
-void enable_hk_spi(bool is_enable){reg_hkspi_disable = !is_enable;}
+void enableHkSpi(bool is_enable){reg_hkspi_disable = !is_enable;}
 // debug regs
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 void set_debug_reg1(unsigned int data){reg_debug_1 = data;}
@@ -125,7 +112,7 @@ void output_enable_all_gpio_user(char is_enable){
  * 
  * 
  */
-void dummy_delay(int num){
+void dummyDelay(int num){
     for (int i=0;i < num;i++){
         #ifdef ARM
         reg_wb_enable = reg_wb_enable;
