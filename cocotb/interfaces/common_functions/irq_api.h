@@ -22,16 +22,16 @@ void clear_UART0_Handler(){
 reg_uart_isc =0x3;
 }
 #endif
-char get_flag(){
+char IRQ_getFlag(){
     #ifndef ARM
     return flag;
     #else 
-    dummy_delay(1);
+    dummyDelay(1);
     return flag;
     #endif
 }
 
-void clear_flag(){
+void IRQ_clearFlag(){
     #ifndef ARM
     flag=0;
     #else 
@@ -46,7 +46,7 @@ void clear_flag(){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_external1_irq(bool is_enable){
+void IRQ_enableExternal1(bool is_enable){
     if (is_enable){
         #ifndef ARM
         irq_setmask(0);
@@ -61,8 +61,9 @@ void enable_external1_irq(bool is_enable){
         #ifndef ARM
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << USER_IRQ_4_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << USER_IRQ_4_INTERRUPT));
         reg_user4_irq_en =0;
+        user_irq_4_ev_pending_i0_write(1); // to clear the interrupt
         #else
         NVIC_DisableIRQ(HK_IRQ1);
         __enable_irq();
@@ -76,7 +77,7 @@ void enable_external1_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_external2_irq(bool is_enable){
+void IRQ_enableExternal2(bool is_enable){
     if (is_enable){
         #ifndef ARM
         irq_setmask(0);
@@ -91,8 +92,9 @@ void enable_external2_irq(bool is_enable){
         #ifndef ARM
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << USER_IRQ_5_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << USER_IRQ_5_INTERRUPT));
         reg_user5_irq_en =0;
+        user_irq_5_ev_pending_i0_write(1); // to clear the interrupt
         #else
         NVIC_DisableIRQ(HK_IRQ2);
         __enable_irq();
@@ -105,7 +107,7 @@ void enable_external2_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_user0_irq(bool is_enable){
+void IRQ_enableUser0(bool is_enable){
     if (is_enable){
         #ifndef ARM
         irq_setmask(0);
@@ -121,9 +123,10 @@ void enable_user0_irq(bool is_enable){
         #ifndef ARM
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << USER_IRQ_0_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(0 << USER_IRQ_0_INTERRUPT));
         reg_user0_irq_en =0;
         reg_user_irq_enable &=0x6;
+        user_irq_0_ev_pending_i0_write(1); // to clear the interrupt
         #else
         NVIC_DisableIRQ(HK_IRQ2);
         __enable_irq();
@@ -136,7 +139,7 @@ void enable_user0_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_user1_irq(bool is_enable){
+void IRQ_enableUser1(bool is_enable){
     if (is_enable){
         #ifndef ARM
         irq_setmask(0);
@@ -152,9 +155,10 @@ void enable_user1_irq(bool is_enable){
         #ifndef ARM
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << USER_IRQ_1_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << USER_IRQ_1_INTERRUPT));
         reg_user1_irq_en =0;
         reg_user_irq_enable &=0x5;
+        user_irq_1_ev_pending_i0_write(1); // to clear the interrupt
         #else
         NVIC_DisableIRQ(HK_IRQ2);
         __enable_irq();
@@ -168,7 +172,7 @@ void enable_user1_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_user2_irq(bool is_enable){
+void IRQ_enableUser2(bool is_enable){
     if (is_enable){
         #ifndef ARM
         irq_setmask(0);
@@ -184,9 +188,10 @@ void enable_user2_irq(bool is_enable){
         #ifndef ARM
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << USER_IRQ_2_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << USER_IRQ_2_INTERRUPT));
         reg_user2_irq_en =0;
         reg_user_irq_enable &=0x3;
+        user_irq_2_ev_pending_i0_write(1); // to clear the interrupt
         #else
         NVIC_DisableIRQ(HK_IRQ2);
         __enable_irq();
@@ -199,7 +204,7 @@ void enable_user2_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_timer0_irq(bool is_enable){
+void IRQ_enableTimer(bool is_enable){
     if (is_enable){
         #ifndef ARM
         irq_setmask(0);
@@ -215,8 +220,9 @@ void enable_timer0_irq(bool is_enable){
         #ifndef ARM
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << TIMER0_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << TIMER0_INTERRUPT));
         reg_timer0_irq_en = 0;
+        timer0_ev_pending_zero_write(1); // to clear the interrupt
         #else
         NVIC_DisableIRQ(TMR0_IRQn);
         reg_timer0_config = reg_timer0_config | 0x8; // enable irq
@@ -230,7 +236,7 @@ void enable_timer0_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_uart_tx_irq(bool is_enable){
+void IRQ_enableUartTx(bool is_enable){
     if (is_enable){
         #ifndef ARM
         reg_uart_enable = 1;
@@ -248,7 +254,8 @@ void enable_uart_tx_irq(bool is_enable){
         reg_uart_irq_en =0;
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << UART_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << UART_INTERRUPT));
+        uart_ev_pending_tx_write(1);    // to clear the interrupt
         #else
         NVIC_DisableIRQ(UART0_IRQn);
         reg_uart_ctrl = reg_uart_ctrl | 0x5; // enable irq TX 
@@ -262,7 +269,7 @@ void enable_uart_tx_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_uart_rx_irq(bool is_enable){
+void IRQ_enableUartRx(bool is_enable){
     if (is_enable){
         #ifndef ARM
         reg_uart_enable = 1;
@@ -281,7 +288,8 @@ void enable_uart_rx_irq(bool is_enable){
         reg_uart_irq_en =1;
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << UART_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << UART_INTERRUPT));
+        uart_ev_pending_rx_write(1);    // to clear the interrupt
         #else
         reg_uart_ctrl = reg_uart_ctrl & 0xF7; // enable irq rx 
         __enable_irq();
@@ -294,7 +302,7 @@ void enable_uart_rx_irq(bool is_enable){
  *  
  * @param is_enable when 1 (true) interrupt is active and firmware would detect if happened, 0 (false) interrupt is disabled and firmware would not detect if happened
  */
-void enable_hk_spi_irq(bool is_enable){
+void IRQ_hkSpi(bool is_enable){
     if (is_enable){
         #ifndef ARM
         reg_user3_irq_en =1;
@@ -309,8 +317,9 @@ void enable_hk_spi_irq(bool is_enable){
         #ifndef ARM
         irq_setmask(0);
         irq_setie(1);
-        irq_setmask(irq_getmask() | (1 << USER_IRQ_3_INTERRUPT));
+        irq_setmask(irq_getmask() & ~(1 << USER_IRQ_3_INTERRUPT));
         reg_user3_irq_en =0;
+        user_irq_3_ev_pending_i0_write(1); // to clear the interrupt
         #else
         NVIC_DisableIRQ(HK_IRQ0);
         __enable_irq();

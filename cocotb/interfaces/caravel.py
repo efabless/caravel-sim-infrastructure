@@ -35,9 +35,12 @@ class Caravel_env:
     def __init__(self, dut: SimHandleBase):
         self.dut = dut
         self.clk = dut.clock_tb
-        self.caravel_hdl = dut.uut.chip_core
-        self.hk_hdl = dut.uut.chip_core.housekeeping
-        self.user_hdl = dut.uut.chip_core.mprj
+        try:
+            self.caravel_hdl = dut.uut.chip_core
+            self.hk_hdl = dut.uut.chip_core.housekeeping
+            self.user_hdl = dut.uut.chip_core.mprj
+        except AttributeError:
+            pass
         self.active_gpios_num = 37  # number of active gpios
         self.get_macros()
 
@@ -194,6 +197,7 @@ class Caravel_env:
         """
         val = ""
         for i in arr:
+            cocotb.log.debug(f" [caravel][monitor_discontinuous_gpios] Monitor gpio[{i}] = {self.monitor_gpio(i).binstr}")
             val += self.monitor_gpio(i).binstr
         return val
 
@@ -568,3 +572,7 @@ class Caravel_env:
     def get_clock_obj(self) -> cocotb.clock.Clock:
         """return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info"""
         return self.clock_obj
+    
+    def get_clock_period(self) -> int:
+        """return the used clock period in ns"""
+        return self.clock_obj.period / 1000

@@ -19,13 +19,15 @@ def get_timeouts(sim_tag_path):
         for file in files:
             if file in tests_logs:
                 files_paths[file] = os.path.join(root, file)
-
+        
     for name, files_path in files_paths.items():
         with open(files_path) as file:
             for line in file:
-                if "Recommeneded timeout to use" in line:
+                if "recommened timeout = " in line:
+                    s_comp = ""
                     for s in line.split():
-                        if s.isdigit():
+                        s_comp += s
+                        if s.isdigit() and "recommened" in s_comp:
                             cycles = int(s)
                             print(f"{name[:-4]:<30}  {cycles}")
 

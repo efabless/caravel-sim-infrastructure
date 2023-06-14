@@ -5,7 +5,9 @@ from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
 import re
-import logging 
+import logging
+import random
+
 
 def check_valid_mail_addr(address):
     pat = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
@@ -14,7 +16,8 @@ def check_valid_mail_addr(address):
         return True
     print(f"invalid mail {address}")
     return False
-    
+
+
 class RunFLow:
     def __init__(self, args) -> None:
         self.args = args
@@ -61,9 +64,23 @@ class RunFLow:
     def set_tag(self):
         if self.args.tag is None:
             self.args.tag = (f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}')
-        Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(
+        Path(f"{self.paths.SIM_PATH}").mkdir(
             parents=True, exist_ok=True
         )
+        # check if scratch disk exists
+        if os.path.exists("/mnt/scratch/"):
+            if os.path.lexists(f"{self.paths.SIM_PATH}/{self.args.tag}"):
+                if os.path.islink(f"{self.paths.SIM_PATH}/{self.args.tag}"):
+                    os.unlink(f"{self.paths.SIM_PATH}/{self.args.tag}")
+                else:
+                    os.rmdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
+            scratch_folder_name = f"cocotb_run_{datetime.now().strftime('%Y%m%d%H%M%S')}.{random.randint(0, 1000)}_{self.args.tag}"
+            scratch_folder = f"/mnt/scratch/cocotb_runs/{scratch_folder_name}"
+            if not os.path.exists(scratch_folder):
+                os.makedirs(scratch_folder)
+            os.symlink(f"{scratch_folder}", f"{self.paths.SIM_PATH}/{self.args.tag}")
+        else:
+            Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(parents=True, exist_ok=True)
         self.logger.info(f"Run tag: {self.args.tag} ")
 
     def set_paths(self, design_info):
@@ -97,6 +114,9 @@ class RunFLow:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
+            # For openframe as the cpu is inside the user project the firmware files should be inside user project as well
+            if self.args.openframe: 
+                FIRMWARE_PATH = f"{design_info['USER_PROJECT_ROOT']}/verilog/dv/firmware"
         COCOTB_PATH = self.args.cocotb_path
         SIM_PATH = (
             f"{COCOTB_PATH}/sim"
@@ -226,6 +246,7 @@ class CocotbArgs:
         sim_path=None,
         cocotb_root=".",
         verbosity="normal",
+        openframe=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -247,7 +268,8 @@ class CocotbArgs:
         # dev only
         self.lint = None
         # related to repos
-        self.cpu_type = None  # would be filled by other class 
+        self.cpu_type = None  # would be filled by other class
+        self.openframe = openframe
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -268,3 +290,4 @@ class CocotbArgs:
         self.lint = args.lint
         self.cocotb_path = os.getcwd()
         self.verbosity = args.verbosity
+        self.openframe = args.openframe
