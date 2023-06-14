@@ -30,51 +30,7 @@ class GitRepoChecker:
                 print(f"{repo_name} is up to date.")
             else:
                 # Prompt the user to pull the latest changes
-                answer = input(f"{repo_name} is not up to date. Do you want to pull the latest changes? (y/n): ")
-                if answer.lower() == 'y':
-                    self.pull_changes()
-        finally:
-            # Change back to the original directory
-            os.chdir(original_dir)
-
-    def pull_changes(self):
-        # Store the current working directory
-        original_dir = os.getcwd()
-
-        try:
-            # Change to the repository directory
-            os.chdir(self.repo_path)
-
-            # Run git pull command
-            pull_output = subprocess.check_output(['git', 'pull']).decode('utf-8')
-
-            if 'Automatic merge failed' in pull_output:
-                print("Pull resulted in a conflict. Please resolve the conflict manually.")
-
-                # Prompt the user for further action
-                action = input("Enter 'c' to continue with conflicted files or 'r' to reset changes and abort the pull: ")
-                if action.lower() == 'c':
-                    print("Continuing with conflicted files.")
-                elif action.lower() == 'r':
-                    self.reset_changes()
-                else:
-                    print("Invalid input. Aborting.")
-            else:
-                print("Pull successful.")
-        finally:
-            # Change back to the original directory
-            os.chdir(original_dir)
-
-    def reset_changes(self):
-        # Store the current working directory
-        original_dir = os.getcwd()
-
-        try:
-            # Change to the repository directory
-            os.chdir(self.repo_path)
-
-            # Run git reset command
-            subprocess.call(['git', 'reset', '--hard', 'HEAD'])
+                raise RepoNotSyncedException(f"{repo_name} is synced to commit {local_hash} while remote is at commit {remote_hash}. please pull the latest changes for {self.repo_path} or use --no-pull flag.")
         finally:
             # Change back to the original directory
             os.chdir(original_dir)
@@ -88,3 +44,9 @@ class GitRepoChecker:
         url = "https://github.com/" + f"{subprocess.run(f'cd {self.repo_path};git ls-remote --get-url', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:", "").replace(".git", "")   
         repo_name = f"Repo: {subprocess.run(f'cd {self.repo_path};basename -s .git `git config --get remote.origin.url`', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(".git", "").replace("https://github.com/", "").replace("\n", "").replace("Repo: ", "")
         return repo_name
+
+
+class RepoNotSyncedException(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
