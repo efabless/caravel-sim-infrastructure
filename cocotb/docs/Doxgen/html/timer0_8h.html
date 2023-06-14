@@ -82,67 +82,24 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a618b157336f2fbb272590e57b0105fb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#a618b157336f2fbb272590e57b0105fb4">timer0_oneshot_configure</a> (unsigned int count)</td></tr>
-<tr class="separator:a618b157336f2fbb272590e57b0105fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace0a359a15e1744a3f8eb4e8a415680e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#ace0a359a15e1744a3f8eb4e8a415680e">timer0_periodic_configure</a> (unsigned int count)</td></tr>
-<tr class="separator:ace0a359a15e1744a3f8eb4e8a415680e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed97be9effff00e8469940bbac4cac53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#aed97be9effff00e8469940bbac4cac53">enable_timer0</a> (bool is_enable)</td></tr>
-<tr class="separator:aed97be9effff00e8469940bbac4cac53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b344afe9da30e277cbcc840cec73067"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#a4b344afe9da30e277cbcc840cec73067">get_timer0_val</a> ()</td></tr>
-<tr class="separator:a4b344afe9da30e277cbcc840cec73067"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2400e05d4063a49d5e0881a8e422ec86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#a2400e05d4063a49d5e0881a8e422ec86">timer0_configureOneShot</a> (unsigned int count)</td></tr>
+<tr class="separator:a2400e05d4063a49d5e0881a8e422ec86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06884fc27bfe7793f6904774b6565b25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#a06884fc27bfe7793f6904774b6565b25">timer0_configurePeriodic</a> (unsigned int count)</td></tr>
+<tr class="separator:a06884fc27bfe7793f6904774b6565b25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2974c941008418ea21ba4641f83c4ea7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#a2974c941008418ea21ba4641f83c4ea7">timer0_enable</a> (bool is_enable)</td></tr>
+<tr class="separator:a2974c941008418ea21ba4641f83c4ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac86682420d0de4bab7bf133f67e6e35b"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="timer0_8h.html#ac86682420d0de4bab7bf133f67e6e35b">timer0_readValue</a> ()</td></tr>
+<tr class="separator:ac86682420d0de4bab7bf133f67e6e35b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aed97be9effff00e8469940bbac4cac53"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed97be9effff00e8469940bbac4cac53">&#9670;&nbsp;</a></span>enable_timer0()</h2>
+<a id="a2400e05d4063a49d5e0881a8e422ec86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2400e05d4063a49d5e0881a8e422ec86">&#9670;&nbsp;</a></span>timer0_configureOneShot()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void enable_timer0 </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>is_enable</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Enable or Disable timer0</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">is_enable</td><td>when 1 (true) timer0 is enable (start counting), 0 (false) timer0 is disabled </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a4b344afe9da30e277cbcc840cec73067"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b344afe9da30e277cbcc840cec73067">&#9670;&nbsp;</a></span>get_timer0_val()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">unsigned int get_timer0_val </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Get timer current value </p>
-
-</div>
-</div>
-<a id="a618b157336f2fbb272590e57b0105fb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a618b157336f2fbb272590e57b0105fb4">&#9670;&nbsp;</a></span>timer0_oneshot_configure()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void timer0_oneshot_configure </td>
+          <td class="memname">void timer0_configureOneShot </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>count</em></td><td>)</td>
@@ -160,14 +117,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ace0a359a15e1744a3f8eb4e8a415680e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace0a359a15e1744a3f8eb4e8a415680e">&#9670;&nbsp;</a></span>timer0_periodic_configure()</h2>
+<a id="a06884fc27bfe7793f6904774b6565b25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06884fc27bfe7793f6904774b6565b25">&#9670;&nbsp;</a></span>timer0_configurePeriodic()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void timer0_periodic_configure </td>
+          <td class="memname">void timer0_configurePeriodic </td>
           <td>(</td>
           <td class="paramtype">unsigned int&#160;</td>
           <td class="paramname"><em>count</em></td><td>)</td>
@@ -182,6 +139,49 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a2974c941008418ea21ba4641f83c4ea7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2974c941008418ea21ba4641f83c4ea7">&#9670;&nbsp;</a></span>timer0_enable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void timer0_enable </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Enable or Disable timer0</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is_enable</td><td>when 1 (true) timer0 is enable (start counting), 0 (false) timer0 is disabled </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac86682420d0de4bab7bf133f67e6e35b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac86682420d0de4bab7bf133f67e6e35b">&#9670;&nbsp;</a></span>timer0_readValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned int timer0_readValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get timer current value </p>
 
 </div>
 </div>

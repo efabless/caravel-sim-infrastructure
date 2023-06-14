@@ -10,41 +10,22 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{timer0_8h_a618b157336f2fbb272590e57b0105fb4}{timer0\+\_\+oneshot\+\_\+configure} (unsigned int count)
+void \hyperlink{timer0_8h_a2400e05d4063a49d5e0881a8e422ec86}{timer0\+\_\+configure\+One\+Shot} (unsigned int count)
 \item 
-void \hyperlink{timer0_8h_ace0a359a15e1744a3f8eb4e8a415680e}{timer0\+\_\+periodic\+\_\+configure} (unsigned int count)
+void \hyperlink{timer0_8h_a06884fc27bfe7793f6904774b6565b25}{timer0\+\_\+configure\+Periodic} (unsigned int count)
 \item 
-void \hyperlink{timer0_8h_aed97be9effff00e8469940bbac4cac53}{enable\+\_\+timer0} (bool is\+\_\+enable)
+void \hyperlink{timer0_8h_a2974c941008418ea21ba4641f83c4ea7}{timer0\+\_\+enable} (bool is\+\_\+enable)
 \item 
-unsigned int \hyperlink{timer0_8h_a4b344afe9da30e277cbcc840cec73067}{get\+\_\+timer0\+\_\+val} ()
+unsigned int \hyperlink{timer0_8h_ac86682420d0de4bab7bf133f67e6e35b}{timer0\+\_\+read\+Value} ()
 \end{DoxyCompactItemize}
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{timer0_8h_aed97be9effff00e8469940bbac4cac53}\label{timer0_8h_aed97be9effff00e8469940bbac4cac53}} 
-\index{timer0.\+h@{timer0.\+h}!enable\+\_\+timer0@{enable\+\_\+timer0}}
-\index{enable\+\_\+timer0@{enable\+\_\+timer0}!timer0.\+h@{timer0.\+h}}
-\subsubsection{\texorpdfstring{enable\+\_\+timer0()}{enable\_timer0()}}
-{\footnotesize\ttfamily void enable\+\_\+timer0 (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
-
-Enable or Disable timer0
-
-
-\begin{DoxyParams}{Parameters}
-{\em is\+\_\+enable} & when 1 (true) timer0 is enable (start counting), 0 (false) timer0 is disabled \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{timer0_8h_a4b344afe9da30e277cbcc840cec73067}\label{timer0_8h_a4b344afe9da30e277cbcc840cec73067}} 
-\index{timer0.\+h@{timer0.\+h}!get\+\_\+timer0\+\_\+val@{get\+\_\+timer0\+\_\+val}}
-\index{get\+\_\+timer0\+\_\+val@{get\+\_\+timer0\+\_\+val}!timer0.\+h@{timer0.\+h}}
-\subsubsection{\texorpdfstring{get\+\_\+timer0\+\_\+val()}{get\_timer0\_val()}}
-{\footnotesize\ttfamily unsigned int get\+\_\+timer0\+\_\+val (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-Get timer current value \mbox{\Hypertarget{timer0_8h_a618b157336f2fbb272590e57b0105fb4}\label{timer0_8h_a618b157336f2fbb272590e57b0105fb4}} 
-\index{timer0.\+h@{timer0.\+h}!timer0\+\_\+oneshot\+\_\+configure@{timer0\+\_\+oneshot\+\_\+configure}}
-\index{timer0\+\_\+oneshot\+\_\+configure@{timer0\+\_\+oneshot\+\_\+configure}!timer0.\+h@{timer0.\+h}}
-\subsubsection{\texorpdfstring{timer0\+\_\+oneshot\+\_\+configure()}{timer0\_oneshot\_configure()}}
-{\footnotesize\ttfamily void timer0\+\_\+oneshot\+\_\+configure (\begin{DoxyParamCaption}\item[{unsigned int}]{count }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{timer0_8h_a2400e05d4063a49d5e0881a8e422ec86}\label{timer0_8h_a2400e05d4063a49d5e0881a8e422ec86}} 
+\index{timer0.\+h@{timer0.\+h}!timer0\+\_\+configure\+One\+Shot@{timer0\+\_\+configure\+One\+Shot}}
+\index{timer0\+\_\+configure\+One\+Shot@{timer0\+\_\+configure\+One\+Shot}!timer0.\+h@{timer0.\+h}}
+\subsubsection{\texorpdfstring{timer0\+\_\+configure\+One\+Shot()}{timer0\_configureOneShot()}}
+{\footnotesize\ttfamily void timer0\+\_\+configure\+One\+Shot (\begin{DoxyParamCaption}\item[{unsigned int}]{count }\end{DoxyParamCaption})}
 
 Start Timer in oneshot countdown mode start value is count
 
@@ -53,11 +34,11 @@ Start Timer in oneshot countdown mode start value is count
 {\em count} & start value in the counter $>$ 0 \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{timer0_8h_ace0a359a15e1744a3f8eb4e8a415680e}\label{timer0_8h_ace0a359a15e1744a3f8eb4e8a415680e}} 
-\index{timer0.\+h@{timer0.\+h}!timer0\+\_\+periodic\+\_\+configure@{timer0\+\_\+periodic\+\_\+configure}}
-\index{timer0\+\_\+periodic\+\_\+configure@{timer0\+\_\+periodic\+\_\+configure}!timer0.\+h@{timer0.\+h}}
-\subsubsection{\texorpdfstring{timer0\+\_\+periodic\+\_\+configure()}{timer0\_periodic\_configure()}}
-{\footnotesize\ttfamily void timer0\+\_\+periodic\+\_\+configure (\begin{DoxyParamCaption}\item[{unsigned int}]{count }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{timer0_8h_a06884fc27bfe7793f6904774b6565b25}\label{timer0_8h_a06884fc27bfe7793f6904774b6565b25}} 
+\index{timer0.\+h@{timer0.\+h}!timer0\+\_\+configure\+Periodic@{timer0\+\_\+configure\+Periodic}}
+\index{timer0\+\_\+configure\+Periodic@{timer0\+\_\+configure\+Periodic}!timer0.\+h@{timer0.\+h}}
+\subsubsection{\texorpdfstring{timer0\+\_\+configure\+Periodic()}{timer0\_configurePeriodic()}}
+{\footnotesize\ttfamily void timer0\+\_\+configure\+Periodic (\begin{DoxyParamCaption}\item[{unsigned int}]{count }\end{DoxyParamCaption})}
 
 Start counter in periodic countdown mode start value is count
 
@@ -66,3 +47,23 @@ Timer will roll over to the count value when it reaches 0
 {\em count} & start value in the counter $>$ 0 \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{timer0_8h_a2974c941008418ea21ba4641f83c4ea7}\label{timer0_8h_a2974c941008418ea21ba4641f83c4ea7}} 
+\index{timer0.\+h@{timer0.\+h}!timer0\+\_\+enable@{timer0\+\_\+enable}}
+\index{timer0\+\_\+enable@{timer0\+\_\+enable}!timer0.\+h@{timer0.\+h}}
+\subsubsection{\texorpdfstring{timer0\+\_\+enable()}{timer0\_enable()}}
+{\footnotesize\ttfamily void timer0\+\_\+enable (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+Enable or Disable timer0
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1 (true) timer0 is enable (start counting), 0 (false) timer0 is disabled \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{timer0_8h_ac86682420d0de4bab7bf133f67e6e35b}\label{timer0_8h_ac86682420d0de4bab7bf133f67e6e35b}} 
+\index{timer0.\+h@{timer0.\+h}!timer0\+\_\+read\+Value@{timer0\+\_\+read\+Value}}
+\index{timer0\+\_\+read\+Value@{timer0\+\_\+read\+Value}!timer0.\+h@{timer0.\+h}}
+\subsubsection{\texorpdfstring{timer0\+\_\+read\+Value()}{timer0\_readValue()}}
+{\footnotesize\ttfamily unsigned int timer0\+\_\+read\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Get timer current value 

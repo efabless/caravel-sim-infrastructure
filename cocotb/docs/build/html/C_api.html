@@ -59,7 +59,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#spi-master">SPI master</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#timer0">Timer0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#uart">UART</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#user-address-space">User Address Space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#user-space">User Space</a></li>
 </ul>
 </li>
 </ul>
@@ -99,18 +99,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv421enable_user_interfacev">
-<span id="_CPPv321enable_user_interfacev"></span><span id="_CPPv221enable_user_interfacev"></span><span id="enable_user_interface"></span><span class="target" id="common_8h_1af79fbe355fd538621db12e3ae9e3e6b8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user_interface</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421enable_user_interfacev" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Enable communication between firmware and user project </p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This necessary when reading or writing are needed between wishbone and user project if interface isn’t enabled no ack would be receive and the writing or reading command will be stuck </p>
-</div>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv413enable_hk_spib">
-<span id="_CPPv313enable_hk_spib"></span><span id="_CPPv213enable_hk_spib"></span><span id="enable_hk_spi__b"></span><span class="target" id="common_8h_1a37a92e81df76732622207204976178f9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_hk_spi</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413enable_hk_spib" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv411enableHkSpib">
+<span id="_CPPv311enableHkSpib"></span><span id="_CPPv211enableHkSpib"></span><span id="enableHkSpi__b"></span><span class="target" id="common_8h_1a08c5c91278b49a7e91696d5d526505e1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enableHkSpi</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411enableHkSpib" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable the housekeeping SPI This function writes to the housekeeping disenable register inside the housekeeping </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -128,8 +118,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv411dummy_delayi">
-<span id="_CPPv311dummy_delayi"></span><span id="_CPPv211dummy_delayi"></span><span id="dummy_delay__i"></span><span class="target" id="common_8h_1a875e99bdc81b2f0c925af03d4881438c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dummy_delay</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411dummy_delayi" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv410dummyDelayi">
+<span id="_CPPv310dummyDelayi"></span><span id="_CPPv210dummyDelayi"></span><span id="dummyDelay__i"></span><span class="target" id="common_8h_1a2693b1908ee935b4d73d7c8c4bb897e9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dummyDelay</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410dummyDelayi" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Insert delay</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -203,12 +193,12 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv419configure_all_gpios9gpio_mode">
-<span id="_CPPv319configure_all_gpios9gpio_mode"></span><span id="_CPPv219configure_all_gpios9gpio_mode"></span><span id="configure_all_gpios__gpio_mode"></span><span class="target" id="gpios_8h_1a855aacde2c3eb9f09f7ca6d4ee44b57a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">configure_all_gpios</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49gpio_mode" title="gpio_mode"><span class="n"><span class="pre">gpio_mode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419configure_all_gpios9gpio_mode" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv418GPIOs_configureAll9gpio_mode">
+<span id="_CPPv318GPIOs_configureAll9gpio_mode"></span><span id="_CPPv218GPIOs_configureAll9gpio_mode"></span><span id="GPIOs_configureAll__gpio_mode"></span><span class="target" id="gpios_8h_1af288a525a946a5cb8265a07235cc0a89"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_configureAll</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49gpio_mode" title="gpio_mode"><span class="n"><span class="pre">gpio_mode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418GPIOs_configureAll9gpio_mode" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Configure all GPIOs with the config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a> </p>
+<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1aa2d753ef0720dd40c8cca9d386ccab85"><span class="std std-ref">GPIOs_loadConfigs()</span></a> </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -218,18 +208,18 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv416gpio_config_loadv">
-<span id="_CPPv316gpio_config_loadv"></span><span id="_CPPv216gpio_config_loadv"></span><span id="gpio_config_load"></span><span class="target" id="gpios_8h_1a7d48a49426f2c9c379660611de769c29"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gpio_config_load</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416gpio_config_loadv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv417GPIOs_loadConfigsv">
+<span id="_CPPv317GPIOs_loadConfigsv"></span><span id="_CPPv217GPIOs_loadConfigsv"></span><span id="GPIOs_loadConfigs"></span><span class="target" id="gpios_8h_1aa2d753ef0720dd40c8cca9d386ccab85"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_loadConfigs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417GPIOs_loadConfigsv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Load the configurations changes to the GPIOs </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414configure_gpioi9gpio_mode">
-<span id="_CPPv314configure_gpioi9gpio_mode"></span><span id="_CPPv214configure_gpioi9gpio_mode"></span><span id="configure_gpio__i.gpio_mode"></span><span class="target" id="gpios_8h_1a60b4f4fbfae8495880881b1d4da68725"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">configure_gpio</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gpio_num</span></span>, <span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49gpio_mode" title="gpio_mode"><span class="n"><span class="pre">gpio_mode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414configure_gpioi9gpio_mode" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv415GPIOs_configurei9gpio_mode">
+<span id="_CPPv315GPIOs_configurei9gpio_mode"></span><span id="_CPPv215GPIOs_configurei9gpio_mode"></span><span id="GPIOs_configure__i.gpio_mode"></span><span class="target" id="gpios_8h_1a7741f231d1f7f3ddd4c3e65e1623d29b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_configure</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gpio_num</span></span>, <span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv49gpio_mode" title="gpio_mode"><span class="n"><span class="pre">gpio_mode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">config</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415GPIOs_configurei9gpio_mode" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Configure one GPIO with the input config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1a7d48a49426f2c9c379660611de769c29"><span class="std std-ref">gpio_config_load()</span></a> </p>
+<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1aa2d753ef0720dd40c8cca9d386ccab85"><span class="std std-ref">GPIOs_loadConfigs()</span></a> </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -242,16 +232,16 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410set_gpio_lj">
-<span id="_CPPv310set_gpio_lj"></span><span id="_CPPv210set_gpio_lj"></span><span id="set_gpio_l__unsigned-i"></span><span class="target" id="gpios_8h_1a381a8a44c3dad81f0a46e202533dba8a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gpio_l</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_gpio_lj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv414GPIOs_writeLowj">
+<span id="_CPPv314GPIOs_writeLowj"></span><span id="_CPPv214GPIOs_writeLowj"></span><span id="GPIOs_writeLow__unsigned-i"></span><span class="target" id="gpios_8h_1a503d40479dae4e1d776f9a828da26e9c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_writeLow</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414GPIOs_writeLowj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the low 32 GPIOs GPIOS[31:0]</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">GPIOs</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLow</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">GPIOs</span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLow</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
@@ -269,16 +259,16 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410set_gpio_hj">
-<span id="_CPPv310set_gpio_hj"></span><span id="_CPPv210set_gpio_hj"></span><span id="set_gpio_h__unsigned-i"></span><span class="target" id="gpios_8h_1ac6950e132b8bd925bb1ede3d18631f05"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gpio_h</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_gpio_hj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv415GPIOs_writeHighj">
+<span id="_CPPv315GPIOs_writeHighj"></span><span id="_CPPv215GPIOs_writeHighj"></span><span id="GPIOs_writeHigh__unsigned-i"></span><span class="target" id="gpios_8h_1a7839dcf1479c966ba9434fd3cafde145"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_writeHigh</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415GPIOs_writeHighj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the highest 6 GPIOs GPIOS[37:32]</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">GPIOs</span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">GPIOs</span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
@@ -296,20 +286,20 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv48set_gpiol">
-<span id="_CPPv38set_gpiol"></span><span id="_CPPv28set_gpiol"></span><span id="set_gpio__l"></span><span class="target" id="gpios_8h_1a55f590722256813d85552b198b25440d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gpio</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48set_gpiol" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv418GPIOs_writeLowHighl">
+<span id="_CPPv318GPIOs_writeLowHighl"></span><span id="_CPPv218GPIOs_writeLowHighl"></span><span id="GPIOs_writeLowHigh__l"></span><span class="target" id="gpios_8h_1aa0bdfb4d673bf0f766c0883b914fc00c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_writeLowHigh</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418GPIOs_writeLowHighl" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the 38 GPIOs GPIOS[37:0]</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">GPIOs</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">set_gpio</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
 </p></li>
@@ -333,8 +323,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410get_gpio_hv">
-<span id="_CPPv310get_gpio_hv"></span><span id="_CPPv210get_gpio_hv"></span><span id="get_gpio_h"></span><span class="target" id="gpios_8h_1a48dd1cdca7124e34b86b729d7355ce04"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gpio_h</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410get_gpio_hv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv414GPIOs_readHighv">
+<span id="_CPPv314GPIOs_readHighv"></span><span id="_CPPv214GPIOs_readHighv"></span><span id="GPIOs_readHigh"></span><span class="target" id="gpios_8h_1a38a69d74731490954747a059d9c7b3de"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_readHigh</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414GPIOs_readHighv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Read the highest 6 GPIOs GPIOS[37:32] </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -343,8 +333,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410get_gpio_lv">
-<span id="_CPPv310get_gpio_lv"></span><span id="_CPPv210get_gpio_lv"></span><span id="get_gpio_l"></span><span class="target" id="gpios_8h_1a5b3a80032bca3d58fb29a598b8524fb1"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gpio_l</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410get_gpio_lv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413GPIOs_readLowv">
+<span id="_CPPv313GPIOs_readLowv"></span><span id="_CPPv213GPIOs_readLowv"></span><span id="GPIOs_readLow"></span><span class="target" id="gpios_8h_1a6e492397b64caf85c5a36ac0c8e1d00d"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_readLow</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413GPIOs_readLowv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Read low 32 GPIOs GPIOS[31:0] </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -353,16 +343,16 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv411wait_gpio_lj">
-<span id="_CPPv311wait_gpio_lj"></span><span id="_CPPv211wait_gpio_lj"></span><span id="wait_gpio_l__unsigned-i"></span><span class="target" id="gpios_8h_1ae04c0971756bf7f833129bf0b6f6d547"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_l</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411wait_gpio_lj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413GPIOs_waitLowj">
+<span id="_CPPv313GPIOs_waitLowj"></span><span id="_CPPv213GPIOs_waitLowj"></span><span id="GPIOs_waitLow__unsigned-i"></span><span class="target" id="gpios_8h_1a196f858ea2a3307d453288e2426de274"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitLow</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413GPIOs_waitLowj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the lowest 32 GPIOsto equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">GPIOs</span><span class="o">=</span> <span class="mi">0</span>  
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLow</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">GPIOs</span><span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLow</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
  </p></li>
@@ -380,16 +370,16 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv411wait_gpio_hj">
-<span id="_CPPv311wait_gpio_hj"></span><span id="_CPPv211wait_gpio_hj"></span><span id="wait_gpio_h__unsigned-i"></span><span class="target" id="gpios_8h_1a9fb980ee2469d57c9d37eed263f1864d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_h</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411wait_gpio_hj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv414GPIOs_waitHighj">
+<span id="_CPPv314GPIOs_waitHighj"></span><span id="_CPPv214GPIOs_waitHighj"></span><span id="GPIOs_waitHigh__unsigned-i"></span><span class="target" id="gpios_8h_1a5633f00a1a81df2ae81341ee04658ea6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitHigh</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414GPIOs_waitHighj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span>  
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
  </p></li>
@@ -407,16 +397,16 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv418wait_gpio_l_maskedjj">
-<span id="_CPPv318wait_gpio_l_maskedjj"></span><span id="_CPPv218wait_gpio_l_maskedjj"></span><span id="wait_gpio_l_masked__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1a4f971ec71379f092d9b616ec6e40bde1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_l_masked</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418wait_gpio_l_maskedjj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv421GPIOs_waitLowWithMaskjj">
+<span id="_CPPv321GPIOs_waitLowWithMaskjj"></span><span id="_CPPv221GPIOs_waitLowWithMaskjj"></span><span id="GPIOs_waitLowWithMask__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1a7eac3b1a8b68f8fef71169ca40a21742"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitLowWithMask</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421GPIOs_waitLowWithMaskjj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the masked lowest 32 GPIOs to equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLowWithMask</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_l_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLowWithMask</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
  </p></li>
@@ -437,16 +427,16 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv418wait_gpio_h_maskedjj">
-<span id="_CPPv318wait_gpio_h_maskedjj"></span><span id="_CPPv218wait_gpio_h_maskedjj"></span><span id="wait_gpio_h_masked__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1ad071916d2d8c21af15b9dd1ed385b437"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_h_masked</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418wait_gpio_h_maskedjj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv422GPIOs_waitHighWithMaskjj">
+<span id="_CPPv322GPIOs_waitHighWithMaskjj"></span><span id="_CPPv222GPIOs_waitHighWithMaskjj"></span><span id="GPIOs_waitHighWithMask__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1a83b74468a9ef251ca1da1fb5f0948869"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitHighWithMask</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422GPIOs_waitHighWithMaskjj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the masked highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
 <ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHighWithMask</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
  </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wait_gpio_h_masked</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
+<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHighWithMask</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
  </p></li>
@@ -473,8 +463,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv420enable_external1_irqb">
-<span id="_CPPv320enable_external1_irqb"></span><span id="_CPPv220enable_external1_irqb"></span><span id="enable_external1_irq__b"></span><span class="target" id="irq__api_8h_1a21341597fad3b92332d60feaa5ceaf01"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_external1_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420enable_external1_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv419IRQ_enableExternal1b">
+<span id="_CPPv319IRQ_enableExternal1b"></span><span id="_CPPv219IRQ_enableExternal1b"></span><span id="IRQ_enableExternal1__b"></span><span class="target" id="irq__api_8h_1a33f86b77b6c05de0aa9f8de0f1121876"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableExternal1</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419IRQ_enableExternal1b" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable external1 interrupt GPIO[7]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -484,8 +474,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv420enable_external2_irqb">
-<span id="_CPPv320enable_external2_irqb"></span><span id="_CPPv220enable_external2_irqb"></span><span id="enable_external2_irq__b"></span><span class="target" id="irq__api_8h_1ae059d78d8da468ca24d853d9d573d1f6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_external2_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420enable_external2_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv419IRQ_enableExternal2b">
+<span id="_CPPv319IRQ_enableExternal2b"></span><span id="_CPPv219IRQ_enableExternal2b"></span><span id="IRQ_enableExternal2__b"></span><span class="target" id="irq__api_8h_1ad7c5b62cb6e19b449ccf6711d31b8b35"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableExternal2</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419IRQ_enableExternal2b" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable external2 interrupt GPIO[12]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -495,8 +485,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv416enable_user0_irqb">
-<span id="_CPPv316enable_user0_irqb"></span><span id="_CPPv216enable_user0_irqb"></span><span id="enable_user0_irq__b"></span><span class="target" id="irq__api_8h_1adb52fc0c18ec040baf3f570d146c4860"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user0_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416enable_user0_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv415IRQ_enableUser0b">
+<span id="_CPPv315IRQ_enableUser0b"></span><span id="_CPPv215IRQ_enableUser0b"></span><span id="IRQ_enableUser0__b"></span><span class="target" id="irq__api_8h_1a7c18bd8cbddb3e33141c99b3d02663b8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableUser0</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415IRQ_enableUser0b" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable user0 interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -506,8 +496,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv416enable_user1_irqb">
-<span id="_CPPv316enable_user1_irqb"></span><span id="_CPPv216enable_user1_irqb"></span><span id="enable_user1_irq__b"></span><span class="target" id="irq__api_8h_1ab8d9b3cf7899a7aaffb5c22d881a852d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user1_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416enable_user1_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv415IRQ_enableUser1b">
+<span id="_CPPv315IRQ_enableUser1b"></span><span id="_CPPv215IRQ_enableUser1b"></span><span id="IRQ_enableUser1__b"></span><span class="target" id="irq__api_8h_1ac8b85a0ff4da956f253da5bb1a359a8f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableUser1</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415IRQ_enableUser1b" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable user1 interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -517,8 +507,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv416enable_user2_irqb">
-<span id="_CPPv316enable_user2_irqb"></span><span id="_CPPv216enable_user2_irqb"></span><span id="enable_user2_irq__b"></span><span class="target" id="irq__api_8h_1a26224abf0d4e4285df5c607da63428f7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_user2_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416enable_user2_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv415IRQ_enableUser2b">
+<span id="_CPPv315IRQ_enableUser2b"></span><span id="_CPPv215IRQ_enableUser2b"></span><span id="IRQ_enableUser2__b"></span><span class="target" id="irq__api_8h_1aa7e7badb5afb49dd8a1e855b676da84a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableUser2</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415IRQ_enableUser2b" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable user1 interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -528,8 +518,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv417enable_timer0_irqb">
-<span id="_CPPv317enable_timer0_irqb"></span><span id="_CPPv217enable_timer0_irqb"></span><span id="enable_timer0_irq__b"></span><span class="target" id="irq__api_8h_1a5b50d14e7052f6375664a542de0b869b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_timer0_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417enable_timer0_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv415IRQ_enableTimerb">
+<span id="_CPPv315IRQ_enableTimerb"></span><span id="_CPPv215IRQ_enableTimerb"></span><span id="IRQ_enableTimer__b"></span><span class="target" id="irq__api_8h_1a2bf7c0011bc8a27bada789eabbb08e6c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableTimer</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415IRQ_enableTimerb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable timer0 interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -539,8 +529,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv418enable_uart_tx_irqb">
-<span id="_CPPv318enable_uart_tx_irqb"></span><span id="_CPPv218enable_uart_tx_irqb"></span><span id="enable_uart_tx_irq__b"></span><span class="target" id="irq__api_8h_1afc59d7e9a7bdac60111985d56dcc7187"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_uart_tx_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418enable_uart_tx_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv416IRQ_enableUartTxb">
+<span id="_CPPv316IRQ_enableUartTxb"></span><span id="_CPPv216IRQ_enableUartTxb"></span><span id="IRQ_enableUartTx__b"></span><span class="target" id="irq__api_8h_1a4f13c9b7d087417cdfe2406fee2d4b62"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableUartTx</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416IRQ_enableUartTxb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable UART tx interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -550,8 +540,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv418enable_uart_rx_irqb">
-<span id="_CPPv318enable_uart_rx_irqb"></span><span id="_CPPv218enable_uart_rx_irqb"></span><span id="enable_uart_rx_irq__b"></span><span class="target" id="irq__api_8h_1a96f7a3547cfb0c10cd43d3cb21d297b8"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_uart_rx_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418enable_uart_rx_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv416IRQ_enableUartRxb">
+<span id="_CPPv316IRQ_enableUartRxb"></span><span id="_CPPv216IRQ_enableUartRxb"></span><span id="IRQ_enableUartRx__b"></span><span class="target" id="irq__api_8h_1a4cda68c6fb315ebcde31cfc54170e307"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_enableUartRx</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416IRQ_enableUartRxb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable UART rx interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -561,8 +551,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv417enable_hk_spi_irqb">
-<span id="_CPPv317enable_hk_spi_irqb"></span><span id="_CPPv217enable_hk_spi_irqb"></span><span id="enable_hk_spi_irq__b"></span><span class="target" id="irq__api_8h_1aaf1679fd3e37519e4024ae3d8de8a0c2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_hk_spi_irq</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417enable_hk_spi_irqb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv49IRQ_hkSpib">
+<span id="_CPPv39IRQ_hkSpib"></span><span id="_CPPv29IRQ_hkSpib"></span><span id="IRQ_hkSpi__b"></span><span class="target" id="irq__api_8h_1ad05bfdede736222a7348204bb84937a4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">IRQ_hkSpi</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49IRQ_hkSpib" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable SPI interrupt</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -614,8 +604,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410set_la_ien13la_reg_numberj">
-<span id="_CPPv310set_la_ien13la_reg_numberj"></span><span id="_CPPv210set_la_ien13la_reg_numberj"></span><span id="set_la_ien__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1aa59af651665d8938229016610ffeb925"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_ien</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_ien13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv425LogicAnalyzer_inputEnable13la_reg_numberj">
+<span id="_CPPv325LogicAnalyzer_inputEnable13la_reg_numberj"></span><span id="_CPPv225LogicAnalyzer_inputEnable13la_reg_numberj"></span><span id="LogicAnalyzer_inputEnable__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1a1a3a34186b36a6386682ef6357c02746"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogicAnalyzer_inputEnable</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425LogicAnalyzer_inputEnable13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Setting logic analyzer input enable</p>
 <p>Enable as input to the user project. firmware sends to user project</p>
 <dl class="field-list simple">
@@ -629,8 +619,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410set_la_oen13la_reg_numberj">
-<span id="_CPPv310set_la_oen13la_reg_numberj"></span><span id="_CPPv210set_la_oen13la_reg_numberj"></span><span id="set_la_oen__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1aeed29349be1ae153fde34d62a59b9dfc"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_oen</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_oen13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv426LogicAnalyzer_outputEnable13la_reg_numberj">
+<span id="_CPPv326LogicAnalyzer_outputEnable13la_reg_numberj"></span><span id="_CPPv226LogicAnalyzer_outputEnable13la_reg_numberj"></span><span id="LogicAnalyzer_outputEnable__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1a6744740a1ac2e2d94c0057617f208de2"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogicAnalyzer_outputEnable</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426LogicAnalyzer_outputEnable13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Setting logic analyzer output enable</p>
 <p>Enable as output from the user project. firmware receives from user project</p>
 <dl class="field-list simple">
@@ -644,8 +634,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410set_la_reg13la_reg_numberj">
-<span id="_CPPv310set_la_reg13la_reg_numberj"></span><span id="_CPPv210set_la_reg13la_reg_numberj"></span><span id="set_la_reg__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1a8f614c8578907a47d6826cc8cdb6f1d5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_la_reg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410set_la_reg13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv419LogicAnalyzer_write13la_reg_numberj">
+<span id="_CPPv319LogicAnalyzer_write13la_reg_numberj"></span><span id="_CPPv219LogicAnalyzer_write13la_reg_numberj"></span><span id="LogicAnalyzer_write__la_reg_number.unsigned-i"></span><span class="target" id="la_8h_1a77a9c3c3deef468e7c5f35c5065317c5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogicAnalyzer_write</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419LogicAnalyzer_write13la_reg_numberj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Write data through logic analyzers from firmware to user project</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -662,8 +652,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410get_la_reg13la_reg_number">
-<span id="_CPPv310get_la_reg13la_reg_number"></span><span id="_CPPv210get_la_reg13la_reg_number"></span><span id="get_la_reg__la_reg_number"></span><span class="target" id="la_8h_1a46f839584a4aa3a3c0a24a103f8e5a1e"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_la_reg</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410get_la_reg13la_reg_number" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv418LogicAnalyzer_read13la_reg_number">
+<span id="_CPPv318LogicAnalyzer_read13la_reg_number"></span><span id="_CPPv218LogicAnalyzer_read13la_reg_number"></span><span id="LogicAnalyzer_read__la_reg_number"></span><span class="target" id="la_8h_1acdb3e73f83b667d9ec81f0e409ad47c8"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">LogicAnalyzer_read</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413la_reg_number" title="la_reg_number"><span class="n"><span class="pre">la_reg_number</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reg_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418LogicAnalyzer_read13la_reg_number" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Read data through logic analyzers from user project to firmware</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -683,32 +673,32 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv418mgmt_gpio_i_enablev">
-<span id="_CPPv318mgmt_gpio_i_enablev"></span><span id="_CPPv218mgmt_gpio_i_enablev"></span><span id="mgmt_gpio_i_enable"></span><span class="target" id="mgmt__gpio_8h_1a5e552dcb3b7872a84b0590aca0626577"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_i_enable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418mgmt_gpio_i_enablev" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv425ManagmentGpio_inputEnablev">
+<span id="_CPPv325ManagmentGpio_inputEnablev"></span><span id="_CPPv225ManagmentGpio_inputEnablev"></span><span id="ManagmentGpio_inputEnable"></span><span class="target" id="mgmt__gpio_8h_1aebb9ca3b8c8add0a6fdc5d1645a58852"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ManagmentGpio_inputEnable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425ManagmentGpio_inputEnablev" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Configure management GPIO as input </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv418mgmt_gpio_o_enablev">
-<span id="_CPPv318mgmt_gpio_o_enablev"></span><span id="_CPPv218mgmt_gpio_o_enablev"></span><span id="mgmt_gpio_o_enable"></span><span class="target" id="mgmt__gpio_8h_1a28a81799fe6b08635e4c38a10870bd19"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_o_enable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418mgmt_gpio_o_enablev" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv426ManagmentGpio_outputEnablev">
+<span id="_CPPv326ManagmentGpio_outputEnablev"></span><span id="_CPPv226ManagmentGpio_outputEnablev"></span><span id="ManagmentGpio_outputEnable"></span><span class="target" id="mgmt__gpio_8h_1a8e72568036b795c978c158b5c0bbd910"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ManagmentGpio_outputEnable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv426ManagmentGpio_outputEnablev" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Configure management GPIO as output </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv419mgmt_gpio_io_enablev">
-<span id="_CPPv319mgmt_gpio_io_enablev"></span><span id="_CPPv219mgmt_gpio_io_enablev"></span><span id="mgmt_gpio_io_enable"></span><span class="target" id="mgmt__gpio_8h_1af6ca17f3be830146f0feaa42992bc8a6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_io_enable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419mgmt_gpio_io_enablev" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv422ManagmentGpio_ioEnablev">
+<span id="_CPPv322ManagmentGpio_ioEnablev"></span><span id="_CPPv222ManagmentGpio_ioEnablev"></span><span id="ManagmentGpio_ioEnable"></span><span class="target" id="mgmt__gpio_8h_1ad8433f94009bba5dfa1472264ab3f405"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ManagmentGpio_ioEnable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422ManagmentGpio_ioEnablev" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Configure management GPIO as bi-direction </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv420mgmt_gpio_io_disablev">
-<span id="_CPPv320mgmt_gpio_io_disablev"></span><span id="_CPPv220mgmt_gpio_io_disablev"></span><span id="mgmt_gpio_io_disable"></span><span class="target" id="mgmt__gpio_8h_1a0227af4e18cc2d6c665eb8d663a9ee8a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_io_disable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420mgmt_gpio_io_disablev" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv421ManagmentGpio_disablev">
+<span id="_CPPv321ManagmentGpio_disablev"></span><span id="_CPPv221ManagmentGpio_disablev"></span><span id="ManagmentGpio_disable"></span><span class="target" id="mgmt__gpio_8h_1ab0d97f495e70deeb0261a968f4d83766"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ManagmentGpio_disable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421ManagmentGpio_disablev" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Configure management GPIO as floating It’s not connected as input or output </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv412mgmt_gpio_wrb">
-<span id="_CPPv312mgmt_gpio_wrb"></span><span id="_CPPv212mgmt_gpio_wrb"></span><span id="mgmt_gpio_wr__b"></span><span class="target" id="mgmt__gpio_8h_1a340b2d0d4f7b0996433830850a66272f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_wr</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412mgmt_gpio_wrb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv419ManagmentGpio_writeb">
+<span id="_CPPv319ManagmentGpio_writeb"></span><span id="_CPPv219ManagmentGpio_writeb"></span><span id="ManagmentGpio_write__b"></span><span class="target" id="mgmt__gpio_8h_1a76f7edf361e9b50ac1f91b3a2efb6d83"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ManagmentGpio_write</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419ManagmentGpio_writeb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Write data in management GPIO</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -722,8 +712,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv412mgmt_gpio_rdv">
-<span id="_CPPv312mgmt_gpio_rdv"></span><span id="_CPPv212mgmt_gpio_rdv"></span><span id="mgmt_gpio_rd"></span><span class="target" id="mgmt__gpio_8h_1ac834401bc984e15179fdf70c4836ed6d"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mgmt_gpio_rd</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412mgmt_gpio_rdv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv418ManagmentGpio_readv">
+<span id="_CPPv318ManagmentGpio_readv"></span><span id="_CPPv218ManagmentGpio_readv"></span><span id="ManagmentGpio_read"></span><span class="target" id="mgmt__gpio_8h_1a1deb38550709ec95b75b81351aa97f6c"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ManagmentGpio_read</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418ManagmentGpio_readv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Read data in management GPIO</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -732,8 +722,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414wait_gpio_mgmtb">
-<span id="_CPPv314wait_gpio_mgmtb"></span><span id="_CPPv214wait_gpio_mgmtb"></span><span id="wait_gpio_mgmt__b"></span><span class="target" id="mgmt__gpio_8h_1a4aca6477221bd8ef8b91853817d1e104"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wait_gpio_mgmt</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414wait_gpio_mgmtb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv418ManagmentGpio_waitb">
+<span id="_CPPv318ManagmentGpio_waitb"></span><span id="_CPPv218ManagmentGpio_waitb"></span><span id="ManagmentGpio_wait__b"></span><span class="target" id="mgmt__gpio_8h_1a7f368859e2df2c12ca3c5000f8a19132"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ManagmentGpio_wait</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418ManagmentGpio_waitb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Wait over management GPIO to equal data</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -753,8 +743,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv49spi_writec">
-<span id="_CPPv39spi_writec"></span><span id="_CPPv29spi_writec"></span><span id="spi_write__c"></span><span class="target" id="spi__master_8h_1ac256606f0178011ddb85162d9584c487"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spi_write</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49spi_writec" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv410MSPI_writec">
+<span id="_CPPv310MSPI_writec"></span><span id="_CPPv210MSPI_writec"></span><span id="MSPI_write__c"></span><span class="target" id="spi__master_8h_1a83bfbffc1add606c915c72d53b74b0b9"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MSPI_write</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410MSPI_writec" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Write byte (8bits) through SPI master</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -764,14 +754,14 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv48spi_readv">
-<span id="_CPPv38spi_readv"></span><span id="_CPPv28spi_readv"></span><span id="spi_read"></span><span class="target" id="spi__master_8h_1ae677e13a3b0995516e495ced349dbcc5"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">spi_read</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv48spi_readv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv49MSPI_readv">
+<span id="_CPPv39MSPI_readv"></span><span id="_CPPv29MSPI_readv"></span><span id="MSPI_read"></span><span class="target" id="spi__master_8h_1add88f1c01868dbb6f7a30ca1c1ae6cf4"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MSPI_read</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49MSPI_readv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Read byte (8bits) through SPI master </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410enable_spib">
-<span id="_CPPv310enable_spib"></span><span id="_CPPv210enable_spib"></span><span id="enable_spi__b"></span><span class="target" id="spi__master_8h_1a60653a00868af39a2ae44b05717197d5"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_spi</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410enable_spib" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv411MSPI_enableb">
+<span id="_CPPv311MSPI_enableb"></span><span id="_CPPv211MSPI_enableb"></span><span id="MSPI_enable__b"></span><span class="target" id="spi__master_8h_1aaa60b306dd0fc9f21f6d10b7fa08034d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MSPI_enable</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411MSPI_enableb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable the master SPI</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -781,8 +771,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv49enable_CSb">
-<span id="_CPPv39enable_CSb"></span><span id="_CPPv29enable_CSb"></span><span id="enable_CS__b"></span><span class="target" id="spi__master_8h_1a904d489d359261aab3e5149f4ac4fb0f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_CS</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49enable_CSb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413MSPI_enableCSb">
+<span id="_CPPv313MSPI_enableCSb"></span><span id="_CPPv213MSPI_enableCSb"></span><span id="MSPI_enableCS__b"></span><span class="target" id="spi__master_8h_1abe298fb2168613cf2e43af17404b3aad"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MSPI_enableCS</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413MSPI_enableCSb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>assert or deassert chip select</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -798,8 +788,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv424timer0_oneshot_configurej">
-<span id="_CPPv324timer0_oneshot_configurej"></span><span id="_CPPv224timer0_oneshot_configurej"></span><span id="timer0_oneshot_configure__unsigned-i"></span><span class="target" id="timer0_8h_1a618b157336f2fbb272590e57b0105fb4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_oneshot_configure</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424timer0_oneshot_configurej" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv423timer0_configureOneShotj">
+<span id="_CPPv323timer0_configureOneShotj"></span><span id="_CPPv223timer0_configureOneShotj"></span><span id="timer0_configureOneShot__unsigned-i"></span><span class="target" id="timer0_8h_1a2400e05d4063a49d5e0881a8e422ec86"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_configureOneShot</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv423timer0_configureOneShotj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Start Timer in oneshot countdown mode start value is count</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -809,8 +799,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv425timer0_periodic_configurej">
-<span id="_CPPv325timer0_periodic_configurej"></span><span id="_CPPv225timer0_periodic_configurej"></span><span id="timer0_periodic_configure__unsigned-i"></span><span class="target" id="timer0_8h_1ace0a359a15e1744a3f8eb4e8a415680e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_periodic_configure</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv425timer0_periodic_configurej" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv424timer0_configurePeriodicj">
+<span id="_CPPv324timer0_configurePeriodicj"></span><span id="_CPPv224timer0_configurePeriodicj"></span><span id="timer0_configurePeriodic__unsigned-i"></span><span class="target" id="timer0_8h_1a06884fc27bfe7793f6904774b6565b25"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_configurePeriodic</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424timer0_configurePeriodicj" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Start counter in periodic countdown mode start value is count</p>
 <p>Timer will roll over to the count value when it reaches 0 </p>
 <dl class="field-list simple">
@@ -821,8 +811,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv413enable_timer0b">
-<span id="_CPPv313enable_timer0b"></span><span id="_CPPv213enable_timer0b"></span><span id="enable_timer0__b"></span><span class="target" id="timer0_8h_1aed97be9effff00e8469940bbac4cac53"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_timer0</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413enable_timer0b" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413timer0_enableb">
+<span id="_CPPv313timer0_enableb"></span><span id="_CPPv213timer0_enableb"></span><span id="timer0_enable__b"></span><span class="target" id="timer0_8h_1a2974c941008418ea21ba4641f83c4ea7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_enable</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413timer0_enableb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or Disable timer0</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -832,8 +822,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414get_timer0_valv">
-<span id="_CPPv314get_timer0_valv"></span><span id="_CPPv214get_timer0_valv"></span><span id="get_timer0_val"></span><span class="target" id="timer0_8h_1a4b344afe9da30e277cbcc840cec73067"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_timer0_val</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414get_timer0_valv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv416timer0_readValuev">
+<span id="_CPPv316timer0_readValuev"></span><span id="_CPPv216timer0_readValuev"></span><span id="timer0_readValue"></span><span class="target" id="timer0_8h_1ac86682420d0de4bab7bf133f67e6e35b"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">timer0_readValue</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416timer0_readValuev" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Get timer current value </p>
 </dd></dl>
 
@@ -844,8 +834,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414enable_uart_TXb">
-<span id="_CPPv314enable_uart_TXb"></span><span id="_CPPv214enable_uart_TXb"></span><span id="enable_uart_TX__b"></span><span class="target" id="uart__api_8h_1af271ffef8910e5c9f6ddf14163ec7e6a"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enable_uart_TX</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414enable_uart_TXb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413UART_enableTXb">
+<span id="_CPPv313UART_enableTXb"></span><span id="_CPPv213UART_enableTXb"></span><span id="UART_enableTX__b"></span><span class="target" id="uart__api_8h_1aca637427323a13558b46e2ee65f6638b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UART_enableTX</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413UART_enableTXb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable TX of UART</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -859,8 +849,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414uart_RX_enableb">
-<span id="_CPPv314uart_RX_enableb"></span><span id="_CPPv214uart_RX_enableb"></span><span id="uart_RX_enable__b"></span><span class="target" id="uart__api_8h_1a23a72c60afce70b08a0fd3ff45a4f024"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uart_RX_enable</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414uart_RX_enableb" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413UART_enableRXb">
+<span id="_CPPv313UART_enableRXb"></span><span id="_CPPv213UART_enableRXb"></span><span id="UART_enableRX__b"></span><span class="target" id="uart__api_8h_1ac7e8b94a1b33769e737169c6fa338912"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UART_enableRX</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_enable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413UART_enableRXb" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Enable or disable RX of UART</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -874,18 +864,24 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv49uart_getcv">
-<span id="_CPPv39uart_getcv"></span><span id="_CPPv29uart_getcv"></span><span id="uart_getc"></span><span class="target" id="uart__api_8h_1a11508a3c55df6779452e795b23f2af40"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uart_getc</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49uart_getcv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413UART_readCharv">
+<span id="_CPPv313UART_readCharv"></span><span id="_CPPv213UART_readCharv"></span><span id="UART_readChar"></span><span class="target" id="uart__api_8h_1a6e0d67a7b5c73e1133d8906eb2037c14"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UART_readChar</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413UART_readCharv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Wait receiving ASCII symbol and return it.</p>
 <p>Return the first ASCII symbol of the UART received queue</p>
 <p>RX mode have to be enabled </p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv413uart_pop_charv">
-<span id="_CPPv313uart_pop_charv"></span><span id="_CPPv213uart_pop_charv"></span><span id="uart_pop_char"></span><span class="target" id="uart__api_8h_1a8398a7147ed6979b318b895c18766975"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">uart_pop_char</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413uart_pop_charv" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv412UART_popCharv">
+<span id="_CPPv312UART_popCharv"></span><span id="_CPPv212UART_popCharv"></span><span id="UART_popChar"></span><span class="target" id="uart__api_8h_1accbd12d45ca5357084a42e65f30c7379"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UART_popChar</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412UART_popCharv" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Pop the first ASCII symbol of the UART received queue</p>
-<p><a class="reference internal" href="#uart__api_8h_1a11508a3c55df6779452e795b23f2af40"><span class="std std-ref">uart_getc()</span></a> function would keeping reading the same symbol unless this function is called </p>
+<p><a class="reference internal" href="#uart__api_8h_1a6e0d67a7b5c73e1133d8906eb2037c14"><span class="std std-ref">UART_readChar()</span></a> function would keeping reading the same symbol unless this function is called </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413UART_readLinev">
+<span id="_CPPv313UART_readLinev"></span><span id="_CPPv213UART_readLinev"></span><span id="UART_readLine"></span><span class="target" id="uart__api_8h_1a0a812bb491942a62046e93a592ce5225"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">UART_readLine</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413UART_readLinev" title="Permalink to this definition"></a><br /></dt>
+<dd><p>read full line msg and return it </p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -895,16 +891,52 @@
 <p>TX mode have to be enabled </p>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413UART_sendCharc">
+<span id="_CPPv313UART_sendCharc"></span><span id="_CPPv213UART_sendCharc"></span><span id="UART_sendChar__c"></span><span class="target" id="uart__api_8h_1a69895a7561310168b024cca863b23206"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UART_sendChar</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413UART_sendCharc" title="Permalink to this definition"></a><br /></dt>
+<dd><p><p>Send ASCII char through UART</p>
+<p>TX mode have to be enabled</p>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c</strong> – ASCII char to send</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412UART_sendInti">
+<span id="_CPPv312UART_sendInti"></span><span id="_CPPv212UART_sendInti"></span><span id="UART_sendInt__i"></span><span class="target" id="uart__api_8h_1a09274b38f8919ad158c0d1ec38271059"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">UART_sendInt</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412UART_sendInti" title="Permalink to this definition"></a><br /></dt>
+<dd><p><p>Send int through UART the int would be sent as 8 hex characters</p>
+<p>TX mode have to be enabled</p>
+</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>c</strong> – int to send</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </section>
-<section id="user-address-space">
-<h3>User Address Space<a class="headerlink" href="#user-address-space" title="Permalink to this heading"></a></h3>
+<section id="user-space">
+<h3>User Space<a class="headerlink" href="#user-space" title="Permalink to this heading"></a></h3>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv422write_user_double_wordji">
-<span id="_CPPv322write_user_double_wordji"></span><span id="_CPPv222write_user_double_wordji"></span><span id="write_user_double_word__unsigned-i.i"></span><span class="target" id="user__addr__space_8h_1a291884d7ca06f6fc9a1f43a5ef274260"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_user_double_word</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422write_user_double_wordji" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Write double word (4 bytes) at user address space 32 bit register</p>
+<dt class="sig sig-object cpp" id="_CPPv413User_enableIFv">
+<span id="_CPPv313User_enableIFv"></span><span id="_CPPv213User_enableIFv"></span><span id="User_enableIF"></span><span class="target" id="user__space_8h_1a613cc002383517796ba21968f75c0ff4"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">User_enableIF</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413User_enableIFv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Enable communication between firmware and user project through wishbone </p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This necessary when reading or writing are needed between wishbone and user project if interface isn’t enabled no ack would be receive and the writing or reading command will be stuck </p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414USER_writeWordji">
+<span id="_CPPv314USER_writeWordji"></span><span id="_CPPv214USER_writeWordji"></span><span id="USER_writeWord__unsigned-i.i"></span><span class="target" id="user__space_8h_1ab4b69057d303df38c571ff19fe70d760"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">USER_writeWord</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414USER_writeWordji" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Write word (4 bytes) at user address space 32 bit register</p>
 <p><table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>address</p></th>
@@ -949,14 +981,14 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p><p>Since offset is a word (4 bytes) and address space represent bytes, offset = address /4</p>
 <p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – double world data to write </p></li>
+<li><p><strong>data</strong> – world data to write </p></li>
 <li><p><strong>offset</strong> – the offset of the register to write. Origin at the user project address</p></li>
 </ul>
 </dd>
@@ -964,9 +996,9 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv421read_user_double_wordi">
-<span id="_CPPv321read_user_double_wordi"></span><span id="_CPPv221read_user_double_wordi"></span><span id="read_user_double_word__i"></span><span class="target" id="user__addr__space_8h_1aa9a3f20abb8888d9f06601b96ca8fbae"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_user_double_word</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421read_user_double_wordi" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Read double word (4 bytes) at user address space 32 bit register</p>
+<dt class="sig sig-object cpp" id="_CPPv413USER_readWordi">
+<span id="_CPPv313USER_readWordi"></span><span id="_CPPv213USER_readWordi"></span><span id="USER_readWord__i"></span><span class="target" id="user__space_8h_1a8341444d1c6a9834627a08284b86bdfd"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">USER_readWord</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413USER_readWordi" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Read word (4 bytes) at user address space 32 bit register</p>
 <p><table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>address</p></th>
@@ -1011,7 +1043,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p><p>Since offset is a word (4 bytes) and address space represent bytes, offset = address /4</p>
 <p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
@@ -1023,9 +1055,9 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv415write_user_wordtjb">
-<span id="_CPPv315write_user_wordtjb"></span><span id="_CPPv215write_user_wordtjb"></span><span id="write_user_word__unsigned-short.unsigned-i.b"></span><span class="target" id="user__addr__space_8h_1ac8c9de3c8721308bc981b0ca98402517"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_user_word</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_first_word</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415write_user_wordtjb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Write word (2 bytes) at user address space 32 bit register</p>
+<dt class="sig sig-object cpp" id="_CPPv418USER_writeHalfWordtjb">
+<span id="_CPPv318USER_writeHalfWordtjb"></span><span id="_CPPv218USER_writeHalfWordtjb"></span><span id="USER_writeHalfWord__unsigned-short.unsigned-i.b"></span><span class="target" id="user__space_8h_1a3aa2a0b36d2fea89e3540866fa878505"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">USER_writeHalfWord</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_first_word</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418USER_writeHalfWordtjb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Write half word (2 bytes) at user address space 32 bit register</p>
 <p><table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>is first word</p></th>
@@ -1077,14 +1109,14 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p><p>Since offset is a word (4 bytes) and address space represent bytes, offset = address /4</p>
 <p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – world data to write </p></li>
+<li><p><strong>data</strong> – half world data to write </p></li>
 <li><p><strong>offset</strong> – the offset of the register to write. Origin at the user project address </p></li>
 <li><p><strong>is_first_word</strong> – the offset of the register to write. Origin at the user project address</p></li>
 </ul>
@@ -1093,9 +1125,9 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414read_user_wordjb">
-<span id="_CPPv314read_user_wordjb"></span><span id="_CPPv214read_user_wordjb"></span><span id="read_user_word__unsigned-i.b"></span><span class="target" id="user__addr__space_8h_1a929692f180f9152c63eef1849e1d15a1"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_user_word</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_first_word</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414read_user_wordjb" title="Permalink to this definition"></a><br /></dt>
-<dd><p>Read word (2 bytes) at user address space 32 bit register</p>
+<dt class="sig sig-object cpp" id="_CPPv417USER_readHalfWordjb">
+<span id="_CPPv317USER_readHalfWordjb"></span><span id="_CPPv217USER_readHalfWordjb"></span><span id="USER_readHalfWord__unsigned-i.b"></span><span class="target" id="user__space_8h_1ad5f4e621258f311f860ee139078d402b"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">short</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">USER_readHalfWord</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_first_word</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417USER_readHalfWordjb" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Read half word (2 bytes) at user address space 32 bit register</p>
 <p><table class="docutils align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p>is first word</p></th>
@@ -1147,7 +1179,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p><p>Since offset is a word (4 bytes) and address space represent bytes, offset = address /4</p>
 <p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
@@ -1162,8 +1194,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv415write_user_bytehjh">
-<span id="_CPPv315write_user_bytehjh"></span><span id="_CPPv215write_user_bytehjh"></span><span id="write_user_byte__unsigned-c.unsigned-i.unsigned-c"></span><span class="target" id="user__addr__space_8h_1a0eb906122234d6c9f173c03fe6fd2345"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_user_byte</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">byte_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415write_user_bytehjh" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv414USER_writeBytehjh">
+<span id="_CPPv314USER_writeBytehjh"></span><span id="_CPPv214USER_writeBytehjh"></span><span id="USER_writeByte__unsigned-c.unsigned-i.unsigned-c"></span><span class="target" id="user__space_8h_1a9cda3d41541035be2198550b85cd1a5f"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">USER_writeByte</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">byte_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414USER_writeBytehjh" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Write byte at user address space 32 bit register</p>
 <p><table class="docutils align-default">
 <thead>
@@ -1216,7 +1248,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p><p>Since offset is a word (4 bytes) and address space represent bytes, offset = address /4</p>
 <p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>
@@ -1232,8 +1264,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv414read_user_bytejh">
-<span id="_CPPv314read_user_bytejh"></span><span id="_CPPv214read_user_bytejh"></span><span id="read_user_byte__unsigned-i.unsigned-c"></span><span class="target" id="user__addr__space_8h_1af2e75a434a8110b6522be2ad1a406713"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_user_byte</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">byte_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414read_user_bytejh" title="Permalink to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv413USER_readBytejh">
+<span id="_CPPv313USER_readBytejh"></span><span id="_CPPv213USER_readBytejh"></span><span id="USER_readByte__unsigned-i.unsigned-c"></span><span class="target" id="user__space_8h_1a4d1bd64c76584c644c5c30091b6a2380"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">USER_readByte</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">offset</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">byte_num</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413USER_readBytejh" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Read byte at user address space 32 bit register</p>
 <p><table class="docutils align-default">
 <thead>
@@ -1286,7 +1318,7 @@
 </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><p>Since offset is a doubleword (4 bytes) and address space represent bytes, offset = address /4</p>
+<p><p>Since offset is a word (4 bytes) and address space represent bytes, offset = address /4</p>
 <p>For example if project caravel space are 26 address bit offset = wb_addr_i[25:0]/4</p>
 </p>
 </div>

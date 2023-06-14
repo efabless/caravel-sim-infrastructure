@@ -69,6 +69,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.drive_mgmt_gpio"><code class="docutils literal notranslate"><span class="pre">Caravel_env.drive_mgmt_gpio()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.setup_clock"><code class="docutils literal notranslate"><span class="pre">Caravel_env.setup_clock()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.get_clock_obj"><code class="docutils literal notranslate"><span class="pre">Caravel_env.get_clock_obj()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.caravel.Caravel_env.get_clock_period"><code class="docutils literal notranslate"><span class="pre">Caravel_env.get_clock_period()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -92,6 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#uart-environment">UART Environment</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#interfaces.UART.UART"><code class="docutils literal notranslate"><span class="pre">UART</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.get_line"><code class="docutils literal notranslate"><span class="pre">UART.get_line()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.get_int"><code class="docutils literal notranslate"><span class="pre">UART.get_int()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.get_char"><code class="docutils literal notranslate"><span class="pre">UART.get_char()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.uart_send_char"><code class="docutils literal notranslate"><span class="pre">UART.uart_send_char()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#interfaces.UART.UART.uart_send_line"><code class="docutils literal notranslate"><span class="pre">UART.uart_send_line()</span></code></a></li>
@@ -319,6 +321,12 @@
 <dd><p>return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.caravel.Caravel_env.get_clock_period">
+<span class="sig-name descname"><span class="pre">get_clock_period</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></span><a class="reference internal" href="_modules/interfaces/caravel.html#Caravel_env.get_clock_period"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.caravel.Caravel_env.get_clock_period" title="Permalink to this definition"></a></dt>
+<dd><p>return the used clock period in ns</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -538,6 +546,12 @@ It then drives the CSB line high and kills the SPI clock.Finally, the function w
 <ul class="simple">
 <li><p>Line is a bunch of ASCII sybmols ended by linefeed ‘\n’</p></li>
 </ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.UART.UART.get_int">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_int</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></span><a class="reference internal" href="_modules/interfaces/UART.html#UART.get_int"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.UART.UART.get_int" title="Permalink to this definition"></a></dt>
+<dd><p>read int sent by firmware API uart_put_int</p>
 </dd></dl>
 
 <dl class="py method">

@@ -82,49 +82,24 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ac256606f0178011ddb85162d9584c487"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#ac256606f0178011ddb85162d9584c487">spi_write</a> (char c)</td></tr>
-<tr class="separator:ac256606f0178011ddb85162d9584c487"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae677e13a3b0995516e495ced349dbcc5"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#ae677e13a3b0995516e495ced349dbcc5">spi_read</a> ()</td></tr>
-<tr class="separator:ae677e13a3b0995516e495ced349dbcc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60653a00868af39a2ae44b05717197d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#a60653a00868af39a2ae44b05717197d5">enable_spi</a> (bool is_enable)</td></tr>
-<tr class="separator:a60653a00868af39a2ae44b05717197d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a904d489d359261aab3e5149f4ac4fb0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#a904d489d359261aab3e5149f4ac4fb0f">enable_CS</a> (bool is_enable)</td></tr>
-<tr class="separator:a904d489d359261aab3e5149f4ac4fb0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83bfbffc1add606c915c72d53b74b0b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#a83bfbffc1add606c915c72d53b74b0b9">MSPI_write</a> (char c)</td></tr>
+<tr class="separator:a83bfbffc1add606c915c72d53b74b0b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add88f1c01868dbb6f7a30ca1c1ae6cf4"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#add88f1c01868dbb6f7a30ca1c1ae6cf4">MSPI_read</a> ()</td></tr>
+<tr class="separator:add88f1c01868dbb6f7a30ca1c1ae6cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa60b306dd0fc9f21f6d10b7fa08034d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#aaa60b306dd0fc9f21f6d10b7fa08034d">MSPI_enable</a> (bool is_enable)</td></tr>
+<tr class="separator:aaa60b306dd0fc9f21f6d10b7fa08034d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe298fb2168613cf2e43af17404b3aad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="spi__master_8h.html#abe298fb2168613cf2e43af17404b3aad">MSPI_enableCS</a> (bool is_enable)</td></tr>
+<tr class="separator:abe298fb2168613cf2e43af17404b3aad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a904d489d359261aab3e5149f4ac4fb0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a904d489d359261aab3e5149f4ac4fb0f">&#9670;&nbsp;</a></span>enable_CS()</h2>
+<a id="aaa60b306dd0fc9f21f6d10b7fa08034d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa60b306dd0fc9f21f6d10b7fa08034d">&#9670;&nbsp;</a></span>MSPI_enable()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void enable_CS </td>
-          <td>(</td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>is_enable</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>assert or deassert chip select</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">is_enable</td><td>when 1 (true) chip select is asserted, 0 (false) chip select is deasserted </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a60653a00868af39a2ae44b05717197d5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60653a00868af39a2ae44b05717197d5">&#9670;&nbsp;</a></span>enable_spi()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void enable_spi </td>
+          <td class="memname">void MSPI_enable </td>
           <td>(</td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>is_enable</em></td><td>)</td>
@@ -142,14 +117,39 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae677e13a3b0995516e495ced349dbcc5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae677e13a3b0995516e495ced349dbcc5">&#9670;&nbsp;</a></span>spi_read()</h2>
+<a id="abe298fb2168613cf2e43af17404b3aad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe298fb2168613cf2e43af17404b3aad">&#9670;&nbsp;</a></span>MSPI_enableCS()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char spi_read </td>
+          <td class="memname">void MSPI_enableCS </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_enable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>assert or deassert chip select</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">is_enable</td><td>when 1 (true) chip select is asserted, 0 (false) chip select is deasserted </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="add88f1c01868dbb6f7a30ca1c1ae6cf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add88f1c01868dbb6f7a30ca1c1ae6cf4">&#9670;&nbsp;</a></span>MSPI_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char MSPI_read </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -160,14 +160,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac256606f0178011ddb85162d9584c487"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac256606f0178011ddb85162d9584c487">&#9670;&nbsp;</a></span>spi_write()</h2>
+<a id="a83bfbffc1add606c915c72d53b74b0b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83bfbffc1add606c915c72d53b74b0b9">&#9670;&nbsp;</a></span>MSPI_write()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void spi_write </td>
+          <td class="memname">void MSPI_write </td>
           <td>(</td>
           <td class="paramtype">char&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>

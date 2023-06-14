@@ -112,9 +112,12 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dut</span><span class="p">:</span> <span class="n">SimHandleBase</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dut</span> <span class="o">=</span> <span class="n">dut</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">clk</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">clock_tb</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">hk_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">housekeeping</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">user_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">mprj</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">caravel_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hk_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">housekeeping</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">mprj</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">pass</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="mi">37</span>  <span class="c1"># number of active gpios</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_macros</span><span class="p">()</span>
 
@@ -271,6 +274,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">val</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">:</span>
+            <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [caravel][monitor_discontinuous_gpios] Monitor gpio[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_gpio</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">binstr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">val</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_gpio</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">binstr</span>
         <span class="k">return</span> <span class="n">val</span></div>
 
@@ -594,70 +598,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">(</span><span class="n">bits</span><span class="p">,</span> <span class="p">(</span><span class="n">n_bits</span><span class="p">)</span> <span class="o">*</span> <span class="s2">&quot;z&quot;</span><span class="p">)</span>
         <span class="n">cocotb</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot; [caravel] finish wait_then_drive &quot;</span><span class="p">)</span>
 
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">hk_write_byte</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span>
-        <span class="n">data_bit</span> <span class="o">=</span> <span class="n">BinaryValue</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">n_bits</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">bigEndian</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="c1">#  for j in range(4):</span>
-            <span class="c1">#     await FallingEdge(self.clk)</span>
-            <span class="c1"># await Timer(7, units=&#39;ns&#39;)</span>
-            <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="c1"># common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">data_bit</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-
-            <span class="k">await</span> <span class="n">RisingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="k">await</span> <span class="n">RisingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">hk_write_read_byte</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="n">read_data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span>
-        <span class="n">data_bit</span> <span class="o">=</span> <span class="n">BinaryValue</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">n_bits</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">bigEndian</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="c1">#  for j in range(4):</span>
-            <span class="c1">#     await FallingEdge(self.clk)</span>
-            <span class="c1"># await Timer(7, units=&#39;ns&#39;)</span>
-            <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="c1"># common.drive_hdl(self.path,[(4,4),(2,2)],[0,int(data_bit[i])]) # 2 = SDI 4 = SCK</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">data_bit</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-
-            <span class="k">await</span> <span class="n">RisingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="k">await</span> <span class="n">RisingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="n">read_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">read_data</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">37</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">read_data</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; read byte using housekeeping spi</span>
-<span class="sd">        when writing to SCK we can&#39;t use mprj[4] as there is a limitation in cocotb for accessing pack array #2587</span>
-<span class="sd">        so use back door access to write the clock then read the output from the SDO mprj[1] value&quot;&quot;&quot;</span>
-
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">hk_read_byte</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_read</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="n">read_data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># SCK</span>
-            <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># SCK</span>
-            <span class="k">await</span> <span class="n">RisingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="k">await</span> <span class="n">RisingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-            <span class="n">read_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">read_data</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">mprj_io_tb</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="mi">37</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># SCK</span>
-        <span class="c1"># if (last_read):</span>
-        <span class="c1">#     common.drive_hdl(self.dut.gpio4_en,(0,0),&#39;z&#39;) #4 = SCK</span>
-        <span class="c1">#     common.drive_hdl(self.path,[(1,1)],&#39;z&#39;)</span>
-
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">read_data</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;write to the house keeping registers by back door no need for commands and waiting for the data to show on mprj&quot;&quot;&quot;</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">hk_write_backdoor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -708,7 +648,11 @@
 
 <div class="viewcode-block" id="Caravel_env.get_clock_obj"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.get_clock_obj">[docs]</a>    <span class="k">def</span> <span class="nf">get_clock_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">cocotb</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">Clock</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock_obj</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock_obj</span></div>
+    
+<div class="viewcode-block" id="Caravel_env.get_clock_period"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env.get_clock_period">[docs]</a>    <span class="k">def</span> <span class="nf">get_clock_period</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;return the used clock period in ns&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock_obj</span><span class="o">.</span><span class="n">period</span> <span class="o">/</span> <span class="mi">1000</span></div></div>
 </pre></div>
 
            </div>

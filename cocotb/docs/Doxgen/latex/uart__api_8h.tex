@@ -10,35 +10,25 @@ This graph shows which files directly or indirectly include this file\+:\nopageb
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{uart__api_8h_af271ffef8910e5c9f6ddf14163ec7e6a}{enable\+\_\+uart\+\_\+\+TX} (bool is\+\_\+enable)
+void \hyperlink{uart__api_8h_aca637427323a13558b46e2ee65f6638b}{U\+A\+R\+T\+\_\+enable\+TX} (bool is\+\_\+enable)
 \item 
-void \hyperlink{uart__api_8h_a23a72c60afce70b08a0fd3ff45a4f024}{uart\+\_\+\+R\+X\+\_\+enable} (bool is\+\_\+enable)
+void \hyperlink{uart__api_8h_ac7e8b94a1b33769e737169c6fa338912}{U\+A\+R\+T\+\_\+enable\+RX} (bool is\+\_\+enable)
 \item 
-char \hyperlink{uart__api_8h_a11508a3c55df6779452e795b23f2af40}{uart\+\_\+getc} ()
+char \hyperlink{uart__api_8h_a6e0d67a7b5c73e1133d8906eb2037c14}{U\+A\+R\+T\+\_\+read\+Char} ()
 \item 
-void \hyperlink{uart__api_8h_a8398a7147ed6979b318b895c18766975}{uart\+\_\+pop\+\_\+char} ()
+void \hyperlink{uart__api_8h_accbd12d45ca5357084a42e65f30c7379}{U\+A\+R\+T\+\_\+pop\+Char} ()
+\item 
+char $\ast$ \hyperlink{uart__api_8h_a0a812bb491942a62046e93a592ce5225}{U\+A\+R\+T\+\_\+read\+Line} ()
 \item 
 void \hyperlink{uart__api_8h_a2d0091e019fc1a50c3cc9f4c86dd73c2}{print} (const char $\ast$p)
+\item 
+void \hyperlink{uart__api_8h_a69895a7561310168b024cca863b23206}{U\+A\+R\+T\+\_\+send\+Char} (char c)
+\item 
+void \hyperlink{uart__api_8h_a09274b38f8919ad158c0d1ec38271059}{U\+A\+R\+T\+\_\+send\+Int} (int data)
 \end{DoxyCompactItemize}
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{uart__api_8h_af271ffef8910e5c9f6ddf14163ec7e6a}\label{uart__api_8h_af271ffef8910e5c9f6ddf14163ec7e6a}} 
-\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!enable\+\_\+uart\+\_\+\+TX@{enable\+\_\+uart\+\_\+\+TX}}
-\index{enable\+\_\+uart\+\_\+\+TX@{enable\+\_\+uart\+\_\+\+TX}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
-\subsubsection{\texorpdfstring{enable\+\_\+uart\+\_\+\+T\+X()}{enable\_uart\_TX()}}
-{\footnotesize\ttfamily void enable\+\_\+uart\+\_\+\+TX (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
-
-Enable or disable TX of U\+A\+RT
-
-
-\begin{DoxyParams}{Parameters}
-{\em is\+\_\+enable} & when 1(true) U\+A\+RT TX enable, 0 (false) U\+A\+RT TX disable\\
-\hline
-\end{DoxyParams}
-\begin{DoxyNote}{Note}
-Some caravel C\+PU enable and disable U\+A\+RT TX and RX together 
-\end{DoxyNote}
 \mbox{\Hypertarget{uart__api_8h_a2d0091e019fc1a50c3cc9f4c86dd73c2}\label{uart__api_8h_a2d0091e019fc1a50c3cc9f4c86dd73c2}} 
 \index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!print@{print}}
 \index{print@{print}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
@@ -47,29 +37,11 @@ Some caravel C\+PU enable and disable U\+A\+RT TX and RX together
 
 Send A\+S\+C\+II symbol or symbols through U\+A\+RT
 
-TX mode have to be enabled \mbox{\Hypertarget{uart__api_8h_a11508a3c55df6779452e795b23f2af40}\label{uart__api_8h_a11508a3c55df6779452e795b23f2af40}} 
-\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!uart\+\_\+getc@{uart\+\_\+getc}}
-\index{uart\+\_\+getc@{uart\+\_\+getc}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
-\subsubsection{\texorpdfstring{uart\+\_\+getc()}{uart\_getc()}}
-{\footnotesize\ttfamily char uart\+\_\+getc (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-Wait receiving A\+S\+C\+II symbol and return it.
-
-Return the first A\+S\+C\+II symbol of the U\+A\+RT received queue
-
-RX mode have to be enabled \mbox{\Hypertarget{uart__api_8h_a8398a7147ed6979b318b895c18766975}\label{uart__api_8h_a8398a7147ed6979b318b895c18766975}} 
-\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!uart\+\_\+pop\+\_\+char@{uart\+\_\+pop\+\_\+char}}
-\index{uart\+\_\+pop\+\_\+char@{uart\+\_\+pop\+\_\+char}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
-\subsubsection{\texorpdfstring{uart\+\_\+pop\+\_\+char()}{uart\_pop\_char()}}
-{\footnotesize\ttfamily void uart\+\_\+pop\+\_\+char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
-
-Pop the first A\+S\+C\+II symbol of the U\+A\+RT received queue
-
-\hyperlink{uart__api_8h_a11508a3c55df6779452e795b23f2af40}{uart\+\_\+getc()} function would keeping reading the same symbol unless this function is called \mbox{\Hypertarget{uart__api_8h_a23a72c60afce70b08a0fd3ff45a4f024}\label{uart__api_8h_a23a72c60afce70b08a0fd3ff45a4f024}} 
-\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!uart\+\_\+\+R\+X\+\_\+enable@{uart\+\_\+\+R\+X\+\_\+enable}}
-\index{uart\+\_\+\+R\+X\+\_\+enable@{uart\+\_\+\+R\+X\+\_\+enable}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
-\subsubsection{\texorpdfstring{uart\+\_\+\+R\+X\+\_\+enable()}{uart\_RX\_enable()}}
-{\footnotesize\ttfamily void uart\+\_\+\+R\+X\+\_\+enable (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+TX mode have to be enabled \mbox{\Hypertarget{uart__api_8h_ac7e8b94a1b33769e737169c6fa338912}\label{uart__api_8h_ac7e8b94a1b33769e737169c6fa338912}} 
+\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!U\+A\+R\+T\+\_\+enable\+RX@{U\+A\+R\+T\+\_\+enable\+RX}}
+\index{U\+A\+R\+T\+\_\+enable\+RX@{U\+A\+R\+T\+\_\+enable\+RX}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T\+\_\+enable\+R\+X()}{UART\_enableRX()}}
+{\footnotesize\ttfamily void U\+A\+R\+T\+\_\+enable\+RX (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
 
 Enable or disable RX of U\+A\+RT
 
@@ -81,3 +53,66 @@ Enable or disable RX of U\+A\+RT
 \begin{DoxyNote}{Note}
 Some caravel C\+PU enable and disable U\+A\+RT TX and RX together 
 \end{DoxyNote}
+\mbox{\Hypertarget{uart__api_8h_aca637427323a13558b46e2ee65f6638b}\label{uart__api_8h_aca637427323a13558b46e2ee65f6638b}} 
+\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!U\+A\+R\+T\+\_\+enable\+TX@{U\+A\+R\+T\+\_\+enable\+TX}}
+\index{U\+A\+R\+T\+\_\+enable\+TX@{U\+A\+R\+T\+\_\+enable\+TX}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T\+\_\+enable\+T\+X()}{UART\_enableTX()}}
+{\footnotesize\ttfamily void U\+A\+R\+T\+\_\+enable\+TX (\begin{DoxyParamCaption}\item[{bool}]{is\+\_\+enable }\end{DoxyParamCaption})}
+
+Enable or disable TX of U\+A\+RT
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+\_\+enable} & when 1(true) U\+A\+RT TX enable, 0 (false) U\+A\+RT TX disable\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+Some caravel C\+PU enable and disable U\+A\+RT TX and RX together 
+\end{DoxyNote}
+\mbox{\Hypertarget{uart__api_8h_accbd12d45ca5357084a42e65f30c7379}\label{uart__api_8h_accbd12d45ca5357084a42e65f30c7379}} 
+\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!U\+A\+R\+T\+\_\+pop\+Char@{U\+A\+R\+T\+\_\+pop\+Char}}
+\index{U\+A\+R\+T\+\_\+pop\+Char@{U\+A\+R\+T\+\_\+pop\+Char}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T\+\_\+pop\+Char()}{UART\_popChar()}}
+{\footnotesize\ttfamily void U\+A\+R\+T\+\_\+pop\+Char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Pop the first A\+S\+C\+II symbol of the U\+A\+RT received queue
+
+\hyperlink{uart__api_8h_a6e0d67a7b5c73e1133d8906eb2037c14}{U\+A\+R\+T\+\_\+read\+Char()} function would keeping reading the same symbol unless this function is called \mbox{\Hypertarget{uart__api_8h_a6e0d67a7b5c73e1133d8906eb2037c14}\label{uart__api_8h_a6e0d67a7b5c73e1133d8906eb2037c14}} 
+\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!U\+A\+R\+T\+\_\+read\+Char@{U\+A\+R\+T\+\_\+read\+Char}}
+\index{U\+A\+R\+T\+\_\+read\+Char@{U\+A\+R\+T\+\_\+read\+Char}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T\+\_\+read\+Char()}{UART\_readChar()}}
+{\footnotesize\ttfamily char U\+A\+R\+T\+\_\+read\+Char (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Wait receiving A\+S\+C\+II symbol and return it.
+
+Return the first A\+S\+C\+II symbol of the U\+A\+RT received queue
+
+RX mode have to be enabled \mbox{\Hypertarget{uart__api_8h_a0a812bb491942a62046e93a592ce5225}\label{uart__api_8h_a0a812bb491942a62046e93a592ce5225}} 
+\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!U\+A\+R\+T\+\_\+read\+Line@{U\+A\+R\+T\+\_\+read\+Line}}
+\index{U\+A\+R\+T\+\_\+read\+Line@{U\+A\+R\+T\+\_\+read\+Line}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T\+\_\+read\+Line()}{UART\_readLine()}}
+{\footnotesize\ttfamily char$\ast$ U\+A\+R\+T\+\_\+read\+Line (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+read full line msg and return it \mbox{\Hypertarget{uart__api_8h_a69895a7561310168b024cca863b23206}\label{uart__api_8h_a69895a7561310168b024cca863b23206}} 
+\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!U\+A\+R\+T\+\_\+send\+Char@{U\+A\+R\+T\+\_\+send\+Char}}
+\index{U\+A\+R\+T\+\_\+send\+Char@{U\+A\+R\+T\+\_\+send\+Char}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T\+\_\+send\+Char()}{UART\_sendChar()}}
+{\footnotesize\ttfamily void U\+A\+R\+T\+\_\+send\+Char (\begin{DoxyParamCaption}\item[{char}]{c }\end{DoxyParamCaption})}
+
+Send A\+S\+C\+II char through U\+A\+RT 
+\begin{DoxyParams}{Parameters}
+{\em c} & A\+S\+C\+II char to send\\
+\hline
+\end{DoxyParams}
+TX mode have to be enabled \mbox{\Hypertarget{uart__api_8h_a09274b38f8919ad158c0d1ec38271059}\label{uart__api_8h_a09274b38f8919ad158c0d1ec38271059}} 
+\index{uart\+\_\+api.\+h@{uart\+\_\+api.\+h}!U\+A\+R\+T\+\_\+send\+Int@{U\+A\+R\+T\+\_\+send\+Int}}
+\index{U\+A\+R\+T\+\_\+send\+Int@{U\+A\+R\+T\+\_\+send\+Int}!uart\+\_\+api.\+h@{uart\+\_\+api.\+h}}
+\subsubsection{\texorpdfstring{U\+A\+R\+T\+\_\+send\+Int()}{UART\_sendInt()}}
+{\footnotesize\ttfamily void U\+A\+R\+T\+\_\+send\+Int (\begin{DoxyParamCaption}\item[{int}]{data }\end{DoxyParamCaption})}
+
+Send int through U\+A\+RT the int would be sent as 8 hex characters 
+\begin{DoxyParams}{Parameters}
+{\em c} & int to send\\
+\hline
+\end{DoxyParams}
+TX mode have to be enabled 
