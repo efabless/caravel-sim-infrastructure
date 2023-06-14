@@ -41,8 +41,10 @@ class Caravel_env:
             self.user_hdl = dut.uut.chip_core.mprj
         except AttributeError:
             pass
-        self.active_gpios_num = 37  # number of active gpios
         self.get_macros()
+        self.active_gpios_num = int(self.design_macros.MPRJ_IO_PADS)  # number of active gpios
+        if "OPENFRAME" in self.design_macros._asdict():
+            self.active_gpios_num = int(self.design_macros.OPENFRAME_IO_PADS)
 
     def get_macros(self):
         valid_macros = {
@@ -63,7 +65,7 @@ class Caravel_env:
         await self.disable_bins()
 
     async def disable_bins(self):
-        for i in range(38):
+        for i in range(self.active_gpios_num):
             if i in [3, 4]:  # CSB and SCK
                 continue
             common.drive_hdl(self.dut._id(f"gpio{i}_en", False), (0, 0), 0)

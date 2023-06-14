@@ -310,7 +310,7 @@ class Test:
     def set_linker_script(self):
         linker_script_orginal = (
             f"{self.paths.FIRMWARE_PATH}/sections.lds"
-            if self.args.cpu_type == "VexRISC"
+            if self.args.cpu_type in["VexRISC","RV32imc"]
             else f"{self.paths.FIRMWARE_PATH}/link.ld"
         )
         self.linker_script_file = f"{self.test_dir}/linker_script.lds"
