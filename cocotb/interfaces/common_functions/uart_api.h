@@ -19,7 +19,7 @@ void arm_mgmt_uart_disable(){reg_wb_enable = reg_wb_enable  & 0xFFBF;}
  * Some caravel CPU enable and disable UART TX and RX together
  * 
  */
-void enable_uart_TX(bool is_enable){
+void UART_enableTX(bool is_enable){
     if (is_enable){
         #ifdef ARM 
         // 0x08 RW    CTRL[3:0]   TxIntEn, RxIntEn, TxEn, RxEn
@@ -58,7 +58,7 @@ void enable_uart_TX(bool is_enable){
  * Some caravel CPU enable and disable UART TX and RX together
  * 
  */
-void uart_RX_enable(bool is_enable){
+void UART_enableRX(bool is_enable){
     if (is_enable){
        #ifdef ARM 
         arm_mgmt_uart_enable();
@@ -86,7 +86,7 @@ void uart_RX_enable(bool is_enable){
  * RX mode have to be enabled
  * 
  */
-char uart_getc(){
+char UART_readChar(){
     #ifdef ARM 
     while ((reg_uart_stat &2) == 0); // RX is empty
     #else 
@@ -97,9 +97,9 @@ char uart_getc(){
 /**
  * Pop the first ASCII symbol of the UART received queue
  * 
- * uart_getc() function would keeping reading the same symbol unless this function is called
+ * UART_readChar() function would keeping reading the same symbol unless this function is called
  */
-void uart_pop_char(){
+void UART_popChar(){
     #ifndef ARM
     uart_ev_pending_write(UART_EV_RX);
     #endif
@@ -110,16 +110,16 @@ void uart_pop_char(){
  * read full line msg and return it
  * 
  */
-char* uart_get_line(){
+char* UART_readLine(){
     char* received_array =0;
     char received_char;
     int count = 0;
-    while ((received_char = uart_getc()) != '\n'){
+    while ((received_char = UART_readChar()) != '\n'){
         received_array[count++] = received_char;
-        uart_pop_char();
+        UART_popChar();
     }
     received_array[count++] = received_char;
-    uart_pop_char();
+    UART_popChar();
     return received_array;
 }
 
@@ -139,7 +139,7 @@ void print(const char *p){}
  * 
  * TX mode have to be enabled
  */
-void uart_putc(char c){
+void UART_sendChar(char c){
     while (reg_uart_txfull == 1);
 	reg_uart_data = c;
 }
@@ -151,7 +151,7 @@ void uart_putc(char c){
  * 
  * TX mode have to be enabled
  */
-void uart_put_int(int data){
+void UART_sendInt(int data){
  for (int i = 0; i < 8; i++) {
         // Extract the current 4-bit chunk
         int chunk = (data >> (i * 4)); 
@@ -165,8 +165,8 @@ void uart_put_int(int data){
         } else {
             ch = 'A' + (chunk - 10);  // Convert to corresponding hex character A-F
         }
-        uart_putc(ch);
+        UART_sendChar(ch);
     }
-    uart_putc('\n');
+    UART_sendChar('\n');
 }
 #endif // UART_API_C_HEADER_FILE
