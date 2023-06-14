@@ -4,6 +4,7 @@ from pathlib import Path
 from collections import namedtuple
 import yaml
 from scripts.verify_cocotb.RunRegression import RunRegression
+from scripts.verify_cocotb.check_git import GitRepoChecker
 import re
 import logging
 import random
@@ -90,6 +91,8 @@ class RunFLow:
             raise NotADirectoryError(
                 f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}"
             )
+        GitRepoChecker(design_info["CARAVEL_ROOT"]) # check repo synced with last commit
+        GitRepoChecker(design_info["MCW_ROOT"]) # check repo synced with last commit
         if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
             raise NotADirectoryError(
                 f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}"
@@ -103,6 +106,7 @@ class RunFLow:
                 )
             else:
                 self.configure_user_files(design_info["USER_PROJECT_ROOT"])
+                GitRepoChecker(design_info["USER_PROJECT_ROOT"]) # check repo synced with last commit
         Paths = namedtuple(
             "Paths",
             "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USER_PROJECT_ROOT SIM_PATH",
@@ -118,6 +122,7 @@ class RunFLow:
             if self.args.openframe: 
                 FIRMWARE_PATH = f"{design_info['USER_PROJECT_ROOT']}/verilog/dv/firmware"
         COCOTB_PATH = self.args.cocotb_path
+        GitRepoChecker(COCOTB_PATH) # check repo synced with last commit
         SIM_PATH = (
             f"{COCOTB_PATH}/sim"
             if self.args.sim_path is None
