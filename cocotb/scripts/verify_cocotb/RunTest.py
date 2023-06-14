@@ -131,7 +131,8 @@ class RunTest:
     # iverilog function
     def runTest_iverilog(self):
         macros = " -D" + " -D".join(self.test.macros)
-        dirs = f'-I \"{self.paths.PDK_ROOT}/{self.paths.PDK}\" '
+        dirs = ""
+        # dirs = f'-I \"{self.paths.PDK_ROOT}/{self.paths.PDK}\" '
         env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
         if self.test.sim == "GL_SDF":
             self.logger.error(
@@ -151,7 +152,10 @@ class RunTest:
             docker_dir += (
                 f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
             )
-        docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {env_vars} {docker_dir} efabless/dv:cocotb sh -ec 'cd {self.test.test_dir} && {iverilog_command}'"
+        if os.path.exists("/mnt/scratch/"):
+            docker_dir += " -v /mnt/scratch/cocotb_runs/:/mnt/scratch/cocotb_runs/ "
+        display = " -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/.Xauthority --network host --security-opt seccomp=unconfined "
+        docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {display} {env_vars} {docker_dir} efabless/dv:cocotb sh -ec 'cd {self.test.test_dir} && {iverilog_command}'"
         self.full_terminal = open(self.test.compilation_log, "w")
         self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
         self.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
