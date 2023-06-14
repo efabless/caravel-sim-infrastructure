@@ -23,11 +23,11 @@
 #include <la.h>
 #include <uart_api.h>
 #include <spi_master.h>
-#include <user_addr_space.h>
+#include <user_space.h>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 void enable_debug(){
-    enableUserIF();
+    User_enableIF();
     set_debug_reg1(0);
     set_debug_reg2(0);
     
