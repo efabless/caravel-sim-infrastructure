@@ -26,7 +26,7 @@ class RunTest:
         ) if not self.args.openframe else f"{self.paths.FIRMWARE_PATH}/start.s"
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common -I{self.paths.COCOTB_PATH}/interfaces/common_functions/ "
+        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
         includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
