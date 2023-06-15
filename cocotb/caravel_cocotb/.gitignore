@@ -1,0 +1,14 @@
+design_info.yaml
+*.log
+sim_build
+sim
+__pycache__
+*.
+./wb_models/housekeepingWB/__pycache__
+*.xml
+*.yml
+*.hex*
+*.elf
+AN.DB
+includes.v
+*.lst
