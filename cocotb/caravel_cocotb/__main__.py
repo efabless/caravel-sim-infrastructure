@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-from scripts.verify_cocotb.RunFlow import RunFLow, CocotbArgs
-
+from caravel_cocotb.scripts.verify_cocotb.RunFlow import RunFLow, CocotbArgs
 import argparse
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run cocotb tests")
     parser.add_argument(
@@ -10,6 +11,11 @@ def main():
         "-t",
         nargs="+",
         help="name of test or tests.if no --sim provided RTL will be run <takes list as input>",
+    )
+    parser.add_argument(
+        "-design_info",
+        "-di",
+        help="path to design_info.yaml file",
     )
     parser.add_argument(
         "-sim",
@@ -80,6 +86,11 @@ def main():
         "-no_pull",
         action="store_true",
         help='use to ignore checking if repos are up to date',
+    )
+    parser.add_argument(
+        "-no_docker",
+        action="store_true",
+        help='run iverilog without docker',
     )
     args = parser.parse_args()
     # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  zip_passed caravan emailto seed no_wave clk lint arm sdf_setup")

@@ -1,10 +1,10 @@
 import cocotb
 import cocotb.log
-import interfaces.caravel as caravel
+import caravel_cocotb.interfaces.caravel as caravel
 import logging
 from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
-from interfaces.common_functions.Timeout import Timeout
+from caravel_cocotb.interfaces.common_functions.Timeout import Timeout
 from cocotb.triggers import ClockCycles
 import yaml
 from cocotb_coverage.coverage import coverage_db

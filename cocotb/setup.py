@@ -10,12 +10,11 @@ setup(
     description="efabless caravel cocotb verification flow.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    # install_requires=requirements,
+    install_requires=requirements,
     include_package_data=True,
-    # package_data={
-    #     "caravel_cocotb": ["interfaces/*", "scripts/*", "scripts/**/*"],
-    #     "": ["dependencies.json"],
-    # },
+    package_data={
+        "caravel_cocotb": ["interfaces/*","interfaces/**/*", "scripts/*", "scripts/**/*"]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Intended Audience :: Users",

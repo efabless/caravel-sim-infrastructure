@@ -6,9 +6,9 @@ import cocotb.simulator
 from cocotb.handle import SimHandleBase
 from cocotb.binary import BinaryValue
 from itertools import groupby
-import interfaces.common as common
-from interfaces.common import GPIO_MODE
-from interfaces.common import MASK_GPIO_CTRL
+import caravel_cocotb.interfaces.common as common
+from caravel_cocotb.interfaces.common import GPIO_MODE
+from caravel_cocotb.interfaces.common import MASK_GPIO_CTRL
 from collections.abc import Iterable
 from collections import namedtuple
 
@@ -70,7 +70,6 @@ class Caravel_env:
                 continue
             common.drive_hdl(self.dut._id(f"gpio{i}_en", False), (0, 0), 0)
         await ClockCycles(self.clk, 1)
-
 
     async def power_up(self):
         """Setup the vdd and vcc power pins"""

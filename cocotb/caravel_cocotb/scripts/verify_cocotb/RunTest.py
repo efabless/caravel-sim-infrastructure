@@ -1,10 +1,12 @@
 import os
 import shutil
 import subprocess
-from scripts.verify_cocotb.read_defines import GetDefines
+from caravel_cocotb.scripts.verify_cocotb.read_defines import GetDefines
 import re
 import time
 import logging
+import caravel_cocotb
+
 
 class RunTest:
     def __init__(self, args, paths, test, logger) -> None:
@@ -26,7 +28,7 @@ class RunTest:
         ) if not self.args.openframe else f"{self.paths.FIRMWARE_PATH}/start.s"
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-g -march=rv32i -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
+        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.FIRMWARE_PATH}/APIs -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
         includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
@@ -42,7 +44,7 @@ class RunTest:
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/cm0_start.s"
         LINKER_SCRIPT = f"-T {self.test.linker_script_file}"
         CPUFLAGS = "-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
-        includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.COCOTB_PATH}/interfaces/common_functions/"
+        includes = f"-I{self.paths.FIRMWARE_PATH}"
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
             f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}"
@@ -67,13 +69,8 @@ class RunTest:
         else:
             command = self.hex_riscv32_command_gen()
 
-        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
-        docker_dir = (
-            docker_dir
-            if not self.args.user_test
-            else docker_dir
-            + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
-        )
+        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
+        docker_dir = (docker_dir+ f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
         docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {docker_dir}   efabless/dv:latest sh -ec 'cd {test_dir} && {command} '"
         command_slipt = command.split("&&")
         self.firmware_log = open(self.test.hex_log, "w")
@@ -112,12 +109,9 @@ class RunTest:
     def test_path(self):
         test_name = self.test.name
         test_name += ".c"
-        tests_path = os.path.abspath(f"{self.paths.COCOTB_PATH}/tests")
+        tests_path = os.path.abspath(f"{self.paths.RUN_PATH}/tests")
         tests_path_user = os.path.abspath(f"{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb")
-        if self.args.user_test:
-            test_file = self.find(test_name, tests_path_user)
-        else:
-            test_file = self.find(test_name, tests_path)
+        test_file = self.find(test_name, tests_path_user)
         test_path = os.path.dirname(test_file)
         return test_path
 
@@ -143,25 +137,25 @@ class RunTest:
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         iverilog_command = (
+            f"cd {self.test.test_dir} &&"
             f"iverilog -Ttyp {macros} {dirs} -o {self.test.test_dir}/sim.vvp"
-            f" {self.paths.COCOTB_PATH}/RTL/caravel_top.sv -s caravel_top "
+            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v -s caravel_top "
             f" && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.test_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         )
-        docker_dir = f"-v {self.paths.COCOTB_PATH}:{self.paths.COCOTB_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} "
-        if self.args.user_test:
-            docker_dir += (
-                f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
-            )
+        local_caravel_cocotb_path = caravel_cocotb.__file__.replace("__init__.py", "")
+        docker_caravel_cocotb_path = "/usr/local/lib/python3.8/dist-packages/caravel_cocotb/"
+        docker_dir = f"-v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} -v {local_caravel_cocotb_path}:{docker_caravel_cocotb_path} "
+        docker_dir += (f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
         if os.path.exists("/mnt/scratch/"):
             docker_dir += " -v /mnt/scratch/cocotb_runs/:/mnt/scratch/cocotb_runs/ "
         display = " -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/.Xauthority --network host --security-opt seccomp=unconfined "
-        docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {display} {env_vars} {docker_dir} efabless/dv:cocotb sh -ec 'cd {self.test.test_dir} && {iverilog_command}'"
+        docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {display} {env_vars} {docker_dir} efabless/dv:cocotb sh -ec '{iverilog_command}'"
         self.full_terminal = open(self.test.compilation_log, "w")
         self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
         self.full_terminal.write(os.path.expandvars(docker_command) + "\n\n")
         self.full_terminal.close()
         run_command_write_to_file(
-            docker_command,
+            docker_command if not self.args.no_docker else iverilog_command,
             self.test.compilation_log,
             self.logger,
             quiet=True if self.args.verbosity == "quiet" else False
@@ -183,7 +177,7 @@ class RunTest:
             if self.test.sim == "GL_SDF":
                 dirs += f'+incdir+\\"{self.paths.MCW_ROOT}/verilog/\\" '
                 shutil.copyfile(
-                    f"{self.paths.COCOTB_PATH}/sdf_includes.v",
+                    f"{self.paths.RUN_PATH}/sdf_includes.v",
                     f"{self.test.test_dir}/sdf_includes.v",
                 )
         change_str(
@@ -205,7 +199,7 @@ class RunTest:
             os.environ["RANDOM_SEED"] = self.args.seed
         self.test.set_user_project()
         defines = GetDefines(self.test.includes_file)
-        vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64 -sverilog +error+30 {self.paths.COCOTB_PATH}/RTL/caravel_top.sv {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
+        vlogan_cmd = f"cd {self.test.test_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {dirs}  {macros}   -l {self.test.test_dir}/analysis.log -o {self.test.test_dir} "
         run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
         lint = "+lint=all" if self.args.lint else ""
         vcs_cmd = f"cd {self.test.test_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 +vcs+loopreport+1000000 -R -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.test_dir}/test.log  caravel_top -Mdir={self.test.test_dir}/csrc -o {self.test.test_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs) +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"

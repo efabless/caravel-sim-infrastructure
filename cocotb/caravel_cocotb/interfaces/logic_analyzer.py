@@ -3,7 +3,7 @@ from cocotb.triggers import ClockCycles
 import cocotb.log
 import cocotb.simulator
 from cocotb.handle import SimHandleBase
-import interfaces.common as common
+import caravel_cocotb.interfaces.common as common
 
 
 class LA:

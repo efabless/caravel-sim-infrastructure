@@ -7,9 +7,9 @@ from pathlib import Path
 import tarfile
 import shutil
 import xml.etree.ElementTree as ET
-from scripts.verify_cocotb.RunTest import change_str
-from scripts.verify_cocotb.RunTest import bcolors
-
+from caravel_cocotb.scripts.verify_cocotb.RunTest import change_str
+from caravel_cocotb.scripts.verify_cocotb.RunTest import bcolors
+from caravel_cocotb.scripts.rerun_script_tamplate import rerun_script_template
 
 class Test:
     max_name_size = 1
@@ -89,31 +89,22 @@ class Test:
             )  # using debug register in this test isn't needed
 
     def set_user_project(self):
-        if not self.args.user_test:
-            user_project = f" {self.paths.COCOTB_PATH}/RTL/debug_regs.v {self.paths.COCOTB_PATH}/RTL/__user_project_wrapper.v {self.paths.COCOTB_PATH}/RTL/__user_project_gpio_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_la_example.v {self.paths.COCOTB_PATH}/RTL/__user_project_addr_space_project.v"
-            if self.args.caravan:
-                user_project = (
-                    f" {self.paths.COCOTB_PATH}/RTL/__user_analog_project_wrapper.v"
-                )
-            if self.args.vcs:
-                user_project = user_project.replace("{", "-v {")
+        if self.sim == "RTL":
+            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
         else:
-            if self.sim == "RTL":
-                user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
-            else:
-                user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
+            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
 
-            user_project = f" -f {user_include}"
-            self.write_includes_file(user_include)
-            if self.args.vcs:
-                user_project = ""
-                lines = open(user_include, "r").readlines()
-                for line in lines:
-                    if line.startswith("-v"):
-                        user_project += line.replace(
-                            "$(USER_PROJECT_VERILOG)",
-                            f"{self.paths.USER_PROJECT_ROOT}/verilog",
-                        ) + " "
+        user_project = f" -f {user_include}"
+        self.write_includes_file(user_include)
+        if self.args.vcs:
+            user_project = ""
+            lines = open(user_include, "r").readlines()
+            for line in lines:
+                if line.startswith("-v"):
+                    user_project += line.replace(
+                        "$(USER_PROJECT_VERILOG)",
+                        f"{self.paths.USER_PROJECT_ROOT}/verilog",
+                    ) + " "
         return user_project.replace("\n", "")
 
     def start_of_test(self):
@@ -121,7 +112,9 @@ class Test:
         self.start_time_t = datetime.now()
         self.create_logs()
         self.create_module_trail()
-        shutil.copyfile(f"{self.paths.COCOTB_PATH}/pli.tab", f"{self.test_dir}/pli.tab")
+        if self.args.vcs:
+            with open(f"{self.test_dir}/pli.tab", 'w') as file:
+                file.write('acc+=rw,wn:*')
         self.set_test_macros()
         self.set_linker_script()
         self.start_time = self.start_time_t.strftime("%H:%M:%S(%a)")
@@ -259,53 +252,20 @@ class Test:
         command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun   -sim {self.sim} -corner {self.corner} "
         if self.get_seed().isdigit():
             command += f" -seed {self.get_seed()} "
-        shutil.copyfile(
-            f"{self.paths.COCOTB_PATH}/scripts/rerun_script_tamplate.py",
-            f"{self.test_dir}/rerun.py",
-        )
-        change_str(
-            str="replace by test command",
-            new_str=f"{command}",
-            file_path=f"{self.test_dir}/rerun.py",
-        )
-        change_str(
-            str="replace by cocotb path",
-            new_str=f"{self.paths.COCOTB_PATH}",
-            file_path=f"{self.test_dir}/rerun.py",
-        )
-        change_str(
-            str="replace by mgmt Root",
-            new_str=f"{self.paths.MCW_ROOT}",
-            file_path=f"{self.test_dir}/rerun.py",
-        )
-        change_str(
-            str="replace by caravel Root",
-            new_str=f"{self.paths.CARAVEL_ROOT}",
-            file_path=f"{self.test_dir}/rerun.py",
-        )
-        change_str(
-            str="replace by orignal rerun script",
-            new_str=f"{self.test_dir}/rerun.py",
-            file_path=f"{self.test_dir}/rerun.py",
-        )
-        change_str(
-            str="replace by new rerun script",
-            new_str=f"{self.test_dir}/rerun/{self.full_name}/rerun.py",
-            file_path=f"{self.test_dir}/rerun.py",
-        )
+        rerun_script = rerun_script_template
+        rerun_script = rerun_script.replace("replace by test command", command).replace("replace by cocotb path", self.paths.RUN_PATH)
+        rerun_script = rerun_script.replace("replace by mgmt Root", self.paths.MCW_ROOT)
+        rerun_script = rerun_script.replace("replace by caravel Root", self.paths.CARAVEL_ROOT)
+        rerun_script = rerun_script.replace("replace by orignal rerun script", f"{self.test_dir}/rerun.py")
+        rerun_script = rerun_script.replace("replace by new rerun script", f"{self.test_dir}/rerun/{self.full_name}/rerun.py")
+        with open(f"{self.test_dir}/rerun.py", "w") as f:
+            f.write(rerun_script)
 
     def create_module_trail(self):
         f = open(f"{self.test_dir}/module_trail.py", "w")
         f.write("from os import path\n")
         f.write("import sys\n")
-        if self.args.user_test:
-            f.write(
-                f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n"
-            )
-        else:
-            f.write(
-                f"sys.path.append(path.abspath('{self.paths.COCOTB_PATH}'))\nfrom caravel_tests import *\n"
-            )
+        f.write(f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n")
 
     def set_linker_script(self):
         linker_script_orginal = (

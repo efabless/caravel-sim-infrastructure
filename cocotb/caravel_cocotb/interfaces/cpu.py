@@ -4,7 +4,7 @@ import cocotb.log
 import cocotb.simulator
 from cocotb.handle import SimHandleBase
 from cocotb.binary import BinaryValue
-import interfaces.common as common
+import caravel_cocotb.interfaces.common as common
 
 
 """ this module isn't used it needs to be updated"""
