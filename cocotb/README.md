@@ -40,7 +40,7 @@ caravel_cocotb provides a flow and APIs to run simulation on user_project after 
  
    - install [cocotb_caravel](#how-to-install-caravel_cocotb) 
    - update netlist for RTL and GL files at ```<caravel_user_project>/verilog/includes/``` with the design netlist
-   - update the [design_info](#update-design_info.yaml) file at ```<caravel_user_project>/verilog/dv/cocotb/design_info.yaml```
+   - update the [design_info](#update-design_infoyaml) file at ```<caravel_user_project>/verilog/dv/cocotb/design_info.yaml```
 
 ## Adding a test
 
