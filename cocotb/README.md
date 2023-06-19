@@ -19,7 +19,7 @@ This project aims to provide a user friendly environment for adding and running 
 
 # caravel_cocotb
 
-## How to install caravel_cocotb
+## How to install caravel_cocotb {#install-caravel-cocotb}
 
 This is temporary, it will soon be released to PyPi
 ```bash
@@ -39,7 +39,7 @@ caravel_cocotb provides a flow and APIs to run simulation on user_project after 
 <!-- start create a test include1 -->
 ## Requirements
  
-   - install [cocotb_caravel](#how-to-install-caravel-cocotb) 
+   - install [cocotb_caravel](#install-caravel-cocotb) 
    - update netlist for RTL and GL files at ```<caravel_user_project>/verilog/includes/``` with the design netlist
    - update the [design_info](#update-design_info-yaml) file at ```<caravel_user_project>/verilog/dv/cocotb/design_info.yaml```
 
