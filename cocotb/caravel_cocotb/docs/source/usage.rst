@@ -3,32 +3,24 @@
 
 Quickstart Guide
 ##################
-
-This project aims to provide a user friendly environment for adding and running cocotb tests for *Caravel user projects*. 
-
-Please setup your project through ``ChipCraft`` as this project is setuped and run through ``ChipCraft``.
-
-.. todo::
-
-      Add chipcraft docs link or info 
-
-
-.. todo::
-
-      Add link for examples 
+.. include:: ../../../README.md
+   :parser: markdown
+   :start-after: <!-- start read me file -->
+   :end-before: <!-- middle read me file -->
 
 .. _create_test:
 
 Creating a Test
 ***************
-.. include:: ../../README.md
+
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start create a test include1 -->
    :end-before: <!-- end create a test include1 -->
 
 Commonly used APIs to monitor or drive the hardware can be found in in :doc:`python_api`
 
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start create a test include2 -->
    :end-before: <!-- end create a test include2 -->
@@ -36,7 +28,7 @@ Commonly used APIs to monitor or drive the hardware can be found in in :doc:`pyt
 
 Commonly used APIs for firmware can be found in :doc:`C_api`
 
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start create a test include3 -->
    :end-before: <!-- end create a test include3 -->
@@ -62,7 +54,7 @@ Run without ChipCraft
 
 Check prerequisites
 ^^^^^^^^^^^^^^^^^^^^
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start configure the repo include0 -->
    :end-before: <!-- end configure the repo include0 -->
@@ -70,7 +62,7 @@ Check prerequisites
 Configure the repo
 ^^^^^^^^^^^^^^^^^^^^
 
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start configure the repo include-->
    :end-before: <!-- end configure the repo include -->
@@ -79,7 +71,7 @@ Configure the repo
 Run test/tests
 ^^^^^^^^^^^^^^^^
 
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start run a test include -->
    :end-before: <!-- end run a test include -->
@@ -89,7 +81,7 @@ Run test/tests
 Example
 """""""""""
 
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start run a test include3 -->
    :end-before: <!-- end run a test include3 -->
@@ -99,7 +91,7 @@ Example
 Creating a Testlist
 *********************
 
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start testlist include -->
    :end-before: <!-- end testlist include -->
@@ -108,7 +100,15 @@ Creating a Testlist
 Results
 **********
 
-.. include:: ../../README.md
+.. include:: ../../../README.md
    :parser: markdown
    :start-after: <!-- start result include -->
    :end-before: <!-- end result include -->
+
+Update design_info.yaml 
+*************************
+
+.. include:: ../../../README.md
+   :parser: markdown
+   :start-after: <!-- start Update design_info include -->
+   :end-before: <!-- end Update design_info include -->
