@@ -83,9 +83,9 @@
 <span class="kn">from</span> <span class="nn">cocotb.handle</span> <span class="kn">import</span> <span class="n">SimHandleBase</span>
 <span class="kn">from</span> <span class="nn">cocotb.binary</span> <span class="kn">import</span> <span class="n">BinaryValue</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
-<span class="kn">import</span> <span class="nn">interfaces.common</span> <span class="k">as</span> <span class="nn">common</span>
-<span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">GPIO_MODE</span>
-<span class="kn">from</span> <span class="nn">interfaces.common</span> <span class="kn">import</span> <span class="n">MASK_GPIO_CTRL</span>
+<span class="kn">import</span> <span class="nn">caravel_cocotb.interfaces.common</span> <span class="k">as</span> <span class="nn">common</span>
+<span class="kn">from</span> <span class="nn">caravel_cocotb.interfaces.common</span> <span class="kn">import</span> <span class="n">GPIO_MODE</span>
+<span class="kn">from</span> <span class="nn">caravel_cocotb.interfaces.common</span> <span class="kn">import</span> <span class="n">MASK_GPIO_CTRL</span>
 <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">Iterable</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 
@@ -103,9 +103,7 @@
 <div class="viewcode-block" id="Caravel_env"><a class="viewcode-back" href="../../python_api.html#interfaces.caravel.Caravel_env">[docs]</a><span class="k">class</span> <span class="nc">Caravel_env</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Verification environment for caraval</span>
-
 <span class="sd">    - provide APIs for monitoring and driving caravel GPIOs, power pins, clock and reset pins</span>
-
 <span class="sd">    :param SimHandle dut: dut handle</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -118,8 +116,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">user_hdl</span> <span class="o">=</span> <span class="n">dut</span><span class="o">.</span><span class="n">uut</span><span class="o">.</span><span class="n">chip_core</span><span class="o">.</span><span class="n">mprj</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="mi">37</span>  <span class="c1"># number of active gpios</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">get_macros</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">MPRJ_IO_PADS</span><span class="p">)</span>  <span class="c1"># number of active gpios</span>
+        <span class="k">if</span> <span class="s2">&quot;OPENFRAME&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">_asdict</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_gpios_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_macros</span><span class="o">.</span><span class="n">OPENFRAME_IO_PADS</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">get_macros</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">valid_macros</span> <span class="o">=</span> <span class="p">{</span>
@@ -140,12 +140,11 @@
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">disable_bins</span><span class="p">()</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">disable_bins</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">38</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_gpios_num</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>  <span class="c1"># CSB and SCK</span>
                 <span class="k">continue</span>
             <span class="n">common</span><span class="o">.</span><span class="n">drive_hdl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">_id</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;gpio</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_en&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">await</span> <span class="n">ClockCycles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clk</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">power_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup the vdd and vcc power pins&quot;&quot;&quot;</span>
