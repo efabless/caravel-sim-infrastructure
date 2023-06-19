@@ -70,7 +70,7 @@ class RunFLow:
             parents=True, exist_ok=True
         )
         # check if scratch disk exists
-        if os.path.exists("/mnt/scratch/") and False:
+        if os.path.exists("/mnt/scratch/"):
             if os.path.lexists(f"{self.paths.SIM_PATH}/{self.args.tag}"):
                 if os.path.islink(f"{self.paths.SIM_PATH}/{self.args.tag}"):
                     os.unlink(f"{self.paths.SIM_PATH}/{self.args.tag}")
