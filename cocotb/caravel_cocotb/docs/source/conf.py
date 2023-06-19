@@ -23,6 +23,7 @@ import subprocess
 
 # subprocess.call('make clean', shell=True)
 subprocess.call("cd ../Doxgen ; doxygen sample_text.conf", shell=True)
+subprocess.call("cd ../../.. ; pip install .", shell=True)
 
 breathe_projects = {"caravel_c_apis": "../Doxgen/xml/"}
 breathe_default_project = "caravel_c_apis"
