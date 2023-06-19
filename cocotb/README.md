@@ -118,7 +118,7 @@ Commonly used APIs for firmware can be found in [`C_api`](docs/build/html/C_api.
 <!-- start create a test include3 -->
 # Test Examples
 
-Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb) for tests example generated for 16-bit counter
+Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/main/verilog/dv/cocotb) for tests example generated for 16-bit counter
 <!-- end create a test include3 -->
 
 
