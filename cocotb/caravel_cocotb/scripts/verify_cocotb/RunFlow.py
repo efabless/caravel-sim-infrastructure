@@ -92,7 +92,7 @@ class RunFLow:
             raise NotADirectoryError(
                 f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}"
             )
-        if not self.args.no_pull:
+        if self.args.check_commits:
             GitRepoChecker(design_info["CARAVEL_ROOT"]) # check repo synced with last commit
             GitRepoChecker(design_info["MCW_ROOT"]) # check repo synced with last commit
         if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
@@ -104,7 +104,7 @@ class RunFLow:
                 f"USER_PROJECT_ROOT is not a directory USER_PROJECT_ROOT:{design_info['USER_PROJECT_ROOT']}"
             )
         else:
-            if not self.args.no_pull:
+            if self.args.check_commits:
                 GitRepoChecker(design_info["USER_PROJECT_ROOT"]) # check repo synced with last commit
         Paths = namedtuple(
             "Paths",
@@ -238,7 +238,7 @@ class CocotbArgs:
         run_path=".",
         verbosity="normal",
         openframe=False,
-        no_pull=False,
+        check_commits=False,
         design_info=None,
         no_docker=False
     ) -> None:
@@ -264,7 +264,7 @@ class CocotbArgs:
         # related to repos
         self.cpu_type = None  # would be filled by other class
         self.openframe = openframe
-        self.no_pull = no_pull
+        self.check_commits = check_commits
         self.design_info = design_info
         self.no_docker = no_docker
 
@@ -288,6 +288,6 @@ class CocotbArgs:
         self.run_path = os.getcwd()
         self.verbosity = args.verbosity
         self.openframe = args.openframe
-        self.no_pull = args.no_pull
+        self.check_commits = args.check_commits
         self.design_info = args.design_info
         self.no_docker = args.no_docker
