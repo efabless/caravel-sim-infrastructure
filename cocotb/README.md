@@ -1,5 +1,5 @@
 # Overview
-
+<!-- start read me file -->
 This project aims to provide a user friendly environment for adding and running cocotb tests for Caravel user projects.
 
 
@@ -32,6 +32,7 @@ This is temporary, it will soon be released to PyPi
 ## caravel_cocotb usage
  
 caravel_cocotb provides a flow and APIs to run simulation on user_project after integerated with caravel. This is so helpful in detecting any bug in the connection between the user project and Caravel IOs, wishbone interface or logic analyzers. Also since it's easy to add and run tests with this flow it can be used to test the whole user project.
+<!-- middle read me file -->
 
 # Creating a Test
 
@@ -263,8 +264,10 @@ New directory named ``sim`` would be created under ``<repo root>/cocotb/`` or to
 │ 
 │ 
 ``` 
+<!-- end result include -->
 
 # Update design_info.yaml 
+<!-- start Update design_info include -->
 
 ``design_info.yaml`` are used to reference all the needed repos and paths needed to run the tests:
 
@@ -302,5 +305,5 @@ fill  it like the following
   emailto: [None]
 ```
 > **Note**: This step is required only in the first run.
-<!-- end result include -->
 
+<!-- end Update design_info include -->
