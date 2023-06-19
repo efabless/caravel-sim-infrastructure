@@ -1,6 +1,6 @@
 import cocotb
 from cocotb.triggers import Timer, FallingEdge, NextTimeStep
-from interfaces.caravel import Caravel_env
+from caravel_cocotb.interfaces.caravel import Caravel_env
 
 
 class UART:

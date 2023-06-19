@@ -1,6 +1,6 @@
 import cocotb
 from cocotb.triggers import FallingEdge, RisingEdge, Timer
-from interfaces.caravel import Caravel_env
+from caravel_cocotb.interfaces.caravel import Caravel_env
 from cocotb.clock import Clock
 from cocotb.binary import BinaryValue
 from enum import IntEnum

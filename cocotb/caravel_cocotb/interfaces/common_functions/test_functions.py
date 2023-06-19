@@ -1,13 +1,16 @@
 import cocotb
 import cocotb.log
-import interfaces.caravel as caravel
+import caravel_cocotb.interfaces.caravel as caravel
 import logging
 from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
-from interfaces.common_functions.Timeout import Timeout
+from caravel_cocotb.interfaces.common_functions.Timeout import Timeout
 from cocotb.triggers import ClockCycles
 import yaml
-from cocotb_coverage.coverage import coverage_db
+try:
+    from cocotb_coverage.coverage import coverage_db
+except ImportError:
+    pass
 
 
 """configure the test log file location and log verbosity
@@ -110,10 +113,13 @@ def report_test(func):
         cocotb.log.addHandler(handler)
         # call test
         await func(*args, **kwargs)
-        if "COVERAGE" in cocotb.plusargs or "CHECKERS" in cocotb.plusargs:
-            coverage_db.export_to_yaml(
-                filename=f"{sim_dir}/{TESTFULLNAME}/coverage.ylm"
-            )
+        try:
+            if "COVERAGE" in cocotb.plusargs or "CHECKERS" in cocotb.plusargs:
+                coverage_db.export_to_yaml(
+                    filename=f"{sim_dir}/{TESTFULLNAME}/coverage.ylm"
+                )
+        except:
+            pass
         # report after finish simulation
         msg = f"with ({cocotb.log.critical.counter})criticals ({cocotb.log.error.counter})errors ({cocotb.log.warning.counter})warnings "
         if cocotb.log.error.counter > 0 or cocotb.log.critical.counter > 0:
