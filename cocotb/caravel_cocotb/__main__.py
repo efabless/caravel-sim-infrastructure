@@ -83,9 +83,9 @@ def main():
         help='use openframe for the simulation rather than caravel',
     )
     parser.add_argument(
-        "-no_pull",
+        "-check_commits",
         action="store_true",
-        help='use to ignore checking if repos are up to date',
+        help='use to check if repos are up to date',
     )
     parser.add_argument(
         "-no_docker",

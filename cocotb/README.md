@@ -144,7 +144,7 @@ usage: caravel_cocotb [-h] [-test TEST [TEST ...]] [-design_info DESIGN_INFO]
                       [-emailto EMAILTO [EMAILTO ...]] [-seed SEED] [-no_wave]
                       [-sdf_setup] [-clk CLK] [-lint]
                       [-macros MACROS [MACROS ...]] [-sim_path SIM_PATH]
-                      [-verbosity VERBOSITY] [-openframe] [-no_pull]
+                      [-verbosity VERBOSITY] [-openframe] [-check_commits]
                       [-no_docker]
 
 Run cocotb tests
@@ -189,7 +189,7 @@ optional arguments:
                         value debug, normal or quiet the default value is
                         normal
   -openframe            use openframe for the simulation rather than caravel
-  -no_pull              use to ignore checking if repos are up to date
+  -check_commits        use to check if repos are up to date
   -no_docker            run iverilog without docker
 ```
 <!-- end run a test include -->
