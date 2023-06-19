@@ -49,8 +49,18 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#caravel-cocotb">caravel_cocotb</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-install-caravel-cocotb">How to install caravel_cocotb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#caravel-cocotb-usage">caravel_cocotb usage</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-test">Creating a Test</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#python-template">Python Template</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-a-test">Adding a test</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#python-template">Python Template</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#c-template">C Template</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#test-examples">Test Examples</a></li>
 </ul>
@@ -67,6 +77,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#creating-a-testlist">Creating a Testlist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#results">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#update-design-info-yaml">Update design_info.yaml</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python_api.html">Python APIs</a></li>
@@ -99,18 +110,48 @@
              
   <section id="quickstart-guide">
 <span id="usage"></span><h1>Quickstart Guide<a class="headerlink" href="#quickstart-guide" title="Permalink to this heading"></a></h1>
-<p>This project aims to provide a user friendly environment for adding and running cocotb tests for <em>Caravel user projects</em>.</p>
-<p>Please setup your project through <code class="docutils literal notranslate"><span class="pre">ChipCraft</span></code> as this project is setuped and run through <code class="docutils literal notranslate"><span class="pre">ChipCraft</span></code>.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Add chipcraft docs link or info</p>
+<p>This project aims to provide a user friendly environment for adding and running cocotb tests for Caravel user projects.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
+<!-- start configure the repo include0 --><ul class="simple">
+<li><p>Docker: <a class="reference external" href="https://hub.docker.com/search?q=&amp;type=edition&amp;offering=community&amp;operating_system=linux&amp;utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Linux</a> ||  <a class="reference external" href="https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Windows</a> || <a class="reference external" href="https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Mac with Intel Chip</a> || <a class="reference external" href="https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Mac with M1 Chip</a></p></li>
+<li><p>Python 3.6+ with PIP</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">efabless/dv:cocotb</span></code></p></li>
+<li><p>Clone of Caravel</p></li>
+<li><p>Clone of Caravel management repo</p></li>
+<li><p>Clone of PDK from <a class="reference external" href="https://github.com/efabless/volare">volare</a></p></li>
+<li><p>Clone of Caravel user project</p></li>
+</ul>
+<!-- end configure the repo include0 --></section>
+<section id="caravel-cocotb">
+<h2>caravel_cocotb<a class="headerlink" href="#caravel-cocotb" title="Permalink to this heading"></a></h2>
+<section id="how-to-install-caravel-cocotb">
+<h3>How to install caravel_cocotb<a class="headerlink" href="#how-to-install-caravel-cocotb" title="Permalink to this heading"></a></h3>
+<p>This is temporary, it will soon be released to PyPi</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="n">git</span> <span class="n">clone</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">efabless</span><span class="o">/</span><span class="n">caravel</span><span class="o">-</span><span class="n">sim</span><span class="o">-</span><span class="n">infrastructure</span><span class="o">.</span><span class="n">git</span>
+   <span class="n">cd</span> <span class="n">caravel</span><span class="o">-</span><span class="n">sim</span><span class="o">-</span><span class="n">infrastructure</span><span class="o">/</span><span class="n">cocotb</span>
+   <span class="n">pip</span> <span class="n">install</span> <span class="o">.</span>
+   <span class="n">cd</span> <span class="o">../..</span>
+</pre></div>
 </div>
-<div class="admonition-todo admonition" id="id2">
-<p class="admonition-title">Todo</p>
-<p>Add link for examples</p>
-</div>
+</section>
+<section id="caravel-cocotb-usage">
+<h3>caravel_cocotb usage<a class="headerlink" href="#caravel-cocotb-usage" title="Permalink to this heading"></a></h3>
+<p>caravel_cocotb provides a flow and APIs to run simulation on user_project after integerated with caravel. This is so helpful in detecting any bug in the connection between the user project and Caravel IOs, wishbone interface or logic analyzers. Also since it’s easy to add and run tests with this flow it can be used to test the whole user project.</p>
+</section>
+</section>
 <section id="creating-a-test">
 <span id="create-test"></span><h2>Creating a Test<a class="headerlink" href="#creating-a-test" title="Permalink to this heading"></a></h2>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>install <a class="reference external" href="#how-to-install-caravel_cocotb">cocotb_caravel</a></p></li>
+<li><p>update netlist for RTL and GL files at <code class="code docutils literal notranslate"><span class="pre">&lt;caravel_user_project&gt;/verilog/includes/</span></code> with the design netlist</p></li>
+<li><p>update the <a class="reference external" href="#update-design_infoyaml">design_info</a> file at <code class="code docutils literal notranslate"><span class="pre">&lt;caravel_user_project&gt;/verilog/dv/cocotb/design_info.yaml</span></code></p></li>
+</ul>
+</section>
+<section id="adding-a-test">
+<h3>Adding a test<a class="headerlink" href="#adding-a-test" title="Permalink to this heading"></a></h3>
 <p>This section explains the steps needed to create a test.</p>
 <p>A typical test for <em>Caravel</em> consists of 2 parts: <code class="code docutils literal notranslate"><span class="pre">Python/cocotb</span></code> code and <code class="code docutils literal notranslate"><span class="pre">C</span></code> code.</p>
 <ul class="simple">
@@ -124,6 +165,7 @@
 | │   │   └── &lt;new_test.py&gt;
 | │   │   └── &lt;new_test.c&gt;
 | │   └── cocotb_tests.py
+| │   └── design_info.yaml
 |
 </pre></div>
 </div>
@@ -131,14 +173,14 @@
 <div><p><strong>Note</strong>: The name of <code class="code docutils literal notranslate"><span class="pre">C</span></code> file must match the name of <code class="code docutils literal notranslate"><span class="pre">cocotb</span></code> test function</p>
 </div></blockquote>
 <section id="python-template">
-<h3>Python Template<a class="headerlink" href="#python-template" title="Permalink to this heading"></a></h3>
+<h4>Python Template<a class="headerlink" href="#python-template" title="Permalink to this heading"></a></h4>
 <p>The template for <code class="code docutils literal notranslate"><span class="pre">python</span></code> test:</p>
 <div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span>
-   <span class="kn">from</span> <span class="nn">cocotb_includes</span> <span class="kn">import</span> <span class="n">test_configure</span>
-   <span class="kn">from</span> <span class="nn">cocotb_includes</span> <span class="kn">import</span> <span class="n">report_test</span>
+   <span class="kn">from</span> <span class="nn">caravel_cocotb.caravel_interfaces</span> <span class="kn">import</span> <span class="n">test_configure</span>
+   <span class="kn">from</span> <span class="nn">caravel_cocotb.caravel_interfaces</span> <span class="kn">import</span> <span class="n">report_test</span>
+   <span class="kn">from</span> <span class="nn">caravel_cocotb.caravel_interfaces</span> <span class="kn">import</span> <span class="n">UART</span>
+   <span class="kn">from</span> <span class="nn">caravel_cocotb.caravel_interfaces</span> <span class="kn">import</span> <span class="n">SPI</span>
    <span class="kn">import</span> <span class="nn">cocotb</span>
-   <span class="c1"># from cocotb_includes import UART</span>
-   <span class="c1"># from cocotb_includes Caravel_env</span>
 
    <span class="nd">@cocotb</span><span class="o">.</span><span class="n">test</span><span class="p">()</span> <span class="c1"># decorator to mark the test function as cocotb test</span>
    <span class="nd">@report_test</span> <span class="c1"># wrapper for configure test reporting files</span>
@@ -148,6 +190,7 @@
       <span class="c1">######################## add test sequence ######################</span>
 </pre></div>
 </div>
+</section>
 </section>
 <p>Commonly used APIs to monitor or drive the hardware can be found in in <a class="reference internal" href="python_api.html"><span class="doc">Python APIs</span></a></p>
 <blockquote>
@@ -160,7 +203,7 @@
 <h3>C Template<a class="headerlink" href="#c-template" title="Permalink to this heading"></a></h3>
 <p>The template for Code test:</p>
 <div class="code C++ highlight-default notranslate"><div class="highlight"><pre><span></span>
-   <span class="c1">#include &lt;common.h&gt; // include required APIs</span>
+   <span class="c1">#include &lt;firmware_apis.h&gt; // include required APIs</span>
    <span class="n">void</span> <span class="n">main</span><span class="p">(){</span>
       <span class="o">//////////////////////</span><span class="n">add</span> <span class="n">test</span> <span class="n">here</span><span class="o">//////////////////////</span>
       <span class="k">return</span><span class="p">;</span>
@@ -179,7 +222,7 @@
 <section id="run-with-chipcraft">
 <h3>Run with ChipCraft<a class="headerlink" href="#run-with-chipcraft" title="Permalink to this heading"></a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">chipcraft</span> <span class="pre">verify</span> <span class="pre">&lt;testname&gt;</span> <span class="pre">--design</span> <span class="pre">&lt;design</span> <span class="pre">name&gt;</span></code></p>
-<div class="admonition-todo admonition" id="id3">
+<div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
 <p>Add how to run test using chipcraft</p>
 </div>
@@ -200,108 +243,80 @@
 </section>
 <section id="configure-the-repo">
 <h4>Configure the repo<a class="headerlink" href="#configure-the-repo" title="Permalink to this heading"></a></h4>
-<p>Fill the <code class="code docutils literal notranslate"><span class="pre">design_info.yaml</span></code> file with repos used as following:</p>
-<div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="c1">#yaml file contain general design information that would mostly need to be updated in the first run only</span>
-  <span class="c1">#eg CARAVEL_ROOT: &quot;/usr/Desktop/caravel_project/caravel/&quot;</span>
-  <span class="c1">#like repo https://github.com/efabless/caravel</span>
-  <span class="n">CARAVEL_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/caravel_project/caravel/&quot;</span>
-
-  <span class="c1">#eg MCW_ROOT: &quot;/usr/Desktop/caravel_project/caravel_mgmt_soc_litex/&quot;</span>
-  <span class="c1">#like repo https://github.com/efabless/caravel_mgmt_soc_litex</span>
-  <span class="c1"># MCW_ROOT: &quot;/home/rady/caravel/swift/swift2&quot;</span>
-  <span class="n">MCW_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/caravel_project/caravel_mgmt_soc_litex/&quot;</span>
-
-  <span class="c1">#eg USER_PROJECT_ROOT: &quot;/usr/Desktop/caravel_project/caravel_user_project/&quot;</span>
-  <span class="c1">#like repo https://github.com/efabless/caravel_user_project</span>
-  <span class="n">USER_PROJECT_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/caravel_project/&quot;</span>
-
-  <span class="c1">#eg PDK_ROOT: &quot;/usr/Desktop/caravel_project/pdk/&quot;</span>
-  <span class="c1">#exported by volare</span>
-  <span class="n">PDK_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/pdk&quot;</span>
-
-  <span class="c1">#eg PDK: &quot;sky130A&quot;</span>
-  <span class="n">PDK</span><span class="p">:</span> <span class="n">sky130A</span>
-  <span class="c1">#PDK: gf180mcuC</span>
-
-  <span class="c1">#clock in ns</span>
-  <span class="n">clk</span><span class="p">:</span> <span class="mi">25</span>
-
-  <span class="c1"># true when caravan are simulated instead of Caravel</span>
-  <span class="n">caravan</span><span class="p">:</span> <span class="n">false</span>
-
-  <span class="c1"># optional email address to send the results to</span>
-  <span class="n">emailto</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span><span class="n">example</span><span class="nd">@efabless</span><span class="o">.</span><span class="n">com</span><span class="p">]</span>
-</pre></div>
-</div>
-<blockquote>
-<div><p><strong>Note</strong>: This step is required only the first time to run the project.</p>
-</div></blockquote>
 </section>
 <section id="run-test-tests">
 <h4>Run test/tests<a class="headerlink" href="#run-test-tests" title="Permalink to this heading"></a></h4>
 <p>Tests can run individually or as a test group using <code class="code docutils literal notranslate"><span class="pre">testlist</span></code>. Tests can also run in RTL, GL or SDF sims with 9 different corners.</p>
-<p>To a test use run script verify_cocotb:</p>
-<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">verify_cocotb</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">test</span> <span class="n">TEST</span> <span class="p">[</span><span class="n">TEST</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">sim</span> <span class="n">SIM</span> <span class="p">[</span><span class="n">SIM</span> <span class="o">...</span><span class="p">]]</span>
-                        <span class="p">[</span><span class="o">-</span><span class="n">testlist</span> <span class="n">TESTLIST</span> <span class="p">[</span><span class="n">TESTLIST</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">tag</span> <span class="n">TAG</span><span class="p">]</span>
-                        <span class="p">[</span><span class="o">-</span><span class="n">maxerr</span> <span class="n">MAXERR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">vcs</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">corner</span> <span class="n">CORNER</span> <span class="p">[</span><span class="n">CORNER</span> <span class="o">...</span><span class="p">]]</span>
-                        <span class="p">[</span><span class="o">-</span><span class="n">zip_passed</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">emailto</span> <span class="n">EMAILTO</span> <span class="p">[</span><span class="n">EMAILTO</span> <span class="o">...</span><span class="p">]]</span>
-                        <span class="p">[</span><span class="o">-</span><span class="n">seed</span> <span class="n">SEED</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">no_wave</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">sdf_setup</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">clk</span> <span class="n">CLK</span><span class="p">]</span>
-                        <span class="p">[</span><span class="o">-</span><span class="n">lint</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">macros</span> <span class="n">MACROS</span> <span class="p">[</span><span class="n">MACROS</span> <span class="o">...</span><span class="p">]]</span>
-                        <span class="p">[</span><span class="o">-</span><span class="n">sim_path</span> <span class="n">SIM_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">verbosity</span> <span class="n">VERBOSITY</span><span class="p">]</span>
+<p>To run use caravel_cocotb in the location that has the design_info.yaml file or pass the path to the design_info.yaml file as a command -design_info:</p>
+<div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">caravel_cocotb</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">test</span> <span class="n">TEST</span> <span class="p">[</span><span class="n">TEST</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">design_info</span> <span class="n">DESIGN_INFO</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">sim</span> <span class="n">SIM</span> <span class="p">[</span><span class="n">SIM</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">testlist</span> <span class="n">TESTLIST</span> <span class="p">[</span><span class="n">TESTLIST</span> <span class="o">...</span><span class="p">]]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">tag</span> <span class="n">TAG</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">maxerr</span> <span class="n">MAXERR</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">vcs</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">corner</span> <span class="n">CORNER</span> <span class="p">[</span><span class="n">CORNER</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">zip_passed</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">emailto</span> <span class="n">EMAILTO</span> <span class="p">[</span><span class="n">EMAILTO</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">seed</span> <span class="n">SEED</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">no_wave</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">sdf_setup</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">clk</span> <span class="n">CLK</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">lint</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">macros</span> <span class="n">MACROS</span> <span class="p">[</span><span class="n">MACROS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">sim_path</span> <span class="n">SIM_PATH</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">verbosity</span> <span class="n">VERBOSITY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">openframe</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">no_pull</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">no_docker</span><span class="p">]</span>
 
+<span class="n">Run</span> <span class="n">cocotb</span> <span class="n">tests</span>
 
-<span class="n">Run</span> <span class="n">Caravel</span> <span class="n">cocotb</span> <span class="n">tests</span>
-
-<span class="n">Arguments</span><span class="p">:</span>
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
   <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
-
   <span class="o">-</span><span class="n">test</span> <span class="n">TEST</span> <span class="p">[</span><span class="n">TEST</span> <span class="o">...</span><span class="p">],</span> <span class="o">-</span><span class="n">t</span> <span class="n">TEST</span> <span class="p">[</span><span class="n">TEST</span> <span class="o">...</span><span class="p">]</span>
                         <span class="n">name</span> <span class="n">of</span> <span class="n">test</span> <span class="ow">or</span> <span class="n">tests</span><span class="o">.</span><span class="k">if</span> <span class="n">no</span> <span class="o">--</span><span class="n">sim</span> <span class="n">provided</span> <span class="n">RTL</span> <span class="n">will</span> <span class="n">be</span>
                         <span class="n">run</span> <span class="o">&lt;</span><span class="n">takes</span> <span class="nb">list</span> <span class="k">as</span> <span class="nb">input</span><span class="o">&gt;</span>
+  <span class="o">-</span><span class="n">design_info</span> <span class="n">DESIGN_INFO</span><span class="p">,</span> <span class="o">-</span><span class="n">di</span> <span class="n">DESIGN_INFO</span>
+                        <span class="n">path</span> <span class="n">to</span> <span class="n">design_info</span><span class="o">.</span><span class="n">yaml</span> <span class="n">file</span>
   <span class="o">-</span><span class="n">sim</span> <span class="n">SIM</span> <span class="p">[</span><span class="n">SIM</span> <span class="o">...</span><span class="p">]</span>    <span class="n">Simulation</span> <span class="nb">type</span> <span class="n">RTL</span><span class="p">,</span><span class="n">GL</span> <span class="o">&amp;</span> <span class="n">GL_SDF</span> <span class="n">provided</span> <span class="n">only</span> <span class="n">when</span> <span class="n">run</span>
                         <span class="o">-</span><span class="n">test</span><span class="o">&lt;</span><span class="n">takes</span> <span class="nb">list</span> <span class="k">as</span> <span class="nb">input</span><span class="o">&gt;</span>
-
   <span class="o">-</span><span class="n">testlist</span> <span class="n">TESTLIST</span> <span class="p">[</span><span class="n">TESTLIST</span> <span class="o">...</span><span class="p">],</span> <span class="o">-</span><span class="n">tl</span> <span class="n">TESTLIST</span> <span class="p">[</span><span class="n">TESTLIST</span> <span class="o">...</span><span class="p">]</span>
                         <span class="n">path</span> <span class="n">of</span> <span class="n">testlist</span> <span class="n">to</span> <span class="n">be</span> <span class="n">run</span>
-
   <span class="o">-</span><span class="n">tag</span> <span class="n">TAG</span>              <span class="n">provide</span> <span class="n">tag</span> <span class="n">of</span> <span class="n">the</span> <span class="n">run</span> <span class="n">default</span> <span class="n">would</span> <span class="n">be</span> <span class="n">regression</span>
                         <span class="n">name</span> <span class="ow">and</span> <span class="k">if</span> <span class="n">no</span> <span class="n">regression</span> <span class="ow">is</span> <span class="n">provided</span> <span class="n">would</span> <span class="n">be</span>
                         <span class="n">run_</span><span class="o">&lt;</span><span class="n">random</span> <span class="nb">float</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">timestamp</span><span class="o">&gt;</span><span class="n">_</span>
-  <span class="o">-</span><span class="n">maxerr</span> <span class="n">MAXERR</span>        <span class="nb">max</span> <span class="n">number</span> <span class="n">of</span> <span class="n">errors</span> <span class="k">for</span> <span class="n">every</span> <span class="n">test</span> <span class="n">before</span> <span class="n">simulation</span> <span class="n">breaks</span> <span class="n">default</span> <span class="o">=</span> <span class="mi">3</span>
+  <span class="o">-</span><span class="n">maxerr</span> <span class="n">MAXERR</span>        <span class="nb">max</span> <span class="n">number</span> <span class="n">of</span> <span class="n">errors</span> <span class="k">for</span> <span class="n">every</span> <span class="n">test</span> <span class="n">before</span> <span class="n">simulation</span>
+                        <span class="n">breaks</span> <span class="n">default</span> <span class="o">=</span> <span class="mi">3</span>
   <span class="o">-</span><span class="n">vcs</span><span class="p">,</span> <span class="o">-</span><span class="n">v</span>              <span class="n">use</span> <span class="n">VCS</span> <span class="k">as</span> <span class="n">compiler</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">used</span> <span class="n">iverilog</span> <span class="n">would</span> <span class="n">be</span> <span class="n">used</span>
-
   <span class="o">-</span><span class="n">corner</span> <span class="n">CORNER</span> <span class="p">[</span><span class="n">CORNER</span> <span class="o">...</span><span class="p">],</span> <span class="o">-</span><span class="n">c</span> <span class="n">CORNER</span> <span class="p">[</span><span class="n">CORNER</span> <span class="o">...</span><span class="p">]</span>
                         <span class="n">Corner</span> <span class="nb">type</span> <span class="ow">in</span> <span class="n">case</span> <span class="n">of</span> <span class="n">GL_SDF</span> <span class="n">run</span> <span class="n">has</span> <span class="n">to</span> <span class="n">be</span> <span class="n">provided</span>
   <span class="o">-</span><span class="n">zip_passed</span>           <span class="nb">zip</span> <span class="n">the</span> <span class="n">waves</span> <span class="ow">and</span> <span class="n">logs</span> <span class="n">of</span> <span class="n">passed</span> <span class="n">tests</span><span class="o">.</span> <span class="n">by</span> <span class="n">default</span> <span class="k">if</span>
-                        <span class="n">the</span> <span class="n">run</span> <span class="n">has</span> <span class="n">more</span> <span class="n">than</span> <span class="mi">7</span> <span class="n">tests</span> <span class="k">pass</span> <span class="n">tests</span> <span class="n">results</span> <span class="n">would</span> <span class="n">be</span> <span class="n">zipped</span> <span class="n">automatically</span>
+                        <span class="n">the</span> <span class="n">run</span> <span class="n">has</span> <span class="n">more</span> <span class="n">than</span> <span class="mi">7</span> <span class="n">tests</span> <span class="k">pass</span> <span class="n">tests</span> <span class="n">results</span> <span class="n">would</span>
+                        <span class="n">be</span> <span class="n">zipped</span> <span class="n">automatically</span>
   <span class="o">-</span><span class="n">emailto</span> <span class="n">EMAILTO</span> <span class="p">[</span><span class="n">EMAILTO</span> <span class="o">...</span><span class="p">],</span> <span class="o">-</span><span class="n">mail</span> <span class="n">EMAILTO</span> <span class="p">[</span><span class="n">EMAILTO</span> <span class="o">...</span><span class="p">]</span>
                         <span class="n">mails</span> <span class="n">to</span> <span class="n">send</span> <span class="n">results</span> <span class="n">to</span> <span class="n">when</span> <span class="n">results</span> <span class="n">finish</span>
   <span class="o">-</span><span class="n">seed</span> <span class="n">SEED</span>            <span class="n">run</span> <span class="k">with</span> <span class="n">specific</span> <span class="n">seed</span>
   <span class="o">-</span><span class="n">no_wave</span>              <span class="n">disable</span> <span class="n">dumping</span> <span class="n">waves</span>
-  <span class="o">-</span><span class="n">sdf_setup</span>            <span class="n">targeting</span> <span class="n">setup</span> <span class="n">violations</span> <span class="n">by</span> <span class="n">taking</span> <span class="n">the</span> <span class="n">SDF</span> <span class="n">maximum</span> <span class="n">values</span>
-  <span class="o">-</span><span class="n">clk</span> <span class="n">CLK</span>              <span class="n">define</span> <span class="n">the</span> <span class="n">clock</span> <span class="n">period</span> <span class="ow">in</span> <span class="n">ns</span> <span class="n">default</span> <span class="n">defined</span> <span class="n">at</span> <span class="n">design_info</span><span class="o">.</span><span class="n">yaml</span>
+  <span class="o">-</span><span class="n">sdf_setup</span>            <span class="n">targeting</span> <span class="n">setup</span> <span class="n">violations</span> <span class="n">by</span> <span class="n">taking</span> <span class="n">the</span> <span class="n">SDF</span> <span class="n">maximum</span>
+                        <span class="n">values</span>
+  <span class="o">-</span><span class="n">clk</span> <span class="n">CLK</span>              <span class="n">define</span> <span class="n">the</span> <span class="n">clock</span> <span class="n">period</span> <span class="ow">in</span> <span class="n">ns</span> <span class="n">default</span> <span class="n">defined</span> <span class="n">at</span>
+                        <span class="n">design_info</span><span class="o">.</span><span class="n">yaml</span>
   <span class="o">-</span><span class="n">lint</span>                 <span class="n">generate</span> <span class="n">lint</span> <span class="n">log</span> <span class="n">VCS</span> <span class="n">must</span> <span class="n">be</span> <span class="n">used</span>
   <span class="o">-</span><span class="n">macros</span> <span class="n">MACROS</span> <span class="p">[</span><span class="n">MACROS</span> <span class="o">...</span><span class="p">]</span>
                         <span class="n">Add</span> <span class="n">additional</span> <span class="n">verilog</span> <span class="n">macros</span> <span class="k">for</span> <span class="n">the</span> <span class="n">design</span>
   <span class="o">-</span><span class="n">sim_path</span> <span class="n">SIM_PATH</span>    <span class="n">directory</span> <span class="n">where</span> <span class="n">simulation</span> <span class="n">result</span> <span class="n">directory</span> <span class="s2">&quot;sim&quot;</span>
-                        <span class="n">would</span> <span class="n">be</span> <span class="n">created</span> <span class="k">if</span> <span class="kc">None</span> <span class="n">it</span> <span class="n">would</span> <span class="n">be</span> <span class="n">created</span> <span class="n">under</span> <span class="n">cocotb</span> <span class="n">folder</span>
+                        <span class="n">would</span> <span class="n">be</span> <span class="n">created</span> <span class="k">if</span> <span class="kc">None</span> <span class="n">it</span> <span class="n">would</span> <span class="n">be</span> <span class="n">created</span> <span class="n">under</span>
+                        <span class="n">cocotb</span> <span class="n">folder</span>
   <span class="o">-</span><span class="n">verbosity</span> <span class="n">VERBOSITY</span>  <span class="n">verbosity</span> <span class="n">of</span> <span class="n">the</span> <span class="n">console</span> <span class="n">output</span> <span class="n">it</span> <span class="n">can</span> <span class="n">have</span> <span class="n">one</span> <span class="n">of</span> <span class="mi">3</span>
-                        <span class="n">value</span> <span class="n">debug</span><span class="p">,</span> <span class="n">normal</span> <span class="ow">or</span> <span class="n">quiet</span> <span class="n">the</span> <span class="n">default</span> <span class="n">value</span> <span class="ow">is</span> <span class="n">normal</span>
+                        <span class="n">value</span> <span class="n">debug</span><span class="p">,</span> <span class="n">normal</span> <span class="ow">or</span> <span class="n">quiet</span> <span class="n">the</span> <span class="n">default</span> <span class="n">value</span> <span class="ow">is</span>
+                        <span class="n">normal</span>
+  <span class="o">-</span><span class="n">openframe</span>            <span class="n">use</span> <span class="n">openframe</span> <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">caravel</span>
+  <span class="o">-</span><span class="n">no_pull</span>              <span class="n">use</span> <span class="n">to</span> <span class="n">ignore</span> <span class="n">checking</span> <span class="k">if</span> <span class="n">repos</span> <span class="n">are</span> <span class="n">up</span> <span class="n">to</span> <span class="n">date</span>
+  <span class="o">-</span><span class="n">no_docker</span>            <span class="n">run</span> <span class="n">iverilog</span> <span class="n">without</span> <span class="n">docker</span>
 </pre></div>
 </div>
 <section id="example">
 <h5>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h5>
 <section id="run-one-test-in-rtl">
 <h6>Run one test in RTL<a class="headerlink" href="#run-one-test-in-rtl" title="Permalink to this heading"></a></h6>
-<p><code class="code docutils literal notranslate"><span class="pre">python3</span> <span class="pre">verify_cocotb.py</span> <span class="pre">-t</span> <span class="pre">&lt;testname&gt;</span> <span class="pre">-tag</span> <span class="pre">run_one_test</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">caravel_cocotb</span> <span class="pre">-t</span> <span class="pre">&lt;testname&gt;</span> <span class="pre">-tag</span> <span class="pre">run_one_test</span></code></p>
 </section>
 <section id="run-2-tests-in-gl">
 <h6>Run 2 tests in GL<a class="headerlink" href="#run-2-tests-in-gl" title="Permalink to this heading"></a></h6>
-<p><code class="code docutils literal notranslate"><span class="pre">python3</span> <span class="pre">verify_cocotb.py</span> <span class="pre">-t</span> <span class="pre">&lt;test1&gt;</span> <span class="pre">&lt;test2&gt;</span>&#160; <span class="pre">-sim</span> <span class="pre">GL</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">caravel_cocotb</span> <span class="pre">-t</span> <span class="pre">&lt;test1&gt;</span> <span class="pre">&lt;test2&gt;</span>&#160; <span class="pre">-sim</span> <span class="pre">GL</span></code></p>
 </section>
 <section id="run-testlist">
 <h6>Run testlist<a class="headerlink" href="#run-testlist" title="Permalink to this heading"></a></h6>
-<p><code class="code docutils literal notranslate"><span class="pre">python3</span> <span class="pre">verify_cocotb.py</span> <span class="pre">-tl</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">testlist&gt;</span> <span class="pre">-tag</span> <span class="pre">all_rtl</span></code></p>
+<p><code class="code docutils literal notranslate"><span class="pre">caravel_cocotb</span> <span class="pre">-tl</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">testlist&gt;</span> <span class="pre">-tag</span> <span class="pre">all_rtl</span></code></p>
 </section>
 </section>
 </section>
@@ -351,6 +366,46 @@
 │
 </pre></div>
 </div>
+</section>
+<section id="update-design-info-yaml">
+<h2>Update design_info.yaml<a class="headerlink" href="#update-design-info-yaml" title="Permalink to this heading"></a></h2>
+<p><code class="code docutils literal notranslate"><span class="pre">design_info.yaml</span></code> are used to reference all the needed repos and paths needed to run the tests:</p>
+<p>fill  it like the following</p>
+<div class="code yaml highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="c1">#yaml file contain general design information that would mostly need to be updated in the first run only</span>
+  <span class="c1">#eg CARAVEL_ROOT: &quot;/usr/Desktop/caravel_project/caravel/&quot;</span>
+  <span class="c1">#like repo https://github.com/efabless/caravel</span>
+  <span class="n">CARAVEL_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/caravel_project/caravel/&quot;</span>
+
+  <span class="c1">#eg MCW_ROOT: &quot;/usr/Desktop/caravel_project/caravel_mgmt_soc_litex/&quot;</span>
+  <span class="c1">#like repo https://github.com/efabless/caravel_mgmt_soc_litex</span>
+  <span class="c1"># MCW_ROOT: &quot;/home/rady/caravel/swift/swift2&quot;</span>
+  <span class="n">MCW_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/caravel_project/caravel_mgmt_soc_litex/&quot;</span>
+
+  <span class="c1">#eg USER_PROJECT_ROOT: &quot;/usr/Desktop/caravel_project/caravel_user_project/&quot;</span>
+  <span class="c1">#like repo https://github.com/efabless/caravel_user_project</span>
+  <span class="n">USER_PROJECT_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/caravel_project/&quot;</span>
+
+  <span class="c1">#eg PDK_ROOT: &quot;/usr/Desktop/caravel_project/pdk/&quot;</span>
+  <span class="c1">#exported by volare</span>
+  <span class="n">PDK_ROOT</span><span class="p">:</span> <span class="s2">&quot;/usr/pdk&quot;</span>
+
+  <span class="c1">#eg PDK: &quot;sky130A&quot;</span>
+  <span class="n">PDK</span><span class="p">:</span> <span class="n">sky130A</span>
+  <span class="c1">#PDK: gf180mcuC</span>
+
+  <span class="c1">#clock in ns</span>
+  <span class="n">clk</span><span class="p">:</span> <span class="mi">25</span>
+
+  <span class="c1"># true when caravan are simulated instead of Caravel</span>
+  <span class="n">caravan</span><span class="p">:</span> <span class="n">false</span>
+
+  <span class="c1"># optional email address to send the results to</span>
+  <span class="n">emailto</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>Note</strong>: This step is required only in the first run.</p>
+</div></blockquote>
 </section>
 </section>
 
