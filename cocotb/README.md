@@ -1,5 +1,5 @@
 # Overview
-
+<!-- start read me file -->
 This project aims to provide a user friendly environment for adding and running cocotb tests for Caravel user projects.
 
 
@@ -32,15 +32,16 @@ This is temporary, it will soon be released to PyPi
 ## caravel_cocotb usage
  
 caravel_cocotb provides a flow and APIs to run simulation on user_project after integerated with caravel. This is so helpful in detecting any bug in the connection between the user project and Caravel IOs, wishbone interface or logic analyzers. Also since it's easy to add and run tests with this flow it can be used to test the whole user project.
+<!-- middle read me file -->
 
 # Creating a Test
 
 <!-- start create a test include1 -->
 ## Requirements
  
-   - install [cocotb_caravel](#how-to-install-caravel_cocotb) 
+   - install [cocotb_caravel](#how-to-install-caravel-cocotb) 
    - update netlist for RTL and GL files at ```<caravel_user_project>/verilog/includes/``` with the design netlist
-   - update the [design_info](#update-design_infoyaml) file at ```<caravel_user_project>/verilog/dv/cocotb/design_info.yaml```
+   - update the [design_info](#update-design_info-yaml) file at ```<caravel_user_project>/verilog/dv/cocotb/design_info.yaml```
 
 ## Adding a test
 
