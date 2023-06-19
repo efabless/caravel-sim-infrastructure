@@ -66,11 +66,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#running-a-test">Running a Test</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#run-with-chipcraft">Run with ChipCraft</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#run-without-chipcraft">Run without ChipCraft</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#check-prerequisites">Check prerequisites</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#configure-the-repo">Configure the repo</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#run-test-tests">Run test/tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-test-tests">Run test/tests</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#example">Example</a></li>
 </ul>
 </li>
 </ul>
@@ -219,33 +216,8 @@
 </section>
 <section id="running-a-test">
 <span id="run-test"></span><h2>Running a Test<a class="headerlink" href="#running-a-test" title="Permalink to this heading"></a></h2>
-<section id="run-with-chipcraft">
-<h3>Run with ChipCraft<a class="headerlink" href="#run-with-chipcraft" title="Permalink to this heading"></a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">chipcraft</span> <span class="pre">verify</span> <span class="pre">&lt;testname&gt;</span> <span class="pre">--design</span> <span class="pre">&lt;design</span> <span class="pre">name&gt;</span></code></p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Add how to run test using chipcraft</p>
-</div>
-</section>
-<section id="run-without-chipcraft">
-<h3>Run without ChipCraft<a class="headerlink" href="#run-without-chipcraft" title="Permalink to this heading"></a></h3>
-<section id="check-prerequisites">
-<h4>Check prerequisites<a class="headerlink" href="#check-prerequisites" title="Permalink to this heading"></a></h4>
-<ul class="simple">
-<li><p>Docker: <a class="reference external" href="https://hub.docker.com/search?q=&amp;type=edition&amp;offering=community&amp;operating_system=linux&amp;utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Linux</a> ||  <a class="reference external" href="https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Windows</a> || <a class="reference external" href="https://desktop.docker.com/mac/main/amd64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Mac with Intel Chip</a> || <a class="reference external" href="https://desktop.docker.com/mac/main/arm64/Docker.dmg?utm_source=docker&amp;utm_medium=webreferral&amp;utm_campaign=dd-smartbutton&amp;utm_location=header">Mac with M1 Chip</a></p></li>
-<li><p>Python 3.6+ with PIP</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span> <span class="pre">efabless/dv:cocotb</span></code></p></li>
-<li><p>Clone of Caravel</p></li>
-<li><p>Clone of Caravel management repo</p></li>
-<li><p>Clone of PDK from <a class="reference external" href="https://github.com/efabless/volare">volare</a></p></li>
-<li><p>Clone of Caravel user project</p></li>
-</ul>
-</section>
-<section id="configure-the-repo">
-<h4>Configure the repo<a class="headerlink" href="#configure-the-repo" title="Permalink to this heading"></a></h4>
-</section>
 <section id="run-test-tests">
-<h4>Run test/tests<a class="headerlink" href="#run-test-tests" title="Permalink to this heading"></a></h4>
+<h3>Run test/tests<a class="headerlink" href="#run-test-tests" title="Permalink to this heading"></a></h3>
 <p>Tests can run individually or as a test group using <code class="code docutils literal notranslate"><span class="pre">testlist</span></code>. Tests can also run in RTL, GL or SDF sims with 9 different corners.</p>
 <p>To run use caravel_cocotb in the location that has the design_info.yaml file or pass the path to the design_info.yaml file as a command -design_info:</p>
 <div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">caravel_cocotb</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">test</span> <span class="n">TEST</span> <span class="p">[</span><span class="n">TEST</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">design_info</span> <span class="n">DESIGN_INFO</span><span class="p">]</span>
@@ -255,7 +227,7 @@
                       <span class="p">[</span><span class="o">-</span><span class="n">emailto</span> <span class="n">EMAILTO</span> <span class="p">[</span><span class="n">EMAILTO</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">seed</span> <span class="n">SEED</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">no_wave</span><span class="p">]</span>
                       <span class="p">[</span><span class="o">-</span><span class="n">sdf_setup</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">clk</span> <span class="n">CLK</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">lint</span><span class="p">]</span>
                       <span class="p">[</span><span class="o">-</span><span class="n">macros</span> <span class="n">MACROS</span> <span class="p">[</span><span class="n">MACROS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">sim_path</span> <span class="n">SIM_PATH</span><span class="p">]</span>
-                      <span class="p">[</span><span class="o">-</span><span class="n">verbosity</span> <span class="n">VERBOSITY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">openframe</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">no_pull</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">verbosity</span> <span class="n">VERBOSITY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">openframe</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">check_commits</span><span class="p">]</span>
                       <span class="p">[</span><span class="o">-</span><span class="n">no_docker</span><span class="p">]</span>
 
 <span class="n">Run</span> <span class="n">cocotb</span> <span class="n">tests</span>
@@ -300,24 +272,23 @@
                         <span class="n">value</span> <span class="n">debug</span><span class="p">,</span> <span class="n">normal</span> <span class="ow">or</span> <span class="n">quiet</span> <span class="n">the</span> <span class="n">default</span> <span class="n">value</span> <span class="ow">is</span>
                         <span class="n">normal</span>
   <span class="o">-</span><span class="n">openframe</span>            <span class="n">use</span> <span class="n">openframe</span> <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">caravel</span>
-  <span class="o">-</span><span class="n">no_pull</span>              <span class="n">use</span> <span class="n">to</span> <span class="n">ignore</span> <span class="n">checking</span> <span class="k">if</span> <span class="n">repos</span> <span class="n">are</span> <span class="n">up</span> <span class="n">to</span> <span class="n">date</span>
+  <span class="o">-</span><span class="n">check_commits</span>        <span class="n">use</span> <span class="n">to</span> <span class="n">check</span> <span class="k">if</span> <span class="n">repos</span> <span class="n">are</span> <span class="n">up</span> <span class="n">to</span> <span class="n">date</span>
   <span class="o">-</span><span class="n">no_docker</span>            <span class="n">run</span> <span class="n">iverilog</span> <span class="n">without</span> <span class="n">docker</span>
 </pre></div>
 </div>
 <section id="example">
-<h5>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h5>
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this heading"></a></h4>
 <section id="run-one-test-in-rtl">
-<h6>Run one test in RTL<a class="headerlink" href="#run-one-test-in-rtl" title="Permalink to this heading"></a></h6>
+<h5>Run one test in RTL<a class="headerlink" href="#run-one-test-in-rtl" title="Permalink to this heading"></a></h5>
 <p><code class="code docutils literal notranslate"><span class="pre">caravel_cocotb</span> <span class="pre">-t</span> <span class="pre">&lt;testname&gt;</span> <span class="pre">-tag</span> <span class="pre">run_one_test</span></code></p>
 </section>
 <section id="run-2-tests-in-gl">
-<h6>Run 2 tests in GL<a class="headerlink" href="#run-2-tests-in-gl" title="Permalink to this heading"></a></h6>
+<h5>Run 2 tests in GL<a class="headerlink" href="#run-2-tests-in-gl" title="Permalink to this heading"></a></h5>
 <p><code class="code docutils literal notranslate"><span class="pre">caravel_cocotb</span> <span class="pre">-t</span> <span class="pre">&lt;test1&gt;</span> <span class="pre">&lt;test2&gt;</span>&#160; <span class="pre">-sim</span> <span class="pre">GL</span></code></p>
 </section>
 <section id="run-testlist">
-<h6>Run testlist<a class="headerlink" href="#run-testlist" title="Permalink to this heading"></a></h6>
+<h5>Run testlist<a class="headerlink" href="#run-testlist" title="Permalink to this heading"></a></h5>
 <p><code class="code docutils literal notranslate"><span class="pre">caravel_cocotb</span> <span class="pre">-tl</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">testlist&gt;</span> <span class="pre">-tag</span> <span class="pre">all_rtl</span></code></p>
-</section>
 </section>
 </section>
 </section>

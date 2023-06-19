@@ -38,36 +38,6 @@ Commonly used APIs for firmware can be found in :doc:`C_api`
 Running a Test
 ***************
 
-Run with ChipCraft 
---------------------------------
-
-``chipcraft verify <testname> --design <design name>``
-
-
-.. todo::
-
-      Add how to run test using chipcraft
-
-
-Run without ChipCraft 
--------------------------
-
-Check prerequisites
-^^^^^^^^^^^^^^^^^^^^
-.. include:: ../../../README.md
-   :parser: markdown
-   :start-after: <!-- start configure the repo include0 -->
-   :end-before: <!-- end configure the repo include0 -->
-
-Configure the repo
-^^^^^^^^^^^^^^^^^^^^
-
-.. include:: ../../../README.md
-   :parser: markdown
-   :start-after: <!-- start configure the repo include-->
-   :end-before: <!-- end configure the repo include -->
-
-
 Run test/tests
 ^^^^^^^^^^^^^^^^
 
