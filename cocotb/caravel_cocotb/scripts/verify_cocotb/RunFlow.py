@@ -3,8 +3,8 @@ from datetime import datetime
 from pathlib import Path
 from collections import namedtuple
 import yaml
-from scripts.verify_cocotb.RunRegression import RunRegression
-from scripts.verify_cocotb.check_git import GitRepoChecker
+from caravel_cocotb.scripts.verify_cocotb.RunRegression import RunRegression
+from caravel_cocotb.scripts.verify_cocotb.check_git import GitRepoChecker
 import re
 import logging
 import random
@@ -22,7 +22,7 @@ def check_valid_mail_addr(address):
 class RunFLow:
     def __init__(self, args) -> None:
         self.args = args
-        self.cocotb_path = self.args.cocotb_path
+        self.run_path = self.args.run_path
         self.configure_logger()
         self.check_valid_args()
         design_info = self.get_design_info()
@@ -32,6 +32,7 @@ class RunFLow:
         self.set_args(design_info)
         self.set_config_script(design_info)
         RunRegression(self.args, self.paths, self.logger)
+        
 
     def configure_logger(self):
         self.logger = logging.getLogger(__name__)
@@ -69,7 +70,7 @@ class RunFLow:
             parents=True, exist_ok=True
         )
         # check if scratch disk exists
-        if os.path.exists("/mnt/scratch/"):
+        if os.path.exists("/mnt/scratch/") and False:
             if os.path.lexists(f"{self.paths.SIM_PATH}/{self.args.tag}"):
                 if os.path.islink(f"{self.paths.SIM_PATH}/{self.args.tag}"):
                     os.unlink(f"{self.paths.SIM_PATH}/{self.args.tag}")
@@ -98,20 +99,16 @@ class RunFLow:
             raise NotADirectoryError(
                 f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}"
             )
-        self.args.user_test = False
-        if design_info["USER_PROJECT_ROOT"] != "None":
-            self.args.user_test = True
-            if not os.path.exists(design_info["USER_PROJECT_ROOT"]):
-                raise NotADirectoryError(
-                    f"USER_PROJECT_ROOT is not a directory USER_PROJECT_ROOT:{design_info['USER_PROJECT_ROOT']}"
-                )
-            else:
-                self.configure_user_files(design_info["USER_PROJECT_ROOT"])
-                if not self.args.no_pull:
-                    GitRepoChecker(design_info["USER_PROJECT_ROOT"]) # check repo synced with last commit
+        if not os.path.exists(design_info["USER_PROJECT_ROOT"]):
+            raise NotADirectoryError(
+                f"USER_PROJECT_ROOT is not a directory USER_PROJECT_ROOT:{design_info['USER_PROJECT_ROOT']}"
+            )
+        else:
+            if not self.args.no_pull:
+                GitRepoChecker(design_info["USER_PROJECT_ROOT"]) # check repo synced with last commit
         Paths = namedtuple(
             "Paths",
-            "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH COCOTB_PATH USER_PROJECT_ROOT SIM_PATH",
+            "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH RUN_PATH USER_PROJECT_ROOT SIM_PATH",
         )
         CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
         VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
@@ -123,11 +120,9 @@ class RunFLow:
             # For openframe as the cpu is inside the user project the firmware files should be inside user project as well
             if self.args.openframe: 
                 FIRMWARE_PATH = f"{design_info['USER_PROJECT_ROOT']}/verilog/dv/firmware"
-        COCOTB_PATH = self.args.cocotb_path
-        if not self.args.no_pull:
-            GitRepoChecker(COCOTB_PATH) # check repo synced with last commit
+        RUN_PATH = self.args.run_path
         SIM_PATH = (
-            f"{COCOTB_PATH}/sim"
+            f"{RUN_PATH}/sim"
             if self.args.sim_path is None
             else f"{self.args.sim_path}/sim"
         )
@@ -140,7 +135,7 @@ class RunFLow:
             VERILOG_PATH,
             CARAVEL_PATH,
             FIRMWARE_PATH,
-            COCOTB_PATH,
+            RUN_PATH,
             design_info["USER_PROJECT_ROOT"],
             SIM_PATH,
         )
@@ -199,20 +194,6 @@ class RunFLow:
         if self.args.verbosity is None:
             self.args.verbosity = "normal"
 
-    def configure_user_files(self, user_path):
-        file = f"{user_path}/verilog/dv/cocotb/cocotb_includes.py"
-        with open(file, "r") as f:
-            # read a list of lines into data
-            page = f.readlines()
-            for num, line in enumerate(page):
-                if "sys.path.append(path.abspath(" in line:
-                    page[
-                        num
-                    ] = f"sys.path.append(path.abspath('{self.args.cocotb_path}'))\n"
-            file_w = open(file, "w")
-            file_w.write("".join(page))
-            file_w.close()
-
     def set_config_script(self, design_info):
         new_config_path = f"{self.paths.SIM_PATH}/{self.args.tag}/configs.yaml"
         design_configs = dict(
@@ -229,7 +210,9 @@ class RunFLow:
             yaml.dump(design_configs, file)
 
     def get_design_info(self):
-        yaml_file = open(f"{self.cocotb_path}/design_info.yaml", "r")
+        if self.args.design_info is not None:
+            return self.args.design_info
+        yaml_file = open(f"{self.run_path}/design_info.yaml", "r")
         design_info = yaml.safe_load(yaml_file)
         return design_info
 
@@ -252,10 +235,12 @@ class CocotbArgs:
         sdf_setup=None,
         macros=None,
         sim_path=None,
-        cocotb_root=".",
+        run_path=".",
         verbosity="normal",
         openframe=False,
-        no_pull=False
+        no_pull=False,
+        design_info=None,
+        no_docker=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -272,7 +257,7 @@ class CocotbArgs:
         self.clk = clk
         self.macros = macros
         self.sim_path = sim_path
-        self.cocotb_path = cocotb_root
+        self.run_path = run_path
         self.verbosity = verbosity
         # dev only
         self.lint = None
@@ -280,6 +265,8 @@ class CocotbArgs:
         self.cpu_type = None  # would be filled by other class
         self.openframe = openframe
         self.no_pull = no_pull
+        self.design_info = design_info
+        self.no_docker = no_docker
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -298,7 +285,9 @@ class CocotbArgs:
         self.macros = args.macros
         self.sim_path = args.sim_path
         self.lint = args.lint
-        self.cocotb_path = os.getcwd()
+        self.run_path = os.getcwd()
         self.verbosity = args.verbosity
         self.openframe = args.openframe
         self.no_pull = args.no_pull
+        self.design_info = args.design_info
+        self.no_docker = args.no_docker

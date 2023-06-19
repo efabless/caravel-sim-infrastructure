@@ -4,8 +4,8 @@ from datetime import datetime
 import os
 import sys
 from subprocess import PIPE, run
-from scripts.verify_cocotb.RunTest import RunTest
-from scripts.verify_cocotb.Test import Test
+from caravel_cocotb.scripts.verify_cocotb.RunTest import RunTest
+from caravel_cocotb.scripts.verify_cocotb.Test import Test
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
@@ -35,7 +35,7 @@ class RunRegression:
         if self.args.openframe:
             simulation_macros.append("OPENFRAME")
         paths_macros = [
-            f'COCOTB_PATH=\\"{self.paths.COCOTB_PATH}\\"',
+            f'RUN_PATH=\\"{self.paths.RUN_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
             f'CARAVEL_ROOT=\\"{self.paths.CARAVEL_ROOT}\\"',
             f'MCW_ROOT=\\"{self.paths.MCW_ROOT}\\"',
@@ -176,7 +176,7 @@ class RunRegression:
         #     if self.args.vcs:
         #         self.generate_cov()
         #     # merge functional coverage
-        #     merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.cocotb_path}:{self.cocotb_path}  efabless/dv:cocotb sh -c 'cd {self.cocotb_path} && python3 scripts/merge_coverage.py -p {self.paths.SIM_PATH}/{self.args.tag}'"
+        #     merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.run_path}:{self.run_path}  efabless/dv:cocotb sh -c 'cd {self.run_path} && python3 scripts/merge_coverage.py -p {self.paths.SIM_PATH}/{self.args.tag}'"
         #     self.full_terminal = open(
         #         f"{self.paths.SIM_PATH}/{self.args.tag}/command.log", "a"
         #     )
@@ -198,7 +198,7 @@ class RunRegression:
         os.system("urg -dir RTL*/*.vdb -format both -show tests -report coverageRTL/")
         # os.system(f"urg -dir GL*/*.vdb -format both -show tests -report coverageGL/")
         # os.system(f"urg -dir SDF*/*.vdb -format both -show tests -report coverageSDF/")
-        os.chdir(self.cocotb_path)
+        os.chdir(self.run_path)
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
@@ -272,46 +272,45 @@ class RunRegression:
             ).stdout
         )
 
-        if self.args.user_test:
-            f.write(f"\n\n{'#'*4} User repo info {'#'*4}\n")
-            url = "https://github.com/" + f"{run(f'cd {self.paths.USER_PROJECT_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
-                "git@github.com:", ""
-            ).replace(
-                ".git", ""
-            )
-            repo = f"Repo: {run(f'cd {self.paths.USER_PROJECT_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(
-                "\n", " "
-            )
-            f.write(f"{repo}\n")
-            f.write(
-                f"Branch name: {run(f'cd {self.paths.USER_PROJECT_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}"
-            )
-            f.write(
-                run(
-                    f"cd {self.paths.USER_PROJECT_ROOT};git show --quiet HEAD",
-                    stdout=PIPE,
-                    stderr=PIPE,
-                    universal_newlines=True,
-                    shell=True,
-                ).stdout
-            )
-
-        f.write(f"\n\n{'#'*4} caravel-dynamic-sims repo info {'#'*4}\n")
-        url = "https://github.com/" + f"{run(f'cd {self.paths.COCOTB_PATH};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
+        f.write(f"\n\n{'#'*4} User repo info {'#'*4}\n")
+        url = "https://github.com/" + f"{run(f'cd {self.paths.USER_PROJECT_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
             "git@github.com:", ""
         ).replace(
             ".git", ""
         )
-        repo = f"Repo: {run(f'cd {self.paths.COCOTB_PATH};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(
+        repo = f"Repo: {run(f'cd {self.paths.USER_PROJECT_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(
             "\n", " "
         )
         f.write(f"{repo}\n")
         f.write(
-            f"Branch name: {run(f'cd {self.paths.COCOTB_PATH};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}"
+            f"Branch name: {run(f'cd {self.paths.USER_PROJECT_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}"
         )
         f.write(
             run(
-                f"cd {self.paths.COCOTB_PATH};git show --quiet HEAD",
+                f"cd {self.paths.USER_PROJECT_ROOT};git show --quiet HEAD",
+                stdout=PIPE,
+                stderr=PIPE,
+                universal_newlines=True,
+                shell=True,
+            ).stdout
+        )
+
+        f.write(f"\n\n{'#'*4} caravel-dynamic-sims repo info {'#'*4}\n")
+        url = "https://github.com/" + f"{run(f'cd {self.paths.RUN_PATH};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
+            "git@github.com:", ""
+        ).replace(
+            ".git", ""
+        )
+        repo = f"Repo: {run(f'cd {self.paths.RUN_PATH};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(
+            "\n", " "
+        )
+        f.write(f"{repo}\n")
+        f.write(
+            f"Branch name: {run(f'cd {self.paths.RUN_PATH};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}"
+        )
+        f.write(
+            run(
+                f"cd {self.paths.RUN_PATH};git show --quiet HEAD",
                 stdout=PIPE,
                 stderr=PIPE,
                 universal_newlines=True,

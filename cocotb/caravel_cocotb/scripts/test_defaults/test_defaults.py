@@ -2,6 +2,7 @@ import yaml
 import os
 import random
 
+
 class TestDefaults:
     def __init__(self) -> None:
         self.cocotb_path = os.getcwd()
