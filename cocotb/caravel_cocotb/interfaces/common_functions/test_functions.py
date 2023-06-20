@@ -6,7 +6,7 @@ from cocotb.log import SimTimeContextFilter
 from cocotb.log import SimLogFormatter
 from caravel_cocotb.interfaces.common_functions.Timeout import Timeout
 from cocotb.triggers import ClockCycles
-import yaml
+import oyaml as yaml
 from cocotb_coverage.coverage import coverage_db
 
 
