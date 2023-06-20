@@ -2,3 +2,4 @@ docker
 cocotb
 oyaml
 breathe 
+cocotb_coverage
