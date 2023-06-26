@@ -210,9 +210,7 @@ class RunFLow:
             yaml.dump(design_configs, file)
 
     def get_design_info(self):
-        if self.args.design_info is not None:
-            return self.args.design_info
-        yaml_file = open(f"{self.run_path}/design_info.yaml", "r")
+        yaml_file = open(f"{f'{self.run_path}/design_info.yaml' if self.args.design_info is None else self.args.design_info}", "r")
         design_info = yaml.safe_load(yaml_file)
         return design_info
 
