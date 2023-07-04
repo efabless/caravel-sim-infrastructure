@@ -34,13 +34,7 @@ class RunRegression:
         simulation_macros = ["USE_POWER_PINS", "UNIT_DELAY=#1", "COCOTB_SIM"]
         if self.args.openframe:
             simulation_macros.append("OPENFRAME")
-        paths_macros = [
-            f'RUN_PATH=\\"{self.paths.RUN_PATH}\\"',
-            f'TAG=\\"{self.args.tag}\\"',
-            f'CARAVEL_ROOT=\\"{self.paths.CARAVEL_ROOT}\\"',
-            f'MCW_ROOT=\\"{self.paths.MCW_ROOT}\\"',
-            f'USER_PROJECT_ROOT=\\"{self.paths.USER_PROJECT_ROOT}\\"',
-        ]
+        paths_macros = [f'TAG=\\"{self.args.tag}\\"']
         paths_macros.append(f'SIM_PATH=\\"{self.paths.SIM_PATH}/\\"')
         if self.args.pdk != "gf180":
             simulation_macros.append("FUNCTIONAL")

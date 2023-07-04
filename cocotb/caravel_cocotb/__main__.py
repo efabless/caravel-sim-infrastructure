@@ -92,6 +92,11 @@ def main():
         action="store_true",
         help='run iverilog without docker',
     )
+    parser.add_argument(
+        "-compile",
+        action="store_true",
+        help='force recompilation',
+    )
     args = parser.parse_args()
     # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  zip_passed caravan emailto seed no_wave clk lint arm sdf_setup")
     # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en  ,args.zip_passed ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)

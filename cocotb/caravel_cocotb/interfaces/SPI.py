@@ -277,7 +277,7 @@ class SPI:
         # READ
         data = []
         for i in range(read_byte_num):
-            data.append(await self._hk_read_byte_with_failing())
+            data.append(await self._hk_read_byte())
         if disable_csb:
             await self.disable_csb()
         return data

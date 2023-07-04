@@ -210,9 +210,7 @@ class RunFLow:
             yaml.dump(design_configs, file)
 
     def get_design_info(self):
-        if self.args.design_info is not None:
-            return self.args.design_info
-        yaml_file = open(f"{self.run_path}/design_info.yaml", "r")
+        yaml_file = open(f"{f'{self.run_path}/design_info.yaml' if self.args.design_info is None else self.args.design_info}", "r")
         design_info = yaml.safe_load(yaml_file)
         return design_info
 
@@ -240,7 +238,8 @@ class CocotbArgs:
         openframe=False,
         check_commits=False,
         design_info=None,
-        no_docker=False
+        no_docker=False,
+        compile=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -267,6 +266,7 @@ class CocotbArgs:
         self.check_commits = check_commits
         self.design_info = design_info
         self.no_docker = no_docker
+        self.compile = compile
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -291,3 +291,4 @@ class CocotbArgs:
         self.check_commits = args.check_commits
         self.design_info = args.design_info
         self.no_docker = args.no_docker
+        self.compile = args.compile

@@ -113,7 +113,7 @@ class Test:
         self.create_logs()
         self.create_module_trail()
         if self.args.vcs:
-            with open(f"{self.test_dir}/pli.tab", 'w') as file:
+            with open(f"{self.compilation_dir}/pli.tab", 'w') as file:
                 file.write('acc+=rw,wn:*')
         self.set_test_macros()
         self.set_linker_script()
@@ -151,24 +151,22 @@ class Test:
             self.create_lint_log()
         if is_pass[1] and self.args.zip_passed:
             self.tar_large_files()
-
-        if os.path.isfile(f"{self.hex_dir}/{self.name}.hex"):
-            shutil.copyfile(
-                f"{self.hex_dir}/{self.name}.hex", f"{self.test_dir}/{self.name}.hex"
-            )
         self.set_rerun_script()
 
     # create and open full terminal log to be able to use it before run the test
     def create_logs(self):
         self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
+        self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/compilation"
         # remove if already exists
         if os.path.isdir(self.test_dir):
             shutil.rmtree(self.test_dir)
         os.mkdir(self.test_dir)
+        if not os.path.exists(self.compilation_dir):
+            os.mkdir(self.compilation_dir)
         self.test_log = f"{self.test_dir}/{self.name}.log"
         self.firmware_log = f"{self.test_dir}/firmware_error.log"
         # self.test_log=open(test_log, "w")
-        self.compilation_log = f"{self.test_dir}/compilation.log"
+        self.compilation_log = f"{self.compilation_dir}/compilation.log"
         self.hex_log = f"{self.test_dir}/firmware.log"
         # self.full_terminal = open(self.compilation_log, "w")
 
@@ -313,7 +311,7 @@ class Test:
     def write_includes_file(self, file):
         paths = self.convert_list_to_include(file)
         # write to include file in the top of the file
-        self.includes_file = f"{self.test_dir}/includes.v"
+        self.includes_file = f"{self.compilation_dir}/includes.v"
         if self.args.vcs:
             includes = open(self.includes_file, 'r').read()
         else:
@@ -328,7 +326,7 @@ class Test:
         if self.args.iverilog:
             # when running with iverilog add includes list also
             paths = open(file, "r").read()
-            self.includes_list = f"{self.test_dir}/includes"
+            self.includes_list = f"{self.compilation_dir}/includes"
             if self.sim == "RTL":
                 includes = open(f"{self.paths.VERILOG_PATH}/includes/{'includes.rtl.caravel' if not self.args.openframe else 'includes.rtl.openframe'}", 'r').read()
             elif self.sim == "GL":
