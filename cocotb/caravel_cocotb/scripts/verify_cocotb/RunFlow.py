@@ -238,7 +238,8 @@ class CocotbArgs:
         openframe=False,
         check_commits=False,
         design_info=None,
-        no_docker=False
+        no_docker=False,
+        compile=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -265,6 +266,7 @@ class CocotbArgs:
         self.check_commits = check_commits
         self.design_info = design_info
         self.no_docker = no_docker
+        self.compile = compile
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -289,3 +291,4 @@ class CocotbArgs:
         self.check_commits = args.check_commits
         self.design_info = args.design_info
         self.no_docker = args.no_docker
+        self.compile = args.compile
