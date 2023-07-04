@@ -211,7 +211,7 @@
 <p>Commonly used APIs for firmware can be found in <a class="reference internal" href="C_api.html"><span class="doc">Firmware APIs</span></a></p>
 <section id="test-examples">
 <h3>Test Examples<a class="headerlink" href="#test-examples" title="Permalink to this heading"></a></h3>
-<p>Refer to this <a class="reference external" href="https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb">directory</a> for tests example generated for 16-bit counter</p>
+<p>Refer to this <a class="reference external" href="https://github.com/efabless/caravel_user_project/tree/main/verilog/dv/cocotb">directory</a> for tests example generated for 16-bit counter</p>
 </section>
 </section>
 <section id="running-a-test">
@@ -228,7 +228,7 @@
                       <span class="p">[</span><span class="o">-</span><span class="n">sdf_setup</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">clk</span> <span class="n">CLK</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">lint</span><span class="p">]</span>
                       <span class="p">[</span><span class="o">-</span><span class="n">macros</span> <span class="n">MACROS</span> <span class="p">[</span><span class="n">MACROS</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">sim_path</span> <span class="n">SIM_PATH</span><span class="p">]</span>
                       <span class="p">[</span><span class="o">-</span><span class="n">verbosity</span> <span class="n">VERBOSITY</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">openframe</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">check_commits</span><span class="p">]</span>
-                      <span class="p">[</span><span class="o">-</span><span class="n">no_docker</span><span class="p">]</span>
+                      <span class="p">[</span><span class="o">-</span><span class="n">no_docker</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="nb">compile</span><span class="p">]</span>
 
 <span class="n">Run</span> <span class="n">cocotb</span> <span class="n">tests</span>
 
@@ -274,6 +274,7 @@
   <span class="o">-</span><span class="n">openframe</span>            <span class="n">use</span> <span class="n">openframe</span> <span class="k">for</span> <span class="n">the</span> <span class="n">simulation</span> <span class="n">rather</span> <span class="n">than</span> <span class="n">caravel</span>
   <span class="o">-</span><span class="n">check_commits</span>        <span class="n">use</span> <span class="n">to</span> <span class="n">check</span> <span class="k">if</span> <span class="n">repos</span> <span class="n">are</span> <span class="n">up</span> <span class="n">to</span> <span class="n">date</span>
   <span class="o">-</span><span class="n">no_docker</span>            <span class="n">run</span> <span class="n">iverilog</span> <span class="n">without</span> <span class="n">docker</span>
+  <span class="o">-</span><span class="nb">compile</span>              <span class="n">force</span> <span class="n">recompilation</span>
 </pre></div>
 </div>
 <section id="example">
@@ -321,12 +322,13 @@
 <div class="code bash highlight-default notranslate"><div class="highlight"><pre><span></span>
 | sim #  directory get generate when run a test
 │ ├── &lt;tag&gt; # tag of the run
-│ │   ├── &lt;sim type&gt;-&lt;test name&gt; # test result directory contain all logs and wave related to the test
-│ │   │   └── &lt;test name&gt;.hex  # hex file used in running this test
-│ │   │   └── &lt;test name&gt;.log  # log file generated from cocotb
+│ │   ├── compilation # directory contain all logs and build files related to the RTL compilation
 │ │   │   └── compilation.log  # log file has all the commands used to run iverilog and any compilation error or warning
+│ │   ├── &lt;sim type&gt;-&lt;test name&gt; # test result directory contain all logs and wave related to the test
+│ │   │   └── firmware.hex  # hex file used in running this test
+│ │   │   └── &lt;test name&gt;.log  # log file generated from cocotb
 │ │   │   └── firmware.log     # log file has all the commands used to compile the C code and any compilation error or warning
-│ │   │   └── &lt;test name&gt;.vcd  # waves can be opened by gtkwave
+│ │   │   └── waves.vcd  # waves can be opened by gtkwave
 │ │   │   └── rerun.py         # script to rerun the test
 │ │   └── command.log    # command use for this run
 │ │   └── repos_info.log # contain information about the repos used to run these tests
