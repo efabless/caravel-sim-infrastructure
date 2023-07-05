@@ -123,6 +123,8 @@ class RunTest:
             self.runTest_iverilog()
         elif self.args.vcs:
             self.runTest_vcs()
+        elif self.args.verilator:
+            self.runTest_verilator()
 
     # iverilog function
     def runTest_iverilog(self):
@@ -174,6 +176,55 @@ class RunTest:
             quiet=True if self.args.verbosity == "quiet" else False
         )
 
+    # verilator function
+    def runTest_verilator(self):
+        macros = " -D" + " -D".join(self.test.macros)
+        env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
+        if self.test.sim == "GL_SDF":
+            self.logger.error(
+                f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc"
+            )
+            return
+        self.test.set_user_project()
+        defines = GetDefines(self.test.includes_file)
+        seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
+        verilator_command = (
+            f"cd {self.test.compilation_dir} &&"
+            f"verilator {macros}  -cc  -Wall --timing --bbox-unsup"
+            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v --top caravel_top"
+        )
+        run_command = (f"cd {self.test.test_dir} && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.compilation_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}")
+        local_caravel_cocotb_path = caravel_cocotb.__file__.replace("__init__.py", "")
+        docker_caravel_cocotb_path = "/usr/local/lib/python3.8/dist-packages/caravel_cocotb/"
+        docker_dir = f"-v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} -v {local_caravel_cocotb_path}:{docker_caravel_cocotb_path} "
+        docker_dir += (f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
+        if os.path.exists("/mnt/scratch/"):
+            docker_dir += " -v /mnt/scratch/cocotb_runs/:/mnt/scratch/cocotb_runs/ "
+        display = " -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/.Xauthority --network host --security-opt seccomp=unconfined "
+        docker_compilation_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {display} {env_vars} {docker_dir} efabless/dv:cocotb sh -ec '{verilator_command}'"
+        docker_run_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {display} {env_vars} {docker_dir} efabless/dv:cocotb sh -ec '{run_command}'"
+        if not os.path.isfile(f"{self.test.compilation_dir}/sim.vvp") or self.args.compile:
+            self.full_terminal = open(self.test.compilation_log, "w")
+            self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
+            self.full_terminal = open(self.test.compilation_log, "w")
+            self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
+            self.full_terminal.write(os.path.expandvars(docker_compilation_command) + "\n\n")
+            self.full_terminal.close()
+            # os.system(verilator_command)
+            run_command_write_to_file(
+                docker_compilation_command if not self.args.no_docker else verilator_command,
+                self.test.compilation_log,
+                self.logger,
+                quiet=True if self.args.verbosity == "quiet" else False
+            )
+        
+        # run_command_write_to_file(
+        #     docker_run_command if not self.args.no_docker else run_command,
+        #     None,
+        #     self.logger,
+        #     quiet=True if self.args.verbosity == "quiet" else False
+        # )
+    
     # vcs function
     def runTest_vcs(self):
         dirs = f'+incdir+\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\" '
@@ -248,7 +299,7 @@ def run_command_write_to_file(cmd, file, logger, quiet=True):
         logger_file.addHandler(file_handler)
     try:
         process = subprocess.Popen(
-            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1024
+            cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1024
         )
         while True:
             out = process.stdout.readline().decode("utf-8")

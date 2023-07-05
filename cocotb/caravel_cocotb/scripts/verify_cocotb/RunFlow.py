@@ -172,7 +172,7 @@ class RunFLow:
             self.args.pdk = "gf180"
 
         self.args.iverilog = False
-        if not self.args.vcs:
+        if not self.args.vcs and not self.args.verilator:
             self.args.iverilog = True
 
         if self.args.emailto is None:
@@ -239,7 +239,8 @@ class CocotbArgs:
         check_commits=False,
         design_info=None,
         no_docker=False,
-        compile=False
+        compile=False,
+        verilator=False,
     ) -> None:
         self.test = test
         self.sim = sim
@@ -267,6 +268,7 @@ class CocotbArgs:
         self.design_info = design_info
         self.no_docker = no_docker
         self.compile = compile
+        self.verilator = verilator
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -292,3 +294,4 @@ class CocotbArgs:
         self.design_info = args.design_info
         self.no_docker = args.no_docker
         self.compile = args.compile
+        self.verilator = args.verilator
