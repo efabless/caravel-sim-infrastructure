@@ -46,11 +46,6 @@ def main():
         help="Corner type in case of GL_SDF run has to be provided",
     )
     parser.add_argument(
-        "-zip_passed",
-        action="store_true",
-        help="zip the waves and logs of passed tests. by default if the run has more than 7 tests pass tests results would be zipped automatically",
-    )
-    parser.add_argument(
         "-emailto", "-mail", nargs="+", help="mails to send results to when results finish"
     )
     parser.add_argument("-seed", help="run with specific seed")
@@ -98,8 +93,8 @@ def main():
         help='force recompilation',
     )
     args = parser.parse_args()
-    # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  zip_passed caravan emailto seed no_wave clk lint arm sdf_setup")
-    # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en  ,args.zip_passed ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)
+    # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  caravan emailto seed no_wave clk lint arm sdf_setup")
+    # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en   ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)
     # print(args)
     # print(
     #     f"test:{args.test}, testlist:{args.testlist} sim: {args.sim}"

@@ -4,12 +4,12 @@ from datetime import datetime
 import os
 import sys
 from pathlib import Path
-import tarfile
 import shutil
 import xml.etree.ElementTree as ET
 from caravel_cocotb.scripts.verify_cocotb.RunTest import change_str
 from caravel_cocotb.scripts.verify_cocotb.RunTest import bcolors
 from caravel_cocotb.scripts.rerun_script_tamplate import rerun_script_template
+
 
 class Test:
     max_name_size = 1
@@ -17,13 +17,14 @@ class Test:
     passed_count = 0
     failed_count = 0
 
-    def __init__(self, name, sim, corner, args, paths):
+    def __init__(self, name, sim, corner, args, paths, local_macros=None):
         self.name = name
         self.sim = sim
         self.corner = corner
         self.args = args
         self.paths = paths
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
+        self.local_macros = local_macros  # macros for this test only has  to run local macros
         self.init_test()
 
     def init_test(self):
@@ -61,27 +62,9 @@ class Test:
             )
         testmacros.append(f"CORNER_{self.corner[0:3]}")
 
-        # special tests
-        if self.name == "la":
-            testmacros.append("LA_TESTING")
-
-        user_gpio_tests = (
-            "gpio_all_o_user",
-            "gpio_all_i_user",
-            "gpio_all_i_pu_user",
-            "gpio_all_i_pd_user",
-            "gpio_all_bidir_user",
-        )
-        if self.name in user_gpio_tests:
-            testmacros.append("GPIO_TESTING")
-
-        if self.name == "user_address_space":
-            testmacros.append("ADDR_SPACE_TESTING")
-
-        if "user_ram" in self.name:
-            testmacros.append("USE_USER_WRAPPER")
-
         self.macros = self.args.macros + testmacros
+        if self.local_macros is not None:
+            self.macros += self.local_macros
 
         if self.name == "user_address_space":
             self.macros.remove(
@@ -149,14 +132,15 @@ class Test:
 
         if self.args.lint:
             self.create_lint_log()
-        if is_pass[1] and self.args.zip_passed:
-            self.tar_large_files()
         self.set_rerun_script()
 
     # create and open full terminal log to be able to use it before run the test
     def create_logs(self):
         self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
-        self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/compilation"
+        if self.local_macros is not None:
+            self.compilation_dir = self.test_dir
+        else: 
+            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/compilation"
         # remove if already exists
         if os.path.isdir(self.test_dir):
             shutil.rmtree(self.test_dir)
@@ -183,18 +167,6 @@ class Test:
                     if line.strip() == "":  # line emptry
                         lint_line = False
 
-    def tar_large_files(self):
-        file_obj = tarfile.open(f"{self.test_dir}/waves_logs.tar", "w")
-        # Add other files to tar file
-        if self.args.vcs:
-            file_obj.add(f"{self.test_dir}/analysis.log")
-            os.remove(f"{self.test_dir}/analysis.log")
-            file_obj.add(f"{self.test_dir}/test.log")
-            os.remove(f"{self.test_dir}/test.log")
-        file_obj.add(f"{self.test_dir}/compilation.log")
-        os.remove(f"{self.test_dir}/compilation.log")
-        file_obj.add(f"{self.test_dir}/firmware.log")
-        os.remove(f"{self.test_dir}/firmware.log")
 
         for root, dirs, files in os.walk(f"{self.test_dir}"):
             for file in files:
