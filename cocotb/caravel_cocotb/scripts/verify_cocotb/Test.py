@@ -4,12 +4,12 @@ from datetime import datetime
 import os
 import sys
 from pathlib import Path
-import tarfile
 import shutil
 import xml.etree.ElementTree as ET
 from caravel_cocotb.scripts.verify_cocotb.RunTest import change_str
 from caravel_cocotb.scripts.verify_cocotb.RunTest import bcolors
 from caravel_cocotb.scripts.rerun_script_tamplate import rerun_script_template
+
 
 class Test:
     max_name_size = 1
@@ -17,13 +17,14 @@ class Test:
     passed_count = 0
     failed_count = 0
 
-    def __init__(self, name, sim, corner, args, paths):
+    def __init__(self, name, sim, corner, args, paths, local_macros=None):
         self.name = name
         self.sim = sim
         self.corner = corner
         self.args = args
         self.paths = paths
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
+        self.local_macros = local_macros  # macros for this test only has  to run local macros
         self.init_test()
 
     def init_test(self):
@@ -61,27 +62,9 @@ class Test:
             )
         testmacros.append(f"CORNER_{self.corner[0:3]}")
 
-        # special tests
-        if self.name == "la":
-            testmacros.append("LA_TESTING")
-
-        user_gpio_tests = (
-            "gpio_all_o_user",
-            "gpio_all_i_user",
-            "gpio_all_i_pu_user",
-            "gpio_all_i_pd_user",
-            "gpio_all_bidir_user",
-        )
-        if self.name in user_gpio_tests:
-            testmacros.append("GPIO_TESTING")
-
-        if self.name == "user_address_space":
-            testmacros.append("ADDR_SPACE_TESTING")
-
-        if "user_ram" in self.name:
-            testmacros.append("USE_USER_WRAPPER")
-
         self.macros = self.args.macros + testmacros
+        if self.local_macros is not None:
+            self.macros += self.local_macros
 
         if self.name == "user_address_space":
             self.macros.remove(
@@ -113,7 +96,7 @@ class Test:
         self.create_logs()
         self.create_module_trail()
         if self.args.vcs:
-            with open(f"{self.test_dir}/pli.tab", 'w') as file:
+            with open(f"{self.compilation_dir}/pli.tab", 'w') as file:
                 file.write('acc+=rw,wn:*')
         self.set_test_macros()
         self.set_linker_script()
@@ -149,26 +132,25 @@ class Test:
 
         if self.args.lint:
             self.create_lint_log()
-        if is_pass[1] and self.args.zip_passed:
-            self.tar_large_files()
-
-        if os.path.isfile(f"{self.hex_dir}/{self.name}.hex"):
-            shutil.copyfile(
-                f"{self.hex_dir}/{self.name}.hex", f"{self.test_dir}/{self.name}.hex"
-            )
         self.set_rerun_script()
 
     # create and open full terminal log to be able to use it before run the test
     def create_logs(self):
         self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
+        if self.local_macros is not None:
+            self.compilation_dir = self.test_dir
+        else: 
+            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/compilation"
         # remove if already exists
         if os.path.isdir(self.test_dir):
             shutil.rmtree(self.test_dir)
         os.mkdir(self.test_dir)
+        if not os.path.exists(self.compilation_dir):
+            os.mkdir(self.compilation_dir)
         self.test_log = f"{self.test_dir}/{self.name}.log"
         self.firmware_log = f"{self.test_dir}/firmware_error.log"
         # self.test_log=open(test_log, "w")
-        self.compilation_log = f"{self.test_dir}/compilation.log"
+        self.compilation_log = f"{self.compilation_dir}/compilation.log"
         self.hex_log = f"{self.test_dir}/firmware.log"
         # self.full_terminal = open(self.compilation_log, "w")
 
@@ -185,18 +167,6 @@ class Test:
                     if line.strip() == "":  # line emptry
                         lint_line = False
 
-    def tar_large_files(self):
-        file_obj = tarfile.open(f"{self.test_dir}/waves_logs.tar", "w")
-        # Add other files to tar file
-        if self.args.vcs:
-            file_obj.add(f"{self.test_dir}/analysis.log")
-            os.remove(f"{self.test_dir}/analysis.log")
-            file_obj.add(f"{self.test_dir}/test.log")
-            os.remove(f"{self.test_dir}/test.log")
-        file_obj.add(f"{self.test_dir}/compilation.log")
-        os.remove(f"{self.test_dir}/compilation.log")
-        file_obj.add(f"{self.test_dir}/firmware.log")
-        os.remove(f"{self.test_dir}/firmware.log")
 
         for root, dirs, files in os.walk(f"{self.test_dir}"):
             for file in files:
@@ -313,7 +283,7 @@ class Test:
     def write_includes_file(self, file):
         paths = self.convert_list_to_include(file)
         # write to include file in the top of the file
-        self.includes_file = f"{self.test_dir}/includes.v"
+        self.includes_file = f"{self.compilation_dir}/includes.v"
         if self.args.vcs:
             includes = open(self.includes_file, 'r').read()
         else:
@@ -328,7 +298,7 @@ class Test:
         if self.args.iverilog:
             # when running with iverilog add includes list also
             paths = open(file, "r").read()
-            self.includes_list = f"{self.test_dir}/includes"
+            self.includes_list = f"{self.compilation_dir}/includes"
             if self.sim == "RTL":
                 includes = open(f"{self.paths.VERILOG_PATH}/includes/{'includes.rtl.caravel' if not self.args.openframe else 'includes.rtl.openframe'}", 'r').read()
             elif self.sim == "GL":

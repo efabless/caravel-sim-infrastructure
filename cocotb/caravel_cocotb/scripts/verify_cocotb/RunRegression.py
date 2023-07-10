@@ -22,8 +22,8 @@ class RunRegression:
         self.total_start_time = datetime.now()
         self.write_command_log()
         self.write_git_log()
-        self.set_common_macros()
         self.get_tests()
+        self.set_common_macros()
         self.unzip_sdf_files()
         self.run_regression()
         self.send_mail()
@@ -41,14 +41,15 @@ class RunRegression:
             f'MCW_ROOT=\\"{self.paths.MCW_ROOT}\\"',
             f'USER_PROJECT_ROOT=\\"{self.paths.USER_PROJECT_ROOT}\\"',
         ]
+
         paths_macros.append(f'SIM_PATH=\\"{self.paths.SIM_PATH}/\\"')
         if self.args.pdk != "gf180":
             simulation_macros.append("FUNCTIONAL")
 
         if self.args.caravan:
             simulation_macros.append("CARAVAN")
-
-        if not self.args.no_wave:
+        # don't dumb waves if tests are more than 10
+        if not self.args.no_wave and len(self.tests) < 10:
             simulation_macros.append("WAVE_GEN")
 
         if self.args.sdf_setup:
@@ -124,12 +125,10 @@ class RunRegression:
         if len(self.tests) == 0:
             raise RuntimeError("There is no test provided to run")
         self.update_run_log()
-        # zip pass tests if running more than 7 tests
-        if len(self.tests) > 7:
-            self.args.zip_passed = True
 
-    def add_new_test(self, test_name, sim_type, corner):
-        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths))
+
+    def add_new_test(self, test_name, sim_type, corner, macros=None):
+        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, macros))
 
     def get_testlist(self, testlist_f):
         directory = os.path.dirname(testlist_f)
@@ -153,6 +152,9 @@ class RunRegression:
                         data["sim_type"] = test["sim"]
                     if "corner" in test:
                         data["corner"] = test["corner"]
+
+                    if "macros" in test:
+                        data["macros"] = test["macros"]
                     self.add_new_test(**data)
                     # add sim to args to detect that this testlist has GL or sdf sims
                     if data["sim_type"] not in self.args.sim:

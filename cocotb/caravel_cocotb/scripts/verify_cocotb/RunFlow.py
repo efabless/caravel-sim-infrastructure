@@ -228,7 +228,6 @@ class CocotbArgs:
         no_wave=False,
         clk=25,
         vcs=False,
-        zip_passed=False,
         emailto=None,
         sdf_setup=None,
         macros=None,
@@ -238,7 +237,8 @@ class CocotbArgs:
         openframe=False,
         check_commits=False,
         design_info=None,
-        no_docker=False
+        no_docker=False,
+        compile=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -247,7 +247,6 @@ class CocotbArgs:
         self.maxerr = maxerr
         self.vcs = vcs
         self.corner = corner
-        self.zip_passed = zip_passed
         self.emailto = emailto
         self.seed = seed
         self.no_wave = no_wave
@@ -265,6 +264,7 @@ class CocotbArgs:
         self.check_commits = check_commits
         self.design_info = design_info
         self.no_docker = no_docker
+        self.compile = compile
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -274,7 +274,6 @@ class CocotbArgs:
         self.maxerr = args.maxerr
         self.vcs = args.vcs
         self.corner = args.corner
-        self.zip_passed = args.zip_passed
         self.emailto = args.emailto
         self.seed = args.seed
         self.no_wave = args.no_wave
@@ -289,3 +288,4 @@ class CocotbArgs:
         self.check_commits = args.check_commits
         self.design_info = args.design_info
         self.no_docker = args.no_docker
+        self.compile = args.compile
