@@ -189,11 +189,13 @@ class RunTest:
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
         verilator_command = (
-            f"cd {self.test.compilation_dir} &&"
-            f"verilator {macros}  -cc  -Wall --timing --bbox-unsup"
-            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v --top caravel_top"
-        )
-        run_command = (f"cd {self.test.test_dir} && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.compilation_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}")
+            f"cd {self.test.compilation_dir} && "
+            f" verilator {macros}  --binary -j 0 --no-timing -bbox-unsup -Wno-fatal "
+            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v --top caravel_top  "
+            f'  --vpi --public-flat-rw --prefix Vtop -LDFLAGS "-Wl,-rpath,$(cocotb-config --lib-dir) -L$(cocotb-config --lib-dir) -lcocotbvpi_verilator -lgpi -lcocotb -lgpilog -lcocotbutils" $(cocotb-config --share)/lib/verilator/verilator.cpp'
+        )#--cc --exe --build --timing -bbox-unsup
+        print(verilator_command)
+        run_command = (f"cd {self.test.test_dir} && TESTCASE={self.test.name} MODULE=module_trail {seed}  {self.test.compilation_dir}/Vcaravel_top +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}")
         local_caravel_cocotb_path = caravel_cocotb.__file__.replace("__init__.py", "")
         docker_caravel_cocotb_path = "/usr/local/lib/python3.8/dist-packages/caravel_cocotb/"
         docker_dir = f"-v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} -v {local_caravel_cocotb_path}:{docker_caravel_cocotb_path} "
@@ -210,7 +212,6 @@ class RunTest:
             self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
             self.full_terminal.write(os.path.expandvars(docker_compilation_command) + "\n\n")
             self.full_terminal.close()
-            # os.system(verilator_command)
             run_command_write_to_file(
                 docker_compilation_command if not self.args.no_docker else verilator_command,
                 self.test.compilation_log,
@@ -218,12 +219,12 @@ class RunTest:
                 quiet=True if self.args.verbosity == "quiet" else False
             )
         
-        # run_command_write_to_file(
-        #     docker_run_command if not self.args.no_docker else run_command,
-        #     None,
-        #     self.logger,
-        #     quiet=True if self.args.verbosity == "quiet" else False
-        # )
+        run_command_write_to_file(
+            docker_run_command if not self.args.no_docker else run_command,
+            None,
+            self.logger,
+            quiet=True if self.args.verbosity == "quiet" else False
+        )
     
     # vcs function
     def runTest_vcs(self):
