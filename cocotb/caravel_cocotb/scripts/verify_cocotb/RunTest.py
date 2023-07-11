@@ -72,17 +72,17 @@ class RunTest:
         docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
         docker_dir = (docker_dir+ f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
         docker_command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {docker_dir}   efabless/dv:latest sh -ec 'cd {test_dir} && {command} '"
-        command_slipt = command.split("&&")
-        self.firmware_log = open(self.test.hex_log, "w")
-        self.firmware_log.write("docker for hex command:\n% ")
-        self.firmware_log.write(os.path.expandvars(docker_command) + "\n\n")
-        self.firmware_log.write("elf file generation command:\n% ")
-        self.firmware_log.write(os.path.expandvars(command_slipt[0]) + "\n\n")
-        self.firmware_log.write("lst file generation command:\n% ")
-        self.firmware_log.write(os.path.expandvars(command_slipt[1]) + "\n\n")
-        self.firmware_log.write("hex file generation command:\n% ")
-        self.firmware_log.write(os.path.expandvars(command_slipt[2]) + "\n\n")
-        self.firmware_log.close()
+        # command_slipt = command.split("&&")
+        # self.firmware_log = open(self.test.hex_log, "w")
+        # self.firmware_log.write("docker for hex command:\n% ")
+        # self.firmware_log.write(os.path.expandvars(docker_command) + "\n\n")
+        # self.firmware_log.write("elf file generation command:\n% ")
+        # self.firmware_log.write(os.path.expandvars(command_slipt[0]) + "\n\n")
+        # self.firmware_log.write("lst file generation command:\n% ")
+        # self.firmware_log.write(os.path.expandvars(command_slipt[1]) + "\n\n")
+        # self.firmware_log.write("hex file generation command:\n% ")
+        # self.firmware_log.write(os.path.expandvars(command_slipt[2]) + "\n\n")
+        # self.firmware_log.close()
         # don't run with docker with arm
         cmd = command if self.args.cpu_type == "ARM" else docker_command
         hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
@@ -144,15 +144,9 @@ class RunTest:
             f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v -s caravel_top"
         )
         docker_compilation_command = self.docker_command_str() + f" '{compile_command}' "
-        self.full_terminal = open(self.test.compilation_log, "w")
-        self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
-        self.full_terminal = open(self.test.compilation_log, "w")
-        self.full_terminal.write("docker command for running iverilog and cocotb:\n% ")
-        self.full_terminal.write(os.path.expandvars(docker_compilation_command) + "\n\n")
-        self.full_terminal.close()
         run_command_write_to_file(
             docker_compilation_command if not self.args.no_docker else compile_command,
-            f"{self.test.compilation_dir}/compilation.log",
+            self.test.compilation_log,
             self.logger,
             quiet=False if self.args.verbosity == "debug" else True
         )
@@ -164,7 +158,7 @@ class RunTest:
         docker_run_command = self.docker_command_str() + f" '{run_command}' "
         run_command_write_to_file(
             docker_run_command if not self.args.no_docker else run_command,
-            None,
+            self.test.test_log2,
             self.logger,
             quiet=True if self.args.verbosity == "quiet" else False
         )
@@ -220,7 +214,7 @@ class RunTest:
         if not os.path.isfile(f"{self.test.compilation_dir}/simv") or self.args.compile:
             run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
         lint = "+lint=all" if self.args.lint else ""
-        vcs_cmd = f"cd {self.test.compilation_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 +vcs+loopreport+1000000 -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.compilation_dir}/test.log  caravel_top -Mdir={self.test.compilation_dir}/csrc -o {self.test.compilation_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)"
+        vcs_cmd = f"cd {self.test.compilation_dir};  vcs {lint} {coverage_command} -debug_access+all +error+50 +vcs+loopreport+1000000 -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.compilation_dir}/test_compilation.log  caravel_top -Mdir={self.test.compilation_dir}/csrc -o {self.test.compilation_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)"
         if not os.path.isfile(f"{self.test.compilation_dir}/simv") or self.args.compile:
             run_command_write_to_file(
                 vcs_cmd,
@@ -231,7 +225,7 @@ class RunTest:
         run_sim = f"cd {self.test.test_dir}; {self.test.compilation_dir}/simv +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         run_command_write_to_file(
             run_sim,
-            None,
+            self.test.test_log2,
             self.logger,
             quiet=True if self.args.verbosity == "quiet" else False
         )
@@ -254,6 +248,10 @@ def run_command_write_to_file(cmd, file, logger, quiet=True):
         file_formatter = logging.Formatter('%(message)s')
         file_handler.setFormatter(file_formatter)
         logger_file.addHandler(file_handler)
+        f = open(file, "a")
+        f.write("command:")
+        f.write(os.path.expandvars(cmd) + "\n\n")
+        f.close()
     try:
         process = subprocess.Popen(
             cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1024
