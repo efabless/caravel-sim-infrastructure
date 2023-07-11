@@ -228,7 +228,6 @@ class CocotbArgs:
         no_wave=False,
         clk=25,
         vcs=False,
-        zip_passed=False,
         emailto=None,
         sdf_setup=None,
         macros=None,
@@ -248,7 +247,6 @@ class CocotbArgs:
         self.maxerr = maxerr
         self.vcs = vcs
         self.corner = corner
-        self.zip_passed = zip_passed
         self.emailto = emailto
         self.seed = seed
         self.no_wave = no_wave
@@ -276,7 +274,6 @@ class CocotbArgs:
         self.maxerr = args.maxerr
         self.vcs = args.vcs
         self.corner = args.corner
-        self.zip_passed = args.zip_passed
         self.emailto = args.emailto
         self.seed = args.seed
         self.no_wave = args.no_wave

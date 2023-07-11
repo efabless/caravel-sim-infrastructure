@@ -17,7 +17,7 @@ setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Intended Audience :: Users",
+        "Intended Audience :: Developers",
         "Operating System :: POSIX :: Linux",
         "Operating System :: MacOS :: MacOS X",
     ],
