@@ -21,9 +21,14 @@ This project aims to provide a user friendly environment for adding and running 
 
 ## How to install caravel_cocotb
 
-This is temporary, it will soon be released to PyPi
+```bash
+ pip install caravel-cocotb
+```
+
+or to install from repo
 ```bash
    git clone git@github.com:efabless/caravel-sim-infrastructure.git
+   git checkout <release>
    cd caravel-sim-infrastructure/cocotb
    pip install .
    cd ../..

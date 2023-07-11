@@ -10,10 +10,8 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -76,8 +74,8 @@
              
   <h1>Source code for interfaces.UART</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">cocotb</span>
-<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">Timer</span>
-<span class="kn">from</span> <span class="nn">interfaces.caravel</span> <span class="kn">import</span> <span class="n">Caravel_env</span>
+<span class="kn">from</span> <span class="nn">cocotb.triggers</span> <span class="kn">import</span> <span class="n">Timer</span><span class="p">,</span> <span class="n">FallingEdge</span><span class="p">,</span> <span class="n">NextTimeStep</span>
+<span class="kn">from</span> <span class="nn">caravel_cocotb.interfaces.caravel</span> <span class="kn">import</span> <span class="n">Caravel_env</span>
 
 
 <div class="viewcode-block" id="UART"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART">[docs]</a><span class="k">class</span> <span class="nc">UART</span><span class="p">:</span>
@@ -137,11 +135,10 @@
         <span class="k">return</span> <span class="nb">chr</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">char</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span></div>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">start_of_tx</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>  <span class="c1"># wait for the start of the transimission it 1 then 0</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">monitor_gpio</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uart_pins</span><span class="p">[</span><span class="s2">&quot;tx&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">integer</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">break</span>
-            <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span> <span class="o">/</span> <span class="mi">100</span><span class="p">),</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">FallingEdge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">dut</span><span class="o">.</span><span class="n">_id</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;gpio</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">uart_pins</span><span class="p">[</span><span class="s1">&#39;tx&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">_monitor&quot;</span><span class="p">,</span><span class="kc">False</span><span class="p">))</span>
         <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">NextTimeStep</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">NextTimeStep</span><span class="p">()</span>
 
 <div class="viewcode-block" id="UART.uart_send_char"><a class="viewcode-back" href="../../python_api.html#interfaces.UART.UART.uart_send_char">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">uart_send_char</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">char</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send character to UART (character is sent to the software)</span>
@@ -163,6 +160,7 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uart_pins</span><span class="p">[</span><span class="s2">&quot;rx&quot;</span><span class="p">],</span> <span class="n">char_bits</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="k">await</span> <span class="n">Timer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bit_time_ns</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">NextTimeStep</span><span class="p">()</span>
 
         <span class="c1"># stop of frame</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">caravelEnv</span><span class="o">.</span><span class="n">drive_gpio_in</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uart_pins</span><span class="p">[</span><span class="s2">&quot;rx&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>

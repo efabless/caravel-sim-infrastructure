@@ -11,10 +11,8 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -198,7 +196,7 @@
 <dd><p>Configure all GPIOs with the config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1aa2d753ef0720dd40c8cca9d386ccab85"><span class="std std-ref">GPIOs_loadConfigs()</span></a> </p>
+<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1aa2d753ef0720dd40c8cca9d386ccab85"><span class="std std-ref">GPIOs_loadConfigs()</span></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -219,7 +217,7 @@
 <dd><p>Configure one GPIO with the input config</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1aa2d753ef0720dd40c8cca9d386ccab85"><span class="std std-ref">GPIOs_loadConfigs()</span></a> </p>
+<p>These configurations will not be change the GPIOs modes until calling <a class="reference internal" href="#gpios_8h_1aa2d753ef0720dd40c8cca9d386ccab85"><span class="std std-ref">GPIOs_loadConfigs()</span></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -236,15 +234,15 @@
 <span id="_CPPv314GPIOs_writeLowj"></span><span id="_CPPv214GPIOs_writeLowj"></span><span id="GPIOs_writeLow__unsigned-i"></span><span class="target" id="gpios_8h_1a503d40479dae4e1d776f9a828da26e9c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_writeLow</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414GPIOs_writeLowj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the low 32 GPIOs GPIOS[31:0]</p>
 <p>Examples:</p>
-<ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLow</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">GPIOs</span> 
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLow</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">31</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLow</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">GPIOs</span>
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLow</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">30</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
- </p></li>
+</li>
 </ul>
 </p>
 <div class="admonition note">
@@ -263,15 +261,15 @@
 <span id="_CPPv315GPIOs_writeHighj"></span><span id="_CPPv215GPIOs_writeHighj"></span><span id="GPIOs_writeHigh__unsigned-i"></span><span class="target" id="gpios_8h_1a7839dcf1479c966ba9434fd3cafde145"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_writeHigh</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415GPIOs_writeHighj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the highest 6 GPIOs GPIOS[37:32]</p>
 <p>Examples:</p>
-<ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">GPIOs</span>
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">5</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">GPIOs</span>
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="mi">34</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">4</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
- </p></li>
+</li>
 </ul>
 </p>
 <div class="admonition note">
@@ -290,19 +288,19 @@
 <span id="_CPPv318GPIOs_writeLowHighl"></span><span id="_CPPv218GPIOs_writeLowHighl"></span><span id="GPIOs_writeLowHigh__l"></span><span class="target" id="gpios_8h_1aa0bdfb4d673bf0f766c0883b914fc00c"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_writeLowHigh</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418GPIOs_writeLowHighl" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>Write to the 38 GPIOs GPIOS[37:0]</p>
 <p>Examples:</p>
-<ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">GPIOs</span> 
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">37</span> <span class="n">GPIOs</span> 
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_writeLowHigh</span><span class="p">(</span><span class="mh">0x100000000</span><span class="p">);</span> <span class="o">//</span> <span class="n">write</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="ow">and</span> <span class="n">write</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">remaining</span> <span class="mi">36</span> <span class="n">GPIOs</span>
 </pre></div>
 </div>
-</p></li>
+</li>
 </ul>
 <dl>
 <dt class="sig sig-object cpp">
@@ -347,15 +345,15 @@
 <span id="_CPPv313GPIOs_waitLowj"></span><span id="_CPPv213GPIOs_waitLowj"></span><span id="GPIOs_waitLow__unsigned-i"></span><span class="target" id="gpios_8h_1a196f858ea2a3307d453288e2426de274"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitLow</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413GPIOs_waitLowj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the lowest 32 GPIOsto equal the data passed</p>
 <p>Examples:</p>
-<ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLow</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">GPIOs</span><span class="o">=</span> <span class="mi">0</span>  
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLow</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">31</span> <span class="n">GPIOs</span><span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLow</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLow</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">30</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
- </p></li>
+</li>
 </ul>
 </p>
 <div class="admonition note">
@@ -374,15 +372,15 @@
 <span id="_CPPv314GPIOs_waitHighj"></span><span id="_CPPv214GPIOs_waitHighj"></span><span id="GPIOs_waitHigh__unsigned-i"></span><span class="target" id="gpios_8h_1a5633f00a1a81df2ae81341ee04658ea6"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitHigh</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414GPIOs_waitHighj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
-<ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span>  
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHigh</span><span class="p">(</span><span class="mh">0x1</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">5</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span>  
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHigh</span><span class="p">(</span><span class="mh">0x5</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">rest</span> <span class="n">of</span> <span class="mi">4</span> <span class="n">GPIOs</span> <span class="o">=</span> <span class="mi">0</span> 
 </pre></div>
 </div>
- </p></li>
+</li>
 </ul>
 </p>
 <div class="admonition note">
@@ -401,15 +399,15 @@
 <span id="_CPPv321GPIOs_waitLowWithMaskjj"></span><span id="_CPPv221GPIOs_waitLowWithMaskjj"></span><span id="GPIOs_waitLowWithMask__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1a7eac3b1a8b68f8fef71169ca40a21742"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitLowWithMask</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv421GPIOs_waitLowWithMaskjj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the masked lowest 32 GPIOs to equal the data passed</p>
 <p>Examples:</p>
-<ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLowWithMask</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLowWithMask</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLowWithMask</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitLowWithMask</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
- </p></li>
+</li>
 </ul>
 </p>
 <div class="admonition note">
@@ -431,15 +429,15 @@
 <span id="_CPPv322GPIOs_waitHighWithMaskjj"></span><span id="_CPPv222GPIOs_waitHighWithMaskjj"></span><span id="GPIOs_waitHighWithMask__unsigned-i.unsigned-i"></span><span class="target" id="gpios_8h_1a83b74468a9ef251ca1da1fb5f0948869"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GPIOs_waitHighWithMask</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mask</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422GPIOs_waitHighWithMaskjj" title="Permalink to this definition"></a><br /></dt>
 <dd><p><p>wait over the masked highest 6 GPIOs to equal the data passed</p>
 <p>Examples:</p>
-<ul class="simple">
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHighWithMask</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
+<ul>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHighWithMask</span><span class="p">(</span><span class="mh">0x1</span><span class="p">,</span><span class="mh">0xF</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">35</span><span class="p">:</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs  </span>
 </pre></div>
 </div>
- </p></li>
-<li><p><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHighWithMask</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GPIOs_waitHighWithMask</span><span class="p">(</span><span class="mh">0x5</span><span class="p">,</span><span class="mh">0x7</span><span class="p">);</span> <span class="o">//</span> <span class="n">function</span> <span class="n">would</span> <span class="k">return</span> <span class="n">only</span> <span class="n">when</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">34</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">GPIO</span> <span class="p">[</span><span class="mi">33</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">don</span><span class="s1">&#39;t care about the rest of GPIOs </span>
 </pre></div>
 </div>
- </p></li>
+</li>
 </ul>
 </p>
 <div class="admonition note">
