@@ -148,6 +148,7 @@ class Test:
         if not os.path.exists(self.compilation_dir):
             os.mkdir(self.compilation_dir)
         self.test_log = f"{self.test_dir}/{self.name}.log"
+        self.test_log2 = f"{self.test_dir}/test.log"
         self.firmware_log = f"{self.test_dir}/firmware_error.log"
         # self.test_log=open(test_log, "w")
         self.compilation_log = f"{self.compilation_dir}/compilation.log"
