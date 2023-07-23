@@ -158,7 +158,7 @@ class RunTest:
         docker_run_command = self.docker_command_str() + f" '{run_command}' "
         run_command_write_to_file(
             docker_run_command if not self.args.no_docker else run_command,
-            self.test.test_log2,
+            None if self.args.verbosity == "quiet" else self.test.test_log2,
             self.logger,
             quiet=True if self.args.verbosity == "quiet" else False
         )
@@ -225,7 +225,7 @@ class RunTest:
         run_sim = f"cd {self.test.test_dir}; {self.test.compilation_dir}/simv +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         run_command_write_to_file(
             run_sim,
-            self.test.test_log2,
+            None if self.args.verbosity == "quiet" else self.test.test_log2,
             self.logger,
             quiet=True if self.args.verbosity == "quiet" else False
         )
