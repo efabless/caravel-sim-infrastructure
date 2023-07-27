@@ -10,22 +10,22 @@ from anytree import NodeMixin
 import html
 
 
-parser = argparse.ArgumentParser(description="merge cocotb functional coverage")
-parser.add_argument("-path", "-p", help="name of regression can found in tests.json")
-args = parser.parse_args()
-path = args.path
-logger = logging.getLogger("example_logger")
-# print (path)
-cov_files = []
-for dirpath, dirnames, filenames in os.walk(path):
-    for filename in [f for f in filenames if f == "coverage.ylm"]:
-        cov_files.append(os.path.join(dirpath, filename))
-        # print (os.path.join(dirpath, filename))
-merge_coverage(logger.info, f"{path}/merged.ylm", *cov_files)
+# parser = argparse.ArgumentParser(description="merge cocotb functional coverage")
+# parser.add_argument("-path", "-p", help="name of regression can found in tests.json")
+# args = parser.parse_args()
+# path = args.path
+# logger = logging.getLogger("example_logger")
+# # print (path)
+# cov_files = []
+# for dirpath, dirnames, filenames in os.walk(path):
+#     for filename in [f for f in filenames if f == "coverage.ylm"]:
+#         cov_files.append(os.path.join(dirpath, filename))
+#         # print (os.path.join(dirpath, filename))
+# merge_coverage(logger.info, f"{path}/merged.ylm", *cov_files)
 
 
 """ add HTML reports """
-
+path = "/home/rady/caravel/coverage_update/caravel_cocotb_tests2/verilog/dv/cocotb/sim/trial/RTL-hk_regs_rst_spi"
 reports_path = f"{path}/coverageReports"
 Path(f"{reports_path}").mkdir(parents=True, exist_ok=True)
 CSS_TEXT = """
@@ -82,8 +82,7 @@ class Node(NodeMixin):  # Add Node feature
     def __repr__(self):
         return self.key
 
-
-with open(f"{path}/merged.ylm") as file:
+with open(f"{path}/coverage.yaml") as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     yaml_file_object = yaml.load(file, Loader=yaml.FullLoader)
@@ -103,7 +102,20 @@ with open(f"{path}/merged.ylm") as file:
         # print(f"{key}  level = {key.count('.')}  yaml: {yaml_file_object[key]} children {tree[key].children}" )
         body_st = []
         prettyTable = PrettyTable()
-        body_st.append("<h2>" + key + "</h2>")
+
+        # Split the header by '.'
+        bins = key.split('.')
+        # Generate the HTML code with anchor tags and href attributes
+        html_header = ""
+        for i in range(len(bins)):
+            new_list = bins[:i+1]
+            result_string = ".".join(new_list)
+            html_header += f"<a href='{reports_path}/{result_string}.html'>{bins[i]}</a>."
+
+        # Remove the last '.' character from the HTML code
+        html_header = html_header.rstrip('.')
+
+        body_st.append("<h2>" + html_header + "</h2>")
         if len(tree[key].children) > 0:
             prettyTable.field_names = [
                 "Cover Group",
@@ -146,7 +158,7 @@ with open(f"{path}/merged.ylm") as file:
         table = html.unescape(table)
         body_st.append(table)
         if key == root:
-            OUTPUT_HTMl = f"{reports_path}/dashboard.html"
+            OUTPUT_HTMl = f"{reports_path}/top.html"
         else:
             OUTPUT_HTMl = f"{reports_path}/{key}.html"
         f = open(OUTPUT_HTMl, "w")
