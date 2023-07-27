@@ -10,22 +10,21 @@ from anytree import NodeMixin
 import html
 
 
-# parser = argparse.ArgumentParser(description="merge cocotb functional coverage")
-# parser.add_argument("-path", "-p", help="name of regression can found in tests.json")
-# args = parser.parse_args()
-# path = args.path
-# logger = logging.getLogger("example_logger")
-# # print (path)
-# cov_files = []
-# for dirpath, dirnames, filenames in os.walk(path):
-#     for filename in [f for f in filenames if f == "coverage.ylm"]:
-#         cov_files.append(os.path.join(dirpath, filename))
-#         # print (os.path.join(dirpath, filename))
-# merge_coverage(logger.info, f"{path}/merged.ylm", *cov_files)
+parser = argparse.ArgumentParser(description="merge cocotb functional coverage")
+parser.add_argument("-path", "-p", help="path of run")
+args = parser.parse_args()
+path = args.path
+logger = logging.getLogger("example_logger")
+# print (path)
+cov_files = []
+for dirpath, dirnames, filenames in os.walk(path):
+    for filename in [f for f in filenames if f == "coverage.yalm"]:
+        cov_files.append(os.path.join(dirpath, filename))
+        print (os.path.join(dirpath, filename))
+merge_coverage(logger.info, f"{path}/merged.yalm", *cov_files)
 
 
 """ add HTML reports """
-path = "/home/rady/caravel/coverage_update/caravel_cocotb_tests2/verilog/dv/cocotb/sim/trial/RTL-hk_regs_rst_spi"
 reports_path = f"{path}/coverageReports"
 Path(f"{reports_path}").mkdir(parents=True, exist_ok=True)
 CSS_TEXT = """
@@ -82,7 +81,7 @@ class Node(NodeMixin):  # Add Node feature
     def __repr__(self):
         return self.key
 
-with open(f"{path}/coverage.yaml") as file:
+with open(f"{path}/merged.yalm") as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     yaml_file_object = yaml.load(file, Loader=yaml.FullLoader)
