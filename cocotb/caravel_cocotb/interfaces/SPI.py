@@ -245,11 +245,37 @@ class SPI:
         cocotb.log.info(f"[SPI][read_reg_spi_nbytes] reading {hex(address)}({bin(address)}) using housekeeping SPI")
         data = []
         await self.enable_csb()
-        await self._hk_write_byte(SPI.SPI_COMMAND.READ_STREAM.value)
+        await self._hk_write_byte(SPI.SPI_COMMAND.READ_STREAM.value | n_bytes << 3)
         await self._hk_write_byte(address)
         await RisingEdge(self.clk)
         for i in range(n_bytes):
             data.append(await self._hk_read_byte())
+        if disable_csb:
+            await self.disable_csb()
+        return data
+    
+    async def read_write_reg_nbytes(self, address, data_in, n_bytes, disable_csb: bool = True):
+        """
+        Read and write `n_bytes` bytes starting from the register at `address` over the housekeeping SPI.
+
+        :param address: The address of the register to read.
+        :type address: int
+        :param data: The data to be written to the register.
+        :type data: list(int)
+        :param n_bytes: The number of bytes to read.
+        :type n_bytes: int
+        :param disable_csb: Whether to disable chip select after reading. Defaults to True.
+        :type disable_csb: bool
+        :return: A list with `n_bytes` integers, where each integer is a byte read from the register.
+        """
+        cocotb.log.info(f"[SPI][read_write_reg_nbytes] reading {hex(address)} and writing {data_in} using housekeeping SPI")
+        data = []
+        await self.enable_csb()
+        await self._hk_write_byte(SPI.SPI_COMMAND.WRITE_READ.value | n_bytes << 3)
+        await self._hk_write_byte(address)
+        await RisingEdge(self.clk)
+        for byte in data_in:
+            data.append(await self._hk_write_read_byte(byte))
         if disable_csb:
             await self.disable_csb()
         return data

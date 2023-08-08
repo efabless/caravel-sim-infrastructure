@@ -12,7 +12,7 @@ import smtplib
 import socket
 import yaml
 import time
-
+from caravel_cocotb.scripts.merge_coverage import merge_fun_cov
 
 class RunRegression:
     def __init__(self, args, paths, logger) -> None:
@@ -174,33 +174,22 @@ class RunRegression:
         # for index, thread in enumerate(threads):
         #     thread.join()
         # # Coverage
-        # if self.args.cov:
-        #     if self.args.vcs:
-        #         self.generate_cov()
-        #     # merge functional coverage
-        #     merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.run_path}:{self.run_path}  efabless/dv:cocotb sh -c 'cd {self.run_path} && python3 scripts/merge_coverage.py -p {self.paths.SIM_PATH}/{self.args.tag}'"
-        #     self.full_terminal = open(
-        #         f"{self.paths.SIM_PATH}/{self.args.tag}/command.log", "a"
-        #     )
-        #     self.full_terminal.write(
-        #         "\n\ndocker command for merge functional coverage:\n% "
-        #     )
-        #     self.full_terminal.write(os.path.expandvars(merge_fun_cov_command) + "\n")
-        #     self.full_terminal.close()
-        #     os.system(merge_fun_cov_command)
+        if "RTL" in self.args.sim and self.args.vcs:
+            self.logger.info("\nStart merging coverage\n")
+            self.cov_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/coverage"
+            # merge line coverage
+            old_path = os.getcwd()
+            os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
+            os.system(f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov")
+            os.chdir(old_path)
+            # merge functional coverage
+            merge_fun_cov(f"{self.paths.SIM_PATH}/{self.args.tag}", reports_path=f"{self.cov_dir}/functional_cov")
 
     def test_run_function(self, test):
         test.start_of_test()
         self.update_run_log()
         RunTest(self.args, self.paths, test, self.logger)
         self.update_run_log()
-
-    def generate_cov(self):
-        os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
-        os.system("urg -dir RTL*/*.vdb -format both -show tests -report coverageRTL/")
-        # os.system(f"urg -dir GL*/*.vdb -format both -show tests -report coverageGL/")
-        # os.system(f"urg -dir SDF*/*.vdb -format both -show tests -report coverageSDF/")
-        os.chdir(self.run_path)
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"

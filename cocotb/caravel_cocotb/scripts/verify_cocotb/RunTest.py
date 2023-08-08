@@ -202,8 +202,9 @@ class RunTest:
             file_path=f"{self.test.compilation_dir}/includes.v",
         )
         macros = " +define+" + " +define+".join(self.test.macros)
-        coverage_command = '' 
-        # coverage_command = "-cm line+tgl+cond+fsm+branch+assert" if self.args.cov else '' 
+        coverage_command = ''
+        if self.test.sim == "RTL":
+            coverage_command = "-cm line+tgl+cond+fsm+branch+assert "
         os.environ["TESTCASE"] = f"{self.test.name}"
         os.environ["MODULE"] = "module_trail"
         if self.args.seed is not None:
@@ -222,7 +223,7 @@ class RunTest:
                 self.logger,
                 quiet=False if self.args.verbosity == "debug" else True
             )
-        run_sim = f"cd {self.test.test_dir}; {self.test.compilation_dir}/simv +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
+        run_sim = f"cd {self.test.test_dir}; {self.test.compilation_dir}/simv {coverage_command} -cm_name {self.test.name} +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         run_command_write_to_file(
             run_sim,
             None if self.args.verbosity == "quiet" else self.test.test_log2,
