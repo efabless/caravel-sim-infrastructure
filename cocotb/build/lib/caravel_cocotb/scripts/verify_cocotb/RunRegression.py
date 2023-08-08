@@ -13,6 +13,8 @@ import socket
 import yaml
 import time
 from caravel_cocotb.scripts.merge_coverage import merge_fun_cov
+from caravel_cocotb.scripts.test_defaults.test_defaults import TestDefaults
+
 
 class RunRegression:
     def __init__(self, args, paths, logger) -> None:
@@ -162,7 +164,7 @@ class RunRegression:
 
     def run_regression(self):
         # threads = list()
-        for test in self.tests:
+        for test in self.tests:            
             if self.args.iverilog:  # threading
                 # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
                 # threads.append(x)
@@ -171,6 +173,11 @@ class RunRegression:
                 self.test_run_function(test)
             else:
                 self.test_run_function(test)
+
+        # run defaults 
+        if self.args.run_defaults:
+            self.args.compile = True
+            TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
         # for index, thread in enumerate(threads):
         #     thread.join()
         # # Coverage

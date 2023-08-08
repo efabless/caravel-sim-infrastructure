@@ -137,7 +137,7 @@ class Test:
     # create and open full terminal log to be able to use it before run the test
     def create_logs(self):
         self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
-        if self.local_macros is not None:
+        if self.local_macros is not None or self.args.compile:
             self.compilation_dir = self.test_dir
         else: 
             self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/compilation"
@@ -180,7 +180,6 @@ class Test:
             for dir in dirs:
                 file_obj.add(f"{self.test_dir}/{dir}")
                 shutil.rmtree(f"{self.test_dir}/{dir}")
-
         file_obj.close()
 
     def check_test_pass(self):
