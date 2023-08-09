@@ -45,11 +45,12 @@ class SPI:
         """
         read_data = ""
         # self._setup_spi_clk()
-        cocotb.log.debug(f"[SPI][_hk_read_byte] reading from SDI")
+        cocotb.log.debug("[SPI][_hk_read_byte] reading from SDI")
         for i in range(8):
             await RisingEdge(self.clk)
             # await cocotb.triggers.NextTimeStep()
             read_data = f"{read_data}{self.caravelEnv.monitor_gpio(self.spi_pins['SDI'])}"
+            cocotb.log.debug(f"[SPI][_hk_read_byte] read bit {i} = {hex(int(read_data, 2))}({read_data})")
         return int(read_data, 2)
 
     async def _hk_read_byte_with_failing(self):
@@ -62,7 +63,7 @@ class SPI:
         cocotb.log.debug("[SPI][_hk_read_byte] reading from SDI")
         for i in range(8):
             await FallingEdge(self.clk)
-            await Timer(10, "ns")
+            # await Timer(10, "ns")
             read_data = f"{read_data}{self.caravelEnv.monitor_gpio(self.spi_pins['SDI'])}"
         return int(read_data, 2)
 
@@ -253,7 +254,7 @@ class SPI:
         if disable_csb:
             await self.disable_csb()
         return data
-    
+
     async def read_write_reg_nbytes(self, address, data_in, n_bytes, disable_csb: bool = True):
         """
         Read and write `n_bytes` bytes starting from the register at `address` over the housekeeping SPI.
@@ -302,6 +303,39 @@ class SPI:
             await self._hk_write_byte(data)
         # READ
         data = []
+        for i in range(read_byte_num):
+            data.append(await self._hk_read_byte())
+        if disable_csb:
+            await self.disable_csb()
+        return data
+
+    async def reg_spi_mgmt_pass_thru_read(self, address: int, read_byte_num: int = 1, disable_csb: bool = True):
+        """
+        Sends SPI read data command to a housekeeping SPI using managment pass-thru command.
+        :param address: The address of the register to read.
+        :type address: int
+        :param read_byte_num: expected number of bytes to be read defaults to 1.
+        :type read_byte_num: int
+        :param disable_csb: Whether to disable CSB after the transaction defaults to True.
+        :type disable_csb: bool        
+        """
+        cocotb.log.debug(f"[SPI][reg_spi_mgmt_pass_thru_read] read addr {hex(address)}")
+        await self.enable_csb()
+        # Apply user pass-thru command to housekeeping SPI
+        await self._hk_write_byte(SPI.SPI_COMMAND.MGMT_PATH_THRU.value)
+        await RisingEdge(self.clk)
+        # command and address
+        await self._hk_write_byte(0x03)  # read
+        addr_bits = bin(address)[2:].zfill(24)
+        cocotb.log.debug(f"[SPI][reg_spi_mgmt_pass_thru_read] send addr {addr_bits}")
+        for i in range(3):
+            address_byte = int(addr_bits[i*8:(i+1)*8], 2)
+            cocotb.log.debug(f"[SPI][reg_spi_mgmt_pass_thru_read] send addr {hex(address_byte)} i = {i}")
+            await self._hk_write_byte(address_byte)
+        # READ
+        data = []
+        await RisingEdge(self.clk)
+
         for i in range(read_byte_num):
             data.append(await self._hk_read_byte())
         if disable_csb:
