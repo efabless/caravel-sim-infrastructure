@@ -21,9 +21,14 @@ This project aims to provide a user friendly environment for adding and running 
 
 ## How to install caravel_cocotb
 
-This is temporary, it will soon be released to PyPi
+```bash
+ pip install caravel-cocotb
+```
+
+or to install from repo
 ```bash
    git clone git@github.com:efabless/caravel-sim-infrastructure.git
+   git checkout <release>
    cd caravel-sim-infrastructure/cocotb
    pip install .
    cd ../..
@@ -118,7 +123,7 @@ Commonly used APIs for firmware can be found in [`C_api`](docs/build/html/C_api.
 <!-- start create a test include3 -->
 # Test Examples
 
-Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/cocotb_dev/verilog/dv/cocotb) for tests example generated for 16-bit counter
+Refer to this [directory](https://github.com/efabless/caravel_user_project/tree/main/verilog/dv/cocotb) for tests example generated for 16-bit counter
 <!-- end create a test include3 -->
 
 
@@ -145,7 +150,7 @@ usage: caravel_cocotb [-h] [-test TEST [TEST ...]] [-design_info DESIGN_INFO]
                       [-sdf_setup] [-clk CLK] [-lint]
                       [-macros MACROS [MACROS ...]] [-sim_path SIM_PATH]
                       [-verbosity VERBOSITY] [-openframe] [-check_commits]
-                      [-no_docker]
+                      [-no_docker] [-compile]
 
 Run cocotb tests
 
@@ -191,6 +196,7 @@ optional arguments:
   -openframe            use openframe for the simulation rather than caravel
   -check_commits        use to check if repos are up to date
   -no_docker            run iverilog without docker
+  -compile              force recompilation
 ```
 <!-- end run a test include -->
 
@@ -249,12 +255,13 @@ New directory named ``sim`` would be created under ``<repo root>/cocotb/`` or to
 
 | sim #  directory get generate when run a test
 │ ├── <tag> # tag of the run  
-│ │   ├── <sim type>-<test name> # test result directory contain all logs and wave related to the test
-│ │   │   └── <test name>.hex  # hex file used in running this test
-│ │   │   └── <test name>.log  # log file generated from cocotb 
+│ │   ├── compilation # directory contain all logs and build files related to the RTL compilation
 │ │   │   └── compilation.log  # log file has all the commands used to run iverilog and any compilation error or warning
+│ │   ├── <sim type>-<test name> # test result directory contain all logs and wave related to the test
+│ │   │   └── firmware.hex  # hex file used in running this test
+│ │   │   └── <test name>.log  # log file generated from cocotb 
 │ │   │   └── firmware.log     # log file has all the commands used to compile the C code and any compilation error or warning
-│ │   │   └── <test name>.vcd  # waves can be opened by gtkwave
+│ │   │   └── waves.vcd  # waves can be opened by gtkwave
 │ │   │   └── rerun.py         # script to rerun the test
 │ │   └── command.log    # command use for this run 
 │ │   └── repos_info.log # contain information about the repos used to run these tests 
