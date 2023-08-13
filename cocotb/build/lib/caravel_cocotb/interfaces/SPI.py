@@ -309,17 +309,15 @@ class SPI:
             await self.disable_csb()
         return data
 
-    async def reg_spi_mgmt_pass_thru_read(self, address: list, read_byte_num: int = 1, disable_csb: bool = True):
+    async def reg_spi_mgmt_pass_thru_read(self, address: int, read_byte_num: int = 1, disable_csb: bool = True):
         """
-        Sends SPI data to a housekeeping SPI using user pass-thru command.
-        
-        :param send_data: A list of data to be sent includeing the commands and addresses.
-        :type send_data: list
-        :param read_byte_num: expected number of bytes to be read defaults to 0.
+        Sends SPI read data command to a housekeeping SPI using managment pass-thru command.
+        :param address: The address of the register to read.
+        :type address: int
+        :param read_byte_num: expected number of bytes to be read defaults to 1.
         :type read_byte_num: int
         :param disable_csb: Whether to disable CSB after the transaction defaults to True.
-        :type disable_csb: bool
-        :return: A list of read data if `read_byte_num` is not 0.
+        :type disable_csb: bool        
         """
         cocotb.log.debug(f"[SPI][reg_spi_mgmt_pass_thru_read] read addr {hex(address)}")
         await self.enable_csb()
