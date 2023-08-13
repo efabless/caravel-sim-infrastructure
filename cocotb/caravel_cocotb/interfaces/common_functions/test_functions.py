@@ -113,13 +113,10 @@ def report_test(func):
         cocotb.log.addHandler(handler)
         # call test
         await func(*args, **kwargs)
-        try:
-            if "COVERAGE" in cocotb.plusargs or "CHECKERS" in cocotb.plusargs:
-                coverage_db.export_to_yaml(
-                    filename=f"{sim_dir}/{TESTFULLNAME}/coverage.ylm"
-                )
-        except:
-            pass
+        if "COVERAGE_COLLECT" in cocotb.plusargs:
+            coverage_db.export_to_yaml(
+                filename=f"{sim_dir}/{TESTFULLNAME}/coverage.yalm".replace('"', ""),
+            )
         # report after finish simulation
         msg = f"with ({cocotb.log.critical.counter})criticals ({cocotb.log.error.counter})errors ({cocotb.log.warning.counter})warnings "
         if cocotb.log.error.counter > 0 or cocotb.log.critical.counter > 0:
