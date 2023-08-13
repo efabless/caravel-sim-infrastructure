@@ -312,6 +312,7 @@ class SPI:
     async def reg_spi_mgmt_pass_thru_read(self, address: int, read_byte_num: int = 1, disable_csb: bool = True):
         """
         Sends SPI read data command to a housekeeping SPI using managment pass-thru command.
+        
         :param address: The address of the register to read.
         :type address: int
         :param read_byte_num: expected number of bytes to be read defaults to 1.
