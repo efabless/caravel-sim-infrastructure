@@ -40,16 +40,14 @@ class TestDefaults:
             self.write_random_values_to_file(valid_modes)
             if "GL" in self.args.sim or "GL_SDF" in self.args.sim:
                 self.run_gen_gpio_defaults()
-            if "RTL" in self.args.sim:
-                self.run_RTL_test(i)
-            
-            if "GL" in self.args.sim or "GL_SDF" in self.args.sim:
-                self.run_gen_gpio_defaults()
-                self.run_GL_test(i)
-
+                        
             if "GL_SDF" in self.args.sim:
                 for corner in self.args.corner:
                     self.run_SDF_test(i, corner)
+            elif "GL" in self.args.sim:
+                self.run_GL_test(i)
+            elif "RTL" in self.args.sim:
+                self.run_RTL_test(i)
 
     def set_valid_modes(self):
         valid_modes = {"GPIO_MODE_MGMT_STD_INPUT_NOPULL": 0x0403, "GPIO_MODE_MGMT_STD_INPUT_PULLDOWN": 0x0c01, "GPIO_MODE_MGMT_STD_INPUT_PULLUP": 0x0801, "GPIO_MODE_MGMT_STD_OUTPUT": 0x1809, "GPIO_MODE_USER_STD_INPUT_NOPULL": 0x0402, "GPIO_MODE_USER_STD_INPUT_PULLDOWN": 0x0c00, "GPIO_MODE_USER_STD_INPUT_PULLUP": 0x0800, "GPIO_MODE_USER_STD_OUTPUT": 0x1808, "GPIO_MODE_USER_STD_BIDIRECTIONAL": 0x1800}
@@ -149,7 +147,7 @@ class TestDefaults:
         self.run_function(GL_test)
 
         old_folder_path = GL_test.test_dir
-        new_folder_name = f"GL-check_defaults{i}"
+        new_folder_name = f"{GL_test.full_name}{i}"
         new_folder_path = os.path.join(os.path.dirname(old_folder_path), new_folder_name)
         try:
             os.rename(old_folder_path, new_folder_path)
