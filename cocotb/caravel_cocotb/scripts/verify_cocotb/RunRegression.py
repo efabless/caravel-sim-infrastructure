@@ -182,15 +182,18 @@ class RunRegression:
         #     thread.join()
         # # Coverage
         if "RTL" in self.args.sim and self.args.vcs:
-            self.logger.info("\nStart merging coverage\n")
-            self.cov_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/coverage"
-            # merge line coverage
-            old_path = os.getcwd()
-            os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
-            os.system(f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov")
-            os.chdir(old_path)
-            # merge functional coverage
-            merge_fun_cov(f"{self.paths.SIM_PATH}/{self.args.tag}", reports_path=f"{self.cov_dir}/functional_cov")
+            try:
+                self.logger.info("\nStart merging coverage\n")
+                self.cov_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/coverage"
+                # merge line coverage
+                old_path = os.getcwd()
+                os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
+                os.system(f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov")
+                os.chdir(old_path)
+                # merge functional coverage
+                merge_fun_cov(f"{self.paths.SIM_PATH}/{self.args.tag}", reports_path=f"{self.cov_dir}/functional_cov")
+            except Exception as e:
+                self.logger.error(e)
 
     def test_run_function(self, test):
         test.start_of_test()
