@@ -117,9 +117,6 @@ class RunFLow:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
-            # For openframe as the cpu is inside the user project the firmware files should be inside user project as well
-            if self.args.openframe: 
-                FIRMWARE_PATH = f"{design_info['USER_PROJECT_ROOT']}/verilog/dv/firmware"
         RUN_PATH = self.args.run_path
         SIM_PATH = (
             f"{RUN_PATH}/sim"
@@ -234,7 +231,6 @@ class CocotbArgs:
         sim_path=None,
         run_path=".",
         verbosity="normal",
-        openframe=False,
         check_commits=False,
         design_info=None,
         no_docker=False,
@@ -261,7 +257,6 @@ class CocotbArgs:
         self.lint = None
         # related to repos
         self.cpu_type = None  # would be filled by other class
-        self.openframe = openframe
         self.check_commits = check_commits
         self.design_info = design_info
         self.no_docker = no_docker
@@ -286,7 +281,6 @@ class CocotbArgs:
         self.lint = args.lint
         self.run_path = os.getcwd()
         self.verbosity = args.verbosity
-        self.openframe = args.openframe
         self.check_commits = args.check_commits
         self.design_info = args.design_info
         self.no_docker = args.no_docker
