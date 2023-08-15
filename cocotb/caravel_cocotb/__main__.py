@@ -73,11 +73,6 @@ def main():
         help='verbosity of the console output it can have one of 3 value debug, normal or quiet the default value is normal',
     )
     parser.add_argument(
-        "-openframe",
-        action="store_true",
-        help='use openframe for the simulation rather than caravel',
-    )
-    parser.add_argument(
         "-check_commits",
         action="store_true",
         help='use to check if repos are up to date',

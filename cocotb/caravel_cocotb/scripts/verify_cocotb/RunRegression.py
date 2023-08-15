@@ -4,7 +4,12 @@ from datetime import datetime
 import os
 import sys
 from subprocess import PIPE, run
-from caravel_cocotb.scripts.verify_cocotb.RunTest import RunTest
+try:
+    from os import path
+    sys.path.append(os.getcwd())
+    from user_run_test import UserRunTest as RunTest
+except ImportError:
+    from caravel_cocotb.scripts.verify_cocotb.RunTest import RunTest
 from caravel_cocotb.scripts.verify_cocotb.Test import Test
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -34,8 +39,6 @@ class RunRegression:
         if self.args.macros is None:
             self.args.macros = list()
         simulation_macros = ["USE_POWER_PINS", "UNIT_DELAY=#1", "COCOTB_SIM"]
-        if self.args.openframe:
-            simulation_macros.append("OPENFRAME")
         paths_macros = [
             f'RUN_PATH=\\"{self.paths.RUN_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
@@ -198,7 +201,7 @@ class RunRegression:
     def test_run_function(self, test):
         test.start_of_test()
         self.update_run_log()
-        RunTest(self.args, self.paths, test, self.logger)
+        RunTest(self.args, self.paths, test, self.logger).run_test()
         self.update_run_log()
 
     def update_run_log(self):
