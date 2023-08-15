@@ -24,7 +24,7 @@ class RunTest:
         return command
 
     def hex_riscv_command_gen(self):
-        GCC_PATH = "/foss/tools/riscv-gnu-toolchain-rv32i/217e7f3debe424d61374d31e33a091a630535937/bin/"
+        GCC_PATH = "/opt/riscv/bin/"
         GCC_PREFIX = "riscv32-unknown-linux-gnu"
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
@@ -72,7 +72,7 @@ class RunTest:
 
         docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
         docker_dir = (docker_dir + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
-        docker_command = self.docker_command_str(docker_image="efabless/dv:latest", docker_dir=docker_dir, command=command)
+        docker_command = self.docker_command_str(docker_image="efabless/dv:cocotb", docker_dir=docker_dir, command=command)
         # don't run with docker with arm
         cmd = command if self.args.cpu_type == "ARM" else docker_command
         hex_gen_state = run_command_write_to_file(cmd, self.test.hex_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
@@ -113,8 +113,8 @@ class RunTest:
                 f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc"
             )
             return
+        self.write_iverilog_includes_file()
         if not os.path.isfile(f"{self.test.compilation_dir}/sim.vvp") or self.args.compile:
-            self.write_iverilog_includes_file()
             self.iverilog_compile()
         self.iverilog_run()
 
@@ -163,8 +163,13 @@ class RunTest:
 
     # vcs function
     def runTest_vcs(self):
+        self.write_vcs_includes_file()
+        self.vcs_coverage_command = ''
+        if self.test.sim == "RTL":
+            self.vcs_coverage_command = "-cm line+tgl+cond+fsm+branch+assert "
+        os.environ["TESTCASE"] = f"{self.test.name}"
+        os.environ["MODULE"] = "module_trail"
         if not os.path.isfile(f"{self.test.compilation_dir}/simv") or self.args.compile:
-            self.write_vcs_includes_file()
             self.vcs_compile()
         self.vcs_run()
 
@@ -195,12 +200,7 @@ class RunTest:
         self.test.set_user_project()
 
     def vcs_compile(self):
-        macros = " +define+" + " +define+".join(self.test.macros)
-        self.vcs_coverage_command = ''
-        if self.test.sim == "RTL":
-            self.vcs_coverage_command = "-cm line+tgl+cond+fsm+branch+assert "
-        os.environ["TESTCASE"] = f"{self.test.name}"
-        os.environ["MODULE"] = "module_trail"
+        macros = " +define+" + " +define+".join(self.test.macros)        
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
         vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
