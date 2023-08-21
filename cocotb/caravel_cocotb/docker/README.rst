@@ -33,22 +33,22 @@ The image installs the following Python packages using pip:
 Pulling the Docker Image
 ------------------------
 
-You can pull the `efabless/dv:cocotb` Docker image from Docker Hub using the following command:
+You can pull the `efabless/dv:cocotb` Docker image from Docker Hub using the following command::
 
-```shell docker pull efabless/dv:cocotb```
+    docker pull efabless/dv:cocotb
 
 Building the Docker Image
 --------------------------
 
 1. **Navigate to the directory containing this Dockerfile:**
 
-    Navigate to this directory and build the Docker image using the following command
+    Navigate to this directory and build the Docker image using the following command::
 
-    ```shell docker build -t efabless/dv:cocotb . ```
+         docker build -t efabless/dv:cocotb . 
 
-    To build diffrent image extend the image name with new tag
+    To build diffrent image extend the image name with new tag::
 
-    ```shell docker build -t efabless/dv:cocotb:<new_tag> . ```
+        docker build -t efabless/dv:cocotb:<new_tag> . 
 
 
 
@@ -57,10 +57,10 @@ Pushing the Docker Image (if you have access)
 
 1. Log in to Docker Hub:
 
-    Log in to Docker Hub using the docker login command. You will need to enter your Docker Hub credentials (username and password or token).
+    Log in to Docker Hub using the docker login command. You will need to enter your Docker Hub credentials (username and password or token).::
 
-    ```shell docker login ```
+        docker login
 
-2. Push the image to Docker Hub:
+2. Push the image to Docker Hub::
 
-    ```shell docker push efabless/dv:cocotb ```
+    push efabless/dv:cocotb
