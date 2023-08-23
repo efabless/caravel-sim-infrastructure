@@ -62,8 +62,7 @@ class UART:
     async def start_of_tx(self):
         await FallingEdge(self.caravelEnv.dut._id(f"gpio{self.uart_pins['tx']}_monitor",False))
         await Timer(self.bit_time_ns, units="ns")
-        await NextTimeStep()
-        await NextTimeStep()
+        await Timer(int(self.bit_time_ns/2), units="ns")  # read the bit from the middle
 
     async def uart_send_char(self, char):
         """Send character to UART (character is sent to the software)
