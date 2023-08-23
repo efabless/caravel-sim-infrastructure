@@ -1,4 +1,4 @@
-name: Cocotb CI
+name: Caravel Cocotb CI
 
 on:
   push:
@@ -21,13 +21,20 @@ jobs:
       with:
         python-version: 3.8
 
-    - name: Navigate to caravel_cocotb directory
-      run: cd root/cocotb/caravel_cocotb
-
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        cd cocotb/caravel_cocotb
+        python3 -m pip install --upgrade pip
         pip install -r requirements.txt
+        pip install docker
+        python3 -m pip install --upgrade --no-cache-dir volare
+    
+    - name: Install caravel_cocotb
+      run: |
+        cd cocotb
+        pip install .
 
-    - name: Run cocotb_ci.py
-      run: python CI/cocotb_ci.py
+    - name: Run main.py
+      run: |
+        cd cocotb/caravel_cocotb/CI
+        python3 main.py
