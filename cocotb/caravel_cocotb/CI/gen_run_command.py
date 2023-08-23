@@ -14,7 +14,7 @@ Command = namedtuple('Command', [
 class GenRunCommand(BaseClass):
     def __init__(self) -> None:
         super().__init__()
-        self.cocotb_path = "/repos/user_project/verilog/dv/cocotb"
+        self.cocotb_path = "~/repos/user_project/verilog/dv/cocotb"
         self.rand_command = GenerateCommands(self.cocotb_path)
 
     def run_command(self, command):
