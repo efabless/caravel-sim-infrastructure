@@ -20,21 +20,25 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
 
     - name: Install dependencies
       run: |
-        cd cocotb/caravel_cocotb
+        cd $GITHUB_WORKSPACE/cocotb/caravel_cocotb
         python3 -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install docker
         python3 -m pip install --upgrade --no-cache-dir volare
     
     - name: Install caravel_cocotb
       run: |
-        cd cocotb
+        cd $GITHUB_WORKSPACE/cocotb
         pip install .
 
     - name: Run main.py
       run: |
-        cd cocotb/caravel_cocotb/CI
+        cd $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI
         python3 main.py
