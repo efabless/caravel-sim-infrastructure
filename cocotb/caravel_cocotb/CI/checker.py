@@ -66,14 +66,14 @@ class Checker(BaseClass):
             if os.path.exists(test_path):
                 self.logger.info(f"[check_exist_pass] Test {test_path} exists")
             else:
-                self.logger.error(f"[check_exist_pass] Test {test_path} doesn't exist")
+                raise ValueError(f"[check_exist_pass] Test {test_path} doesn't exist")
                 return False
 
             if os.path.exists(f"{test_path}/passed"):
                 self.logger.info(f"[check_exist_pass] Test {test_path} passed")
             else:
                 if self.command.sim != "GL_SDF":
-                    self.logger.error(f"[check_exist_pass] Test {test_path} failed")
+                    raise ValueError(f"[check_exist_pass] Test {test_path} failed")
                 return False
         return True
     
@@ -96,17 +96,17 @@ class Checker(BaseClass):
             yaml_data = yaml_file.read()
         configs = yaml.safe_load(yaml_data)
         if clk_exp != configs.get("clock"):
-            self.logger.error(f"[check_configs] Clock mismatch: {clk_exp} != {configs.get('clock')}")
+            raise ValueError(f"[check_configs] Clock mismatch: {clk_exp} != {configs.get('clock')}")
         if max_err_exp != int(configs.get("max_err")):
-            self.logger.error(f"[check_configs] Max error mismatch: {max_err_exp} != {configs.get('max_err')}")
+            raise ValueError(f"[check_configs] Max error mismatch: {max_err_exp} != {configs.get('max_err')}")
         if caravel_root_exp != configs.get("CARAVEL_ROOT"):
-            self.logger.error(f"[check_configs] Caravel root mismatch: {caravel_root_exp} != {configs.get('CARAVEL_ROOT')}")
+            raise ValueError(f"[check_configs] Caravel root mismatch: {caravel_root_exp} != {configs.get('CARAVEL_ROOT')}")
         if mgmt_core_exp != configs.get("MCW_ROOT"):
-            self.logger.error(f"[check_configs] Management core mismatch: {mgmt_core_exp} != {configs.get('MCW_ROOT')}")
+            raise ValueError(f"[check_configs] Management core mismatch: {mgmt_core_exp} != {configs.get('MCW_ROOT')}")
         if pdk_root_exp != configs.get("PDK_ROOT"):
-            self.logger.error(f"[check_configs] PDK root mismatch: {pdk_root_exp} != {configs.get('PDK_ROOT')}")
+            raise ValueError(f"[check_configs] PDK root mismatch: {pdk_root_exp} != {configs.get('PDK_ROOT')}")
         if pdk_exp != configs.get("PDK"):
-            self.logger.error(f"[check_configs] PDK mismatch: {pdk_exp} != {configs.get('PDK')}")
+            raise ValueError(f"[check_configs] PDK mismatch: {pdk_exp} != {configs.get('PDK')}")
     
     def check_seed(self, all_tests_paths):
         if self.command.seed is not None:
@@ -128,15 +128,15 @@ class Checker(BaseClass):
                 if seed_value == self.command.seed:
                     self.logger.info(f"[check_seed] Test run with correct seed {seed_value}")
                 else:
-                    self.logger.error(f"[check_seed] Test run with incorrect seed {seed_value} instead of {self.command.seed}")
+                    raise ValueError(f"[check_seed] Test run with incorrect seed {seed_value} instead of {self.command.seed}")
 
     def check_dump_wave(self, all_tests_paths):
         dump_wave_exp = False if self.command.no_wave is not None else True
         for test_path in all_tests_paths:
             if os.path.exists(f"{test_path}/waves.vcd") and not dump_wave_exp:
-                self.logger.error(f"[check_dump_wave] Test {test_path} dump waves while -no_wave switch is used")
+                raise ValueError(f"[check_dump_wave] Test {test_path} dump waves while -no_wave switch is used")
             elif not os.path.exists(f"{test_path}/waves.vcd") and dump_wave_exp:
-                self.logger.error(f"[check_dump_wave] Test {test_path} doesn't dump waves while -no_wave switch isn't used")
+                raise ValueError(f"[check_dump_wave] Test {test_path} doesn't dump waves while -no_wave switch isn't used")
             else:
                 self.logger.info(f"[check_dump_wave] Test {test_path} has wave {'dumped' if dump_wave_exp else 'not dumped'} waves as expected")
 
@@ -144,9 +144,9 @@ class Checker(BaseClass):
         is_compile_shared = False if self.command.compile is not None else True
         for test_path in all_tests_paths:
             if os.path.exists(f"{test_path}/sim.vpp") and not is_compile_shared:
-                self.logger.error(f"[check_compile] Test {test_path} compile is not shared while -compile switch is used")
+                raise ValueError(f"[check_compile] Test {test_path} compile is not shared while -compile switch is used")
             elif not os.path.exists(f"{test_path}/sim.vpp") and is_compile_shared:
-                self.logger.error(f"[check_compile] Test {test_path} shared compile while -compile switch isn't used")
+                raise ValueError(f"[check_compile] Test {test_path} shared compile while -compile switch isn't used")
             else:
                 self.logger.info(f"[check_compile] Test {test_path} has compile {'shared' if is_compile_shared else 'not shared'} as expected")
 
@@ -164,5 +164,5 @@ class Checker(BaseClass):
                             if pattern_to_search in content:
                                 self.logger.info(f"[check_macros] Test {test_path} uses macro {macro_used} correctly")
                                 return True
-                self.logger.error(f"[check_macros] Test {test_path} doesn't use macro {macro_used}")
+                raise ValueError(f"[check_macros] Test {test_path} doesn't use macro {macro_used}")
                 return False

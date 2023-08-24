@@ -9,7 +9,7 @@ Command = namedtuple('Command', [
     'test', 'test_list', 'design_info', 'sim', 'tag',
     'max_error', 'corner', 'seed', 'no_wave', 'clk',
     'macro', 'sim_path', 'verbosity', 'compile', 'check_commits',
-    "run_location"])
+    "run_location", "CI"])
 
 
 class GenRunCommand(BaseClass):
@@ -87,7 +87,7 @@ class GenerateCommands(BaseClass):
         self.macros_chooser = RandomChooser([None, "USE_MACRO_1", "USE_MACRO_2"])
         self.sim_paths_chooser = RandomChooser([None, os.path.abspath(os.path.join(self.cocotb_path, ".."))])
         # self.verbosities_chooser = RandomChooser([None, "quiet", "normal", "debug"])
-        self.verbosities_chooser = RandomChooser(["debug"])
+        self.verbosities_chooser = RandomChooser(["quiet"])  # to speed sims
         self.compiles_chooser = RandomChooser([None, True])
         self.check_commits_chooser = RandomChooser([None, True])
         self.run_location = RandomChooser([self.cocotb_path, os.path.abspath(os.path.join(self.cocotb_path, "..", ".."))])
@@ -126,7 +126,8 @@ class GenerateCommands(BaseClass):
             verbosity=self.verbosities_chooser.choose_next(),
             compile=self.compiles_chooser.choose_next(),
             check_commits=self.check_commits_chooser.choose_next(),
-            run_location=run_location
+            run_location=run_location,
+            CI=True
         )
         # force run location to be in cocotb directory if design_info path file isn't provided
         if command.design_info is None:
@@ -150,9 +151,10 @@ class GenerateCommands(BaseClass):
         sim_path = f" -sim_path {command.sim_path} " if command.sim_path is not None else ""
         verbosity = f" -verbosity {command.verbosity} " if command.verbosity is not None else ""
         compile = " -compile" if command.compile is not None else ""
+        CI = " --CI" if command.CI is not None else ""
         check_commits = " -check_commits" if command.check_commits is not None else ""
         # TODO for now remove using {check_commits}
-        command = f"cd {command.run_location}  && caravel_cocotb {test}{design_info}{sim}{max_error}{corner}{seed}{no_wave}{clk}{macro}{sim_path}{verbosity}{compile} -tag  {command.tag}"
+        command = f"cd {command.run_location}  && caravel_cocotb {test}{design_info}{sim}{max_error}{corner}{seed}{no_wave}{clk}{macro}{sim_path}{verbosity}{compile}{CI} -tag  {command.tag}"
         return command
 
 

@@ -237,7 +237,8 @@ class CocotbArgs:
         design_info=None,
         no_docker=False,
         compile=False,
-        run_defaults=False
+        run_defaults=False,
+        CI=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -264,6 +265,7 @@ class CocotbArgs:
         self.no_docker = no_docker
         self.compile = compile
         self.run_defaults = run_defaults
+        self.CI = CI
 
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
@@ -288,3 +290,4 @@ class CocotbArgs:
         self.no_docker = args.no_docker
         self.compile = args.compile
         self.run_defaults = args.run_defaults
+        self.CI = args.CI

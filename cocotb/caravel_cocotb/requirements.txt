@@ -1,6 +1,0 @@
-click
-cocotb
-oyaml
-cocotb_coverage
-PrettyTable
-anytree

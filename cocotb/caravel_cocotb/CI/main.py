@@ -20,10 +20,10 @@ def main():
     while gen_run_obj.is_all_cases_covered() is False:
         command = gen_run_obj.next_command()
         gen_run_obj.run_command(command)
-        checker_obj.check_command(command[0])
-    
-    # err_count = checker_obj.logger.error.counter
-    # assert err_count == 0, f"Errors occurred: {err_count} error(s)"
+        try:
+            checker_obj.check_command(command)
+        except ValueError:
+            exit(1)
 
 
 if __name__ == "__main__":
