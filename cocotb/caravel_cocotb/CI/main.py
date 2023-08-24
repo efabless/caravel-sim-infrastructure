@@ -14,7 +14,7 @@ def main():
         user_project_root=f'{current_path}/user_project_root',
         pdk_root=f'{current_path}/pdk_root'
     )
-    # SetupEnv(paths)
+    SetupEnv(paths)
     gen_run_obj = GenRunCommand(paths)
     checker_obj = Checker()
     while gen_run_obj.is_all_cases_covered() is False:
