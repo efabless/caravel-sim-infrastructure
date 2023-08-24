@@ -20,7 +20,7 @@ class RunTest:
         self.test.end_of_test()
 
     def docker_command_str(self, docker_image="efabless/dv:cocotb", docker_dir="", env_vars="", addtional_switchs="", command=""):
-        command = f"docker run --init -u $(id -u $USER):$(id -g $USER) -it --sig-proxy=true {addtional_switchs} {env_vars} {docker_dir} {docker_image} sh -ec '{command}'"
+        command = f"docker run -u $(id -u $USER):$(id -g $USER) {addtional_switchs} {env_vars} {docker_dir} {docker_image} sh -ec '{command}'"
         return command
 
     def hex_riscv_command_gen(self):
