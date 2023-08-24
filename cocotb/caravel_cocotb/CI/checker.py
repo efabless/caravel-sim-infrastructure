@@ -141,12 +141,13 @@ class Checker(BaseClass):
                 self.logger.info(f"[check_dump_wave] Test {test_path} has wave {'dumped' if dump_wave_exp else 'not dumped'} waves as expected")
 
     def check_compile(self, all_tests_paths):
-        is_compile_shared = False if self.command.compile is not None else True
+        is_compile_shared = True if self.command.compile is None else False
         for test_path in all_tests_paths:
-            if os.path.exists(f"{test_path}/sim.vpp") and not is_compile_shared:
+            simvpp_exist = os.path.exists(f"{test_path}/sim.vvp")
+            if simvpp_exist and is_compile_shared:
                 raise ValueError(f"[check_compile] Test {test_path} compile is not shared while -compile switch is used")
-            elif not os.path.exists(f"{test_path}/sim.vpp") and is_compile_shared:
-                raise ValueError(f"[check_compile] Test {test_path} shared compile while -compile switch isn't used")
+            elif not simvpp_exist and not is_compile_shared:
+                raise ValueError(f"[check_compile] Test {test_path} shared compile while -compile switch isn't used simvpp exist = {simvpp_exist} is shared = {is_compile_shared}")
             else:
                 self.logger.info(f"[check_compile] Test {test_path} has compile {'shared' if is_compile_shared else 'not shared'} as expected")
 

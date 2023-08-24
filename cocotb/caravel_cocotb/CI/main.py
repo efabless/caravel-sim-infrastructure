@@ -14,15 +14,16 @@ def main():
         user_project_root=f'{current_path}/user_project_root',
         pdk_root=f'{current_path}/pdk_root'
     )
-    SetupEnv(paths)
+    # SetupEnv(paths)
     gen_run_obj = GenRunCommand(paths)
     checker_obj = Checker()
     while gen_run_obj.is_all_cases_covered() is False:
-        command = gen_run_obj.next_command()
-        gen_run_obj.run_command(command)
         try:
+            command = gen_run_obj.next_command()
+            gen_run_obj.run_command(command)
             checker_obj.check_command(command[0])
-        except ValueError:
+        except Exception as e:
+            print(f"Returned exception: {e}")
             exit(1)
 
 
