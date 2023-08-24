@@ -3,6 +3,7 @@ from base_class import BaseClass
 import random
 import string
 from collections import namedtuple
+import yaml
 
 Command = namedtuple('Command', [
     'test', 'test_list', 'design_info', 'sim', 'tag',
@@ -12,9 +13,11 @@ Command = namedtuple('Command', [
 
 
 class GenRunCommand(BaseClass):
-    def __init__(self) -> None:
+    def __init__(self, paths) -> None:
         super().__init__()
-        self.cocotb_path = "~/repos/user_project/verilog/dv/cocotb"
+        self.paths = paths
+        self.cocotb_path = f"{self.paths.user_project_root}/verilog/dv/cocotb"
+        self.update_design_info()
         self.rand_command = GenerateCommands(self.cocotb_path)
 
     def run_command(self, command):
@@ -48,6 +51,21 @@ class GenRunCommand(BaseClass):
             else:
                 self.logger.info(f"{indent}- {item}")
 
+    def update_design_info(self):
+        data = {
+            'CARAVEL_ROOT': self.paths.caravel_root,
+            'MCW_ROOT': self.paths.mgmt_core_root,
+            'USER_PROJECT_ROOT': self.paths.user_project_root,
+            'PDK_ROOT': self.paths.pdk_root,
+            'PDK': "sky130A",
+            'clk': 25,
+            'caravan': False,
+            'emailto': [None]
+        }
+
+        with open(f'{self.paths.user_project_root}/verilog/dv/cocotb/design_info.yaml', 'w') as file:
+            yaml.dump(data, file)
+
 
 class GenerateCommands(BaseClass):
     def __init__(self, cocotb_path) -> None:
@@ -68,7 +86,8 @@ class GenerateCommands(BaseClass):
         self.clks_chooser = RandomChooser([None, 30, 40, 50])
         self.macros_chooser = RandomChooser([None, "USE_MACRO_1", "USE_MACRO_2"])
         self.sim_paths_chooser = RandomChooser([None, os.path.abspath(os.path.join(self.cocotb_path, ".."))])
-        self.verbosities_chooser = RandomChooser([None, "quiet", "normal", "debug"])
+        # self.verbosities_chooser = RandomChooser([None, "quiet", "normal", "debug"])
+        self.verbosities_chooser = RandomChooser(["debug"])
         self.compiles_chooser = RandomChooser([None, True])
         self.check_commits_chooser = RandomChooser([None, True])
         self.run_location = RandomChooser([self.cocotb_path, os.path.abspath(os.path.join(self.cocotb_path, "..", ".."))])
