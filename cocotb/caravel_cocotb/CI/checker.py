@@ -25,7 +25,7 @@ class Checker(BaseClass):
         return
 
     def get_expected_tests_dir(self):
-        # self.logger.debug(f"[get_expected_tests_dir] Checking tests exist and pass test = {self.command.test} testlist = {self.command.test_list} sim = {self.command.sim}")
+        self.logger.debug(f"[get_expected_tests_dir] Checking tests exist and pass test = {self.command.test} testlist = {self.command.test_list} sim = {self.command.sim}")
         if self.command.sim is None:
             self.logger.debug("Sim is None")
             sims = ["RTL"]

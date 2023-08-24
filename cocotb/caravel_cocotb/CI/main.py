@@ -21,7 +21,7 @@ def main():
         command = gen_run_obj.next_command()
         gen_run_obj.run_command(command)
         try:
-            checker_obj.check_command(command)
+            checker_obj.check_command(command[0])
         except ValueError:
             exit(1)
 
