@@ -6,6 +6,13 @@ on:
       - main  
       - dev
       - CI_dev
+    paths:
+      - 'cocotb/caravel_cocotb/CI/**'
+      - '.github/workflows/caravel_cocotb.yml'
+      - 'cocotb/caravel_cocotb/scripts/**'
+      - '!cocotb/caravel_cocotb/**/'  # Exclude directories within the specified directory
+
+
   pull_request:
 
 jobs:
