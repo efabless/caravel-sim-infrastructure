@@ -3,9 +3,7 @@ name: Caravel Cocotb CI
 on:
   push:
     branches:
-      - main  
-      - dev
-      - CI_dev
+      - *
     paths:
       - 'cocotb/caravel_cocotb/CI/**'
       - '.github/workflows/caravel_cocotb.yml'
