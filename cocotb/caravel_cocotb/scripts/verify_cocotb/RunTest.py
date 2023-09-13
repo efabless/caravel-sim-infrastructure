@@ -181,27 +181,6 @@ class RunTest:
         self.vcs_dirs = ' '
         if self.test.sim == "RTL":
             self.vcs_dirs += f'+incdir+\\"{self.paths.USER_PROJECT_ROOT}/verilog/rtl\\" '
-            shutil.copyfile(
-                f"{self.paths.VERILOG_PATH}/includes/rtl_caravel_vcs.v",
-                f"{self.test.compilation_dir}/includes.v",
-            )
-        else:
-            shutil.copyfile(
-                f"{self.paths.VERILOG_PATH}/includes/gl_caravel_vcs.v",
-                f"{self.test.compilation_dir}/includes.v",
-            )
-            if self.test.sim == "GL_SDF":
-                self.vcs_dirs += f'+incdir+\\"{self.paths.MCW_ROOT}/verilog/\\" '
-        change_str(
-            str='"caravel/verilog',
-            new_str=f'"{self.paths.CARAVEL_PATH}',
-            file_path=f"{self.test.compilation_dir}/includes.v",
-        )
-        change_str(
-            str='"caravel_mgmt_soc_litex/verilog',
-            new_str=f'"{self.paths.VERILOG_PATH}',
-            file_path=f"{self.test.compilation_dir}/includes.v",
-        )
         self.test.set_user_project()
 
     def vcs_compile(self):
