@@ -401,7 +401,11 @@ class RunRegression:
 
         sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/user_project_wrapper/primetime/sdf"
+        user_project_name = "user_project_wrapper"
+        sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
+        if not os.path.exists(sdf_user_project): # so special case for openframe maybe change it in the future
+            user_project_name = "openframe_project_wrapper"
+            sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
 
         # check if user sdf dir exists 
         if os.path.exists(sdf_user_dir) and os.path.isdir(sdf_user_dir) and len(os.listdir(sdf_user_dir)) > 0:
@@ -412,7 +416,7 @@ class RunRegression:
             start_time = time.time()
             sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
             sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/user_project_wrapper.{sdf_prefix2}.sdf"]
+            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
             for output_file in output_files:
                 compress_file = output_file + ".gz"
                 # delete output file if exists 
