@@ -129,8 +129,8 @@ class Test:
         self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
         if self.local_macros is not None or self.args.compile:
             self.compilation_dir = self.test_dir
-        else: 
-            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/compilation"
+        else:
+            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.sim}-compilation"
         # remove if already exists
         if os.path.isdir(self.test_dir):
             shutil.rmtree(self.test_dir)
