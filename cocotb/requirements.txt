@@ -6,3 +6,4 @@ PrettyTable==3.8.0
 anytree==2.9.0
 PyYAML==6.0.1
 tabulate==0.9.0
+ruamel.yaml==0.17.21
