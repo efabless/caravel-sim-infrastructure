@@ -26,7 +26,10 @@ class SetupEnv(BaseClass):
 
     def download_sky130_pdk(self, pdk_version):
         self.logger.info(f"download sky130 pdk with pdk version = {pdk_version}")
-        volare.enable(pdk_root=self.paths.pdk_root, pdk="sky130", version=pdk_version)
+        try:
+            volare.enable(pdk_root=self.paths.pdk_root, pdk="sky130", version=pdk_version)
+        except Exception as e:
+            raise RuntimeError(f"Error occurred while downloading pdk: {e}")
 
     def clone_repo(self, repo_url, target_dir, branch=None, commit=None, depth=None):
         if not os.path.exists(target_dir):
@@ -44,10 +47,12 @@ class SetupEnv(BaseClass):
 
         self.logger.info(f"Cloning new repo using command: {clone_command}")
 
-        subprocess.run(clone_command, check=True)
-
-        if commit:
-            self.checkout_commit(target_dir, commit)
+        try:
+            subprocess.run(clone_command, check=True)
+            if commit:
+                self.checkout_commit(target_dir, commit)
+        except Exception as e:
+            raise RuntimeError(f"Error occurred while cloning repo: {e}")
 
     def checkout_commit(self, repo_dir, commit):
         subprocess.run(["git", "checkout", commit], cwd=repo_dir, check=True)
