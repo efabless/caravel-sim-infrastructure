@@ -12,7 +12,7 @@ class SetupEnv(BaseClass):
         self.pull_cocotb_docker()
 
     def clone_needed_repos(self):
-        self.clone_repo(repo_url="https://github.com/efabless/caravel.git", target_dir=self.paths.caravel_root, depth=1, branch="duplicate_declaration")
+        self.clone_repo(repo_url="https://github.com/efabless/caravel.git", target_dir=self.paths.caravel_root, depth=1, branch="main")
         self.clone_repo(repo_url="https://github.com/M0stafaRady/caravel_cocotb_tests.git", target_dir=self.paths.user_project_root, depth=1, branch="cocotb-CI")
         self.clone_repo(repo_url="https://github.com/efabless/caravel_mgmt_soc_litex.git", target_dir=self.paths.mgmt_core_root, depth=1, branch="cooctb")
         self.download_sky130_pdk("e3b630d9b7c0e23615367d52c4f78b2d2ede58ac")
