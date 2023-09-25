@@ -31,8 +31,8 @@ class RunTest:
 
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-g -march=rv32i_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
-        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.FIRMWARE_PATH}/APIs -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
-        includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
+        includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.FIRMWARE_PATH}/APIs -I{self.paths.FIRMWARE_PATH}/generated "
+        includes += f" -I{self.paths.COCOTB_ROOT} "
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
             f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}"
@@ -70,7 +70,7 @@ class RunTest:
         else:
             command = self.hex_riscv_command_gen()
 
-        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
+        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
         docker_dir = (docker_dir + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
         docker_command = self.docker_command_str(docker_image="efabless/dv:cocotb", docker_dir=docker_dir, command=command)
         # don't run with docker with arm
@@ -95,7 +95,7 @@ class RunTest:
         if test_name is None:
             test_name = self.test.name
         c_file_name = test_name + ".c"
-        tests_path_user = os.path.abspath(f"{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb")
+        tests_path_user = self.paths.COCOTB_ROOT
         test_file = self.find(c_file_name, tests_path_user)
         test_path = os.path.dirname(test_file)
         return test_path
@@ -129,7 +129,7 @@ class RunTest:
         compile_command = (
             f"cd {self.test.compilation_dir} &&"
             f"iverilog -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
-            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v -s caravel_top"
+            f" {self.paths.CARAVEL_ROOT}/common/verilog/rtl/toplevel_cocotb.v -s caravel_top"
         )
         docker_compilation_command = self._iverilog_docker_command_str(compile_command)
         self.run_command_write_to_file(
@@ -153,10 +153,10 @@ class RunTest:
 
     def _iverilog_docker_command_str(self, command=""):
         """the docker command without the command that would run"""
-        env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
+        env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_ROOT={self.paths.CARAVEL_ROOT} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
         local_caravel_cocotb_path = caravel_cocotb.__file__.replace("__init__.py", "")
         docker_caravel_cocotb_path = "/usr/local/lib/python3.8/dist-packages/caravel_cocotb/"
-        docker_dir = f"-v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} -v {local_caravel_cocotb_path}:{docker_caravel_cocotb_path} "
+        docker_dir = f"-v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} -v {local_caravel_cocotb_path}:{docker_caravel_cocotb_path} "
         docker_dir += (f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
         if os.path.exists("/mnt/scratch/"):
             docker_dir += " -v /mnt/scratch/cocotb_runs/:/mnt/scratch/cocotb_runs/ "
@@ -187,7 +187,7 @@ class RunTest:
         macros = " +define+" + " +define+".join(self.test.macros)        
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
-        vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
+        vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_ROOT}/common/verilog/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
         self.run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
         lint = "+lint=all" if self.args.lint else ""
         ignored_errors = " -error=noZMMCM "

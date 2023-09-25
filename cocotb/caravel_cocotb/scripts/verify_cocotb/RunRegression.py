@@ -43,16 +43,15 @@ class RunRegression:
             f'RUN_PATH=\\"{self.paths.RUN_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
             f'CARAVEL_ROOT=\\"{self.paths.CARAVEL_ROOT}\\"',
-            f'MCW_ROOT=\\"{self.paths.MCW_ROOT}\\"',
             f'USER_PROJECT_ROOT=\\"{self.paths.USER_PROJECT_ROOT}\\"',
+            f'COCOTB_ROOT=\\"{self.paths.COCOTB_ROOT}\\"',
         ]
 
         paths_macros.append(f'SIM_PATH=\\"{self.paths.SIM_PATH}/\\"')
         if self.args.pdk != "gf180":
             simulation_macros.append("FUNCTIONAL")
 
-        if self.args.caravan:
-            simulation_macros.append("CARAVAN")
+        simulation_macros.append(self.args.design_type.upper())
         # don't dumb waves if tests are more than 10
         if not self.args.no_wave and len(self.tests) < 10:
             simulation_macros.append("WAVE_GEN")
@@ -253,29 +252,6 @@ class RunRegression:
             ).stdout
         )
 
-        f.write(f"\n\n{'#'*4} Caravel Managment repo info {'#'*4}\n")
-        url = "https://github.com/" + f"{run(f'cd {self.paths.MCW_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
-            "git@github.com:", ""
-        ).replace(
-            ".git", ""
-        )
-        repo = f"Repo: {run(f'cd {self.paths.MCW_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(
-            "\n", " "
-        )
-        f.write(f"{repo}\n")
-        f.write(
-            f"Branch name: {run(f'cd {self.paths.MCW_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}"
-        )
-        f.write(
-            run(
-                f"cd {self.paths.MCW_ROOT};git show --quiet HEAD",
-                stdout=PIPE,
-                stderr=PIPE,
-                universal_newlines=True,
-                shell=True,
-            ).stdout
-        )
-
         f.write(f"\n\n{'#'*4} User repo info {'#'*4}\n")
         url = "https://github.com/" + f"{run(f'cd {self.paths.USER_PROJECT_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
             "git@github.com:", ""
@@ -399,8 +375,8 @@ class RunRegression:
         else:
             corners = self.args.corner
 
-        sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
+        sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{self.args.design_type}/primetime/sdf"
+        sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{self.args.design_type}/primetime/sdf"
         user_project_name = "user_project_wrapper"
         sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
         if not os.path.exists(sdf_user_project): # so special case for openframe maybe change it in the future
@@ -416,7 +392,7 @@ class RunRegression:
             start_time = time.time()
             sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
             sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
+            output_files = [f"{sdf_dir}/{sdf_prefix1}/{self.args.design_type}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
             for output_file in output_files:
                 compress_file = output_file + ".gz"
                 # delete output file if exists 

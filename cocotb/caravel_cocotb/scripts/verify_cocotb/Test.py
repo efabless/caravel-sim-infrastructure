@@ -72,10 +72,15 @@ class Test:
             )  # using debug register in this test isn't needed
 
     def set_user_project(self):
-        if self.sim == "RTL":
-            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
+        if self.args.is_user_project:
+            if self.sim == "RTL":
+                user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
+            elif self.sim == "GL":
+                user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
+            elif self.sim == "GL_SDF":
+                user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl+sdf.caravel_user_project"
         else:
-            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
+            user_include = f"{self.paths.CARAVEL_ROOT}/verify/dv/cocotb/includes/user.include"
         user_project = f" -f {user_include}"
         self.write_includes_file(user_include)
         return user_project.replace("\n", "")
@@ -214,7 +219,6 @@ class Test:
             command += f" -seed {self.get_seed()} "
         rerun_script = rerun_script_template
         rerun_script = rerun_script.replace("replace by test command", command).replace("replace by cocotb path", self.paths.RUN_PATH)
-        rerun_script = rerun_script.replace("replace by mgmt Root", self.paths.MCW_ROOT)
         rerun_script = rerun_script.replace("replace by caravel Root", self.paths.CARAVEL_ROOT)
         rerun_script = rerun_script.replace("replace by orignal rerun script", f"{self.test_dir}/rerun.py")
         rerun_script = rerun_script.replace("replace by new rerun script", f"{self.test_dir}/rerun/{self.full_name}/rerun.py")
@@ -225,7 +229,7 @@ class Test:
         f = open(f"{self.test_dir}/module_trail.py", "w")
         f.write("from os import path\n")
         f.write("import sys\n")
-        f.write(f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n")
+        f.write(f"sys.path.append(path.abspath('{self.paths.COCOTB_ROOT}'))\nfrom cocotb_tests import *\n")
 
     def set_linker_script(self):
         linker_script_orginal = (
@@ -274,12 +278,14 @@ class Test:
         paths = self.convert_list_to_include(file)
         # write to include file in the top of the file
         self.includes_file = f"{self.compilation_dir}/includes.v"
+        design_type = self.args.design_type
         if self.sim == "RTL":
-            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel")
+            includes = self.convert_list_to_include(f"{self.paths.INCLUDES_PATH}/{design_type}/{design_type}.rtl")
         elif self.sim == "GL_SDF":
-            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel")
+            includes = self.convert_list_to_include(f"{self.paths.INCLUDES_PATH}/{design_type}/{design_type}.gl+sdf")
         elif self.sim == "GL":
-            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel")
+            includes = self.convert_list_to_include(f"{self.paths.INCLUDES_PATH}/{design_type}/{design_type}.gl")
+        includes += self.convert_list_to_include(f"{self.paths.INCLUDES_PATH}/pdk/pdk.hdl")
         includes = paths + includes
         open(self.includes_file, "w").write(includes)
         move_defines_to_start(self.includes_file, 'defines.v"')
@@ -287,11 +293,12 @@ class Test:
         paths = open(file, "r").read()
         self.includes_list = f"{self.compilation_dir}/includes"
         if self.sim == "RTL":
-            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel", 'r').read()
+            includes = open(f"{self.paths.INCLUDES_PATH}/{design_type}/caravel.rtl", 'r').read()
         elif self.sim == "GL_SDF":
-            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel", 'r').read()
+            includes = open(f"{self.paths.INCLUDES_PATH}/{design_type}/{design_type}.gl+sdf", 'r').read()
         elif self.sim == "GL":
-            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", 'r').read()
+            includes = open(f"{self.paths.INCLUDES_PATH}/{design_type}/{design_type}.gl", 'r').read()
+        includes += open(f"{self.paths.INCLUDES_PATH}/pdk/pdk.hdl", 'r').read()
         includes = paths + includes
         open(self.includes_list, "w").write(includes)
         move_defines_to_start(self.includes_list, 'defines.v')
@@ -304,9 +311,7 @@ class Test:
                 line = line.strip()
                 # Check if line is not empty or a comment
                 if line and not line.startswith("#"):
-                    # Replace $(VERILOG_PATH) with actual path
-                    line = line.replace("$(VERILOG_PATH)", self.paths.VERILOG_PATH)
-                    line = line.replace("$(CARAVEL_PATH)", self.paths.CARAVEL_PATH)
+                    line = line.replace("$(CARAVEL_TOP)", self.paths.CARAVEL_ROOT)
                     line = line.replace(
                         "$(USER_PROJECT_VERILOG)",
                         f"{self.paths.USER_PROJECT_ROOT}/verilog",
