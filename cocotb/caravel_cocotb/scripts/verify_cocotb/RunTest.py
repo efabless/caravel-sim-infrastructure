@@ -19,7 +19,7 @@ class RunTest:
             self.runTest()
         self.test.end_of_test()
 
-    def docker_command_str(self, docker_image="efabless/dv:cocotb", docker_dir="", env_vars="", addtional_switchs="", command=""):
+    def docker_command_str(self, docker_image="efabless/dv:cocotb_trial", docker_dir="", env_vars="", addtional_switchs="", command=""):
         command = f"docker run {' --init -it --sig-proxy=true ' if not self.args.CI else ' ' } -u $(id -u $USER):$(id -g $USER) {addtional_switchs} {env_vars} {docker_dir} {docker_image} sh -ec '{command}'"
         return command
 
@@ -72,7 +72,7 @@ class RunTest:
 
         docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
         docker_dir = (docker_dir + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
-        docker_command = self.docker_command_str(docker_image="efabless/dv:cocotb", docker_dir=docker_dir, command=command)
+        docker_command = self.docker_command_str(docker_image="efabless/dv:cocotb_trial", docker_dir=docker_dir, command=command)
         # don't run with docker with arm
         cmd = command if self.args.cpu_type == "ARM" else docker_command
         hex_gen_state = self.run_command_write_to_file(cmd, self.test.hex_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
@@ -161,7 +161,7 @@ class RunTest:
         if os.path.exists("/mnt/scratch/"):
             docker_dir += " -v /mnt/scratch/cocotb_runs/:/mnt/scratch/cocotb_runs/ "
         display = " -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/.Xauthority --network host --security-opt seccomp=unconfined "
-        command = self.docker_command_str(docker_image="efabless/dv:cocotb", docker_dir=docker_dir, env_vars=env_vars, addtional_switchs=display, command=command)
+        command = self.docker_command_str(docker_image="efabless/dv:cocotb_trial", docker_dir=docker_dir, env_vars=env_vars, addtional_switchs=display, command=command)
         return command
 
     # vcs function
