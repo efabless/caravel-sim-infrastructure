@@ -121,14 +121,14 @@ class RunTest:
 
     def write_iverilog_includes_file(self):
         self.iverilog_dirs = " "
-        # self.iverilog_dirs += f'-I {self.paths.USER_PROJECT_ROOT}/verilog/rtl'
+        self.iverilog_dirs += f'-I {self.paths.USER_PROJECT_ROOT}/verilog/rtl'
         self.test.set_user_project()
 
     def iverilog_compile(self):
         macros = " -D" + " -D".join(self.test.macros)
         compile_command = (
             f"cd {self.test.compilation_dir} &&"
-            f"iverilog -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
+            f"iverilog -g2012 -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
             f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v -s caravel_top"
         )
         docker_compilation_command = self._iverilog_docker_command_str(compile_command)
