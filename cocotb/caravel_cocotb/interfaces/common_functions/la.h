@@ -25,9 +25,9 @@ enum la_reg_number {
                 };
 #endif //DOXYGEN_DOCS_ONLY
 /**
- * Setting logic analyzer input enable 
+ * Setting logic analyzer input enable. High to enable. 
  * 
- * Enable as input to the user project. firmware sends to user project
+ * Enable as input from the user project to the firmware.
  *   
  * @param reg_num logic analyzer register to write to. 
  * Usually not all caravel versions has the same numbers of LA registers 
@@ -51,9 +51,9 @@ void LogicAnalyzer_inputEnable(enum la_reg_number reg_num , unsigned int is_enab
     }
 }
 /**
- * Setting logic analyzer output enable 
+ * Setting logic analyzer output enable. Low to enable.
  * 
- * Enable as output from the user project. firmware receives from user project
+ * Enable as output from the firmware to the user project.
  * 
  *  
  * @param reg_num logic analyzer register to write to. 
