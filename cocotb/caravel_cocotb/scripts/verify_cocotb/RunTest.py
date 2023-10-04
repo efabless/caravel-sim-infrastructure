@@ -30,7 +30,8 @@ class RunTest:
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
 
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
-        CPUFLAGS = "-g -march=rv32i_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
+        CPUFLAGS = "-O2 -g -march=rv32im_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
+        # CPUFLAGS = "-O2 -g -march=rv32imc_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.FIRMWARE_PATH}/APIs -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
         includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
         elf_command = (
@@ -47,7 +48,7 @@ class RunTest:
         SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/cm0_start.s"
         LINKER_SCRIPT = f"-T {self.test.linker_script_file}"
         CPUFLAGS = "-O2 -Wall -nostdlib -nostartfiles -ffreestanding -mcpu=cortex-m0 -Wno-unused-value"
-        includes = f"-I{self.paths.FIRMWARE_PATH}"
+        includes = f"-I{self.paths.FIRMWARE_PATH} -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb"
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
             f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}"
@@ -121,14 +122,14 @@ class RunTest:
 
     def write_iverilog_includes_file(self):
         self.iverilog_dirs = " "
-        # self.iverilog_dirs += f'-I {self.paths.USER_PROJECT_ROOT}/verilog/rtl'
+        self.iverilog_dirs += f'-I {self.paths.USER_PROJECT_ROOT}/verilog/rtl'
         self.test.set_user_project()
 
     def iverilog_compile(self):
         macros = " -D" + " -D".join(self.test.macros)
         compile_command = (
             f"cd {self.test.compilation_dir} &&"
-            f"iverilog -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
+            f"iverilog -g2012 -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
             f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v -s caravel_top"
         )
         docker_compilation_command = self._iverilog_docker_command_str(compile_command)
