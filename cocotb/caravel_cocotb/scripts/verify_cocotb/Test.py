@@ -130,7 +130,7 @@ class Test:
         if self.local_macros is not None or self.args.compile:
             self.compilation_dir = self.test_dir
         else:
-            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.sim}-compilation"
+            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.sim}-compilation{f'-{self.corner}' if self.sim=='GL_SDF' else ''}"
         # remove if already exists
         if os.path.isdir(self.test_dir):
             shutil.rmtree(self.test_dir)
