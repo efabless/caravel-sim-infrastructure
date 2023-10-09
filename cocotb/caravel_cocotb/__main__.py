@@ -89,6 +89,7 @@ def main():
     )
     parser.add_argument("--run_defaults", action="store_true", help=argparse.SUPPRESS) # this used to run the default tests the flag is hidden because it just used with caravel verification flow
     parser.add_argument("--CI", action="store_true", help=argparse.SUPPRESS)   #used only for CI to run docker in non interactive mode
+    parser.add_argument("-no_gen_defaults", action="store_true",  help="don't run gen_gpio_defaults script")
 
     args = parser.parse_args()
     # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  caravan emailto seed no_wave clk lint arm sdf_setup")

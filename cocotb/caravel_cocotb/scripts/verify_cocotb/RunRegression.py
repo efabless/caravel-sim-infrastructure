@@ -32,6 +32,7 @@ class RunRegression:
         self.get_tests()
         self.set_common_macros()
         self.unzip_sdf_files()
+        self.run_defaults_script()
         self.run_regression()
         self.send_mail()
 
@@ -157,7 +158,6 @@ class RunRegression:
                         data["sim_type"] = test["sim"]
                     if "corner" in test:
                         data["corner"] = test["corner"]
-
                     if "macros" in test:
                         data["macros"] = test["macros"]
                     self.add_new_test(**data)
@@ -165,6 +165,17 @@ class RunRegression:
                     if data["sim_type"] not in self.args.sim:
                         self.args.sim.append(data["sim_type"])
 
+    def run_defaults_script(self):
+        if not ("GL_SDF" in self.args.sim or "GL" in self.args.sim):
+            return
+        if self.args.no_gen_defaults:
+            return
+        current_dir = os.getcwd()
+        os.chdir(f"{self.paths.CARAVEL_ROOT}/")
+        self.logger.info("Running gen_gpio_defaults script")
+        os.system(f"python3 scripts/gen_gpio_defaults.py {self.paths.USER_PROJECT_ROOT}")
+        os.chdir(current_dir)
+            
     def run_regression(self):
         # threads = list()
         for test in self.tests:            

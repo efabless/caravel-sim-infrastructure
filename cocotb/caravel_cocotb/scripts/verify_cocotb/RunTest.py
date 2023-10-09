@@ -80,7 +80,7 @@ class RunTest:
         self.firmware_log = open(self.test.hex_log, "a")
         if hex_gen_state != 0:
             # open(self.test.firmware_log, "w").write(stdout)
-            self.logger.error(
+            raise RuntimeError(
                 f"{bcolors.FAIL}Error:{bcolors.ENDC} Fail to compile the C code for more info refer to {bcolors.OKCYAN }{self.test.hex_log}{bcolors.ENDC } "
             )
             self.firmware_log.write("Error: when generating hex")
@@ -111,7 +111,7 @@ class RunTest:
     # iverilog function
     def runTest_iverilog(self):
         if self.test.sim == "GL_SDF":
-            self.logger.error(
+            raise RuntimeError(
                 f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc"
             )
             return
@@ -214,7 +214,7 @@ class RunTest:
         for root, dirs, files in os.walk(path):
             if name in files:
                 return os.path.join(root, name)
-        self.logger.error(f"Test {name} doesn't exist or don't have a C file ")
+        raise RuntimeError(f"Test {name} doesn't exist or don't have a C file ")
 
     def run_command_write_to_file(self, cmd, file, logger, quiet=True):
         """run command and write output to file return 0 if no error"""
