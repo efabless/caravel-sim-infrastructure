@@ -6,7 +6,7 @@ requirements = open("requirements.txt").read().strip().split("\n")
 setup(
     name="caravel_cocotb",
     packages=find_packages(),
-    version="1.2.1",
+    version="1.2.2",
     description="efabless caravel cocotb verification flow.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
