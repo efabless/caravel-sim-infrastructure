@@ -3,3 +3,4 @@ cocotb
 oyaml
 breathe 
 cocotb_coverage
+sphinx_rtd_theme
