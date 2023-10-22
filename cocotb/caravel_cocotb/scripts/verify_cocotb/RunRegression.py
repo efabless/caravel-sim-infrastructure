@@ -4,7 +4,12 @@ from datetime import datetime
 import os
 import sys
 from subprocess import PIPE, run
-from caravel_cocotb.scripts.verify_cocotb.RunTest import RunTest
+try:
+    from os import path
+    sys.path.append(os.getcwd())
+    from user_run_test import UserRunTest as RunTest
+except ImportError:
+    from caravel_cocotb.scripts.verify_cocotb.RunTest import RunTest
 from caravel_cocotb.scripts.verify_cocotb.Test import Test
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -27,6 +32,7 @@ class RunRegression:
         self.get_tests()
         self.set_common_macros()
         self.unzip_sdf_files()
+        self.run_defaults_script()
         self.run_regression()
         self.send_mail()
 
@@ -34,8 +40,6 @@ class RunRegression:
         if self.args.macros is None:
             self.args.macros = list()
         simulation_macros = ["USE_POWER_PINS", "UNIT_DELAY=#1", "COCOTB_SIM"]
-        if self.args.openframe:
-            simulation_macros.append("OPENFRAME")
         paths_macros = [
             f'RUN_PATH=\\"{self.paths.RUN_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
@@ -154,7 +158,6 @@ class RunRegression:
                         data["sim_type"] = test["sim"]
                     if "corner" in test:
                         data["corner"] = test["corner"]
-
                     if "macros" in test:
                         data["macros"] = test["macros"]
                     self.add_new_test(**data)
@@ -162,6 +165,17 @@ class RunRegression:
                     if data["sim_type"] not in self.args.sim:
                         self.args.sim.append(data["sim_type"])
 
+    def run_defaults_script(self):
+        if not ("GL_SDF" in self.args.sim or "GL" in self.args.sim):
+            return
+        if self.args.no_gen_defaults:
+            return
+        current_dir = os.getcwd()
+        os.chdir(f"{self.paths.CARAVEL_ROOT}/")
+        self.logger.info("Running gen_gpio_defaults script")
+        os.system(f"python3 scripts/gen_gpio_defaults.py {self.paths.USER_PROJECT_ROOT}")
+        os.chdir(current_dir)
+            
     def run_regression(self):
         # threads = list()
         for test in self.tests:            
@@ -182,20 +196,23 @@ class RunRegression:
         #     thread.join()
         # # Coverage
         if "RTL" in self.args.sim and self.args.vcs:
-            self.logger.info("\nStart merging coverage\n")
-            self.cov_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/coverage"
-            # merge line coverage
-            old_path = os.getcwd()
-            os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
-            os.system(f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov")
-            os.chdir(old_path)
-            # merge functional coverage
-            merge_fun_cov(f"{self.paths.SIM_PATH}/{self.args.tag}", reports_path=f"{self.cov_dir}/functional_cov")
+            try:
+                self.logger.info("\nStart merging coverage\n")
+                self.cov_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/coverage"
+                # merge line coverage
+                old_path = os.getcwd()
+                os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
+                os.system(f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov")
+                os.chdir(old_path)
+                # merge functional coverage
+                merge_fun_cov(f"{self.paths.SIM_PATH}/{self.args.tag}", reports_path=f"{self.cov_dir}/functional_cov")
+            except Exception as e:
+                self.logger.error(e)
 
     def test_run_function(self, test):
         test.start_of_test()
         self.update_run_log()
-        RunTest(self.args, self.paths, test, self.logger)
+        RunTest(self.args, self.paths, test, self.logger).run_test()
         self.update_run_log()
 
     def update_run_log(self):
@@ -395,7 +412,11 @@ class RunRegression:
 
         sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/user_project_wrapper/primetime/sdf"
+        user_project_name = "user_project_wrapper"
+        sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
+        if not os.path.exists(sdf_user_project): # so special case for openframe maybe change it in the future
+            user_project_name = "openframe_project_wrapper"
+            sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
 
         # check if user sdf dir exists 
         if os.path.exists(sdf_user_dir) and os.path.isdir(sdf_user_dir) and len(os.listdir(sdf_user_dir)) > 0:
@@ -406,7 +427,7 @@ class RunRegression:
             start_time = time.time()
             sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
             sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/user_project_wrapper.{sdf_prefix2}.sdf"]
+            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
             for output_file in output_files:
                 compress_file = output_file + ".gz"
                 # delete output file if exists 

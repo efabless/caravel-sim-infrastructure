@@ -381,3 +381,4 @@ class SPI:
         WRITE_READ = 0xC0
         USER_PASS_THRU = 0x02
         MGMT_PATH_THRU = 0xC4
+

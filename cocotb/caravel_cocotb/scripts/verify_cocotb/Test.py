@@ -76,18 +76,8 @@ class Test:
             user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
         else:
             user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
-
         user_project = f" -f {user_include}"
         self.write_includes_file(user_include)
-        if self.args.vcs:
-            user_project = ""
-            lines = open(user_include, "r").readlines()
-            for line in lines:
-                if line.startswith("-v"):
-                    user_project += line.replace(
-                        "$(USER_PROJECT_VERILOG)",
-                        f"{self.paths.USER_PROJECT_ROOT}/verilog",
-                    ) + " "
         return user_project.replace("\n", "")
 
     def start_of_test(self):
@@ -139,8 +129,8 @@ class Test:
         self.test_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.full_name}"
         if self.local_macros is not None or self.args.compile:
             self.compilation_dir = self.test_dir
-        else: 
-            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/compilation"
+        else:
+            self.compilation_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/{self.sim}-compilation{f'-{self.corner}' if self.sim=='GL_SDF' else ''}"
         # remove if already exists
         if os.path.isdir(self.test_dir):
             shutil.rmtree(self.test_dir)
@@ -284,29 +274,27 @@ class Test:
         paths = self.convert_list_to_include(file)
         # write to include file in the top of the file
         self.includes_file = f"{self.compilation_dir}/includes.v"
-        if self.args.vcs:
-            includes = open(self.includes_file, 'r').read()
-        else:
-            if self.sim == "RTL":
-                includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/{'includes.rtl.caravel' if not self.args.openframe else 'includes.rtl.openframe'}")
-            elif self.sim == "GL":
-                includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel")
+        if self.sim == "RTL":
+            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel")
+        elif self.sim == "GL_SDF":
+            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel")
+        elif self.sim == "GL":
+            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel")
         includes = paths + includes
         open(self.includes_file, "w").write(includes)
         move_defines_to_start(self.includes_file, 'defines.v"')
-      
-        if self.args.iverilog:
-            # when running with iverilog add includes list also
-            paths = open(file, "r").read()
-            self.includes_list = f"{self.compilation_dir}/includes"
-            if self.sim == "RTL":
-                includes = open(f"{self.paths.VERILOG_PATH}/includes/{'includes.rtl.caravel' if not self.args.openframe else 'includes.rtl.openframe'}", 'r').read()
-            elif self.sim == "GL":
-                includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", 'r').read()
-            includes = paths + includes
-            open(self.includes_list, "w").write(includes)
-            move_defines_to_start(self.includes_list, 'defines.v')
-        
+        # copy includes used also
+        paths = open(file, "r").read()
+        self.includes_list = f"{self.compilation_dir}/includes"
+        if self.sim == "RTL":
+            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel", 'r').read()
+        elif self.sim == "GL_SDF":
+            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel", 'r').read()
+        elif self.sim == "GL":
+            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", 'r').read()
+        includes = paths + includes
+        open(self.includes_list, "w").write(includes)
+        move_defines_to_start(self.includes_list, 'defines.v')
 
     def convert_list_to_include(self, file):
         paths = ""
