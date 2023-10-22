@@ -79,6 +79,7 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#P"><strong>P</strong></a>
@@ -95,26 +96,24 @@
       <li><a href="python_api.html#interfaces.caravel.Caravel_env">Caravel_env (class in interfaces.caravel)</a>
 </li>
   </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv419configure_all_gpios9gpio_mode">configure_all_gpios (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv414configure_gpioi9gpio_mode">configure_gpio (C++ function)</a>
-</li>
-  </ul></td>
 </tr></table>
 
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.disable_csb">disable_csb() (interfaces.caravel.Caravel_env method)</a>
+
+      <ul>
+        <li><a href="python_api.html#interfaces.SPI.SPI.disable_csb">(interfaces.SPI.SPI method)</a>
 </li>
-      <li><a href="python_api.html#interfaces.caravel.Caravel_env.drive_gpio_in">drive_gpio_in() (interfaces.caravel.Caravel_env method)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api.html#interfaces.caravel.Caravel_env.drive_gpio_in">drive_gpio_in() (interfaces.caravel.Caravel_env method)</a>
+</li>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.drive_mgmt_gpio">drive_mgmt_gpio() (interfaces.caravel.Caravel_env method)</a>
 </li>
-      <li><a href="C_api.html#_CPPv411dummy_delayi">dummy_delay (C++ function)</a>
+      <li><a href="C_api.html#_CPPv410dummyDelayi">dummyDelay (C++ function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -122,33 +121,15 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv49enable_CSb">enable_CS (C++ function)</a>
-</li>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.enable_csb">enable_csb() (interfaces.caravel.Caravel_env method)</a>
+
+      <ul>
+        <li><a href="python_api.html#interfaces.SPI.SPI.enable_csb">(interfaces.SPI.SPI method)</a>
 </li>
-      <li><a href="C_api.html#_CPPv420enable_external1_irqb">enable_external1_irq (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv420enable_external2_irqb">enable_external2_irq (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv413enable_hk_spib">enable_hk_spi (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv417enable_hk_spi_irqb">enable_hk_spi_irq (C++ function)</a>
-</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv410enable_spib">enable_spi (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv413enable_timer0b">enable_timer0 (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv417enable_timer0_irqb">enable_timer0_irq (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv418enable_uart_rx_irqb">enable_uart_rx_irq (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv414enable_uart_TXb">enable_uart_TX (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv418enable_uart_tx_irqb">enable_uart_tx_irq (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv421enable_user_interfacev">enable_user_interface (C++ function)</a>
+      <li><a href="C_api.html#_CPPv411enableHkSpib">enableHkSpi (C++ function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -160,21 +141,65 @@
 </li>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.get_clock_obj">get_clock_obj() (interfaces.caravel.Caravel_env method)</a>
 </li>
-      <li><a href="C_api.html#_CPPv410get_gpio_hv">get_gpio_h (C++ function)</a>
+      <li><a href="python_api.html#interfaces.caravel.Caravel_env.get_clock_period">get_clock_period() (interfaces.caravel.Caravel_env method)</a>
 </li>
-      <li><a href="C_api.html#_CPPv410get_gpio_lv">get_gpio_l (C++ function)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv410get_la_reg13la_reg_number">get_la_reg (C++ function)</a>
+      <li><a href="python_api.html#interfaces.UART.UART.get_int">get_int() (interfaces.UART.UART method)</a>
 </li>
       <li><a href="python_api.html#interfaces.UART.UART.get_line">get_line() (interfaces.UART.UART method)</a>
 </li>
-      <li><a href="C_api.html#_CPPv414get_timer0_valv">get_timer0_val (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv416gpio_config_loadv">gpio_config_load (C++ function)</a>
-</li>
       <li><a href="C_api.html#_CPPv49gpio_mode">gpio_mode (C++ enum)</a>
+</li>
+      <li><a href="C_api.html#_CPPv415GPIOs_configurei9gpio_mode">GPIOs_configure (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv418GPIOs_configureAll9gpio_mode">GPIOs_configureAll (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv417GPIOs_loadConfigsv">GPIOs_loadConfigs (C++ function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="C_api.html#_CPPv414GPIOs_readHighv">GPIOs_readHigh (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413GPIOs_readLowv">GPIOs_readLow (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv414GPIOs_waitHighj">GPIOs_waitHigh (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv422GPIOs_waitHighWithMaskjj">GPIOs_waitHighWithMask (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413GPIOs_waitLowj">GPIOs_waitLow (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv421GPIOs_waitLowWithMaskjj">GPIOs_waitLowWithMask (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv415GPIOs_writeHighj">GPIOs_writeHigh (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv414GPIOs_writeLowj">GPIOs_writeLow (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv418GPIOs_writeLowHighl">GPIOs_writeLowHigh (C++ function)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="C_api.html#_CPPv419IRQ_enableExternal1b">IRQ_enableExternal1 (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv419IRQ_enableExternal2b">IRQ_enableExternal2 (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv415IRQ_enableTimerb">IRQ_enableTimer (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv416IRQ_enableUartRxb">IRQ_enableUartRx (C++ function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="C_api.html#_CPPv416IRQ_enableUartTxb">IRQ_enableUartTx (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv415IRQ_enableUser0b">IRQ_enableUser0 (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv415IRQ_enableUser1b">IRQ_enableUser1 (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv415IRQ_enableUser2b">IRQ_enableUser2 (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv49IRQ_hkSpib">IRQ_hkSpi (C++ function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -184,29 +209,51 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="C_api.html#_CPPv413la_reg_number">la_reg_number (C++ enum)</a>
 </li>
+      <li><a href="C_api.html#_CPPv425LogicAnalyzer_inputEnable13la_reg_numberj">LogicAnalyzer_inputEnable (C++ function)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="C_api.html#_CPPv426LogicAnalyzer_outputEnable13la_reg_numberj">LogicAnalyzer_outputEnable (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv418LogicAnalyzer_read13la_reg_number">LogicAnalyzer_read (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv419LogicAnalyzer_write13la_reg_numberj">LogicAnalyzer_write (C++ function)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv418mgmt_gpio_i_enablev">mgmt_gpio_i_enable (C++ function)</a>
+      <li><a href="C_api.html#_CPPv421ManagmentGpio_disablev">ManagmentGpio_disable (C++ function)</a>
 </li>
-      <li><a href="C_api.html#_CPPv420mgmt_gpio_io_disablev">mgmt_gpio_io_disable (C++ function)</a>
+      <li><a href="C_api.html#_CPPv425ManagmentGpio_inputEnablev">ManagmentGpio_inputEnable (C++ function)</a>
 </li>
-      <li><a href="C_api.html#_CPPv419mgmt_gpio_io_enablev">mgmt_gpio_io_enable (C++ function)</a>
+      <li><a href="C_api.html#_CPPv422ManagmentGpio_ioEnablev">ManagmentGpio_ioEnable (C++ function)</a>
 </li>
-      <li><a href="C_api.html#_CPPv418mgmt_gpio_o_enablev">mgmt_gpio_o_enable (C++ function)</a>
+      <li><a href="C_api.html#_CPPv426ManagmentGpio_outputEnablev">ManagmentGpio_outputEnable (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv418ManagmentGpio_readv">ManagmentGpio_read (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv418ManagmentGpio_waitb">ManagmentGpio_wait (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv419ManagmentGpio_writeb">ManagmentGpio_write (C++ function)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv412mgmt_gpio_rdv">mgmt_gpio_rd (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv412mgmt_gpio_wrb">mgmt_gpio_wr (C++ function)</a>
+      <li><a href="python_api.html#interfaces.caravel.Caravel_env.monitor_discontinuous_gpios">monitor_discontinuous_gpios() (interfaces.caravel.Caravel_env method)</a>
 </li>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.monitor_gpio">monitor_gpio() (interfaces.caravel.Caravel_env method)</a>
 </li>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.monitor_mgmt_gpio">monitor_mgmt_gpio() (interfaces.caravel.Caravel_env method)</a>
+</li>
+      <li><a href="C_api.html#_CPPv411MSPI_enableb">MSPI_enable (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413MSPI_enableCSb">MSPI_enableCS (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv49MSPI_readv">MSPI_read (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv410MSPI_writec">MSPI_write (C++ function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -222,14 +269,18 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv414read_user_bytejh">read_user_byte (C++ function)</a>
+      <li><a href="python_api.html#interfaces.SPI.SPI.read_reg_spi">read_reg_spi() (interfaces.SPI.SPI method)</a>
 </li>
-      <li><a href="C_api.html#_CPPv421read_user_double_wordi">read_user_double_word (C++ function)</a>
+      <li><a href="python_api.html#interfaces.SPI.SPI.read_reg_spi_nbytes">read_reg_spi_nbytes() (interfaces.SPI.SPI method)</a>
 </li>
-      <li><a href="C_api.html#_CPPv414read_user_wordjb">read_user_word (C++ function)</a>
+      <li><a href="python_api.html#interfaces.SPI.SPI.read_write_reg_spi">read_write_reg_spi() (interfaces.SPI.SPI method)</a>
+</li>
+      <li><a href="python_api.html#interfaces.SPI.SPI.reg_spi_op">reg_spi_op() (interfaces.SPI.SPI method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python_api.html#interfaces.SPI.SPI.reg_spi_user_pass_thru">reg_spi_user_pass_thru() (interfaces.SPI.SPI method)</a>
+</li>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.release_csb">release_csb() (interfaces.caravel.Caravel_env method)</a>
 </li>
       <li><a href="python_api.html#interfaces.caravel.Caravel_env.release_gpio">release_gpio() (interfaces.caravel.Caravel_env method)</a>
@@ -242,25 +293,13 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv48set_gpiol">set_gpio (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv410set_gpio_hj">set_gpio_h (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv410set_gpio_lj">set_gpio_l (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv410set_la_ien13la_reg_numberj">set_la_ien (C++ function)</a>
+      <li><a href="python_api.html#interfaces.caravel.Caravel_env.setup_clock">setup_clock() (interfaces.caravel.Caravel_env method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv410set_la_oen13la_reg_numberj">set_la_oen (C++ function)</a>
+      <li><a href="python_api.html#interfaces.SPI.SPI">SPI (class in interfaces.SPI)</a>
 </li>
-      <li><a href="C_api.html#_CPPv410set_la_reg13la_reg_numberj">set_la_reg (C++ function)</a>
-</li>
-      <li><a href="python_api.html#interfaces.caravel.Caravel_env.setup_clock">setup_clock() (interfaces.caravel.Caravel_env method)</a>
-</li>
-      <li><a href="C_api.html#_CPPv48spi_readv">spi_read (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv49spi_writec">spi_write (C++ function)</a>
+      <li><a href="python_api.html#interfaces.SPI.SPI.SPI_COMMAND">SPI.SPI_COMMAND (class in interfaces.SPI)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -268,13 +307,17 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python_api.html#test_functions.test_configure">test_configure() (in module test_functions)</a>
+      <li><a href="python_api.html#interfaces.common_functions.test_functions.test_configure">test_configure() (in module interfaces.common_functions.test_functions)</a>
+</li>
+      <li><a href="C_api.html#_CPPv423timer0_configureOneShotj">timer0_configureOneShot (C++ function)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv424timer0_oneshot_configurej">timer0_oneshot_configure (C++ function)</a>
+      <li><a href="C_api.html#_CPPv424timer0_configurePeriodicj">timer0_configurePeriodic (C++ function)</a>
 </li>
-      <li><a href="C_api.html#_CPPv425timer0_periodic_configurej">timer0_periodic_configure (C++ function)</a>
+      <li><a href="C_api.html#_CPPv413timer0_enableb">timer0_enable (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv416timer0_readValuev">timer0_readValue (C++ function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -284,17 +327,39 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python_api.html#interfaces.UART.UART">UART (class in interfaces.UART)</a>
 </li>
-      <li><a href="C_api.html#_CPPv49uart_getcv">uart_getc (C++ function)</a>
+      <li><a href="C_api.html#_CPPv413UART_enableRXb">UART_enableRX (C++ function)</a>
 </li>
-      <li><a href="C_api.html#_CPPv413uart_pop_charv">uart_pop_char (C++ function)</a>
+      <li><a href="C_api.html#_CPPv413UART_enableTXb">UART_enableTX (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv414uart_RX_enableb">uart_RX_enable (C++ function)</a>
+      <li><a href="C_api.html#_CPPv412UART_popCharv">UART_popChar (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413UART_readCharv">UART_readChar (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413UART_readLinev">UART_readLine (C++ function)</a>
 </li>
       <li><a href="python_api.html#interfaces.UART.UART.uart_send_char">uart_send_char() (interfaces.UART.UART method)</a>
 </li>
       <li><a href="python_api.html#interfaces.UART.UART.uart_send_line">uart_send_line() (interfaces.UART.UART method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="C_api.html#_CPPv413UART_sendCharc">UART_sendChar (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv412UART_sendInti">UART_sendInt (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413User_enableIFv">User_enableIF (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413USER_readBytejh">USER_readByte (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv417USER_readHalfWordjb">USER_readHalfWord (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv413USER_readWordi">USER_readWord (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv414USER_writeBytehjh">USER_writeByte (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv418USER_writeHalfWordtjb">USER_writeHalfWord (C++ function)</a>
+</li>
+      <li><a href="C_api.html#_CPPv414USER_writeWordji">USER_writeWord (C++ function)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -302,25 +367,13 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv411wait_gpio_hj">wait_gpio_h (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv418wait_gpio_h_maskedjj">wait_gpio_h_masked (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv411wait_gpio_lj">wait_gpio_l (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv418wait_gpio_l_maskedjj">wait_gpio_l_masked (C++ function)</a>
+      <li><a href="python_api.html#interfaces.caravel.Caravel_env.wait_mgmt_gpio">wait_mgmt_gpio() (interfaces.caravel.Caravel_env method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="C_api.html#_CPPv414wait_gpio_mgmtb">wait_gpio_mgmt (C++ function)</a>
+      <li><a href="python_api.html#interfaces.SPI.SPI.write_reg_spi">write_reg_spi() (interfaces.SPI.SPI method)</a>
 </li>
-      <li><a href="python_api.html#interfaces.caravel.Caravel_env.wait_mgmt_gpio">wait_mgmt_gpio() (interfaces.caravel.Caravel_env method)</a>
-</li>
-      <li><a href="C_api.html#_CPPv415write_user_bytehjh">write_user_byte (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv422write_user_double_wordji">write_user_double_word (C++ function)</a>
-</li>
-      <li><a href="C_api.html#_CPPv415write_user_wordtjb">write_user_word (C++ function)</a>
+      <li><a href="python_api.html#interfaces.SPI.SPI.write_reg_spi_nbytes">write_reg_spi_nbytes() (interfaces.SPI.SPI method)</a>
 </li>
   </ul></td>
 </tr></table>

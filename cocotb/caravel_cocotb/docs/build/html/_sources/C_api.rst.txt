@@ -50,7 +50,7 @@ UART
 .. doxygenfile:: uart_api.h
    :project: caravel_c_apis
 
-User Address Space 
+User Space 
 ------------------
-.. doxygenfile:: user_addr_space.h
+.. doxygenfile:: user_space.h
    :project: caravel_c_apis

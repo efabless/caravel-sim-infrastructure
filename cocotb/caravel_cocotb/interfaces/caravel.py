@@ -26,9 +26,7 @@ def gpio_mode(gpios_values: list):
 class Caravel_env:
     """
     Verification environment for caraval
-
     - provide APIs for monitoring and driving caravel GPIOs, power pins, clock and reset pins
-
     :param SimHandle dut: dut handle
     """
 
