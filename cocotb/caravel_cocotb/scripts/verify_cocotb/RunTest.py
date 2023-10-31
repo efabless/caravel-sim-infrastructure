@@ -124,6 +124,8 @@ class RunTest:
         self.iverilog_dirs = " "
         self.iverilog_dirs += f'-I {self.paths.USER_PROJECT_ROOT}/verilog/rtl'
         self.test.set_user_project()
+        for include_dir in self.test.include_dirs:
+            self.iverilog_dirs += f' -I {include_dir}'
 
     def iverilog_compile(self):
         macros = " -D" + " -D".join(self.test.macros)
