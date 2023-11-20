@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 from setuptools import setup, find_packages
-
+from caravel_cocotb.version import __version__
 requirements = open("requirements.txt").read().strip().split("\n")
 
 setup(
     name="caravel_cocotb",
     packages=find_packages(),
-    version="1.2.1",
+    version=__version__,
     description="efabless caravel cocotb verification flow.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
