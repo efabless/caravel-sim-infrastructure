@@ -26,9 +26,7 @@ def gpio_mode(gpios_values: list):
 class Caravel_env:
     """
     Verification environment for caraval
-
     - provide APIs for monitoring and driving caravel GPIOs, power pins, clock and reset pins
-
     :param SimHandle dut: dut handle
     """
 
@@ -64,9 +62,9 @@ class Caravel_env:
         await self.reset()
         await self.disable_bins()
 
-    async def disable_bins(self):
+    async def disable_bins(self, ignore_bins=[3, 4]):
         for i in range(self.active_gpios_num):
-            if i in [3, 4]:  # CSB and SCK
+            if i in ignore_bins:  # CSB and SCK
                 continue
             common.drive_hdl(self.dut._id(f"gpio{i}_en", False), (0, 0), 0)
         await ClockCycles(self.clk, 1)

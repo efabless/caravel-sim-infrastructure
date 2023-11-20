@@ -6,18 +6,18 @@ requirements = open("requirements.txt").read().strip().split("\n")
 setup(
     name="caravel_cocotb",
     packages=find_packages(),
-    version="1.0.0",
+    version="1.2.3",
     description="efabless caravel cocotb verification flow.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     install_requires=requirements,
     include_package_data=True,
     package_data={
-        "caravel_cocotb": ["interfaces/*","interfaces/**/*", "scripts/*", "scripts/**/*"]
+        "caravel_cocotb": ["interfaces/*","interfaces/**/*", "scripts/*", "scripts/**/*", "VIP/*", "VIP/**/*"]
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Intended Audience :: Users",
+        "Intended Audience :: Developers",
         "Operating System :: POSIX :: Linux",
         "Operating System :: MacOS :: MacOS X",
     ],

@@ -117,9 +117,6 @@ class RunFLow:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
-            # For openframe as the cpu is inside the user project the firmware files should be inside user project as well
-            if self.args.openframe: 
-                FIRMWARE_PATH = f"{design_info['USER_PROJECT_ROOT']}/verilog/dv/firmware"
         RUN_PATH = self.args.run_path
         SIM_PATH = (
             f"{RUN_PATH}/sim"
@@ -154,6 +151,8 @@ class RunFLow:
     def set_args(self, design_info):
         if self.args.clk is None:
             self.args.clk = design_info["clk"]
+        else:
+            self.args.clk = int(self.args.clk)
 
         if self.args.maxerr is None:
             self.args.maxerr = 3
@@ -228,19 +227,20 @@ class CocotbArgs:
         no_wave=False,
         clk=25,
         vcs=False,
-        zip_passed=False,
         emailto=None,
         sdf_setup=None,
         macros=None,
         sim_path=None,
         run_path=".",
         verbosity="normal",
-        openframe=False,
         check_commits=False,
         design_info=None,
         no_docker=False,
         compile=False,
-        verilator=False,
+        run_defaults=False,
+        CI=False,
+        no_gen_defaults=False,
+        verilator=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -249,7 +249,6 @@ class CocotbArgs:
         self.maxerr = maxerr
         self.vcs = vcs
         self.corner = corner
-        self.zip_passed = zip_passed
         self.emailto = emailto
         self.seed = seed
         self.no_wave = no_wave
@@ -263,13 +262,15 @@ class CocotbArgs:
         self.lint = None
         # related to repos
         self.cpu_type = None  # would be filled by other class
-        self.openframe = openframe
         self.check_commits = check_commits
         self.design_info = design_info
         self.no_docker = no_docker
         self.compile = compile
+        self.run_defaults = run_defaults
+        self.CI = CI
+        self.no_gen_defaults = no_gen_defaults
         self.verilator = verilator
-
+  
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
         self.sim = args.sim
@@ -278,7 +279,6 @@ class CocotbArgs:
         self.maxerr = args.maxerr
         self.vcs = args.vcs
         self.corner = args.corner
-        self.zip_passed = args.zip_passed
         self.emailto = args.emailto
         self.seed = args.seed
         self.no_wave = args.no_wave
@@ -289,9 +289,11 @@ class CocotbArgs:
         self.lint = args.lint
         self.run_path = os.getcwd()
         self.verbosity = args.verbosity
-        self.openframe = args.openframe
         self.check_commits = args.check_commits
         self.design_info = args.design_info
         self.no_docker = args.no_docker
         self.compile = args.compile
+        self.run_defaults = args.run_defaults
+        self.CI = args.CI
+        self.no_gen_defaults = args.no_gen_defaults
         self.verilator = args.verilator

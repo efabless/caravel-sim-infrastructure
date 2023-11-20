@@ -1,0 +1,49 @@
+name: Caravel Cocotb CI
+
+on:
+  push:
+    branches:
+      - '*'
+    paths:
+      - 'cocotb/caravel_cocotb/CI/**'
+      - '.github/workflows/caravel_cocotb.yml'
+      - 'cocotb/caravel_cocotb/scripts/**'
+      - '!cocotb/caravel_cocotb/**/'  # Exclude directories within the specified directory
+
+
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Install dependencies
+      run: |
+        cd $GITHUB_WORKSPACE/cocotb
+        python3 -m pip install --upgrade pip
+        pip install -r requirements.txt
+        python3 -m pip install --upgrade --no-cache-dir volare
+    
+    - name: Install caravel_cocotb
+      run: |
+        cd $GITHUB_WORKSPACE/cocotb
+        pip install .
+
+    - name: Run main.py
+      run: |
+        cd $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI
+        python3 main.py

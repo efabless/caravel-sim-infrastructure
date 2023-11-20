@@ -4,7 +4,12 @@ from datetime import datetime
 import os
 import sys
 from subprocess import PIPE, run
-from caravel_cocotb.scripts.verify_cocotb.RunTest import RunTest
+try:
+    from os import path
+    sys.path.append(os.getcwd())
+    from user_run_test import UserRunTest as RunTest
+except ImportError:
+    from caravel_cocotb.scripts.verify_cocotb.RunTest import RunTest
 from caravel_cocotb.scripts.verify_cocotb.Test import Test
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -12,6 +17,8 @@ import smtplib
 import socket
 import yaml
 import time
+from caravel_cocotb.scripts.merge_coverage import merge_fun_cov
+from caravel_cocotb.scripts.test_defaults.test_defaults import TestDefaults
 
 
 class RunRegression:
@@ -22,9 +29,10 @@ class RunRegression:
         self.total_start_time = datetime.now()
         self.write_command_log()
         self.write_git_log()
-        self.set_common_macros()
         self.get_tests()
+        self.set_common_macros()
         self.unzip_sdf_files()
+        self.run_defaults_script()
         self.run_regression()
         self.send_mail()
 
@@ -32,17 +40,22 @@ class RunRegression:
         if self.args.macros is None:
             self.args.macros = list()
         simulation_macros = ["USE_POWER_PINS", "UNIT_DELAY=#1", "COCOTB_SIM"]
-        if self.args.openframe:
-            simulation_macros.append("OPENFRAME")
-        paths_macros = [f'TAG=\\"{self.args.tag}\\"']
+        paths_macros = [
+            f'RUN_PATH=\\"{self.paths.RUN_PATH}\\"',
+            f'TAG=\\"{self.args.tag}\\"',
+            f'CARAVEL_ROOT=\\"{self.paths.CARAVEL_ROOT}\\"',
+            f'MCW_ROOT=\\"{self.paths.MCW_ROOT}\\"',
+            f'USER_PROJECT_ROOT=\\"{self.paths.USER_PROJECT_ROOT}\\"',
+        ]
+
         paths_macros.append(f'SIM_PATH=\\"{self.paths.SIM_PATH}/\\"')
         if self.args.pdk != "gf180":
             simulation_macros.append("FUNCTIONAL")
 
         if self.args.caravan:
             simulation_macros.append("CARAVAN")
-
-        if not self.args.no_wave:
+        # don't dumb waves if tests are more than 10
+        if not self.args.no_wave and len(self.tests) < 10:
             simulation_macros.append("WAVE_GEN")
 
         if self.args.sdf_setup:
@@ -118,12 +131,10 @@ class RunRegression:
         if len(self.tests) == 0:
             raise RuntimeError("There is no test provided to run")
         self.update_run_log()
-        # zip pass tests if running more than 7 tests
-        if len(self.tests) > 7:
-            self.args.zip_passed = True
 
-    def add_new_test(self, test_name, sim_type, corner):
-        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths))
+
+    def add_new_test(self, test_name, sim_type, corner, macros=None):
+        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, macros))
 
     def get_testlist(self, testlist_f):
         directory = os.path.dirname(testlist_f)
@@ -147,14 +158,27 @@ class RunRegression:
                         data["sim_type"] = test["sim"]
                     if "corner" in test:
                         data["corner"] = test["corner"]
+                    if "macros" in test:
+                        data["macros"] = test["macros"]
                     self.add_new_test(**data)
                     # add sim to args to detect that this testlist has GL or sdf sims
                     if data["sim_type"] not in self.args.sim:
                         self.args.sim.append(data["sim_type"])
 
+    def run_defaults_script(self):
+        if not ("GL_SDF" in self.args.sim or "GL" in self.args.sim):
+            return
+        if self.args.no_gen_defaults:
+            return
+        current_dir = os.getcwd()
+        os.chdir(f"{self.paths.CARAVEL_ROOT}/")
+        self.logger.info("Running gen_gpio_defaults script")
+        os.system(f"python3 scripts/gen_gpio_defaults.py {self.paths.USER_PROJECT_ROOT}")
+        os.chdir(current_dir)
+            
     def run_regression(self):
         # threads = list()
-        for test in self.tests:
+        for test in self.tests:            
             if self.args.iverilog:  # threading
                 # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
                 # threads.append(x)
@@ -163,36 +187,33 @@ class RunRegression:
                 self.test_run_function(test)
             else:
                 self.test_run_function(test)
+
+        # run defaults 
+        if self.args.run_defaults:
+            self.args.compile = True
+            TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
         # for index, thread in enumerate(threads):
         #     thread.join()
         # # Coverage
-        # if self.args.cov:
-        #     if self.args.vcs:
-        #         self.generate_cov()
-        #     # merge functional coverage
-        #     merge_fun_cov_command = f"docker run -it -u $(id -u $USER):$(id -g $USER) -v {self.run_path}:{self.run_path}  efabless/dv:cocotb sh -c 'cd {self.run_path} && python3 scripts/merge_coverage.py -p {self.paths.SIM_PATH}/{self.args.tag}'"
-        #     self.full_terminal = open(
-        #         f"{self.paths.SIM_PATH}/{self.args.tag}/command.log", "a"
-        #     )
-        #     self.full_terminal.write(
-        #         "\n\ndocker command for merge functional coverage:\n% "
-        #     )
-        #     self.full_terminal.write(os.path.expandvars(merge_fun_cov_command) + "\n")
-        #     self.full_terminal.close()
-        #     os.system(merge_fun_cov_command)
+        if "RTL" in self.args.sim and self.args.vcs:
+            try:
+                self.logger.info("\nStart merging coverage\n")
+                self.cov_dir = f"{self.paths.SIM_PATH}/{self.args.tag}/coverage"
+                # merge line coverage
+                old_path = os.getcwd()
+                os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
+                os.system(f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov")
+                os.chdir(old_path)
+                # merge functional coverage
+                merge_fun_cov(f"{self.paths.SIM_PATH}/{self.args.tag}", reports_path=f"{self.cov_dir}/functional_cov")
+            except Exception as e:
+                self.logger.error(e)
 
     def test_run_function(self, test):
         test.start_of_test()
         self.update_run_log()
-        RunTest(self.args, self.paths, test, self.logger)
+        RunTest(self.args, self.paths, test, self.logger).run_test()
         self.update_run_log()
-
-    def generate_cov(self):
-        os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
-        os.system("urg -dir RTL*/*.vdb -format both -show tests -report coverageRTL/")
-        # os.system(f"urg -dir GL*/*.vdb -format both -show tests -report coverageGL/")
-        # os.system(f"urg -dir SDF*/*.vdb -format both -show tests -report coverageSDF/")
-        os.chdir(self.run_path)
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
@@ -391,7 +412,11 @@ class RunRegression:
 
         sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/user_project_wrapper/primetime/sdf"
+        user_project_name = "user_project_wrapper"
+        sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
+        if not os.path.exists(sdf_user_project): # so special case for openframe maybe change it in the future
+            user_project_name = "openframe_project_wrapper"
+            sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
 
         # check if user sdf dir exists 
         if os.path.exists(sdf_user_dir) and os.path.isdir(sdf_user_dir) and len(os.listdir(sdf_user_dir)) > 0:
@@ -402,7 +427,7 @@ class RunRegression:
             start_time = time.time()
             sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
             sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/user_project_wrapper.{sdf_prefix2}.sdf"]
+            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
             for output_file in output_files:
                 compress_file = output_file + ".gz"
                 # delete output file if exists 
