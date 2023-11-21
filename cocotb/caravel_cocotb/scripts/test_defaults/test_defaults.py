@@ -1,4 +1,3 @@
-import yaml
 import os
 import random
 from caravel_cocotb.scripts.verify_cocotb.Test import Test
@@ -40,7 +39,6 @@ class TestDefaults:
             self.write_random_values_to_file(valid_modes)
             if "GL" in self.args.sim or "GL_SDF" in self.args.sim:
                 self.run_gen_gpio_defaults()
-                        
             if "GL_SDF" in self.args.sim:
                 for corner in self.args.corner:
                     self.run_SDF_test(i, corner)
@@ -67,7 +65,6 @@ class TestDefaults:
                 line = f"`define {mode} 13'h{value:04x}\n"  # format: `define <mode> <value>
                 user_define_file.write(line)
 
-
     def write_random_values_to_file(self, valid_modes):
         with open(f'{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_defines.v', 'a') as user_define_file:
             with open(f'{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_define_temp.txt', 'w') as user_define_txt_file:
@@ -77,9 +74,9 @@ class TestDefaults:
                     random_mode = random.choice(list(modes_difference))
                     # check for the fixed configured GPIO
                     if i in [0, 1, 2, 3, 4]:
-                        if i in [0,1]:
+                        if i in [0, 1]:
                             random_mode = "GPIO_MODE_MGMT_STD_INPUT_NOPULL"
-                        elif i in [2,4]:
+                        elif i in [2, 4]:
                             random_mode = "GPIO_MODE_MGMT_STD_INPUT_NOPULL"
                         elif i == 3:
                             random_mode = "GPIO_MODE_MGMT_STD_INPUT_PULLUP"
@@ -98,7 +95,6 @@ class TestDefaults:
         if len(modes_difference) == 0:
             modes_difference = valid_modes_set
         return modes_difference
-    
 
     def run_gen_gpio_defaults(self):
         script_path = f'{self.paths.CARAVEL_ROOT}/scripts/gen_gpio_defaults.py'
@@ -158,6 +154,3 @@ class TestDefaults:
             print(f"Folder '{new_folder_path}' already exists.")
         except Exception as e:
             print(f"An error occurred: {e}")
-
-
-

@@ -1,3 +1,4 @@
+""" this module isn't used it needs to be updated
 import cocotb
 from cocotb.triggers import RisingEdge, ClockCycles
 import cocotb.log
@@ -7,7 +8,6 @@ from cocotb.binary import BinaryValue
 import caravel_cocotb.interfaces.common as common
 
 
-""" this module isn't used it needs to be updated"""
 
 
 class RiskV:
@@ -223,4 +223,4 @@ class RiskV:
         self.force_reset = True
 
     def cpu_release_reset(self):
-        self.force_reset = False
+        self.force_reset = False """

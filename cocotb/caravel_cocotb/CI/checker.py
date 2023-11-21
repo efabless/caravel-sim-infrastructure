@@ -32,7 +32,7 @@ class Checker(BaseClass):
         else:
             sims = self.command.sim.split()
         expected_tests = list()
-        # to get tests run by -t 
+        # to get tests run by -t
         if self.command.test is None:
             self.logger.debug("Test is None")
             tests = None
@@ -40,7 +40,7 @@ class Checker(BaseClass):
             tests = self.command.test.split()
             for sim_type in sims:
                 for test_name in tests:
-                    if sim_type != "GL_SDF": 
+                    if sim_type != "GL_SDF":
                         expected_tests.append(f"{sim_type}-{test_name}")
                     else:
                         expected_tests.append(f"{sim_type}-{test_name}-{'nom-t' if self.command.corner is None else self.command.corner}")
@@ -52,12 +52,12 @@ class Checker(BaseClass):
             for test in tests:
                 test_name = test.get("name")
                 sim_type = test.get("sim")
-                if sim_type != "GL_SDF": 
+                if sim_type != "GL_SDF":
                     expected_tests.append(f"{sim_type}-{test_name}")
                 else:
                     expected_tests.append(f"{sim_type}-{test_name}-{'nom-t' if self.command.corner is None else self.command.corner}")
         self.tag_path = f"{self.command.run_location if self.command.sim_path is None else self.command.sim_path}/sim/{self.command.tag}/"
-        full_tests_paths = [self.tag_path+expected_test for expected_test in expected_tests]
+        full_tests_paths = [self.tag_path + expected_test for expected_test in expected_tests]
         self.logger.info(f"[get_expected_tests_dir] Expected tests: {full_tests_paths}")
         return full_tests_paths
 
@@ -76,7 +76,7 @@ class Checker(BaseClass):
                     raise ValueError(f"[check_exist_pass] Test {test_path} failed")
                 return False
         return True
-    
+
     def check_configs(self):
         # read design_info.yaml
         design_info_path = self.command.design_info if self.command.design_info is not None else f"{self.command.run_location}/design_info.yaml"
@@ -85,7 +85,7 @@ class Checker(BaseClass):
         design_info = yaml.safe_load(yaml_data)
         caravel_root_exp = design_info.get("CARAVEL_ROOT")
         mgmt_core_exp = design_info.get("MCW_ROOT")
-        pdk_root_exp = design_info.get("PDK_ROOT")+"/"+design_info.get("PDK")
+        pdk_root_exp = design_info.get("PDK_ROOT") + "/" + design_info.get("PDK")
         pdk_exp = design_info.get("PDK")[:-1]
         clk_exp = self.command.clk if self.command.clk is not None else design_info.get("clk")
         max_err_exp = int(self.command.max_error) if self.command.max_error is not None else 3
@@ -107,7 +107,7 @@ class Checker(BaseClass):
             raise ValueError(f"[check_configs] PDK root mismatch: {pdk_root_exp} != {configs.get('PDK_ROOT')}")
         if pdk_exp != configs.get("PDK"):
             raise ValueError(f"[check_configs] PDK mismatch: {pdk_exp} != {configs.get('PDK')}")
-    
+
     def check_seed(self, all_tests_paths):
         if self.command.seed is not None:
             for test_path in all_tests_paths:

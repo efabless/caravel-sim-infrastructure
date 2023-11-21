@@ -18,10 +18,10 @@ class GitRepoChecker:
             # Run git fetch command to update remote tracking branches
             subprocess.call(['git', 'fetch'])
             try:
-            # Get the local branch name
+                # Get the local branch name
                 branch_output = subprocess.check_output(['git', 'symbolic-ref', '--short', 'HEAD']).decode('utf-8')
                 branch_name = branch_output.strip()
-            except:
+            except Exception:
                 raise RepoNotSyncedException(f"{TerminalColors.colorize(repo_name, TerminalColors.RED)} isn't synced any a known branch. please fix this. use -no_pull flag if you want to ignore this error.")
 
             # Compare local and remote commit hashes
@@ -43,7 +43,7 @@ class GitRepoChecker:
         return commit_hash
 
     def _get_repo_name(self):
-        url = "https://github.com/" + f"{subprocess.run(f'cd {self.repo_path};git ls-remote --get-url', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:", "").replace(".git", "")   
+        url = "https://github.com/" + f"{subprocess.run(f'cd {self.repo_path};git ls-remote --get-url', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True).stdout}".replace("git@github.com:", "").replace(".git", "")
         repo_name = f"Repo: {subprocess.run(f'cd {self.repo_path};basename -s .git `git config --get remote.origin.url`', stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(".git", "").replace("https://github.com/", "").replace("\n", "").replace("Repo: ", "")
         return repo_name
 
@@ -67,7 +67,6 @@ class TerminalColors:
     CYAN = '\033[96m'
     WHITE = '\033[97m'
     RESET = '\033[0m'
-
 
     @classmethod
     def colorize(cls, text, color):

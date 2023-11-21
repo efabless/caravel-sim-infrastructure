@@ -8,6 +8,7 @@ from caravel_cocotb.scripts.verify_cocotb.check_git import GitRepoChecker
 import re
 import logging
 import random
+import subprocess
 
 
 def check_valid_mail_addr(address):
@@ -31,8 +32,8 @@ class RunFLow:
         self.set_tag()
         self.set_args(design_info)
         self.set_config_script(design_info)
+        self.pull_docker_image("efabless/dv:cocotb")
         RunRegression(self.args, self.paths, self.logger)
-        
 
     def configure_logger(self):
         self.logger = logging.getLogger(__name__)
@@ -93,8 +94,8 @@ class RunFLow:
                 f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}"
             )
         if self.args.check_commits:
-            GitRepoChecker(design_info["CARAVEL_ROOT"]) # check repo synced with last commit
-            GitRepoChecker(design_info["MCW_ROOT"]) # check repo synced with last commit
+            GitRepoChecker(design_info["CARAVEL_ROOT"])  # check repo synced with last commit
+            GitRepoChecker(design_info["MCW_ROOT"])  # check repo synced with last commit
         if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
             raise NotADirectoryError(
                 f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}"
@@ -105,7 +106,7 @@ class RunFLow:
             )
         else:
             if self.args.check_commits:
-                GitRepoChecker(design_info["USER_PROJECT_ROOT"]) # check repo synced with last commit
+                GitRepoChecker(design_info["USER_PROJECT_ROOT"])  # check repo synced with last commit
         Paths = namedtuple(
             "Paths",
             "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH RUN_PATH USER_PROJECT_ROOT SIM_PATH",
@@ -147,7 +148,7 @@ class RunFLow:
                     self.args.cpu_type = match.group(1)
                     return
         raise EnvironmentError("Can't find cpu type please add #define CPU_TYPE to defs.h in managment repo")
-    
+
     def set_args(self, design_info):
         if self.args.clk is None:
             self.args.clk = design_info["clk"]
@@ -213,6 +214,21 @@ class RunFLow:
         design_info = yaml.safe_load(yaml_file)
         return design_info
 
+    def pull_docker_image(self, image_full_name):
+        # Check if the image exists locally
+        try:
+            subprocess.run(["docker", "inspect", image_full_name], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            print(f"check update for docker image {image_full_name}.")
+        except subprocess.CalledProcessError:
+            print(f"pulling  docker image {image_full_name}.")
+        command = ["docker", "pull", "-q", f"{image_full_name}"]
+        try:
+            # Run the docker pull command
+            subprocess.run(command, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error: Failed to pull {image_full_name}")
+            print(e)
+
 
 class CocotbArgs:
     def __init__(
@@ -239,8 +255,7 @@ class CocotbArgs:
         compile=False,
         run_defaults=False,
         CI=False,
-        no_gen_defaults=False,
-        verilator=False
+        no_gen_defaults=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -269,8 +284,7 @@ class CocotbArgs:
         self.run_defaults = run_defaults
         self.CI = CI
         self.no_gen_defaults = no_gen_defaults
-        self.verilator = verilator
-  
+
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
         self.sim = args.sim
@@ -296,4 +310,3 @@ class CocotbArgs:
         self.run_defaults = args.run_defaults
         self.CI = args.CI
         self.no_gen_defaults = args.no_gen_defaults
-        self.verilator = args.verilator

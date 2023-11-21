@@ -56,4 +56,3 @@ class SetupEnv(BaseClass):
 
     def checkout_commit(self, repo_dir, commit):
         subprocess.run(["git", "checkout", commit], cwd=repo_dir, check=True)
-

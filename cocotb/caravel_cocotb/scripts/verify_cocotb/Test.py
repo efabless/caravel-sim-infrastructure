@@ -160,20 +160,6 @@ class Test:
                     if line.strip() == "":  # line emptry
                         lint_line = False
 
-
-        for root, dirs, files in os.walk(f"{self.test_dir}"):
-            for file in files:
-                if file.endswith(".vcd") or file.endswith(".vpd"):
-                    file_obj.add(f"{self.test_dir}/{file}")
-                    os.remove(f"{self.test_dir}/{file}")
-                if file == "simv":
-                    file_obj.add(f"{self.test_dir}/{file}")
-                    os.remove(f"{self.test_dir}/{file}")
-            for dir in dirs:
-                file_obj.add(f"{self.test_dir}/{dir}")
-                shutil.rmtree(f"{self.test_dir}/{dir}")
-        file_obj.close()
-
     def check_test_pass(self):
         pass_pattern = "Test passed with (0)criticals (0)errors"
         # if file doesn't exist
@@ -232,7 +218,7 @@ class Test:
     def set_linker_script(self):
         linker_script_orginal = (
             f"{self.paths.FIRMWARE_PATH}/sections.lds"
-            if self.args.cpu_type in["VexRISC","RV32imc"]
+            if self.args.cpu_type in ["VexRISC", "RV32imc"]
             else f"{self.paths.FIRMWARE_PATH}/link.ld"
         )
         self.linker_script_file = f"{self.test_dir}/linker_script.lds"
