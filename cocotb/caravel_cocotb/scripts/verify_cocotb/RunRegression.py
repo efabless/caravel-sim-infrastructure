@@ -5,7 +5,6 @@ import os
 import sys
 from subprocess import PIPE, run
 try:
-    from os import path
     sys.path.append(os.getcwd())
     from user_run_test import UserRunTest as RunTest
 except ImportError:
@@ -67,11 +66,11 @@ class RunRegression:
             simulation_macros.append("VCS")
 
         simulation_macros.append(self.args.pdk)
-        
+
         simulation_macros.extend([f'CPU_TYPE_{self.args.cpu_type}'])
         if self.args.cpu_type == "ARM":
             simulation_macros.append("AHB")
-            
+
         self.args.macros += simulation_macros + paths_macros
 
     def get_tests(self):
@@ -132,7 +131,6 @@ class RunRegression:
             raise RuntimeError("There is no test provided to run")
         self.update_run_log()
 
-
     def add_new_test(self, test_name, sim_type, corner, macros=None):
         self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, macros))
 
@@ -175,10 +173,10 @@ class RunRegression:
         self.logger.info("Running gen_gpio_defaults script")
         os.system(f"python3 scripts/gen_gpio_defaults.py {self.paths.USER_PROJECT_ROOT}")
         os.chdir(current_dir)
-            
+
     def run_regression(self):
         # threads = list()
-        for test in self.tests:            
+        for test in self.tests:
             if self.args.iverilog:  # threading
                 # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
                 # threads.append(x)
@@ -188,7 +186,7 @@ class RunRegression:
             else:
                 self.test_run_function(test)
 
-        # run defaults 
+        # run defaults
         if self.args.run_defaults:
             self.args.compile = True
             TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
@@ -414,11 +412,11 @@ class RunRegression:
         sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         user_project_name = "user_project_wrapper"
         sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
-        if not os.path.exists(sdf_user_project): # so special case for openframe maybe change it in the future
+        if not os.path.exists(sdf_user_project):  # so special case for openframe maybe change it in the future
             user_project_name = "openframe_project_wrapper"
             sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
 
-        # check if user sdf dir exists 
+        # check if user sdf dir exists
         if os.path.exists(sdf_user_dir) and os.path.isdir(sdf_user_dir) and len(os.listdir(sdf_user_dir)) > 0:
             sdf_dir = sdf_user_dir
 
@@ -427,10 +425,10 @@ class RunRegression:
             start_time = time.time()
             sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
             sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
+            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf", f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
             for output_file in output_files:
                 compress_file = output_file + ".gz"
-                # delete output file if exists 
+                # delete output file if exists
                 if os.path.exists(output_file):
                     os.remove(output_file)
                 # compress the file

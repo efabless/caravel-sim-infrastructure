@@ -78,7 +78,7 @@ class GenerateCommands(BaseClass):
         self.test_list_chooser = RandomChooser([f"{self.cocotb_path}/test_io10/test_io10.yaml", f"{self.cocotb_path}/test_mgmt_gpio/test_mgmt_gpio.yaml"])
         self.design_infos_chooser = RandomChooser([None, f"{self.cocotb_path}/design_info.yaml"])
         self.sims_chooser = RandomChooser([None, 'RTL', "GL", "GL_SDF", "RTL GL", "GL RTL"])
-        self.tags_chooser = RandomChooser([''.join(random.choice(string.ascii_lowercase) for _ in range(i)) for i in range(5,10)]) # change string length to make sure tag is unique
+        self.tags_chooser = RandomChooser([''.join(random.choice(string.ascii_lowercase) for _ in range(i)) for i in range(5, 10)])  # change string length to make sure tag is unique
         self.max_errors_chooser = RandomChooser([None, "7", "5", "100"])
         self.corners_chooser = RandomChooser([None, "nom-t", "nom-f", "nom-s", "max-t", "max-f", "max-s", "min-t", "min-f", "min-s"])
         self.seed_chooser = RandomChooser([None] + [random.randint(0, 100000) for _ in range(5)])
@@ -152,11 +152,10 @@ class GenerateCommands(BaseClass):
         verbosity = f" -verbosity {command.verbosity} " if command.verbosity is not None else ""
         compile = " -compile" if command.compile is not None else ""
         CI = " --CI" if command.CI is not None else ""
-        check_commits = " -check_commits" if command.check_commits is not None else ""
+        # check_commits = " -check_commits" if command.check_commits is not None else ""
         # TODO for now remove using {check_commits}
         command = f"cd {command.run_location}  && caravel_cocotb {test}{design_info}{sim}{max_error}{corner}{seed}{no_wave}{clk}{macro}{sim_path}{verbosity}{compile}{CI} -tag  {command.tag}"
         return command
-
 
 
 class RandomChooser:

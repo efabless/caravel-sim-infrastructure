@@ -21,7 +21,7 @@ class SPI:
         self.caravelEnv = caravelEnv
         self.spi_pins = spi_pins
         # if clock period is not given, use caravel clock * 3
-        self.clk_period = clk_period if clk_period is not None else self.caravelEnv.get_clock_obj().period*3 / 1000
+        self.clk_period = clk_period if clk_period is not None else self.caravelEnv.get_clock_obj().period * 3 / 1000
         self.caravelEnv.drive_gpio_in(self.spi_pins["SDO"], 0)
         # self._setup_spi_clk()
 
@@ -98,18 +98,18 @@ class SPI:
     def _get_cycle_number(self):
 
         current_time = cocotb.utils.get_sim_time("ns")
-        cycle_num = (current_time - self.start_time)/self.clk_period
+        cycle_num = (current_time - self.start_time) / self.clk_period
         return cycle_num
 
     async def disable_csb(self):
         """
         Disables the housekeeping SPI transmission by driving the CSB line high.
 
-        **Note:** The function waits for 2 clock cycles before disabling to ensure that the previous writing command has been applied. 
+        **Note:** The function waits for 2 clock cycles before disabling to ensure that the previous writing command has been applied.
         It then drives the CSB line high and kills the SPI clock.Finally, the function waits for some time to ensure that the disable has taken effect.
         """
         cocotb.log.info("[SPI][disable_csb] disable housekeeping SPI transmission")
-        # should wait for 2 clock cycles before disabling 
+        # should wait for 2 clock cycles before disabling
         # to wait until writing command got applied
         await Timer(self.clk_period, "ns")
         await Timer(self.clk_period, "ns")
@@ -131,7 +131,7 @@ class SPI:
         # must wait for some time for the disable get affected
         await Timer(self.clk_period, "ns")
         self._setup_spi_clk()
-        await Timer(self.clk_period*0.5, "ns")
+        await Timer(self.clk_period * 0.5, "ns")
         self.caravelEnv.drive_gpio_in(self.spi_pins["CSB"], 0)
 
     async def write_reg_spi(self, address, data, disable_csb: bool = True):
@@ -159,7 +159,6 @@ class SPI:
         """
         Reads a byte from a register at the given address over the housekeeping SPI interface.
 
-        
         :param address: The address of the register to read from.
         :type address: int
         :param disable_csb: Whether to disable the chip select line after reading the byte. Defaults to True.
@@ -206,7 +205,7 @@ class SPI:
         if disable_csb:
             await self.disable_csb()
         return data
-    
+
     async def write_reg_spi_nbytes(self, address, data, n_bytes, disable_csb: bool = True):
         """
         Writes to `n_bytes` bytes starting from the register at `address` over the housekeeping SPI.
@@ -284,7 +283,7 @@ class SPI:
     async def reg_spi_user_pass_thru(self, send_data: list, read_byte_num: int = 0, disable_csb: bool = True):
         """
         Sends SPI data to a housekeeping SPI using user pass-thru command.
-        
+
         :param send_data: A list of data to be sent includeing the commands and addresses.
         :type send_data: list
         :param read_byte_num: expected number of bytes to be read defaults to 0.
@@ -312,13 +311,13 @@ class SPI:
     async def reg_spi_mgmt_pass_thru_read(self, address: int, read_byte_num: int = 1, disable_csb: bool = True):
         """
         Sends SPI read data command to a housekeeping SPI using managment pass-thru command.
-        
+
         :param address: The address of the register to read.
         :type address: int
         :param read_byte_num: expected number of bytes to be read defaults to 1.
         :type read_byte_num: int
         :param disable_csb: Whether to disable CSB after the transaction defaults to True.
-        :type disable_csb: bool        
+        :type disable_csb: bool
         """
         cocotb.log.debug(f"[SPI][reg_spi_mgmt_pass_thru_read] read addr {hex(address)}")
         await self.enable_csb()
@@ -330,7 +329,7 @@ class SPI:
         addr_bits = bin(address)[2:].zfill(24)
         cocotb.log.debug(f"[SPI][reg_spi_mgmt_pass_thru_read] send addr {addr_bits}")
         for i in range(3):
-            address_byte = int(addr_bits[i*8:(i+1)*8], 2)
+            address_byte = int(addr_bits[i * 8:(i + 1) * 8], 2)
             cocotb.log.debug(f"[SPI][reg_spi_mgmt_pass_thru_read] send addr {hex(address_byte)} i = {i}")
             await self._hk_write_byte(address_byte)
         # READ
@@ -343,7 +342,7 @@ class SPI:
             await self.disable_csb()
         return data
 
-    # use for configure in mgmt pass thru or user pass thru or any other command that doesn't have a function 
+    # use for configure in mgmt pass thru or user pass thru or any other command that doesn't have a function
     async def reg_spi_op(self, command, address, disable_csb: bool = True):
         """
         Perform a register SPI operation.
@@ -381,4 +380,3 @@ class SPI:
         WRITE_READ = 0xC0
         USER_PASS_THRU = 0x02
         MGMT_PATH_THRU = 0xC4
-

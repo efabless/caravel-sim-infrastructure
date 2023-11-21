@@ -14,12 +14,12 @@
 #
 import os
 import sys
+## add C code XML
+import subprocess
 
 sys.path.insert(0, os.path.abspath("../.."))
 sys.path.insert(0, os.path.abspath("../../tests/common_functions"))
 
-## add C code XML
-import subprocess
 
 # subprocess.call('make clean', shell=True)
 subprocess.call("cd ../Doxgen ; doxygen sample_text.conf", shell=True)

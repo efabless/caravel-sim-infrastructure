@@ -37,7 +37,11 @@ jobs:
         python3 -m pip install --upgrade pip
         pip install -r requirements.txt
         python3 -m pip install --upgrade --no-cache-dir volare
-    
+        pip install flake8
+
+    - name: Run Flake8
+      run: flake8 $GITHUB_WORKSPACE/cocotb
+
     - name: Install caravel_cocotb
       run: |
         cd $GITHUB_WORKSPACE/cocotb

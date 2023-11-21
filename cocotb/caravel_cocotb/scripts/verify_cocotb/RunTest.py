@@ -63,7 +63,7 @@ class RunTest:
         test_path = self.test_path()
         # Create a new hex_files directory because it does not exist
         if not os.path.exists(f"{self.paths.SIM_PATH}/hex_files"):
-            os.makedirs(f"{self.paths.SIM_PATH}/hex_files")  
+            os.makedirs(f"{self.paths.SIM_PATH}/hex_files")
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.c_file = f"{test_path}/{self.test.name}.c"
         if self.args.cpu_type == "ARM":
@@ -89,7 +89,7 @@ class RunTest:
         self.firmware_log.write("Pass: hex generation")
         self.firmware_log.close()
         # move hex file to the test
-        shutil.copyfile(f"{self.test.hex_dir}/{self.test.name}.hex", f"{self.test.test_dir}/firmware.hex")            
+        shutil.copyfile(f"{self.test.hex_dir}/{self.test.name}.hex", f"{self.test.test_dir}/firmware.hex")
         return "hex_generated"
 
     def test_path(self, test_name=None):
@@ -185,7 +185,7 @@ class RunTest:
         self.test.set_user_project()
 
     def vcs_compile(self):
-        macros = " +define+" + " +define+".join(self.test.macros)        
+        macros = " +define+" + " +define+".join(self.test.macros)
         if self.args.seed is not None:
             os.environ["RANDOM_SEED"] = self.args.seed
         vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
@@ -249,7 +249,7 @@ class RunTest:
                         logger_file.info(stdout.replace("\n", "", 1))
         except Exception as e:
             logger(f"Docker process stopped by user {e}")
-            process.stdin.write(b'\x03') # Send the Ctrl+C signal to the Docker process
+            process.stdin.write(b'\x03')  # Send the Ctrl+C signal to the Docker process
             process.terminate()
 
         return process.returncode

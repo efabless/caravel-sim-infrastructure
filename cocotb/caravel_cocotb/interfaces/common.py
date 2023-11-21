@@ -60,7 +60,7 @@ tag = os.getenv("RUNTAG")
 
 
 class GPIO_MODE(Enum):
-    try: 
+    try:
         GPIO_MODE_MGMT_STD_INPUT_NOPULL = int(
             cocotb.plusargs["GPIO_MODE_MGMT_STD_INPUT_NOPULL"]
         )
@@ -92,10 +92,9 @@ class GPIO_MODE(Enum):
             cocotb.plusargs["GPIO_MODE_USER_STD_OUT_MONITORED"]
         )
         GPIO_MODE_USER_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_USER_STD_ANALOG"])
-    except:
-        cocotb.log.warning(f"Some configuration isn't valid please review it's define at user_defines file")
+    except Exception:
+        cocotb.log.warning("Some configuration isn't valid please review it's define at user_defines file")
         pass
-    
 
 
 class MASK_GPIO_CTRL(Enum):

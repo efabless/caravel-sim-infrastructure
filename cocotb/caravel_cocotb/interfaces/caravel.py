@@ -573,7 +573,7 @@ class Caravel_env:
     def get_clock_obj(self) -> cocotb.clock.Clock:
         """return the used clock object of cocotb.clock.Clock used mostly to get info about simulation time or clock period info"""
         return self.clock_obj
-    
+
     def get_clock_period(self) -> int:
         """return the used clock period in ns"""
         return self.clock_obj.period / 1000
