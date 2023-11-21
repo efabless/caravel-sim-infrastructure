@@ -314,8 +314,7 @@ class Test:
                         # Add Includes to Set
                         include_indices = [i for i, flag in enumerate(split_line) if flag == "-I"]
                         for i in include_indices:
-                            self.include_dirs.add(split_line[i+1])
-                                
+                            self.include_dirs.add(split_line[i + 1])
         return paths
 
 def remove_argument(to_remove, patt):
