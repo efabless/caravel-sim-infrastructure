@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dummy_5fdelay',['dummy_delay',['../common_8h.html#a875e99bdc81b2f0c925af03d4881438c',1,'common.h']]]
+  ['dummydelay',['dummyDelay',['../common_8h.html#a2693b1908ee935b4d73d7c8c4bb897e9',1,'common.h']]]
 ];
