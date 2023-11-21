@@ -107,8 +107,8 @@ class RunTest:
             self.runTest_iverilog()
         elif self.args.vcs:
             self.runTest_vcs()
-        elif self.args.verilator:
-            self.runTest_verilator()
+        # elif self.args.verilator:
+            # self.runTest_verilator()
 
     # iverilog function
     def runTest_iverilog(self):
