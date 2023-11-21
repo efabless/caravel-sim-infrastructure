@@ -172,7 +172,7 @@ class RunFLow:
             self.args.pdk = "gf180"
 
         self.args.iverilog = False
-        if not self.args.vcs and not self.args.verilator:
+        if not self.args.vcs:
             self.args.iverilog = True
 
         if self.args.emailto is None:
@@ -255,8 +255,7 @@ class CocotbArgs:
         compile=False,
         run_defaults=False,
         CI=False,
-        no_gen_defaults=False,
-        verilator=False
+        no_gen_defaults=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -285,8 +284,7 @@ class CocotbArgs:
         self.run_defaults = run_defaults
         self.CI = CI
         self.no_gen_defaults = no_gen_defaults
-        self.verilator = verilator
-  
+
     def argparse_to_CocotbArgs(self, args):
         self.test = args.test
         self.sim = args.sim

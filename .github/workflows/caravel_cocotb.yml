@@ -40,7 +40,7 @@ jobs:
         pip install flake8
 
     - name: Run Flake8
-      run: flake8 $GITHUB_WORKSPACE/cocotb
+      run: flake8 $GITHUB_WORKSPACE/cocotb --config $GITHUB_WORKSPACE/cocotb/.flake8
 
     - name: Install caravel_cocotb
       run: |
