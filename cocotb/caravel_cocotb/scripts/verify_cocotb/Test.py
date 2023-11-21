@@ -3,6 +3,7 @@
 from datetime import datetime
 import os
 import sys
+import glob
 from pathlib import Path
 import shutil
 import xml.etree.ElementTree as ET
@@ -25,6 +26,7 @@ class Test:
         self.paths = paths
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.local_macros = local_macros  # macros for this test only has  to run local macros
+        self.include_dirs = set()
         self.init_test()
 
     def init_test(self):
@@ -300,9 +302,20 @@ class Test:
                     line = line.replace("$(PDK_ROOT)", f"{self.paths.PDK_ROOT}")
                     line = line.replace("$(PDK)", f"{self.paths.PDK}")
                     # Extract file path from command
-                    if line.startswith("-v"):
-                        file_path = line.split(" ")[1]
-                        paths += f'`include "{file_path}"\n'
+                    if line.startswith("-v") or line.startswith("-sv"):
+                        # Add Verilog or System Verilog, including wildcards
+                        split_line = line.split(" ")
+                        file_path = split_line[-1]
+                        if ("*" in file_path):
+                            for wild_match in glob.glob(file_path):
+                                paths += f'`include "{wild_match}"\n'
+                        else:
+                            paths += f'`include "{file_path}"\n'
+                        # Add Includes to Set
+                        include_indices = [i for i, flag in enumerate(split_line) if flag == "-I"]
+                        for i in include_indices:
+                            self.include_dirs.add(split_line[i+1])
+                                
         return paths
 
 def remove_argument(to_remove, patt):
@@ -329,7 +342,6 @@ def move_defines_to_start(filename, pattern):
     # print(defines_lines)
     # Remove the extracted lines from the original list
     lines = [f"{line.strip()}\n" for line in lines if line not in defines_lines]
-
     # Insert the extracted lines at the start of the list
     lines = defines_lines + lines
 

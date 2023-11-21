@@ -1,88 +1,72 @@
-\hypertarget{mgmt__gpio_8h}{}\section{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/mgmt\+\_\+gpio.h File Reference}
-\label{mgmt__gpio_8h}\index{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/mgmt\+\_\+gpio.\+h@{/home/rady/caravel/swift/caravel-\/dynamic-\/sims/cocotb/tests/common\+\_\+functions/mgmt\+\_\+gpio.\+h}}
+\hypertarget{mgmt__gpio_8h}{}\section{/home/rady/caravel/caravel\+\_\+release/caravel-\/dynamic-\/sims/cocotb/caravel\+\_\+cocotb/interfaces/common\+\_\+functions/mgmt\+\_\+gpio.h File Reference}
+\label{mgmt__gpio_8h}\index{/home/rady/caravel/caravel\+\_\+release/caravel-\/dynamic-\/sims/cocotb/caravel\+\_\+cocotb/interfaces/common\+\_\+functions/mgmt\+\_\+gpio.\+h@{/home/rady/caravel/caravel\+\_\+release/caravel-\/dynamic-\/sims/cocotb/caravel\+\_\+cocotb/interfaces/common\+\_\+functions/mgmt\+\_\+gpio.\+h}}
 This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=218pt]{mgmt__gpio_8h__dep__incl}
+\includegraphics[width=262pt]{mgmt__gpio_8h__dep__incl}
 \end{center}
 \end{figure}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{mgmt__gpio_8h_a5e552dcb3b7872a84b0590aca0626577}{mgmt\+\_\+gpio\+\_\+i\+\_\+enable} ()
+void \hyperlink{mgmt__gpio_8h_aebb9ca3b8c8add0a6fdc5d1645a58852}{Managment\+Gpio\+\_\+input\+Enable} ()
 \item 
-void \hyperlink{mgmt__gpio_8h_a28a81799fe6b08635e4c38a10870bd19}{mgmt\+\_\+gpio\+\_\+o\+\_\+enable} ()
+void \hyperlink{mgmt__gpio_8h_a8e72568036b795c978c158b5c0bbd910}{Managment\+Gpio\+\_\+output\+Enable} ()
 \item 
-void \hyperlink{mgmt__gpio_8h_af6ca17f3be830146f0feaa42992bc8a6}{mgmt\+\_\+gpio\+\_\+io\+\_\+enable} ()
+void \hyperlink{mgmt__gpio_8h_ad8433f94009bba5dfa1472264ab3f405}{Managment\+Gpio\+\_\+io\+Enable} ()
 \item 
-void \hyperlink{mgmt__gpio_8h_a0227af4e18cc2d6c665eb8d663a9ee8a}{mgmt\+\_\+gpio\+\_\+io\+\_\+disable} ()
+void \hyperlink{mgmt__gpio_8h_ab0d97f495e70deeb0261a968f4d83766}{Managment\+Gpio\+\_\+disable} ()
 \item 
-void \hyperlink{mgmt__gpio_8h_a340b2d0d4f7b0996433830850a66272f}{mgmt\+\_\+gpio\+\_\+wr} (bool data)
+void \hyperlink{mgmt__gpio_8h_a76f7edf361e9b50ac1f91b3a2efb6d83}{Managment\+Gpio\+\_\+write} (bool data)
 \item 
-int \hyperlink{mgmt__gpio_8h_ac834401bc984e15179fdf70c4836ed6d}{mgmt\+\_\+gpio\+\_\+rd} ()
+int \hyperlink{mgmt__gpio_8h_a1deb38550709ec95b75b81351aa97f6c}{Managment\+Gpio\+\_\+read} ()
 \item 
-void \hyperlink{mgmt__gpio_8h_a4aca6477221bd8ef8b91853817d1e104}{wait\+\_\+gpio\+\_\+mgmt} (bool data)
+void \hyperlink{mgmt__gpio_8h_a7f368859e2df2c12ca3c5000f8a19132}{Managment\+Gpio\+\_\+wait} (bool data)
 \end{DoxyCompactItemize}
 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{mgmt__gpio_8h_a5e552dcb3b7872a84b0590aca0626577}\label{mgmt__gpio_8h_a5e552dcb3b7872a84b0590aca0626577}} 
-\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!mgmt\+\_\+gpio\+\_\+i\+\_\+enable@{mgmt\+\_\+gpio\+\_\+i\+\_\+enable}}
-\index{mgmt\+\_\+gpio\+\_\+i\+\_\+enable@{mgmt\+\_\+gpio\+\_\+i\+\_\+enable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
-\subsubsection{\texorpdfstring{mgmt\+\_\+gpio\+\_\+i\+\_\+enable()}{mgmt\_gpio\_i\_enable()}}
-{\footnotesize\ttfamily void mgmt\+\_\+gpio\+\_\+i\+\_\+enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{mgmt__gpio_8h_ab0d97f495e70deeb0261a968f4d83766}\label{mgmt__gpio_8h_ab0d97f495e70deeb0261a968f4d83766}} 
+\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!Managment\+Gpio\+\_\+disable@{Managment\+Gpio\+\_\+disable}}
+\index{Managment\+Gpio\+\_\+disable@{Managment\+Gpio\+\_\+disable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
+\subsubsection{\texorpdfstring{Managment\+Gpio\+\_\+disable()}{ManagmentGpio\_disable()}}
+{\footnotesize\ttfamily void Managment\+Gpio\+\_\+disable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-Configure management G\+P\+IO as input \mbox{\Hypertarget{mgmt__gpio_8h_a0227af4e18cc2d6c665eb8d663a9ee8a}\label{mgmt__gpio_8h_a0227af4e18cc2d6c665eb8d663a9ee8a}} 
-\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!mgmt\+\_\+gpio\+\_\+io\+\_\+disable@{mgmt\+\_\+gpio\+\_\+io\+\_\+disable}}
-\index{mgmt\+\_\+gpio\+\_\+io\+\_\+disable@{mgmt\+\_\+gpio\+\_\+io\+\_\+disable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
-\subsubsection{\texorpdfstring{mgmt\+\_\+gpio\+\_\+io\+\_\+disable()}{mgmt\_gpio\_io\_disable()}}
-{\footnotesize\ttfamily void mgmt\+\_\+gpio\+\_\+io\+\_\+disable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+Configure management G\+P\+IO as floating It\textquotesingle{}s not connected as input or output \mbox{\Hypertarget{mgmt__gpio_8h_aebb9ca3b8c8add0a6fdc5d1645a58852}\label{mgmt__gpio_8h_aebb9ca3b8c8add0a6fdc5d1645a58852}} 
+\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!Managment\+Gpio\+\_\+input\+Enable@{Managment\+Gpio\+\_\+input\+Enable}}
+\index{Managment\+Gpio\+\_\+input\+Enable@{Managment\+Gpio\+\_\+input\+Enable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
+\subsubsection{\texorpdfstring{Managment\+Gpio\+\_\+input\+Enable()}{ManagmentGpio\_inputEnable()}}
+{\footnotesize\ttfamily void Managment\+Gpio\+\_\+input\+Enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-Configure management G\+P\+IO as floating It\textquotesingle{}s not connected as input or output \mbox{\Hypertarget{mgmt__gpio_8h_af6ca17f3be830146f0feaa42992bc8a6}\label{mgmt__gpio_8h_af6ca17f3be830146f0feaa42992bc8a6}} 
-\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!mgmt\+\_\+gpio\+\_\+io\+\_\+enable@{mgmt\+\_\+gpio\+\_\+io\+\_\+enable}}
-\index{mgmt\+\_\+gpio\+\_\+io\+\_\+enable@{mgmt\+\_\+gpio\+\_\+io\+\_\+enable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
-\subsubsection{\texorpdfstring{mgmt\+\_\+gpio\+\_\+io\+\_\+enable()}{mgmt\_gpio\_io\_enable()}}
-{\footnotesize\ttfamily void mgmt\+\_\+gpio\+\_\+io\+\_\+enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+Configure management G\+P\+IO as input \mbox{\Hypertarget{mgmt__gpio_8h_ad8433f94009bba5dfa1472264ab3f405}\label{mgmt__gpio_8h_ad8433f94009bba5dfa1472264ab3f405}} 
+\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!Managment\+Gpio\+\_\+io\+Enable@{Managment\+Gpio\+\_\+io\+Enable}}
+\index{Managment\+Gpio\+\_\+io\+Enable@{Managment\+Gpio\+\_\+io\+Enable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
+\subsubsection{\texorpdfstring{Managment\+Gpio\+\_\+io\+Enable()}{ManagmentGpio\_ioEnable()}}
+{\footnotesize\ttfamily void Managment\+Gpio\+\_\+io\+Enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-Configure management G\+P\+IO as bi-\/direction \mbox{\Hypertarget{mgmt__gpio_8h_a28a81799fe6b08635e4c38a10870bd19}\label{mgmt__gpio_8h_a28a81799fe6b08635e4c38a10870bd19}} 
-\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!mgmt\+\_\+gpio\+\_\+o\+\_\+enable@{mgmt\+\_\+gpio\+\_\+o\+\_\+enable}}
-\index{mgmt\+\_\+gpio\+\_\+o\+\_\+enable@{mgmt\+\_\+gpio\+\_\+o\+\_\+enable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
-\subsubsection{\texorpdfstring{mgmt\+\_\+gpio\+\_\+o\+\_\+enable()}{mgmt\_gpio\_o\_enable()}}
-{\footnotesize\ttfamily void mgmt\+\_\+gpio\+\_\+o\+\_\+enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+Configure management G\+P\+IO as bi-\/direction \mbox{\Hypertarget{mgmt__gpio_8h_a8e72568036b795c978c158b5c0bbd910}\label{mgmt__gpio_8h_a8e72568036b795c978c158b5c0bbd910}} 
+\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!Managment\+Gpio\+\_\+output\+Enable@{Managment\+Gpio\+\_\+output\+Enable}}
+\index{Managment\+Gpio\+\_\+output\+Enable@{Managment\+Gpio\+\_\+output\+Enable}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
+\subsubsection{\texorpdfstring{Managment\+Gpio\+\_\+output\+Enable()}{ManagmentGpio\_outputEnable()}}
+{\footnotesize\ttfamily void Managment\+Gpio\+\_\+output\+Enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-Configure management G\+P\+IO as output \mbox{\Hypertarget{mgmt__gpio_8h_ac834401bc984e15179fdf70c4836ed6d}\label{mgmt__gpio_8h_ac834401bc984e15179fdf70c4836ed6d}} 
-\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!mgmt\+\_\+gpio\+\_\+rd@{mgmt\+\_\+gpio\+\_\+rd}}
-\index{mgmt\+\_\+gpio\+\_\+rd@{mgmt\+\_\+gpio\+\_\+rd}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
-\subsubsection{\texorpdfstring{mgmt\+\_\+gpio\+\_\+rd()}{mgmt\_gpio\_rd()}}
-{\footnotesize\ttfamily int mgmt\+\_\+gpio\+\_\+rd (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+Configure management G\+P\+IO as output \mbox{\Hypertarget{mgmt__gpio_8h_a1deb38550709ec95b75b81351aa97f6c}\label{mgmt__gpio_8h_a1deb38550709ec95b75b81351aa97f6c}} 
+\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!Managment\+Gpio\+\_\+read@{Managment\+Gpio\+\_\+read}}
+\index{Managment\+Gpio\+\_\+read@{Managment\+Gpio\+\_\+read}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
+\subsubsection{\texorpdfstring{Managment\+Gpio\+\_\+read()}{ManagmentGpio\_read()}}
+{\footnotesize\ttfamily int Managment\+Gpio\+\_\+read (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 Read data in management G\+P\+IO
 
 \begin{DoxyNote}{Note}
 This function works correctly when management G\+P\+IO configured as input If management doesn\textquotesingle{}t connect to anything the firmware would read \char`\"{}0\char`\"{} 
 \end{DoxyNote}
-\mbox{\Hypertarget{mgmt__gpio_8h_a340b2d0d4f7b0996433830850a66272f}\label{mgmt__gpio_8h_a340b2d0d4f7b0996433830850a66272f}} 
-\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!mgmt\+\_\+gpio\+\_\+wr@{mgmt\+\_\+gpio\+\_\+wr}}
-\index{mgmt\+\_\+gpio\+\_\+wr@{mgmt\+\_\+gpio\+\_\+wr}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
-\subsubsection{\texorpdfstring{mgmt\+\_\+gpio\+\_\+wr()}{mgmt\_gpio\_wr()}}
-{\footnotesize\ttfamily void mgmt\+\_\+gpio\+\_\+wr (\begin{DoxyParamCaption}\item[{bool}]{data }\end{DoxyParamCaption})}
-
-Write data in management G\+P\+IO
-
-
-\begin{DoxyParams}{Parameters}
-{\em data} & data to write at management G\+P\+IO possible values are 0 and 1\\
-\hline
-\end{DoxyParams}
-\begin{DoxyNote}{Note}
-This function works when management G\+P\+IO configured as output 
-\end{DoxyNote}
-\mbox{\Hypertarget{mgmt__gpio_8h_a4aca6477221bd8ef8b91853817d1e104}\label{mgmt__gpio_8h_a4aca6477221bd8ef8b91853817d1e104}} 
-\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!wait\+\_\+gpio\+\_\+mgmt@{wait\+\_\+gpio\+\_\+mgmt}}
-\index{wait\+\_\+gpio\+\_\+mgmt@{wait\+\_\+gpio\+\_\+mgmt}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
-\subsubsection{\texorpdfstring{wait\+\_\+gpio\+\_\+mgmt()}{wait\_gpio\_mgmt()}}
-{\footnotesize\ttfamily void wait\+\_\+gpio\+\_\+mgmt (\begin{DoxyParamCaption}\item[{bool}]{data }\end{DoxyParamCaption})}
+\mbox{\Hypertarget{mgmt__gpio_8h_a7f368859e2df2c12ca3c5000f8a19132}\label{mgmt__gpio_8h_a7f368859e2df2c12ca3c5000f8a19132}} 
+\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!Managment\+Gpio\+\_\+wait@{Managment\+Gpio\+\_\+wait}}
+\index{Managment\+Gpio\+\_\+wait@{Managment\+Gpio\+\_\+wait}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
+\subsubsection{\texorpdfstring{Managment\+Gpio\+\_\+wait()}{ManagmentGpio\_wait()}}
+{\footnotesize\ttfamily void Managment\+Gpio\+\_\+wait (\begin{DoxyParamCaption}\item[{bool}]{data }\end{DoxyParamCaption})}
 
 Wait over management G\+P\+IO to equal data
 
@@ -94,3 +78,19 @@ This function works correctly when management G\+P\+IO configured as input
 {\em data} & data to wait over \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{mgmt__gpio_8h_a76f7edf361e9b50ac1f91b3a2efb6d83}\label{mgmt__gpio_8h_a76f7edf361e9b50ac1f91b3a2efb6d83}} 
+\index{mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}!Managment\+Gpio\+\_\+write@{Managment\+Gpio\+\_\+write}}
+\index{Managment\+Gpio\+\_\+write@{Managment\+Gpio\+\_\+write}!mgmt\+\_\+gpio.\+h@{mgmt\+\_\+gpio.\+h}}
+\subsubsection{\texorpdfstring{Managment\+Gpio\+\_\+write()}{ManagmentGpio\_write()}}
+{\footnotesize\ttfamily void Managment\+Gpio\+\_\+write (\begin{DoxyParamCaption}\item[{bool}]{data }\end{DoxyParamCaption})}
+
+Write data in management G\+P\+IO
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & data to write at management G\+P\+IO possible values are 0 and 1\\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function works when management G\+P\+IO configured as output 
+\end{DoxyNote}

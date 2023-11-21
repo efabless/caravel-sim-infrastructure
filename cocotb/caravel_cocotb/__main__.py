@@ -92,7 +92,6 @@ def main():
     parser.add_argument("-no_gen_defaults", action="store_true", help="don't run gen_gpio_defaults script")
     # Add a --version option
     parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
-
     args = parser.parse_args()
     # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  caravan emailto seed no_wave clk lint arm sdf_setup")
     # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en   ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)
