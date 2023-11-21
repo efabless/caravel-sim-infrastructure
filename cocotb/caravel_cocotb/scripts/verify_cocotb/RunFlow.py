@@ -8,6 +8,7 @@ from caravel_cocotb.scripts.verify_cocotb.check_git import GitRepoChecker
 import re
 import logging
 import random
+import subprocess
 
 
 def check_valid_mail_addr(address):
@@ -31,6 +32,7 @@ class RunFLow:
         self.set_tag()
         self.set_args(design_info)
         self.set_config_script(design_info)
+        self.pull_docker_image("efabless/dv:cocotb")
         RunRegression(self.args, self.paths, self.logger)
         
 
@@ -212,6 +214,22 @@ class RunFLow:
         yaml_file = open(f"{f'{self.run_path}/design_info.yaml' if self.args.design_info is None else self.args.design_info}", "r")
         design_info = yaml.safe_load(yaml_file)
         return design_info
+
+    def pull_docker_image(self, image_full_name):
+        # Check if the image exists locally
+        try:
+            subprocess.run(["docker", "inspect", image_full_name], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            print(f"check update for docker image {image_full_name}.")
+        except subprocess.CalledProcessError:
+            print(f"pulling  docker image {image_full_name}.")
+        command = ["docker", "pull", "-q", f"{image_full_name}"]
+        try:
+            # Run the docker pull command
+            subprocess.run(command, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error: Failed to pull {image_full_name}")
+            print(e)
+
 
 
 class CocotbArgs:
