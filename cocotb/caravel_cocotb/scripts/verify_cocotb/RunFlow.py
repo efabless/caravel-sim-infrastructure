@@ -171,7 +171,7 @@ class RunFLow:
             self.args.pdk = "gf180"
 
         self.args.iverilog = False
-        if not self.args.vcs and not self.args.verilator:
+        if not self.args.vcs:
             self.args.iverilog = True
 
         if self.args.emailto is None:
