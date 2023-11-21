@@ -1,4 +1,4 @@
-import cocotb 
+import cocotb
 from cocotb.triggers import RisingEdge
 
 
@@ -35,12 +35,12 @@ class WishboneInterface:
                 self.registers.reset()
                 continue
 
-            # wait check for valid cycle 
+            # wait check for valid cycle
             if self.wishbone_in["cyc"].get_val() == 0 or self.wishbone_in["stb"].get_val() == 0:
                 self.wishbone_out["ack"].set_val(0)
                 continue
 
-            # check for valid address 
+            # check for valid address
             if not self.registers.is_valid_address(self.wishbone_in["addr"].get_val()):
                 self.wishbone_out["ack"].set_val(0)
                 cocotb.log.error(f"[WishboneInterface][valid_cycle] trying to access invalid address {hex(self.wishbone_in['addr'].get_val())} the firmware will stuck waiting for ack that will never be sent")
@@ -55,7 +55,7 @@ class WishboneInterface:
             await self.valid_cycle()
             self.wishbone_out["ack"].set_val(1)
 
-            # read operation 
+            # read operation
             if self.wishbone_in["we"].get_val() == 0:
                 cocotb.log.debug(f"[WishboneInterface][read_write_op] start reading address {hex(self.wishbone_in['addr'].get_val())}")
                 data = self.registers.read(self.wishbone_in["addr"].get_val(), self.wishbone_in["sel"].get_val())
@@ -85,6 +85,6 @@ class _WishboneSignalOutput:
 
     def set_val(self, val):
         self.hdl.value = val
-    
+
     def get_hdl(self):
         return self.hdl

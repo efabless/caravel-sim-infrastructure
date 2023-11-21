@@ -3,6 +3,7 @@
 from datetime import datetime
 import os
 import sys
+import glob
 from pathlib import Path
 import shutil
 import xml.etree.ElementTree as ET
@@ -25,6 +26,7 @@ class Test:
         self.paths = paths
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.local_macros = local_macros  # macros for this test only has  to run local macros
+        self.include_dirs = set()
         self.init_test()
 
     def init_test(self):
@@ -158,20 +160,6 @@ class Test:
                     if line.strip() == "":  # line emptry
                         lint_line = False
 
-
-        for root, dirs, files in os.walk(f"{self.test_dir}"):
-            for file in files:
-                if file.endswith(".vcd") or file.endswith(".vpd"):
-                    file_obj.add(f"{self.test_dir}/{file}")
-                    os.remove(f"{self.test_dir}/{file}")
-                if file == "simv":
-                    file_obj.add(f"{self.test_dir}/{file}")
-                    os.remove(f"{self.test_dir}/{file}")
-            for dir in dirs:
-                file_obj.add(f"{self.test_dir}/{dir}")
-                shutil.rmtree(f"{self.test_dir}/{dir}")
-        file_obj.close()
-
     def check_test_pass(self):
         pass_pattern = "Test passed with (0)criticals (0)errors"
         # if file doesn't exist
@@ -230,7 +218,7 @@ class Test:
     def set_linker_script(self):
         linker_script_orginal = (
             f"{self.paths.FIRMWARE_PATH}/sections.lds"
-            if self.args.cpu_type in["VexRISC","RV32imc"]
+            if self.args.cpu_type in ["VexRISC", "RV32imc"]
             else f"{self.paths.FIRMWARE_PATH}/link.ld"
         )
         self.linker_script_file = f"{self.test_dir}/linker_script.lds"
@@ -314,9 +302,19 @@ class Test:
                     line = line.replace("$(PDK_ROOT)", f"{self.paths.PDK_ROOT}")
                     line = line.replace("$(PDK)", f"{self.paths.PDK}")
                     # Extract file path from command
-                    if line.startswith("-v"):
-                        file_path = line.split(" ")[1]
-                        paths += f'`include "{file_path}"\n'
+                    if line.startswith("-v") or line.startswith("-sv"):
+                        # Add Verilog or System Verilog, including wildcards
+                        split_line = line.split(" ")
+                        file_path = split_line[-1]
+                        if ("*" in file_path):
+                            for wild_match in glob.glob(file_path):
+                                paths += f'`include "{wild_match}"\n'
+                        else:
+                            paths += f'`include "{file_path}"\n'
+                        # Add Includes to Set
+                        include_indices = [i for i, flag in enumerate(split_line) if flag == "-I"]
+                        for i in include_indices:
+                            self.include_dirs.add(split_line[i + 1])
         return paths
 
 def remove_argument(to_remove, patt):
@@ -343,7 +341,6 @@ def move_defines_to_start(filename, pattern):
     # print(defines_lines)
     # Remove the extracted lines from the original list
     lines = [f"{line.strip()}\n" for line in lines if line not in defines_lines]
-
     # Insert the extracted lines at the start of the list
     lines = defines_lines + lines
 

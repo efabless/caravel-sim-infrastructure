@@ -18,7 +18,6 @@ for corner in corners:
     commands.append(command)
 
 
-
 # create a list to store the subprocess objects
 procs = []
 

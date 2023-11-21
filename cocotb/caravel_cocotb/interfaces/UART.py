@@ -66,7 +66,7 @@ class UART:
             if self.caravelEnv.dut._id(f"gpio{self.uart_pins['tx']}_monitor", False).value == 1:
                 continue  # to skip latches
             await Timer(self.bit_time_ns - 2, units="ns")
-            await Timer(int(self.bit_time_ns/2), units="ns")  # read the bit from the middle
+            await Timer(int(self.bit_time_ns / 2), units="ns")  # read the bit from the middle
             break
 
     async def uart_send_char(self, char):

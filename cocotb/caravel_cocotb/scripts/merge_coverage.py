@@ -87,7 +87,7 @@ def merge_fun_cov(path, reports_path=None):
             # Generate the HTML code with anchor tags and href attributes
             html_header = ""
             for i in range(len(bins)):
-                new_list = bins[:i+1]
+                new_list = bins[:i + 1]
                 result_string = ".".join(new_list)
                 html_header += f"<a href='{reports_path}/{result_string}.html'>{bins[i]}</a>."
 
@@ -172,5 +172,3 @@ if __name__ == "__main__":
     args = parser.parse_args()
     path = args.path
     merge_fun_cov(path)
-
-

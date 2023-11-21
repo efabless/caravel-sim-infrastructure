@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from caravel_cocotb.scripts.verify_cocotb.RunFlow import RunFLow, CocotbArgs
 import argparse
+from caravel_cocotb.version import __version__
 
 
 def main():
@@ -23,8 +24,7 @@ def main():
         help="Simulation type RTL,GL & GL_SDF provided only when run -test<takes list as input>",
     )
     parser.add_argument("-testlist", "-tl", nargs="+",
-            help="path of testlist to be run"
-    )
+                        help="path of testlist to be run")
     parser.add_argument(
         "-tag",
         help="provide tag of the run default would be regression name and if no regression is provided would be run_<random float>_<timestamp>_"
@@ -87,10 +87,11 @@ def main():
         action="store_true",
         help='force recompilation',
     )
-    parser.add_argument("--run_defaults", action="store_true", help=argparse.SUPPRESS) # this used to run the default tests the flag is hidden because it just used with caravel verification flow
-    parser.add_argument("--CI", action="store_true", help=argparse.SUPPRESS)   #used only for CI to run docker in non interactive mode
-    parser.add_argument("-no_gen_defaults", action="store_true",  help="don't run gen_gpio_defaults script")
-
+    parser.add_argument("--run_defaults", action="store_true", help=argparse.SUPPRESS)  # this used to run the default tests the flag is hidden because it just used with caravel verification flow
+    parser.add_argument("--CI", action="store_true", help=argparse.SUPPRESS)   # used only for CI to run docker in non interactive mode
+    parser.add_argument("-no_gen_defaults", action="store_true", help="don't run gen_gpio_defaults script")
+    # Add a --version option
+    parser.add_argument('--version', action='version', version='%(prog)s ' + __version__)
     args = parser.parse_args()
     # Arguments = namedtuple("Arguments","regression test sim corner testlist tag maxerr vcs cov checker_en  caravan emailto seed no_wave clk lint arm sdf_setup")
     # arg = Arguments(args.regression ,args.test ,args.sim ,args.corner ,args.testlist ,args.tag ,args.maxerr ,args.vcs ,args.cov ,args.checkers_en   ,args.caravan ,args.emailto ,args.seed ,args.no_wave ,args.clk ,args.lint ,args.arm ,args.sdf_setup)
@@ -101,6 +102,7 @@ def main():
     cocotb_args = CocotbArgs()
     cocotb_args.argparse_to_CocotbArgs(args)
     RunFLow(cocotb_args)
+
 
 if __name__ == "__main__":
     # Call the main function
