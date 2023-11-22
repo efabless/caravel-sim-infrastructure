@@ -255,7 +255,6 @@ class RunRegression:
         for row in self.tests:
             style = "green" if row.passed == "passed" else "red bold" if row.passed == "failed" else "cyan italic"
             table.add_row(row.full_name, row.status, row.start_time, row.endtime, row.duration, row.passed, row.seed, style=style)
-        
         return table
 
     def update_live_table(self):
