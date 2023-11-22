@@ -46,7 +46,7 @@ jobs:
         python3 main.py > output.log
 
     - name: Upload Logs as Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: logs
-          path: $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI/output.log
+      uses: actions/upload-artifact@v2
+      with:
+        name: logs
+        path: $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI/output.log
