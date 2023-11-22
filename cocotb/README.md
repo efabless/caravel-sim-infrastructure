@@ -344,3 +344,13 @@ Coctb flow supports this format in addition to other formats:
 
 <!-- end Update include files format include -->
 
+# unexisted python modules 
+<!-- start unexisted python modules include -->
+If the testbench use python modules that are not installed in the docker image, there are 2 options: 
+
+1. use `-no_docker` option to run without docker if you have all the required tools installed.
+2. Add requirments file to `<caravel_user_project>/verilog/dv/cocotb/requirements.txt` 
+   ```txt
+   rich==12.0.1
+   ```
+<!-- end unexisted python modules include -->

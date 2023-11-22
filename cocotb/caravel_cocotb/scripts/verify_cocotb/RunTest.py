@@ -147,7 +147,8 @@ class RunTest:
     def iverilog_run(self):
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
-        run_command = (f"cd {self.test.test_dir} && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.compilation_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}")
+        install_requirements = f'&& pip3 install -r {self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb/requirements.txt' if os.path.exists(f"{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb/requirements.txt") else ''
+        run_command = (f"cd {self.test.test_dir} {install_requirements} && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.compilation_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}")
         docker_run_command = self._iverilog_docker_command_str(run_command)
         self.run_command_write_to_file(
             docker_run_command if not self.args.no_docker else run_command,

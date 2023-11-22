@@ -219,9 +219,11 @@ class RunFLow:
         try:
             subprocess.run(["docker", "inspect", image_full_name], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             print(f"check update for docker image {image_full_name}.")
+            command = ["docker", "pull", "-q", f"{image_full_name}"]
         except subprocess.CalledProcessError:
             print(f"pulling  docker image {image_full_name}.")
-        command = ["docker", "pull", "-q", f"{image_full_name}"]
+            command = ["docker", "pull", f"{image_full_name}"]
+
         try:
             # Run the docker pull command
             subprocess.run(command, check=True)
