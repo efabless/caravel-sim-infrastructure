@@ -87,7 +87,7 @@ class GenerateCommands(BaseClass):
         self.macros_chooser = RandomChooser([None, "USE_MACRO_1", "USE_MACRO_2"])
         self.sim_paths_chooser = RandomChooser([None, os.path.abspath(os.path.join(self.cocotb_path, ".."))])
         # self.verbosities_chooser = RandomChooser([None, "quiet", "normal", "debug"])
-        self.verbosities_chooser = RandomChooser(["quiet"])  # to speed sims
+        self.verbosities_chooser = RandomChooser(["debug"])  # to speed sims
         self.compiles_chooser = RandomChooser([None, True])
         self.check_commits_chooser = RandomChooser([None, True])
         self.run_location = RandomChooser([self.cocotb_path, os.path.abspath(os.path.join(self.cocotb_path, "..", ".."))])

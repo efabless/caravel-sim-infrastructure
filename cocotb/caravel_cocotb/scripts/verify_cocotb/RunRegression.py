@@ -178,7 +178,7 @@ class RunRegression:
 
     def run_regression(self):
         # threads = list()
-        if self.args.verbosity == "quiet":  # run live screen
+        if self.args.verbosity == "quiet" and not self.args.CI:  # run live screen
             with Live(self.live_table(), auto_refresh=False) as self.live_screen:
                 self.run_all_tests()
         else:
@@ -258,7 +258,7 @@ class RunRegression:
         return table
 
     def update_live_table(self):
-        if self.args.verbosity != "quiet":
+        if self.args.verbosity != "quiet" or self.args.CI:
             return
         self.live_screen.update(self.live_table(), refresh=True)
 
