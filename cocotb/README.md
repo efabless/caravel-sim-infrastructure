@@ -344,7 +344,7 @@ Coctb flow supports this format in addition to other formats:
 
 <!-- end Update include files format include -->
 
-# unexisted python modules 
+# Unexisted python modules 
 <!-- start unexisted python modules include -->
 If the testbench use python modules that are not installed in the docker image, there are 2 options: 
 
