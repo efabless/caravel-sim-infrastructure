@@ -35,6 +35,10 @@ jobs:
     - name: Run Flake8
       run: flake8 $GITHUB_WORKSPACE/cocotb --config $GITHUB_WORKSPACE/cocotb/.flake8
 
+    - name: download docker
+      run: |
+        docker pull efabless/dv:cocotb
+
     - name: Install caravel_cocotb
       run: |
         cd $GITHUB_WORKSPACE/cocotb
@@ -43,10 +47,4 @@ jobs:
     - name: Run main.py
       run: |
         cd $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI
-        python3 main.py > output.log
-
-    - name: Upload Logs as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: logs
-        path: $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI/output.log
+        python3 main.py
