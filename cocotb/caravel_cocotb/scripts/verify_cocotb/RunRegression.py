@@ -20,6 +20,7 @@ from caravel_cocotb.scripts.merge_coverage import merge_fun_cov
 from caravel_cocotb.scripts.test_defaults.test_defaults import TestDefaults
 from rich.live import Live
 from rich.table import Table
+from rich.console import Console
 
 class RunRegression:
     def __init__(self, args, paths, logger) -> None:
@@ -183,6 +184,9 @@ class RunRegression:
                 self.run_all_tests()
         else:
             self.run_all_tests()
+            # Print the table in the top-left corner
+            Console().print(self.live_table(), justify="left")
+
 
         # for index, thread in enumerate(threads):
         #     thread.join()
