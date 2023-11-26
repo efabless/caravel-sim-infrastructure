@@ -1,5 +1,4 @@
 import subprocess
-import docker
 import os
 
 class DockerProcess:
@@ -56,5 +55,3 @@ class DockerProcess:
             f.write("# Install additional packages\n")
             f.write(f"RUN pip install --upgrade {' '.join(requirements)}")
             f.write("\n")
-            
-

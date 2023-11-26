@@ -187,7 +187,6 @@ class RunRegression:
             # Print the table in the top-left corner
             Console().print(self.live_table(), justify="left")
 
-
         # for index, thread in enumerate(threads):
         #     thread.join()
         # # Coverage
