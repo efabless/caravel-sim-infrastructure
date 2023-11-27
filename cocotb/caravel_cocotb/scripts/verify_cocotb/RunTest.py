@@ -206,7 +206,7 @@ class RunTest:
 
     def vcs_run(self):
         defines = GetDefines(self.test.includes_file)
-        run_sim = f"cd {self.test.test_dir}; {self.test.compilation_dir}/simv -negdelay +vcs+dumpvars+all {self.vcs_coverage_command} -cm_name {self.test.name} +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
+        run_sim = f"cd {self.test.test_dir}; {self.test.compilation_dir}/simv +vcs+dumpvars+all {self.vcs_coverage_command} -cm_name {self.test.name} +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         self.run_command_write_to_file(
             run_sim,
             None if self.args.verbosity == "quiet" else self.test.test_log2,
