@@ -78,7 +78,7 @@ class GenerateCommands(BaseClass):
         self.test_list_chooser = RandomChooser([f"{self.cocotb_path}/test_io10/test_io10.yaml", f"{self.cocotb_path}/test_mgmt_gpio/test_mgmt_gpio.yaml"])
         self.design_infos_chooser = RandomChooser([None, f"{self.cocotb_path}/design_info.yaml"])
         self.sims_chooser = RandomChooser([None, 'RTL', "GL", "GL_SDF", "RTL GL", "GL RTL"])
-        self.tags_chooser = RandomChooser([''.join(random.choice(string.ascii_lowercase) for _ in range(i)) for i in range(5, 10)])  # change string length to make sure tag is unique
+        self.tags_chooser = RandomChooser([''.join(random.choice(string.ascii_lowercase) for _ in range(i)) for i in range(5, 40)])  # change string length to make sure tag is unique
         self.max_errors_chooser = RandomChooser([None, "7", "5", "100"])
         self.corners_chooser = RandomChooser([None, "nom-t", "nom-f", "nom-s", "max-t", "max-f", "max-s", "min-t", "min-f", "min-s"])
         self.seed_chooser = RandomChooser([None] + [random.randint(0, 100000) for _ in range(5)])
