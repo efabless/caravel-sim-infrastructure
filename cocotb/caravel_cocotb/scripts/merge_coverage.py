@@ -69,8 +69,8 @@ def merge_fun_cov(path, reports_path=None):
         tree = {}
         for key in yaml_file_object:
             level = key.count(".")
-            nodes = key.split(".")
-            key_parent = key.replace(f".{nodes[level]}", "")
+            last_node_index = key.rfind(".")
+            key_parent = key[:last_node_index] if last_node_index != -1 else key
             if level == 0:
                 root = key
                 tree[key] = Node(key=key)
