@@ -276,6 +276,10 @@ New directory named ``sim`` would be created under ``<repo root>/cocotb/`` or to
 # Update design_info.yaml 
 <!-- start Update design_info include -->
 
+> **Note**: This step is required only if make setup isn't used after cloning <caravel_user_project> 
+
+> After any change `make setup-cocotb` can be used.
+
 ``design_info.yaml`` are used to reference all the needed repos and paths needed to run the tests:
 
 fill  it like the following
@@ -311,6 +315,42 @@ fill  it like the following
   # optional email address to send the results to 
   emailto: [None]
 ```
-> **Note**: This step is required only in the first run.
 
 <!-- end Update design_info include -->
+
+# HDL include files format 
+<!-- start Update include files format include -->
+Include files from ``<caravel_user_project>/verilog/include`` like  ``includes.rtl.caravel_user_project``, ``includes.gl.caravel_user_project`` and ``includes.sdf.caravel_user_project`` are used to reference all the needed repos and paths needed to run the tests:
+
+The legacy format to reference files is:
+- support verilog file include
+   ```bash
+   -v $(USER_PROJECT_VERILOG)/rtl/user_project_wrapper.v
+   ```
+
+Coctb flow supports this format in addition to other formats:
+- support systemVerilg file include
+   ```bash
+   -sv  $(USER_PROJECT_VERILOG)/rtl/counter.sv
+   ```
+- support wild card use
+   ```bash
+   -sv $(USER_PROJECT_VERILOG)/rtl/peripherals/*.sv
+   ```
+- support add search path for `.vh` and `.svh` files
+   ```bash
+   -I $(USER_PROJECT_VERILOG)/rtl/peripherals
+   ```
+
+<!-- end Update include files format include -->
+
+# Unexisted python modules 
+<!-- start unexisted python modules include -->
+If the testbench use python modules that are not installed in the docker image, there are 2 options: 
+
+1. use `-no_docker` option to run without docker if you have all the required tools installed.
+2. Add requirments file to `<caravel_user_project>/verilog/dv/cocotb/requirements.txt` 
+   ```txt
+   rich==12.0.1
+   ```
+<!-- end unexisted python modules include -->

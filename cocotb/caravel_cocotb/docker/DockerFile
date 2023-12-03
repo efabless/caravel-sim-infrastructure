@@ -44,21 +44,6 @@ RUN apt-get update && \
     libglib2.0-dev\
     gperf
 
-# Upgrade pip
-RUN pip3 install --upgrade pip
-
-# Install Python packages using pip
-RUN pip3 install --upgrade\
-    cocotb \
-    cocotb_coverage \
-    cocotb-bus \
-    coverage \
-    loremipsum \
-    oyaml \
-    prettytable \
-    anytree\
-    caravel-cocotb
-
 # Install Verilator from source v5.012
 RUN git clone https://github.com/verilator/verilator && \
     cd verilator && \
@@ -100,8 +85,44 @@ ENV PATH="/opt/riscv/bin:${PATH}"
 RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Create a non-root user
+RUN useradd -ms /bin/bash myuser
+
 # Set the working directory
 WORKDIR /app
+
+# Copy the application code
+COPY . /app
+
+# Change ownership to the non-root user
+RUN chown -R myuser:myuser /app
+
+# Switch to the non-root user
+USER myuser
+
+
+# Upgrade pip
+RUN pip3 install --upgrade pip
+
+# Install Python packages using pip
+RUN pip3 install --upgrade\
+    cocotb \
+    cocotb_coverage \
+    cocotb-bus \
+    coverage \
+    loremipsum \
+    oyaml \
+    prettytable \
+    anytree\
+    caravel-cocotb
+
+
+USER root
+ENV PATH /home/myuser/.local/bin:$PATH
+
+# Add any additional setup or changes here
+
+USER myuser
 
 # Default command when the container starts
 CMD ["bash"]

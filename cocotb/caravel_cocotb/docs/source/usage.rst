@@ -82,3 +82,19 @@ Update design_info.yaml
    :parser: markdown
    :start-after: <!-- start Update design_info include -->
    :end-before: <!-- end Update design_info include -->
+
+HDL include files format 
+*************************
+
+.. include:: ../../../README.md
+   :parser: markdown
+   :start-after: <!-- start Update include files format include -->
+   :end-before: <!-- end Update include files format include -->
+
+Unexisted python modules 
+*************************
+
+.. include:: ../../../README.md
+   :parser: markdown
+   :start-after: <!-- start unexisted python modules include -->
+   :end-before: <!-- end unexisted python modules include -->
