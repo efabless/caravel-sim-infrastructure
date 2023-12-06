@@ -47,7 +47,6 @@ class apbModel():
             self.apb_cov.apb_cov(transaction)
         elif "IRQ_Transaction" in str(type(transaction)):
             self.apb_cov.irq_cov(transaction)
-       
 
     async def _get_transactions(self, queue):
         transaction = await queue.get()
@@ -268,7 +267,7 @@ class EF_apbCoverage:
                     if field_size < 5:
                         cov_points.append(CoverPoint(
                             f"{self.hierarchy}.regs.{reg['name']}.{field['name']}.{access}",
-                            xf=lambda operation, field_start=field_start, field_size=field_size: (operation.address & 0xffff, "write" if operation.write else "read", 0x0 if "x" in operation.data.binstr else (operation.data.integer >> field_start) &  (1 << field_size) - 1),
+                            xf=lambda operation, field_start=field_start, field_size=field_size: (operation.address & 0xffff, "write" if operation.write else "read", 0x0 if "x" in operation.data.binstr else (operation.data.integer >> field_start) & (1 << field_size) - 1),
                             bins=[i for i in range(2**field_size)],
                             bins_labels=[format(i, f'0{field_size}b') for i in range(2 ** field_size)],
                             rel=lambda val, b, address=reg_addr, access=access: val[1] == access and val[0] == address and val[2] == b
@@ -277,7 +276,7 @@ class EF_apbCoverage:
                     else:
                         cov_points.append(CoverPoint(
                             f"{self.hierarchy}.regs.{reg['name']}.{field['name']}.{access}",
-                            xf=lambda operation, field_start=field_start, field_size=field_size: (operation.address & 0xffff, "write" if operation.write else "read", 0x0 if "x" in operation.data.binstr else (operation.data.integer >> field_start) &  (1 << field_size) - 1),
+                            xf=lambda operation, field_start=field_start, field_size=field_size: (operation.address & 0xffff, "write" if operation.write else "read", 0x0 if "x" in operation.data.binstr else (operation.data.integer >> field_start) & (1 << field_size) - 1),
                             bins=[(1 << i, (1 << i + 1) - 1) if i != 0 else (0, 1) for i in range(field_size)],
                             bins_labels=[f"from {hex(1 << i)} to {hex((1 << i + 1) - 1)}" if i != 0 else f"from {hex(0)} to {hex(1)}" for i in range(field_size)],
                             rel=lambda val, b, address=reg_addr, access=access: val[1] == access and val[0] == address and b[0] <= val[2] <= b[1]
