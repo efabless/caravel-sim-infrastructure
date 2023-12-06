@@ -124,7 +124,7 @@ def report_test(func):
         else:
             cocotb.log.info(f"Test passed {msg}")
             cocotb.log.info(
-                f'Cycles consumed = {int(cocotb.utils.get_sim_time("ns")/CLOCK_GLOBAL)} recommened timeout = {int(cocotb.utils.get_sim_time("ns")*1.1/CLOCK_GLOBAL)+1} cycles'
+                f'Cycles consumed = {int(cocotb.utils.get_sim_time("ns") / CLOCK_GLOBAL)} recommened timeout = {int(cocotb.utils.get_sim_time("ns") * 1.1 / CLOCK_GLOBAL) + 1} cycles'
             )
 
     return wrapper_func
