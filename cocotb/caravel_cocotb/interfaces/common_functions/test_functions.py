@@ -41,9 +41,9 @@ CLOCK_GLOBAL = 25
 async def test_configure(
     dut: cocotb.handle.SimHandle,
     timeout_cycles=1000000,
-    clk=25,
+    clk=read_config_file()['clock'],
     timeout_precision=0.2,
-    num_error=3,
+    num_error=int(read_config_file()['max_err']),
     start_up=True
 ) -> caravel.Caravel_env:
     """

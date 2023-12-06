@@ -13,7 +13,7 @@ setup(
     install_requires=requirements,
     include_package_data=True,
     package_data={
-        "caravel_cocotb": ["interfaces/*", "interfaces/**/*", "scripts/*", "scripts/**/*", "VIP/*", "VIP/**/*"]
+        "caravel_cocotb": ["interfaces/*", "interfaces/**/*", "scripts/*", "scripts/**/*", "VIP/*", "VIP/**/*", "models/*", "models/**/*"]
     },
     classifiers=[
         "Programming Language :: Python :: 3",
