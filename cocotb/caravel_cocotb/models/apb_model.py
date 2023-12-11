@@ -99,7 +99,7 @@ class APB_regs():
         with open(json_file, 'r') as file:
             self.data = json.load(file)
         self.init_regs()
-        cocotb.log.info(f"[{__class__.__name__}] {self.get_regs()}")
+        cocotb.log.debug(f"[{__class__.__name__}] {self.get_regs()}")
 
     def init_regs(self):
         regs = {}
@@ -137,7 +137,7 @@ class APB_regs():
         cocotb.log.debug(f"[{__class__.__name__}] value before write to address {hex(address)}: {hex(self.regs[address]['val'])}")
         if "w" in self.regs[address]["mode"]:
             self.regs[address]["val"] = value & ((1 << int(self.regs[address]["size"])) - 1)
-        cocotb.log.info(f"[{__class__.__name__}] value after write to address {hex(address)}: {hex(self.regs[address]['val'])}")
+        cocotb.log.debug(f"[{__class__.__name__}] value after write to address {hex(address)}: {hex(self.regs[address]['val'])}")
 
     def read_reg_value(self, address):
         return self.regs[address]["val"]
@@ -150,7 +150,7 @@ class EF_apbMonitor:
         self._queue_fork = cocotb.scheduler.add(self.apb_monitor(queue))
         if ip_regs.get_irq_exist():
             self._irq_fork = cocotb.scheduler.add(self.irq_monitor(queue))
-        cocotb.log.info("[TEST] Start UART APB Monitor")
+        cocotb.log.debug("[TEST] Start APB Monitor")
 
     async def irq_monitor(self, queue):
         self.irq_hdls()
