@@ -7,5 +7,6 @@ anytree
 PyYAML
 tabulate
 rich
-breathe 
+breathe
+myst_parser
 
