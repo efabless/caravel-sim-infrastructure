@@ -60,7 +60,8 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.githubpages",
     "sphinx.ext.imgmath",
-    "breathe"
+    "breathe",
+    'myst_parser'
 ]
 
 # Add any paths that contain templates here, relative to this directory.

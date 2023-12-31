@@ -150,7 +150,7 @@ usage: caravel_cocotb [-h] [-test TEST [TEST ...]] [-design_info DESIGN_INFO]
                       [-sdf_setup] [-clk CLK] [-lint]
                       [-macros MACROS [MACROS ...]] [-sim_path SIM_PATH]
                       [-verbosity VERBOSITY] [-openframe] [-check_commits]
-                      [-no_docker] [-compile]
+                      [-no_docker] [-compile] [-no_gen_defaults] [--version]
 
 Run cocotb tests
 
@@ -197,6 +197,8 @@ optional arguments:
   -check_commits        use to check if repos are up to date
   -no_docker            run iverilog without docker
   -compile              force recompilation
+  -no_gen_defaults      don't run gen_gpio_defaults script
+  --version             show program's version number and exit
 ```
 <!-- end run a test include -->
 
