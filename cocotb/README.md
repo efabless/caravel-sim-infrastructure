@@ -197,6 +197,8 @@ optional arguments:
   -check_commits        use to check if repos are up to date
   -no_docker            run iverilog without docker
   -compile              force recompilation
+  -no_gen_defaults      dont run gen_gpio_defaults script
+  --version             show program's version number and exit
 ```
 <!-- end run a test include -->
 

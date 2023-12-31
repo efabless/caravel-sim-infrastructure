@@ -24,6 +24,10 @@ class DockerProcess:
         except subprocess.CalledProcessError:
             print(f"pulling  docker image {self.image_name}.")
             command = ["docker", "pull", f"{self.image_name}"]
+        except FileNotFoundError:
+            print("Error: Docker is not installed.")
+            print("Please install Docker and try again.")
+            exit(0)
         try:
             # Run the docker pull command
             subprocess.run(command, check=True)
