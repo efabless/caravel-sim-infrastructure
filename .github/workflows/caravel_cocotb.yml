@@ -35,6 +35,10 @@ jobs:
     - name: Run Flake8
       run: flake8 $GITHUB_WORKSPACE/cocotb --config $GITHUB_WORKSPACE/cocotb/.flake8
 
+    - name: download docker
+      run: |
+        docker pull efabless/dv:cocotb
+
     - name: Install caravel_cocotb
       run: |
         cd $GITHUB_WORKSPACE/cocotb

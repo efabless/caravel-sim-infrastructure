@@ -9,7 +9,6 @@ class SetupEnv(BaseClass):
         super().__init__()
         self.paths = paths
         self.clone_needed_repos()
-        self.pull_cocotb_docker()
 
     def clone_needed_repos(self):
         self.clone_repo(repo_url="https://github.com/efabless/caravel.git", target_dir=self.paths.caravel_root, depth=1, branch="main")

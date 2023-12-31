@@ -18,6 +18,9 @@ import yaml
 import time
 from caravel_cocotb.scripts.merge_coverage import merge_fun_cov
 from caravel_cocotb.scripts.test_defaults.test_defaults import TestDefaults
+from rich.live import Live
+from rich.table import Table
+from rich.console import Console
 
 
 class RunRegression:
@@ -25,6 +28,7 @@ class RunRegression:
         self.args = args
         self.paths = paths
         self.logger = logger
+        self.is_first_test_run = False
         self.total_start_time = datetime.now()
         self.write_command_log()
         self.write_git_log()
@@ -176,20 +180,14 @@ class RunRegression:
 
     def run_regression(self):
         # threads = list()
-        for test in self.tests:
-            if self.args.iverilog:  # threading
-                # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
-                # threads.append(x)
-                # x.start()
-                # time.sleep(10)
-                self.test_run_function(test)
-            else:
-                self.test_run_function(test)
+        if self.args.verbosity == "quiet" and not self.args.CI:  # run live screen
+            with Live(self.live_table(), auto_refresh=False) as self.live_screen:
+                self.run_all_tests()
+        else:
+            self.run_all_tests()
+            # Print the table in the top-left corner
+            Console().print(self.live_table(), justify="left")
 
-        # run defaults
-        if self.args.run_defaults:
-            self.args.compile = True
-            TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
         # for index, thread in enumerate(threads):
         #     thread.join()
         # # Coverage
@@ -207,11 +205,28 @@ class RunRegression:
             except Exception as e:
                 self.logger.error(e)
 
+    def run_all_tests(self):
+        for test in self.tests:
+            if self.args.iverilog:  # threading
+                # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
+                # threads.append(x)
+                # x.start()
+                # time.sleep(10)
+                self.test_run_function(test)
+            else:
+                self.test_run_function(test)
+            # run defaults
+            if self.args.run_defaults:
+                self.args.compile = True
+                TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
+
     def test_run_function(self, test):
         test.start_of_test()
         self.update_run_log()
+        self.update_live_table()
         RunTest(self.args, self.paths, test, self.logger).run_test()
         self.update_run_log()
+        self.update_live_table()
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
@@ -228,6 +243,28 @@ class RunRegression:
             f"\n\nTotal: ({test.passed_count})passed ({test.failed_count})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})time consumed "
         )
         f.close()
+
+    def live_table(self):
+        table = Table()
+        table.add_column("Total")
+        table.add_column("Passed")
+        table.add_column("Failed")
+        table.add_column("Unknown")
+        table.add_column("duration")
+        table.add_column(" ")
+        table.add_column(" ")
+        table.add_row(str(len(self.tests)), str(self.tests[0].passed_count), str(self.tests[0].failed_count), str(self.tests[0].unknown_count), f"{('%.10s' % (datetime.now() - self.total_start_time))}", "", "", style="bold")
+        table.add_row("", "", "", "", "", "", "", style="on white bold")
+        table.add_row("Test", "status", "start", "end", "duration", "p/f", "seed", style="white bold")
+        for row in self.tests:
+            style = "green" if row.passed == "passed" else "red bold" if row.passed == "failed" else "cyan italic"
+            table.add_row(row.full_name, row.status, row.start_time, row.endtime, row.duration, row.passed, row.seed, style=style)
+        return table
+
+    def update_live_table(self):
+        if self.args.verbosity != "quiet" or self.args.CI:
+            return
+        self.live_screen.update(self.live_table(), refresh=True)
 
     def write_command_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/command.log"

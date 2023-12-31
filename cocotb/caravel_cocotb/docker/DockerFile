@@ -105,4 +105,3 @@ WORKDIR /app
 
 # Default command when the container starts
 CMD ["bash"]
-

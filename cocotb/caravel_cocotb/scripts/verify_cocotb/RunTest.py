@@ -190,13 +190,11 @@ class RunTest:
 
     def vcs_compile(self):
         macros = " +define+" + " +define+".join(self.test.macros)
-        if self.args.seed is not None:
-            os.environ["RANDOM_SEED"] = self.args.seed
         vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
         self.run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
         lint = "+lint=all" if self.args.lint else ""
         ignored_errors = " -error=noZMMCM "
-        vcs_cmd = f"cd {self.test.compilation_dir};  vcs {lint} {self.vcs_coverage_command} {ignored_errors}-debug_access+all +error+50 +vcs+loopreport+1000000 -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.compilation_dir}/test_compilation.log  caravel_top -Mdir={self.test.compilation_dir}/csrc -o {self.test.compilation_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)"
+        vcs_cmd = f"cd {self.test.compilation_dir};  vcs {lint} -negdelay {self.vcs_coverage_command} {ignored_errors}-debug_access+all +error+50 +vcs+loopreport+1000000 -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.compilation_dir}/test_compilation.log  caravel_top -Mdir={self.test.compilation_dir}/csrc -o {self.test.compilation_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)"
         self.run_command_write_to_file(
             vcs_cmd,
             self.test.compilation_log,
@@ -206,6 +204,8 @@ class RunTest:
 
     def vcs_run(self):
         defines = GetDefines(self.test.includes_file)
+        if self.args.seed is not None:
+            os.environ["RANDOM_SEED"] = self.args.seed
         run_sim = f"cd {self.test.test_dir}; {self.test.compilation_dir}/simv +vcs+dumpvars+all {self.vcs_coverage_command} -cm_name {self.test.name} +{ ' +'.join(self.test.macros)} {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         self.run_command_write_to_file(
             run_sim,
