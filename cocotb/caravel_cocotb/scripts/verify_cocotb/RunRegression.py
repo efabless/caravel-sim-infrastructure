@@ -22,6 +22,7 @@ from rich.live import Live
 from rich.table import Table
 from rich.console import Console
 
+
 class RunRegression:
     def __init__(self, args, paths, logger) -> None:
         self.args = args
