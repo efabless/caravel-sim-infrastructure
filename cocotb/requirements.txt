@@ -7,4 +7,5 @@ anytree
 PyYAML
 tabulate
 rich
+breathe 
 
