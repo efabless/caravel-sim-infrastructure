@@ -44,7 +44,7 @@ Building the Docker Image
 
     Navigate to this directory and build the Docker image using the following command::
 
-         docker build -t efabless/dv:cocotb . 
+         docker build -t efabless/dv:cocotb -f DockerFile . 
 
     To build diffrent image extend the image name with new tag::
 

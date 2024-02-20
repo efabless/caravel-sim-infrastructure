@@ -105,3 +105,9 @@ WORKDIR /app
 
 # Default command when the container starts
 CMD ["bash"]
+
+# Add uvm-python
+RUN git clone https://github.com/tpoikela/uvm-python.git && \
+cd uvm-python && \
+python3 -m pip install . && \
+cd ../ && rm -rf uvm-python 
