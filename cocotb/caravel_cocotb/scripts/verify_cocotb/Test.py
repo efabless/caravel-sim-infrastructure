@@ -18,12 +18,13 @@ class Test:
     passed_count = 0
     failed_count = 0
 
-    def __init__(self, name, sim, corner, args, paths, local_macros=None):
+    def __init__(self, name, sim, corner, args, paths, logger, local_macros=None):
         self.name = name
         self.sim = sim
         self.corner = corner
         self.args = args
         self.paths = paths
+        self.logger = logger
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
         self.local_macros = local_macros  # macros for this test only has  to run local macros
         self.include_dirs = set()
@@ -114,11 +115,11 @@ class Test:
             if not os.path.isfile(self.compilation_log):
                 pass
             elif os.path.isfile(self.test_log):
-                print(
+                self.logger.info(
                     f"{bcolors.FAIL }Fail{bcolors.ENDC}: Test {self.sim}-{self.name} has Failed for more info refer to {bcolors.OKCYAN }{self.test_log}{bcolors.ENDC}"
                 )
             else:
-                print(
+                self.logger.info(
                     f"{bcolors.FAIL }Error{bcolors.ENDC}: Fail to compile the verilog code for more info refer to {bcolors.OKCYAN }{self.compilation_log}{bcolors.ENDC}"
                 )
 

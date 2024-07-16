@@ -136,7 +136,7 @@ class RunRegression:
         self.update_run_log()
 
     def add_new_test(self, test_name, sim_type, corner, macros=None):
-        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, macros))
+        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, self.logger, macros))
 
     def get_testlist(self, testlist_f):
         directory = os.path.dirname(testlist_f)
@@ -218,7 +218,7 @@ class RunRegression:
             # run defaults
             if self.args.run_defaults:
                 self.args.compile = True
-                TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
+                TestDefaults(self.args, self.paths, self.test_run_function, self.tests, self.logger)
 
     def test_run_function(self, test):
         test.start_of_test()

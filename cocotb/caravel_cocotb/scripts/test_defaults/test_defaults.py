@@ -4,7 +4,7 @@ from caravel_cocotb.scripts.verify_cocotb.Test import Test
 
 
 class TestDefaults:
-    def __init__(self, args, paths, run_function, tests, macros=None) -> None:
+    def __init__(self, args, paths, run_function, tests, logger, macros=None) -> None:
         self.cocotb_path = os.getcwd()
         self.gpio_num = 38
         self.gpio_config_covered = [set() for _ in range(self.gpio_num)]
@@ -13,6 +13,7 @@ class TestDefaults:
         self.macros = macros
         self.run_function = run_function
         self.tests = tests
+        self.logger = logger
         self.update_random_user_defines()
         pass
 
@@ -101,7 +102,7 @@ class TestDefaults:
         os.system(f'cd {self.paths.CARAVEL_ROOT}; python3 {script_path} {self.paths.USER_PROJECT_ROOT}')
 
     def run_RTL_test(self, i):
-        RTL_test = Test("check_defaults", "RTL", "nom-t", self.args, self.paths, self.macros)
+        RTL_test = Test("check_defaults", "RTL", "nom-t", self.args, self.paths, self.logger, self.macros)
         self.tests.append(RTL_test)
         self.run_function(RTL_test)
 
@@ -120,7 +121,7 @@ class TestDefaults:
         # os.system(f'python3 verify_cocotb.py -t check_defaults -tag default_run{i} -v -verbosity quiet -no_wave')
 
     def run_GL_test(self, i):
-        GL_test = Test("check_defaults", "GL", "nom-t", self.args, self.paths, self.macros)
+        GL_test = Test("check_defaults", "GL", "nom-t", self.args, self.paths, self.logger, self.macros)
         self.tests.append(GL_test)
         self.run_function(GL_test)
 
@@ -138,7 +139,7 @@ class TestDefaults:
             print(f"An error occurred: {e}")
 
     def run_SDF_test(self, i, corner):
-        GL_test = Test("check_defaults", "GL_SDF", corner, self.args, self.paths, self.macros)
+        GL_test = Test("check_defaults", "GL_SDF", corner, self.args, self.paths, self.logger, self.macros)
         self.tests.append(GL_test)
         self.run_function(GL_test)
 
