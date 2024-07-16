@@ -227,6 +227,8 @@ class RunRegression:
         RunTest(self.args, self.paths, test, self.logger).run_test()
         self.update_run_log()
         self.update_live_table()
+        if self.args.progress:
+            self.logger.info(f"Total: ({test.passed_count})passed ({test.failed_count})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})elapsed time")
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
@@ -240,7 +242,7 @@ class RunRegression:
                 f"{test.full_name:<{name_size}} {test.status:<10} {test.start_time:<15} {test.endtime:<15} {test.duration:<13} {test.passed:<8} {test.seed:<10}\n"
             )
         f.write(
-            f"\n\nTotal: ({test.passed_count})passed ({test.failed_count})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})time consumed "
+            f"\n\nTotal: ({test.passed_count})passed ({test.failed_count})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})elapsed time"
         )
         f.close()
 

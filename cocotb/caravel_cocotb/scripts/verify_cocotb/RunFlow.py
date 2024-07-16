@@ -239,6 +239,7 @@ class CocotbArgs:
         compile=False,
         run_defaults=False,
         CI=False,
+        progress=False,
         no_gen_defaults=False
     ) -> None:
         self.test = test
@@ -267,6 +268,7 @@ class CocotbArgs:
         self.compile = compile
         self.run_defaults = run_defaults
         self.CI = CI
+        self.progress = progress
         self.no_gen_defaults = no_gen_defaults
 
     def argparse_to_CocotbArgs(self, args):
@@ -293,4 +295,5 @@ class CocotbArgs:
         self.compile = args.compile
         self.run_defaults = args.run_defaults
         self.CI = args.CI
+        self.progress = args.progress
         self.no_gen_defaults = args.no_gen_defaults
