@@ -206,19 +206,22 @@ class RunRegression:
                 self.logger.error(e)
 
     def run_all_tests(self):
-        for test in self.tests:
-            if self.args.iverilog:  # threading
-                # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
-                # threads.append(x)
-                # x.start()
-                # time.sleep(10)
-                self.test_run_function(test)
-            else:
-                self.test_run_function(test)
-            # run defaults
-            if self.args.run_defaults:
-                self.args.compile = True
-                TestDefaults(self.args, self.paths, self.test_run_function, self.tests, self.logger)
+        if self.args.compile_only:  # run only the first test to compile
+            self.test_run_function(self.tests[0])
+        else:
+            for test in self.tests:
+                if self.args.iverilog:  # threading
+                    # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
+                    # threads.append(x)
+                    # x.start()
+                    # time.sleep(10)
+                    self.test_run_function(test)
+                else:
+                    self.test_run_function(test)
+                # run defaults
+                if self.args.run_defaults:
+                    self.args.compile = True
+                    TestDefaults(self.args, self.paths, self.test_run_function, self.tests, self.logger)
 
     def test_run_function(self, test):
         test.start_of_test()
