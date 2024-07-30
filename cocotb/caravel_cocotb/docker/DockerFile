@@ -88,7 +88,7 @@ RUN git clone https://github.com/steveicarus/iverilog.git && cd iverilog && \
 RUN git clone https://github.com/riscv/riscv-gnu-toolchain && \
     cd riscv-gnu-toolchain && git checkout 2023.07.07 && \
     ./configure --prefix=/opt/riscv --enable-multilib --with-arch=rv32gc --with-abi=ilp32d && \
-    make linux && \
+    make && \
     cd .. && rm -rf riscv-gnu-toolchain
 
 # Add toolchain to PATH
