@@ -3,17 +3,21 @@ from gen_run_command import GenRunCommand
 from checker import Checker
 import os
 from collections import namedtuple
-DirectoryPaths = namedtuple('DirectoryPaths', ['caravel_root', 'mgmt_core_root', 'user_project_root', "pdk_root"])
+
+DirectoryPaths = namedtuple(
+    "DirectoryPaths",
+    ["caravel_root", "mgmt_core_root", "user_project_root", "pdk_root"],
+)
 
 
 def main():
     try:
         current_path = os.getcwd()
         paths = DirectoryPaths(
-            caravel_root=f'{current_path}/caravel',
-            mgmt_core_root=f'{current_path}/mgmt_core',
-            user_project_root=f'{current_path}/user_project_root',
-            pdk_root=f'{current_path}/pdk_root'
+            caravel_root=f"{current_path}/caravel",
+            mgmt_core_root=f"{current_path}/mgmt_core",
+            user_project_root=f"{current_path}/user_project_root",
+            pdk_root=f"{current_path}/pdk_root",
         )
         SetupEnv(paths)
         gen_run_obj = GenRunCommand(paths)

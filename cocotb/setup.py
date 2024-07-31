@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from setuptools import setup, find_packages
 from caravel_cocotb.version import __version__
+
 requirements = open("requirements.txt").read().strip().split("\n")
 
 setup(
@@ -13,7 +14,14 @@ setup(
     install_requires=requirements,
     include_package_data=True,
     package_data={
-        "caravel_cocotb": ["interfaces/*", "interfaces/**/*", "scripts/*", "scripts/**/*", "VIP/*", "VIP/**/*"]
+        "caravel_cocotb": [
+            "interfaces/*",
+            "interfaces/**/*",
+            "scripts/*",
+            "scripts/**/*",
+            "VIP/*",
+            "VIP/**/*",
+        ]
     },
     classifiers=[
         "Programming Language :: Python :: 3",

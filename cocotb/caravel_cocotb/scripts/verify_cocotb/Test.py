@@ -25,7 +25,9 @@ class Test:
         self.args = args
         self.paths = paths
         self.hex_dir = f"{self.paths.SIM_PATH}/hex_files/"
-        self.local_macros = local_macros  # macros for this test only has  to run local macros
+        self.local_macros = (
+            local_macros  # macros for this test only has  to run local macros
+        )
         self.include_dirs = set()
         self.init_test()
 
@@ -48,7 +50,7 @@ class Test:
             f'SIM=\\"{self.sim}\\"',
             f'TESTNAME=\\"{self.name}\\"',
             f'FTESTNAME=\\"{self.full_name}\\"',
-            f'SIM_DIR=\\"{self.paths.SIM_PATH}/{self.args.tag}\\"'
+            f'SIM_DIR=\\"{self.paths.SIM_PATH}/{self.args.tag}\\"',
         ]
         if self.sim == "GL":
             testmacros.append("GL")
@@ -88,8 +90,8 @@ class Test:
         self.create_logs()
         self.create_module_trail()
         if self.args.vcs:
-            with open(f"{self.compilation_dir}/pli.tab", 'w') as file:
-                file.write('acc+=rw,wn:*')
+            with open(f"{self.compilation_dir}/pli.tab", "w") as file:
+                file.write("acc+=rw,wn:*")
         self.set_test_macros()
         self.set_linker_script()
         self.start_time = self.start_time_t.strftime("%H:%M:%S(%a)")
@@ -196,16 +198,27 @@ class Test:
         remove_argument(to_remove, "-seed")
         remove_argument(to_remove, "-sim")
         remove_argument(to_remove, "-corner")
-        command = "python3 " + " ".join([arg for arg in sys.argv if arg not in to_remove])
+        command = "python3 " + " ".join(
+            [arg for arg in sys.argv if arg not in to_remove]
+        )
         command += f" -test {self.name} -tag {self.args.tag}/{self.full_name}/rerun   -sim {self.sim} -corner {self.corner} "
         if self.get_seed().isdigit():
             command += f" -seed {self.get_seed()} "
         rerun_script = rerun_script_template
-        rerun_script = rerun_script.replace("replace by test command", command).replace("replace by cocotb path", self.paths.RUN_PATH)
+        rerun_script = rerun_script.replace("replace by test command", command).replace(
+            "replace by cocotb path", self.paths.RUN_PATH
+        )
         rerun_script = rerun_script.replace("replace by mgmt Root", self.paths.MCW_ROOT)
-        rerun_script = rerun_script.replace("replace by caravel Root", self.paths.CARAVEL_ROOT)
-        rerun_script = rerun_script.replace("replace by orignal rerun script", f"{self.test_dir}/rerun.py")
-        rerun_script = rerun_script.replace("replace by new rerun script", f"{self.test_dir}/rerun/{self.full_name}/rerun.py")
+        rerun_script = rerun_script.replace(
+            "replace by caravel Root", self.paths.CARAVEL_ROOT
+        )
+        rerun_script = rerun_script.replace(
+            "replace by orignal rerun script", f"{self.test_dir}/rerun.py"
+        )
+        rerun_script = rerun_script.replace(
+            "replace by new rerun script",
+            f"{self.test_dir}/rerun/{self.full_name}/rerun.py",
+        )
         with open(f"{self.test_dir}/rerun.py", "w") as f:
             f.write(rerun_script)
 
@@ -213,7 +226,9 @@ class Test:
         f = open(f"{self.test_dir}/module_trail.py", "w")
         f.write("from os import path\n")
         f.write("import sys\n")
-        f.write(f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n")
+        f.write(
+            f"sys.path.append(path.abspath('{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb'))\nfrom cocotb_tests import *\n"
+        )
 
     def set_linker_script(self):
         linker_script_orginal = (
@@ -263,11 +278,17 @@ class Test:
         # write to include file in the top of the file
         self.includes_file = f"{self.compilation_dir}/includes.v"
         if self.sim == "RTL":
-            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel")
+            includes = self.convert_list_to_include(
+                f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel"
+            )
         elif self.sim == "GL_SDF":
-            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel")
+            includes = self.convert_list_to_include(
+                f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel"
+            )
         elif self.sim == "GL":
-            includes = self.convert_list_to_include(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel")
+            includes = self.convert_list_to_include(
+                f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel"
+            )
         includes = paths + includes
         open(self.includes_file, "w").write(includes)
         move_defines_to_start(self.includes_file, 'defines.v"')
@@ -275,14 +296,20 @@ class Test:
         paths = open(file, "r").read()
         self.includes_list = f"{self.compilation_dir}/includes"
         if self.sim == "RTL":
-            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel", 'r').read()
+            includes = open(
+                f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel", "r"
+            ).read()
         elif self.sim == "GL_SDF":
-            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel", 'r').read()
+            includes = open(
+                f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel", "r"
+            ).read()
         elif self.sim == "GL":
-            includes = open(f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", 'r').read()
+            includes = open(
+                f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", "r"
+            ).read()
         includes = paths + includes
         open(self.includes_list, "w").write(includes)
-        move_defines_to_start(self.includes_list, 'defines.v')
+        move_defines_to_start(self.includes_list, "defines.v")
 
     def convert_list_to_include(self, file):
         paths = ""
@@ -306,16 +333,19 @@ class Test:
                         # Add Verilog or System Verilog, including wildcards
                         split_line = line.split(" ")
                         file_path = split_line[-1]
-                        if ("*" in file_path):
+                        if "*" in file_path:
                             for wild_match in glob.glob(file_path):
                                 paths += f'`include "{wild_match}"\n'
                         else:
                             paths += f'`include "{file_path}"\n'
                         # Add Includes to Set
-                        include_indices = [i for i, flag in enumerate(split_line) if flag == "-I"]
+                        include_indices = [
+                            i for i, flag in enumerate(split_line) if flag == "-I"
+                        ]
                         for i in include_indices:
                             self.include_dirs.add(split_line[i + 1])
         return paths
+
 
 def remove_argument(to_remove, patt):
     test_name = False
@@ -333,7 +363,7 @@ def remove_argument(to_remove, patt):
 def move_defines_to_start(filename, pattern):
     # Read the contents of the file into a list of lines
     # print(f"file name = {filename}")
-    with open(filename, 'r') as f:
+    with open(filename, "r") as f:
         lines = f.readlines()
 
     # Extract the lines that end with "defines.v"
@@ -345,5 +375,5 @@ def move_defines_to_start(filename, pattern):
     lines = defines_lines + lines
 
     # Write the modified list of lines back to the file
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         f.writelines(lines)

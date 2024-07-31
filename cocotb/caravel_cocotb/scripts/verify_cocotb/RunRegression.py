@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import sys
 from subprocess import PIPE, run
+
 try:
     sys.path.append(os.getcwd())
     from user_run_test import UserRunTest as RunTest
@@ -71,7 +72,7 @@ class RunRegression:
 
         simulation_macros.append(self.args.pdk)
 
-        simulation_macros.extend([f'CPU_TYPE_{self.args.cpu_type}'])
+        simulation_macros.extend([f"CPU_TYPE_{self.args.cpu_type}"])
         if self.args.cpu_type == "ARM":
             simulation_macros.append("AHB")
 
@@ -136,7 +137,9 @@ class RunRegression:
         self.update_run_log()
 
     def add_new_test(self, test_name, sim_type, corner, macros=None):
-        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, macros))
+        self.tests.append(
+            Test(test_name, sim_type, corner, self.args, self.paths, macros)
+        )
 
     def get_testlist(self, testlist_f):
         directory = os.path.dirname(testlist_f)
@@ -175,7 +178,9 @@ class RunRegression:
         current_dir = os.getcwd()
         os.chdir(f"{self.paths.CARAVEL_ROOT}/")
         self.logger.info("Running gen_gpio_defaults script")
-        os.system(f"python3 scripts/gen_gpio_defaults.py {self.paths.USER_PROJECT_ROOT}")
+        os.system(
+            f"python3 scripts/gen_gpio_defaults.py {self.paths.USER_PROJECT_ROOT}"
+        )
         os.chdir(current_dir)
 
     def run_regression(self):
@@ -198,10 +203,15 @@ class RunRegression:
                 # merge line coverage
                 old_path = os.getcwd()
                 os.chdir(f"{self.paths.SIM_PATH}/{self.args.tag}")
-                os.system(f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov")
+                os.system(
+                    f"urg -dir */*.vdb -format both -show tests -report {self.cov_dir}/line_cov"
+                )
                 os.chdir(old_path)
                 # merge functional coverage
-                merge_fun_cov(f"{self.paths.SIM_PATH}/{self.args.tag}", reports_path=f"{self.cov_dir}/functional_cov")
+                merge_fun_cov(
+                    f"{self.paths.SIM_PATH}/{self.args.tag}",
+                    reports_path=f"{self.cov_dir}/functional_cov",
+                )
             except Exception as e:
                 self.logger.error(e)
 
@@ -253,12 +263,43 @@ class RunRegression:
         table.add_column("duration")
         table.add_column(" ")
         table.add_column(" ")
-        table.add_row(str(len(self.tests)), str(self.tests[0].passed_count), str(self.tests[0].failed_count), str(self.tests[0].unknown_count), f"{('%.10s' % (datetime.now() - self.total_start_time))}", "", "", style="bold")
+        table.add_row(
+            str(len(self.tests)),
+            str(self.tests[0].passed_count),
+            str(self.tests[0].failed_count),
+            str(self.tests[0].unknown_count),
+            f"{('%.10s' % (datetime.now() - self.total_start_time))}",
+            "",
+            "",
+            style="bold",
+        )
         table.add_row("", "", "", "", "", "", "", style="on white bold")
-        table.add_row("Test", "status", "start", "end", "duration", "p/f", "seed", style="white bold")
+        table.add_row(
+            "Test",
+            "status",
+            "start",
+            "end",
+            "duration",
+            "p/f",
+            "seed",
+            style="white bold",
+        )
         for row in self.tests:
-            style = "green" if row.passed == "passed" else "red bold" if row.passed == "failed" else "cyan italic"
-            table.add_row(row.full_name, row.status, row.start_time, row.endtime, row.duration, row.passed, row.seed, style=style)
+            style = (
+                "green"
+                if row.passed == "passed"
+                else "red bold" if row.passed == "failed" else "cyan italic"
+            )
+            table.add_row(
+                row.full_name,
+                row.status,
+                row.start_time,
+                row.endtime,
+                row.duration,
+                row.passed,
+                row.seed,
+                style=style,
+            )
         return table
 
     def update_live_table(self):
@@ -448,13 +489,21 @@ class RunRegression:
         sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         user_project_name = "user_project_wrapper"
-        sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
-        if not os.path.exists(sdf_user_project):  # so special case for openframe maybe change it in the future
+        sdf_user_project = (
+            f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
+        )
+        if not os.path.exists(
+            sdf_user_project
+        ):  # so special case for openframe maybe change it in the future
             user_project_name = "openframe_project_wrapper"
             sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
 
         # check if user sdf dir exists
-        if os.path.exists(sdf_user_dir) and os.path.isdir(sdf_user_dir) and len(os.listdir(sdf_user_dir)) > 0:
+        if (
+            os.path.exists(sdf_user_dir)
+            and os.path.isdir(sdf_user_dir)
+            and len(os.listdir(sdf_user_dir)) > 0
+        ):
             sdf_dir = sdf_user_dir
 
         self.args.macros.append(f'SDF_PATH=\\"{sdf_dir}\\"')
@@ -462,7 +511,10 @@ class RunRegression:
             start_time = time.time()
             sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
             sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf", f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf"]
+            output_files = [
+                f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",
+                f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf",
+            ]
             for output_file in output_files:
                 compress_file = output_file + ".gz"
                 # delete output file if exists
@@ -472,4 +524,6 @@ class RunRegression:
                 os.system(f"gzip -dc {compress_file} > {output_file}")
                 end_time = time.time()
                 execution_time = end_time - start_time
-                self.logger.info(f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds")
+                self.logger.info(
+                    f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds"
+                )

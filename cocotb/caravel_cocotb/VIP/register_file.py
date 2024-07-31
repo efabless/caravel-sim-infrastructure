@@ -3,8 +3,9 @@ import cocotb
 
 class RegisterFile:
     """Register file
-        create a register file that can contain multiple registers
+    create a register file that can contain multiple registers
     """
+
     def __init__(self):
         self.registers = {}
 
@@ -28,7 +29,9 @@ class RegisterFile:
         and it can be accessed as an attribute using the given name. The Register instance can be accessed using `reg_file.counter`.
         """
 
-        cocotb.log.debug(f"[RegisterFile][add_register] name={name}, address={hex(address)} reset_val={hex(reset_val)} size={size}")
+        cocotb.log.debug(
+            f"[RegisterFile][add_register] name={name}, address={hex(address)} reset_val={hex(reset_val)} size={size}"
+        )
         if address in self.registers:
             raise ValueError("Address already assigned")
         self.registers[address] = Register(name, reset_val, size)
@@ -85,7 +88,9 @@ class RegisterFile:
         The `select` parameter is used to determine which bytes to read from the register. Each bit of `select` corresponds to a byte in the register, and if a bit is set to 1, the corresponding byte will be read.
         If the address does not correspond to any registered register in the RegisterFile, a ValueError is raised.
         """
-        cocotb.log.debug(f"[RegisterFile][read] read  from reg {self.registers[address].name}, address={hex(address)}, select={bin(select)[2:][::-1]}")
+        cocotb.log.debug(
+            f"[RegisterFile][read] read  from reg {self.registers[address].name}, address={hex(address)}, select={bin(select)[2:][::-1]}"
+        )
         if address in self.registers:
             return self.registers[address].read(select)
         else:
@@ -123,7 +128,9 @@ class RegisterFile:
         The `select` parameter is used to determine which bytes to update in the register. Each bit of `select` corresponds to a byte in the register, and if a bit is set to 1, the corresponding byte will be updated with the corresponding part of the data.
         If the address does not correspond to any registered register in the RegisterFile, a ValueError is raised.
         """
-        cocotb.log.debug(f"[RegisterFile][write] write to reg {self.registers[address].name}, address={hex(address)}, data={hex(data)}, select={bin(select)[2:][::-1]}")
+        cocotb.log.debug(
+            f"[RegisterFile][write] write to reg {self.registers[address].name}, address={hex(address)}, data={hex(data)}, select={bin(select)[2:][::-1]}"
+        )
         if address in self.registers:
             self.registers[address].write(data, select)
         else:
@@ -144,7 +151,7 @@ class Register:
         self.reset()
 
     def reset(self):
-        self.write(self.reset_val, 0xf)
+        self.write(self.reset_val, 0xF)
 
     def read(self, select):
         data = 0
@@ -153,7 +160,9 @@ class Register:
             if sel == "1":
                 masking = self.value[index] << (index * 8)
                 data |= masking
-        cocotb.log.debug(f"[Register][read] value={[hex(hex_val) for hex_val in self.value]}, select={binary_select} data={hex(data)}")
+        cocotb.log.debug(
+            f"[Register][read] value={[hex(hex_val) for hex_val in self.value]}, select={binary_select} data={hex(data)}"
+        )
         return data
 
     def write(self, data, select):
@@ -162,4 +171,6 @@ class Register:
             if sel == "1":
                 byte = data >> (index * 8) & 0xFF
                 self.value[index] = byte
-        cocotb.log.debug(f"[Register][write] value={[hex(hex_val) for hex_val in self.value]}, select={bin(select)[2:][::-1]} data={hex(data)} value[0]={self.value[0]}")
+        cocotb.log.debug(
+            f"[Register][write] value={[hex(hex_val) for hex_val in self.value]}, select={bin(select)[2:][::-1]} data={hex(data)} value[0]={self.value[0]}"
+        )

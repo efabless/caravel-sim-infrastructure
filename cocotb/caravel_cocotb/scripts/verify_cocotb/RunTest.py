@@ -19,7 +19,14 @@ class RunTest:
             self.runTest()
         self.test.end_of_test()
 
-    def docker_command_str(self, docker_image="efabless/dv:cocotb", docker_dir="", env_vars="", addtional_switchs="", command=""):
+    def docker_command_str(
+        self,
+        docker_image="efabless/dv:cocotb",
+        docker_dir="",
+        env_vars="",
+        addtional_switchs="",
+        command="",
+    ):
         command = f"docker run {' --init -it --sig-proxy=true ' if not self.args.CI else ' ' } -u $(id -u $USER):$(id -g $USER) {addtional_switchs} {env_vars} {docker_dir} {docker_image} sh -ec '{command}'"
         return command
 
@@ -27,7 +34,9 @@ class RunTest:
         GCC_PATH = "/opt/riscv/bin/"
         GCC_PREFIX = "riscv32-unknown-linux-gnu"
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
-        SOURCE_FILES = f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
+        SOURCE_FILES = (
+            f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
+        )
 
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-O2 -g -march=rv32i_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
@@ -72,11 +81,21 @@ class RunTest:
             command = self.hex_riscv_command_gen()
 
         docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
-        docker_dir = (docker_dir + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
-        docker_command = self.docker_command_str(docker_image="efabless/dv:cocotb", docker_dir=docker_dir, command=command)
+        docker_dir = (
+            docker_dir
+            + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
+        )
+        docker_command = self.docker_command_str(
+            docker_image="efabless/dv:cocotb", docker_dir=docker_dir, command=command
+        )
         # don't run with docker with arm
         cmd = command if self.args.cpu_type == "ARM" else docker_command
-        hex_gen_state = self.run_command_write_to_file(cmd, self.test.hex_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
+        hex_gen_state = self.run_command_write_to_file(
+            cmd,
+            self.test.hex_log,
+            self.logger,
+            quiet=False if self.args.verbosity == "debug" else True,
+        )
         self.firmware_log = open(self.test.hex_log, "a")
         if hex_gen_state != 0:
             # open(self.test.firmware_log, "w").write(stdout)
@@ -89,14 +108,19 @@ class RunTest:
         self.firmware_log.write("Pass: hex generation")
         self.firmware_log.close()
         # move hex file to the test
-        shutil.copyfile(f"{self.test.hex_dir}/{self.test.name}.hex", f"{self.test.test_dir}/firmware.hex")
+        shutil.copyfile(
+            f"{self.test.hex_dir}/{self.test.name}.hex",
+            f"{self.test.test_dir}/firmware.hex",
+        )
         return "hex_generated"
 
     def test_path(self, test_name=None):
         if test_name is None:
             test_name = self.test.name
         c_file_name = test_name + ".c"
-        tests_path_user = os.path.abspath(f"{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb")
+        tests_path_user = os.path.abspath(
+            f"{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb"
+        )
         test_file = self.find(c_file_name, tests_path_user)
         test_path = os.path.dirname(test_file)
         return test_path
@@ -108,7 +132,7 @@ class RunTest:
         elif self.args.vcs:
             self.runTest_vcs()
         # elif self.args.verilator:
-            # self.runTest_verilator()
+        # self.runTest_verilator()
 
     # iverilog function
     def runTest_iverilog(self):
@@ -118,16 +142,19 @@ class RunTest:
             )
             return
         self.write_iverilog_includes_file()
-        if not os.path.isfile(f"{self.test.compilation_dir}/sim.vvp") or self.args.compile:
+        if (
+            not os.path.isfile(f"{self.test.compilation_dir}/sim.vvp")
+            or self.args.compile
+        ):
             self.iverilog_compile()
         self.iverilog_run()
 
     def write_iverilog_includes_file(self):
         self.iverilog_dirs = " "
-        self.iverilog_dirs += f'-I {self.paths.USER_PROJECT_ROOT}/verilog/rtl'
+        self.iverilog_dirs += f"-I {self.paths.USER_PROJECT_ROOT}/verilog/rtl"
         self.test.set_user_project()
         for include_dir in self.test.include_dirs:
-            self.iverilog_dirs += f' -I {include_dir}'
+            self.iverilog_dirs += f" -I {include_dir}"
 
     def iverilog_compile(self):
         macros = " -D" + " -D".join(self.test.macros)
@@ -141,38 +168,48 @@ class RunTest:
             docker_compilation_command if not self.args.no_docker else compile_command,
             self.test.compilation_log,
             self.logger,
-            quiet=False if self.args.verbosity == "debug" else True
+            quiet=False if self.args.verbosity == "debug" else True,
         )
 
     def iverilog_run(self):
         defines = GetDefines(self.test.includes_file)
         seed = "" if self.args.seed is None else f"RANDOM_SEED={self.args.seed}"
-        run_command = (f"cd {self.test.test_dir} && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.compilation_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}")
+        run_command = f"cd {self.test.test_dir} && TESTCASE={self.test.name} MODULE=module_trail {seed} vvp -M $(cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus {self.test.compilation_dir}/sim.vvp +{ ' +'.join(self.test.macros) } {' '.join([f'+{k}={v}' if v != ''else f'+{k}' for k, v in defines.defines.items()])}"
         docker_run_command = self._iverilog_docker_command_str(run_command)
         self.run_command_write_to_file(
             docker_run_command if not self.args.no_docker else run_command,
             None if self.args.verbosity == "quiet" else self.test.test_log2,
             self.logger,
-            quiet=True if self.args.verbosity == "quiet" else False
+            quiet=True if self.args.verbosity == "quiet" else False,
         )
 
     def _iverilog_docker_command_str(self, command=""):
         """the docker command without the command that would run"""
         env_vars = f"-e COCOTB_RESULTS_FILE={os.getenv('COCOTB_RESULTS_FILE')} -e CARAVEL_PATH={self.paths.CARAVEL_PATH} -e CARAVEL_VERILOG_PATH={self.paths.CARAVEL_VERILOG_PATH} -e VERILOG_PATH={self.paths.VERILOG_PATH} -e PDK_ROOT={self.paths.PDK_ROOT} -e PDK={self.paths.PDK} -e USER_PROJECT_VERILOG={self.paths.USER_PROJECT_ROOT}/verilog"
         local_caravel_cocotb_path = caravel_cocotb.__file__.replace("__init__.py", "")
-        docker_caravel_cocotb_path = "/usr/local/lib/python3.8/dist-packages/caravel_cocotb/"
+        docker_caravel_cocotb_path = (
+            "/usr/local/lib/python3.8/dist-packages/caravel_cocotb/"
+        )
         docker_dir = f"-v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.paths.PDK_ROOT}:{self.paths.PDK_ROOT} -v {local_caravel_cocotb_path}:{docker_caravel_cocotb_path} "
-        docker_dir += (f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}")
+        docker_dir += (
+            f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
+        )
         if os.path.exists("/mnt/scratch/"):
             docker_dir += " -v /mnt/scratch/cocotb_runs/:/mnt/scratch/cocotb_runs/ "
         display = " -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/.Xauthority --network host --security-opt seccomp=unconfined "
-        command = self.docker_command_str(docker_image="efabless/dv:cocotb", docker_dir=docker_dir, env_vars=env_vars, addtional_switchs=display, command=command)
+        command = self.docker_command_str(
+            docker_image="efabless/dv:cocotb",
+            docker_dir=docker_dir,
+            env_vars=env_vars,
+            addtional_switchs=display,
+            command=command,
+        )
         return command
 
     # vcs function
     def runTest_vcs(self):
         self.write_vcs_includes_file()
-        self.vcs_coverage_command = ''
+        self.vcs_coverage_command = ""
         if self.test.sim == "RTL":
             self.vcs_coverage_command = "-cm line+tgl+cond+fsm+branch+assert "
         os.environ["TESTCASE"] = f"{self.test.name}"
@@ -183,15 +220,22 @@ class RunTest:
 
     def write_vcs_includes_file(self):
         # self.vcs_dirs = f'+incdir+\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\" '
-        self.vcs_dirs = ' '
+        self.vcs_dirs = " "
         if self.test.sim == "RTL":
-            self.vcs_dirs += f'+incdir+\\"{self.paths.USER_PROJECT_ROOT}/verilog/rtl\\" '
+            self.vcs_dirs += (
+                f'+incdir+\\"{self.paths.USER_PROJECT_ROOT}/verilog/rtl\\" '
+            )
         self.test.set_user_project()
 
     def vcs_compile(self):
         macros = " +define+" + " +define+".join(self.test.macros)
         vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
-        self.run_command_write_to_file(vlogan_cmd, self.test.compilation_log, self.logger, quiet=False if self.args.verbosity == "debug" else True)
+        self.run_command_write_to_file(
+            vlogan_cmd,
+            self.test.compilation_log,
+            self.logger,
+            quiet=False if self.args.verbosity == "debug" else True,
+        )
         lint = "+lint=all" if self.args.lint else ""
         ignored_errors = " -error=noZMMCM "
         vcs_cmd = f"cd {self.test.compilation_dir};  vcs {lint} -negdelay {self.vcs_coverage_command} {ignored_errors}-debug_access+all +error+50 +vcs+loopreport+1000000 -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.compilation_dir}/test_compilation.log  caravel_top -Mdir={self.test.compilation_dir}/csrc -o {self.test.compilation_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)"
@@ -199,7 +243,7 @@ class RunTest:
             vcs_cmd,
             self.test.compilation_log,
             self.logger,
-            quiet=False if self.args.verbosity == "debug" else True
+            quiet=False if self.args.verbosity == "debug" else True,
         )
 
     def vcs_run(self):
@@ -211,7 +255,7 @@ class RunTest:
             run_sim,
             None if self.args.verbosity == "quiet" else self.test.test_log2,
             self.logger,
-            quiet=True if self.args.verbosity == "quiet" else False
+            quiet=True if self.args.verbosity == "quiet" else False,
         )
 
     def find(self, name, path):
@@ -228,7 +272,7 @@ class RunTest:
             # Configure file handler for the logger
             file_handler = logging.FileHandler(file)
             file_handler.setLevel(logging.INFO)
-            file_formatter = logging.Formatter('%(message)s')
+            file_formatter = logging.Formatter("%(message)s")
             file_handler.setFormatter(file_formatter)
             logger_file.addHandler(file_handler)
             f = open(file, "a")
@@ -237,7 +281,11 @@ class RunTest:
             f.close()
         try:
             process = subprocess.Popen(
-                cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1024
+                cmd,
+                shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                bufsize=1024,
             )
             while True:
                 out = process.stdout.readline().decode("utf-8")
@@ -253,7 +301,7 @@ class RunTest:
                         logger_file.info(stdout.replace("\n", "", 1))
         except Exception as e:
             logger(f"Docker process stopped by user {e}")
-            process.stdin.write(b'\x03')  # Send the Ctrl+C signal to the Docker process
+            process.stdin.write(b"\x03")  # Send the Ctrl+C signal to the Docker process
             process.terminate()
 
         return process.returncode

@@ -83,16 +83,18 @@ def merge_fun_cov(path, reports_path=None):
             prettyTable = PrettyTable()
 
             # Split the header by '.'
-            bins = key.split('.')
+            bins = key.split(".")
             # Generate the HTML code with anchor tags and href attributes
             html_header = ""
             for i in range(len(bins)):
-                new_list = bins[:i + 1]
+                new_list = bins[: i + 1]
                 result_string = ".".join(new_list)
-                html_header += f"<a href='{reports_path}/{result_string}.html'>{bins[i]}</a>."
+                html_header += (
+                    f"<a href='{reports_path}/{result_string}.html'>{bins[i]}</a>."
+                )
 
             # Remove the last '.' character from the HTML code
-            html_header = html_header.rstrip('.')
+            html_header = html_header.rstrip(".")
 
             body_st.append("<h2>" + html_header + "</h2>")
             if len(tree[key].children) > 0:

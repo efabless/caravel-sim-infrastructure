@@ -1,6 +1,7 @@
 import subprocess
 import os
 
+
 class DockerProcess:
     def __init__(self, image_name, user_project_path=None, sim_path=None) -> None:
         self.image_name = image_name
@@ -11,14 +12,21 @@ class DockerProcess:
         # pull/update docker image
         self.pull_docker_image()
         # update docker image with pip commands if requirements.txt exists
-        if os.path.exists(f"{self.user_project_path}/verilog/dv/cocotb/requirements.txt"):
+        if os.path.exists(
+            f"{self.user_project_path}/verilog/dv/cocotb/requirements.txt"
+        ):
             self.write_docker_file()
             self.build_docker_image()
 
     def pull_docker_image(self):
         # Check if the image exists locally
         try:
-            subprocess.run(["docker", "inspect", self.image_name], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.run(
+                ["docker", "inspect", self.image_name],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
             print(f"check update for docker image {self.image_name}.")
             command = ["docker", "pull", "-q", f"{self.image_name}"]
         except subprocess.CalledProcessError:
@@ -38,7 +46,18 @@ class DockerProcess:
     def build_docker_image(self):
         try:
             # Build the Docker image using subprocess
-            subprocess.run(["docker", "build", "-t", self.image_name, "-f", f"{self.sim_path}/Dockerfile", "."], check=True)
+            subprocess.run(
+                [
+                    "docker",
+                    "build",
+                    "-t",
+                    self.image_name,
+                    "-f",
+                    f"{self.sim_path}/Dockerfile",
+                    ".",
+                ],
+                check=True,
+            )
             print(f"Docker image '{self.image_name}' built successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error building Docker image: {e}")

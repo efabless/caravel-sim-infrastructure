@@ -10,6 +10,7 @@ import logging
 import random
 from caravel_cocotb.scripts.verify_cocotb.DockerProcess import DockerProcess
 
+
 def check_valid_mail_addr(address):
     pat = r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b"
     if re.match(pat, address):
@@ -31,23 +32,24 @@ class RunFLow:
         self.set_tag()
         self.set_args(design_info)
         self.set_config_script(design_info)
-        DockerProcess("efabless/dv:cocotb", self.paths.USER_PROJECT_ROOT, f"{self.paths.SIM_PATH}/{self.args.tag}").run()
+        DockerProcess(
+            "efabless/dv:cocotb",
+            self.paths.USER_PROJECT_ROOT,
+            f"{self.paths.SIM_PATH}/{self.args.tag}",
+        ).run()
         RunRegression(self.args, self.paths, self.logger)
 
     def configure_logger(self):
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(message)s')
+        formatter = logging.Formatter("%(message)s")
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(formatter)
         self.logger.addHandler(console_handler)
 
     def check_valid_args(self):
-        if all(
-            v is None
-            for v in [self.args.test, self.args.testlist]
-        ):
+        if all(v is None for v in [self.args.test, self.args.testlist]):
             raise EnvironmentError(
                 "Should provide at least one of the following options test or testlist for more info use --help"
             )
@@ -65,10 +67,8 @@ class RunFLow:
 
     def set_tag(self):
         if self.args.tag is None:
-            self.args.tag = (f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}')
-        Path(f"{self.paths.SIM_PATH}").mkdir(
-            parents=True, exist_ok=True
-        )
+            self.args.tag = f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
+        Path(f"{self.paths.SIM_PATH}").mkdir(parents=True, exist_ok=True)
         # check if scratch disk exists
         if os.path.exists("/mnt/scratch/"):
             if os.path.lexists(f"{self.paths.SIM_PATH}/{self.args.tag}"):
@@ -82,7 +82,9 @@ class RunFLow:
                 os.makedirs(scratch_folder)
             os.symlink(f"{scratch_folder}", f"{self.paths.SIM_PATH}/{self.args.tag}")
         else:
-            Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(parents=True, exist_ok=True)
+            Path(f"{self.paths.SIM_PATH}/{self.args.tag}").mkdir(
+                parents=True, exist_ok=True
+            )
         self.logger.info(f"Run tag: {self.args.tag} ")
 
     def set_paths(self, design_info):
@@ -93,8 +95,12 @@ class RunFLow:
                 f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}"
             )
         if self.args.check_commits:
-            GitRepoChecker(design_info["CARAVEL_ROOT"])  # check repo synced with last commit
-            GitRepoChecker(design_info["MCW_ROOT"])  # check repo synced with last commit
+            GitRepoChecker(
+                design_info["CARAVEL_ROOT"]
+            )  # check repo synced with last commit
+            GitRepoChecker(
+                design_info["MCW_ROOT"]
+            )  # check repo synced with last commit
         if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
             raise NotADirectoryError(
                 f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}"
@@ -105,7 +111,9 @@ class RunFLow:
             )
         else:
             if self.args.check_commits:
-                GitRepoChecker(design_info["USER_PROJECT_ROOT"])  # check repo synced with last commit
+                GitRepoChecker(
+                    design_info["USER_PROJECT_ROOT"]
+                )  # check repo synced with last commit
         Paths = namedtuple(
             "Paths",
             "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH RUN_PATH USER_PROJECT_ROOT SIM_PATH",
@@ -138,15 +146,17 @@ class RunFLow:
         )
 
     def set_cpu_type(self):
-        def_h_file = f'{self.paths.FIRMWARE_PATH}/defs.h'
-        pattern = r'^#define CPU_TYPE\s+(\w+)$'
+        def_h_file = f"{self.paths.FIRMWARE_PATH}/defs.h"
+        pattern = r"^#define CPU_TYPE\s+(\w+)$"
         with open(def_h_file, "r") as f:
             for line in f:
                 match = re.match(pattern, line)
                 if match:
                     self.args.cpu_type = match.group(1)
                     return
-        raise EnvironmentError("Can't find cpu type please add #define CPU_TYPE to defs.h in managment repo")
+        raise EnvironmentError(
+            "Can't find cpu type please add #define CPU_TYPE to defs.h in managment repo"
+        )
 
     def set_args(self, design_info):
         if self.args.clk is None:
@@ -209,7 +219,10 @@ class RunFLow:
             yaml.dump(design_configs, file)
 
     def get_design_info(self):
-        yaml_file = open(f"{f'{self.run_path}/design_info.yaml' if self.args.design_info is None else self.args.design_info}", "r")
+        yaml_file = open(
+            f"{f'{self.run_path}/design_info.yaml' if self.args.design_info is None else self.args.design_info}",
+            "r",
+        )
         design_info = yaml.safe_load(yaml_file)
         return design_info
 
@@ -239,7 +252,7 @@ class CocotbArgs:
         compile=False,
         run_defaults=False,
         CI=False,
-        no_gen_defaults=False
+        no_gen_defaults=False,
     ) -> None:
         self.test = test
         self.sim = sim

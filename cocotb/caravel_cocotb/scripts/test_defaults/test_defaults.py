@@ -48,14 +48,32 @@ class TestDefaults:
                 self.run_RTL_test(i)
 
     def set_valid_modes(self):
-        valid_modes = {"GPIO_MODE_MGMT_STD_INPUT_NOPULL": 0x0403, "GPIO_MODE_MGMT_STD_INPUT_PULLDOWN": 0x0c01, "GPIO_MODE_MGMT_STD_INPUT_PULLUP": 0x0801, "GPIO_MODE_MGMT_STD_OUTPUT": 0x1809, "GPIO_MODE_USER_STD_INPUT_NOPULL": 0x0402, "GPIO_MODE_USER_STD_INPUT_PULLDOWN": 0x0c00, "GPIO_MODE_USER_STD_INPUT_PULLUP": 0x0800, "GPIO_MODE_USER_STD_OUTPUT": 0x1808, "GPIO_MODE_USER_STD_BIDIRECTIONAL": 0x1800}
+        valid_modes = {
+            "GPIO_MODE_MGMT_STD_INPUT_NOPULL": 0x0403,
+            "GPIO_MODE_MGMT_STD_INPUT_PULLDOWN": 0x0C01,
+            "GPIO_MODE_MGMT_STD_INPUT_PULLUP": 0x0801,
+            "GPIO_MODE_MGMT_STD_OUTPUT": 0x1809,
+            "GPIO_MODE_USER_STD_INPUT_NOPULL": 0x0402,
+            "GPIO_MODE_USER_STD_INPUT_PULLDOWN": 0x0C00,
+            "GPIO_MODE_USER_STD_INPUT_PULLUP": 0x0800,
+            "GPIO_MODE_USER_STD_OUTPUT": 0x1808,
+            "GPIO_MODE_USER_STD_BIDIRECTIONAL": 0x1800,
+        }
         # unvalid modes that can't be testsed
-        unvalid_modes = {"GPIO_MODE_MGMT_STD_BIDIRECTIONAL": 0x1801, "GPIO_MODE_MGMT_STD_ANALOG": 0x000b, "GPIO_MODE_USER_STD_ANALOG": 0x000a}
+        unvalid_modes = {
+            "GPIO_MODE_MGMT_STD_BIDIRECTIONAL": 0x1801,
+            "GPIO_MODE_MGMT_STD_ANALOG": 0x000B,
+            "GPIO_MODE_USER_STD_ANALOG": 0x000A,
+        }
         return valid_modes, unvalid_modes
 
     def write_user_defines_to_file(self, valid_modes, unvalid_modes):
-        with open(f'{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_defines.v', 'w') as user_define_file:
-            user_define_file.write("""`ifndef __USER_DEFINES_H \n`define __USER_DEFINES_H\n\n\n""")
+        with open(
+            f"{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_defines.v", "w"
+        ) as user_define_file:
+            user_define_file.write(
+                """`ifndef __USER_DEFINES_H \n`define __USER_DEFINES_H\n\n\n"""
+            )
 
             for mode, value in valid_modes.items():
                 line = f"`define {mode} 13'h{value:04x}\n"  # format: `define <mode> <value>
@@ -66,8 +84,12 @@ class TestDefaults:
                 user_define_file.write(line)
 
     def write_random_values_to_file(self, valid_modes):
-        with open(f'{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_defines.v', 'a') as user_define_file:
-            with open(f'{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_define_temp.txt', 'w') as user_define_txt_file:
+        with open(
+            f"{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_defines.v", "a"
+        ) as user_define_file:
+            with open(
+                f"{self.paths.USER_PROJECT_ROOT}/verilog/rtl/user_define_temp.txt", "w"
+            ) as user_define_txt_file:
                 user_define_file.write("\n\n\n")
                 for i in range(self.gpio_num):
                     modes_difference = self.get_modes_difference(valid_modes, i)
@@ -97,20 +119,28 @@ class TestDefaults:
         return modes_difference
 
     def run_gen_gpio_defaults(self):
-        script_path = f'{self.paths.CARAVEL_ROOT}/scripts/gen_gpio_defaults.py'
-        os.system(f'cd {self.paths.CARAVEL_ROOT}; python3 {script_path} {self.paths.USER_PROJECT_ROOT}')
+        script_path = f"{self.paths.CARAVEL_ROOT}/scripts/gen_gpio_defaults.py"
+        os.system(
+            f"cd {self.paths.CARAVEL_ROOT}; python3 {script_path} {self.paths.USER_PROJECT_ROOT}"
+        )
 
     def run_RTL_test(self, i):
-        RTL_test = Test("check_defaults", "RTL", "nom-t", self.args, self.paths, self.macros)
+        RTL_test = Test(
+            "check_defaults", "RTL", "nom-t", self.args, self.paths, self.macros
+        )
         self.tests.append(RTL_test)
         self.run_function(RTL_test)
 
         old_folder_path = RTL_test.test_dir
         new_folder_name = f"{RTL_test.full_name}{i}"
-        new_folder_path = os.path.join(os.path.dirname(old_folder_path), new_folder_name)
+        new_folder_path = os.path.join(
+            os.path.dirname(old_folder_path), new_folder_name
+        )
         try:
             os.rename(old_folder_path, new_folder_path)
-            print(f"Folder path changed from '{old_folder_path}' to '{new_folder_path}'.")
+            print(
+                f"Folder path changed from '{old_folder_path}' to '{new_folder_path}'."
+            )
         except FileNotFoundError:
             print(f"Folder '{old_folder_path}' not found.")
         except FileExistsError:
@@ -120,16 +150,22 @@ class TestDefaults:
         # os.system(f'python3 verify_cocotb.py -t check_defaults -tag default_run{i} -v -verbosity quiet -no_wave')
 
     def run_GL_test(self, i):
-        GL_test = Test("check_defaults", "GL", "nom-t", self.args, self.paths, self.macros)
+        GL_test = Test(
+            "check_defaults", "GL", "nom-t", self.args, self.paths, self.macros
+        )
         self.tests.append(GL_test)
         self.run_function(GL_test)
 
         old_folder_path = GL_test.test_dir
         new_folder_name = f"{GL_test.full_name}{i}"
-        new_folder_path = os.path.join(os.path.dirname(old_folder_path), new_folder_name)
+        new_folder_path = os.path.join(
+            os.path.dirname(old_folder_path), new_folder_name
+        )
         try:
             os.rename(old_folder_path, new_folder_path)
-            print(f"Folder path changed from '{old_folder_path}' to '{new_folder_path}'.")
+            print(
+                f"Folder path changed from '{old_folder_path}' to '{new_folder_path}'."
+            )
         except FileNotFoundError:
             print(f"Folder '{old_folder_path}' not found.")
         except FileExistsError:
@@ -138,16 +174,22 @@ class TestDefaults:
             print(f"An error occurred: {e}")
 
     def run_SDF_test(self, i, corner):
-        GL_test = Test("check_defaults", "GL_SDF", corner, self.args, self.paths, self.macros)
+        GL_test = Test(
+            "check_defaults", "GL_SDF", corner, self.args, self.paths, self.macros
+        )
         self.tests.append(GL_test)
         self.run_function(GL_test)
 
         old_folder_path = GL_test.test_dir
         new_folder_name = f"{GL_test.full_name}{i}"
-        new_folder_path = os.path.join(os.path.dirname(old_folder_path), new_folder_name)
+        new_folder_path = os.path.join(
+            os.path.dirname(old_folder_path), new_folder_name
+        )
         try:
             os.rename(old_folder_path, new_folder_path)
-            print(f"Folder path changed from '{old_folder_path}' to '{new_folder_path}'.")
+            print(
+                f"Folder path changed from '{old_folder_path}' to '{new_folder_path}'."
+            )
         except FileNotFoundError:
             print(f"Folder '{old_folder_path}' not found.")
         except FileExistsError:

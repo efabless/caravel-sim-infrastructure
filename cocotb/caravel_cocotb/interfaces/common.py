@@ -93,7 +93,9 @@ class GPIO_MODE(Enum):
         )
         GPIO_MODE_USER_STD_ANALOG = int(cocotb.plusargs["GPIO_MODE_USER_STD_ANALOG"])
     except Exception:
-        cocotb.log.warning("Some configuration isn't valid please review it's define at user_defines file")
+        cocotb.log.warning(
+            "Some configuration isn't valid please review it's define at user_defines file"
+        )
         pass
 
 

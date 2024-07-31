@@ -34,8 +34,7 @@ class UART:
         return line[0:-1]
 
     async def get_int(self) -> int:
-        """read int sent by firmware API uart_put_int
-        """
+        """read int sent by firmware API uart_put_int"""
         line = ""
         while True:
             new_char = await self.get_char()
@@ -61,12 +60,21 @@ class UART:
 
     async def start_of_tx(self):
         while True:
-            await FallingEdge(self.caravelEnv.dut._id(f"gpio{self.uart_pins['tx']}_monitor", False))
+            await FallingEdge(
+                self.caravelEnv.dut._id(f"gpio{self.uart_pins['tx']}_monitor", False)
+            )
             await Timer(2, units="ns")
-            if self.caravelEnv.dut._id(f"gpio{self.uart_pins['tx']}_monitor", False).value == 1:
+            if (
+                self.caravelEnv.dut._id(
+                    f"gpio{self.uart_pins['tx']}_monitor", False
+                ).value
+                == 1
+            ):
                 continue  # to skip latches
             await Timer(self.bit_time_ns - 2, units="ns")
-            await Timer(int(self.bit_time_ns / 2), units="ns")  # read the bit from the middle
+            await Timer(
+                int(self.bit_time_ns / 2), units="ns"
+            )  # read the bit from the middle
             break
 
     async def uart_send_char(self, char):

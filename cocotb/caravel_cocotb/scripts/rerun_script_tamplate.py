@@ -1,4 +1,4 @@
-rerun_script_template = '''
+rerun_script_template = """
 import os
 import shutil
 import argparse
@@ -18,4 +18,4 @@ if args.extend is not None:
 os.system(command)
 
 shutil.copyfile("replace by orignal rerun script", "replace by new rerun script")
-'''
+"""

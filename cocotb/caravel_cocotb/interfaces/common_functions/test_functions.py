@@ -7,6 +7,7 @@ from cocotb.log import SimLogFormatter
 from caravel_cocotb.interfaces.common_functions.Timeout import Timeout
 from cocotb.triggers import ClockCycles
 import oyaml as yaml
+
 try:
     from cocotb_coverage.coverage import coverage_db
 except ImportError:
@@ -41,10 +42,10 @@ CLOCK_GLOBAL = 25
 async def test_configure(
     dut: cocotb.handle.SimHandle,
     timeout_cycles=1000000,
-    clk=read_config_file()['clock'],
+    clk=read_config_file()["clock"],
     timeout_precision=0.2,
-    num_error=int(read_config_file()['max_err']),
-    start_up=True
+    num_error=int(read_config_file()["max_err"]),
+    start_up=True,
 ) -> caravel.Caravel_env:
     """
     Configure caravel power, clock, and reset and setup the timeout watchdog then return object of caravel environment.

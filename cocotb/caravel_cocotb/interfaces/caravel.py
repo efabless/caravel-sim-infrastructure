@@ -40,7 +40,9 @@ class Caravel_env:
         except AttributeError:
             pass
         self.get_macros()
-        self.active_gpios_num = int(self.design_macros.MPRJ_IO_PADS)  # number of active gpios
+        self.active_gpios_num = int(
+            self.design_macros.MPRJ_IO_PADS
+        )  # number of active gpios
         if "OPENFRAME" in self.design_macros._asdict():
             self.active_gpios_num = int(self.design_macros.OPENFRAME_IO_PADS)
 
@@ -162,7 +164,7 @@ class Caravel_env:
             h_bit = h_bit[0]
         if l_bit is None:
             l_bit = h_bit
-        mprj_out = self.dut.mprj_io_tb.value[size - h_bit: size - l_bit]
+        mprj_out = self.dut.mprj_io_tb.value[size - h_bit : size - l_bit]
         if mprj_out.is_resolvable:
             cocotb.log.debug(
                 f" [caravel] Monitor : mprj[{h_bit}:{l_bit}] = {hex(mprj_out)}"
@@ -196,7 +198,9 @@ class Caravel_env:
         """
         val = ""
         for i in arr:
-            cocotb.log.debug(f" [caravel][monitor_discontinuous_gpios] Monitor gpio[{i}] = {self.monitor_gpio(i).binstr}")
+            cocotb.log.debug(
+                f" [caravel][monitor_discontinuous_gpios] Monitor gpio[{i}] = {self.monitor_gpio(i).binstr}"
+            )
             val += self.monitor_gpio(i).binstr
         return val
 
@@ -224,9 +228,9 @@ class Caravel_env:
         for array in gpios_values:
             gpio_value = array[1]
             for gpio in array[0]:
-                gpio_defaults[
-                    size - (gpio * 13 + 12): size - gpio * 13
-                ] = gpio_value.value
+                gpio_defaults[size - (gpio * 13 + 12) : size - gpio * 13] = (
+                    gpio_value.value
+                )
                 # cocotb.log.info(f' [caravel] gpio_defaults[{size - (gpio*13 + 12)}:{size -gpio*13}] = {gpio_value.value} ')
         self.caravel_hdl.gpio_defaults.value = gpio_defaults
         # reset
@@ -252,9 +256,9 @@ class Caravel_env:
                 self.gpio_control_reg_write(
                     control_modules[gpio], gpio_value.value
                 )  # for control blocks regs
-                self.caravel_hdl.housekeeping.gpio_configure[
-                    gpio
-                ].value = gpio_value.value  # for house keeping regs
+                self.caravel_hdl.housekeeping.gpio_configure[gpio].value = (
+                    gpio_value.value
+                )  # for house keeping regs
         cocotb.log.info(" [caravel] finish configuring gpios, the curret gpios value: ")
         self.print_gpios_ctrl_val()
         self.print_gpios_HW_val()
@@ -264,7 +268,7 @@ class Caravel_env:
         size = gpio_defaults.n_bits - 1  # number of bins in gpio_defaults
         gpios = []
         for gpio in range(self.design_macros["MPRJ_IO_PADS"]):
-            gpio_value = gpio_defaults[size - (gpio * 13 + 12): size - gpio * 13]
+            gpio_value = gpio_defaults[size - (gpio * 13 + 12) : size - gpio * 13]
             gpio_enum = GPIO_MODE(gpio_value.integer)
             gpios.append((gpio, gpio_enum))
         group_pins = groupby(gpios, key=lambda x: x[1])
@@ -405,7 +409,7 @@ class Caravel_env:
         path.gpio_slow_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_SLOW.value]
         path.gpio_vtrip_sel.value = bits[MASK_GPIO_CTRL.MASK_GPIO_CTRL_TRIP.value]
         gpio_dm = bits[
-            MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value: MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value
+            MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value : MASK_GPIO_CTRL.MASK_GPIO_CTRL_DGTL_MODE.value
             + 3
         ]
         gpio_dm = sum(

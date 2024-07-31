@@ -23,7 +23,7 @@ class RiskV:
         if not Macros["GL"] and not Macros["ARM"]:
             cocotb.scheduler.add(self.force_reset_fun())
 
-    """  """
+    """ """
 
     async def drive_data_with_address(self, address, data, SEL=0xF):
         self.cpu_hdl.dBusWishbone_CYC.value = 1
@@ -47,7 +47,7 @@ class RiskV:
             self.cpu_hdl.dBusWishbone_DAT_MOSI
         )[0]
 
-    """  """
+    """ """
 
     async def drive_data2address(self, address, data, SEL=0xF):
         cocotb.log.info(
@@ -120,7 +120,7 @@ class RiskV:
             f"[RiskV][drive_data2address] finish driving address {hex(address)} with {hex(data)}"
         )
 
-    """  """
+    """ """
 
     async def read_address(self, address, SEL=0xF):
         cocotb.log.info(f"[RiskV][read_address] start reading address {hex(address)}")
