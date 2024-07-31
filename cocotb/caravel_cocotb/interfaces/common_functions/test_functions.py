@@ -116,7 +116,7 @@ def report_test(func):
         await func(*args, **kwargs)
         if "COVERAGE_COLLECT" in cocotb.plusargs:
             coverage_db.export_to_yaml(
-                filename=f"{sim_dir}/{TESTFULLNAME}/coverage.yalm".replace('"', ""),
+                filename=f"{sim_dir}/{TESTFULLNAME}/coverage.yaml".replace('"', ""),
             )
         # report after finish simulation
         msg = f"with ({cocotb.log.critical.counter})criticals ({cocotb.log.error.counter})errors ({cocotb.log.warning.counter})warnings "
