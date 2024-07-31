@@ -1,10 +1,12 @@
-click
-cocotb==1.8.0
-oyaml
+anytree>=2.12.0,<3
+click>=8
+cocotb>=1.9.0,<2
 cocotb_coverage==1.1.0
-PrettyTable
-anytree
-PyYAML
-tabulate
-rich
+oyaml==1.0
+prettytable>=3.10.0,<4
+PyYAML>=6
+rich>=13,<14
+ruamel.yaml>=0.18.6
+volare>=0.18.0
 
+setuptools

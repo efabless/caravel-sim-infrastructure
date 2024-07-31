@@ -2,7 +2,6 @@ design_info.yaml
 *.log
 sim_build
 sim
-__pycache__
 *.
 ./wb_models/housekeepingWB/__pycache__
 *.xml
@@ -12,3 +11,10 @@ __pycache__
 AN.DB
 includes.v
 *.lst
+
+# Python
+__pycache__
+/build
+/venv
+/dist
+/*.egg-info
