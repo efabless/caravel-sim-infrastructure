@@ -147,7 +147,8 @@ class RunTest:
             or self.args.compile
         ):
             self.iverilog_compile()
-        self.iverilog_run()
+        if not self.args.compile_only:
+            self.iverilog_run()
 
     def write_iverilog_includes_file(self):
         self.iverilog_dirs = " "
@@ -216,7 +217,8 @@ class RunTest:
         os.environ["MODULE"] = "module_trail"
         if not os.path.isfile(f"{self.test.compilation_dir}/simv") or self.args.compile:
             self.vcs_compile()
-        self.vcs_run()
+        if not self.args.compile_only:
+            self.vcs_run()
 
     def write_vcs_includes_file(self):
         # self.vcs_dirs = f'+incdir+\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\" '

@@ -137,9 +137,7 @@ class RunRegression:
         self.update_run_log()
 
     def add_new_test(self, test_name, sim_type, corner, macros=None):
-        self.tests.append(
-            Test(test_name, sim_type, corner, self.args, self.paths, macros)
-        )
+        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, self.logger, macros))
 
     def get_testlist(self, testlist_f):
         directory = os.path.dirname(testlist_f)
@@ -216,19 +214,22 @@ class RunRegression:
                 self.logger.error(e)
 
     def run_all_tests(self):
-        for test in self.tests:
-            if self.args.iverilog:  # threading
-                # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
-                # threads.append(x)
-                # x.start()
-                # time.sleep(10)
-                self.test_run_function(test)
-            else:
-                self.test_run_function(test)
-            # run defaults
-            if self.args.run_defaults:
-                self.args.compile = True
-                TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
+        if self.args.compile_only:  # run only the first test to compile
+            self.test_run_function(self.tests[0])
+        else:
+            for test in self.tests:
+                if self.args.iverilog:  # threading
+                    # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
+                    # threads.append(x)
+                    # x.start()
+                    # time.sleep(10)
+                    self.test_run_function(test)
+                else:
+                    self.test_run_function(test)
+                # run defaults
+                if self.args.run_defaults:
+                    self.args.compile = True
+                    TestDefaults(self.args, self.paths, self.test_run_function, self.tests, self.logger)
 
     def test_run_function(self, test):
         test.start_of_test()
@@ -237,6 +238,8 @@ class RunRegression:
         RunTest(self.args, self.paths, test, self.logger).run_test()
         self.update_run_log()
         self.update_live_table()
+        if self.args.progress:
+            self.logger.info(f"Total: {f'passed ({test.passed_count})':12} {f'failed ({test.failed_count})':12} {f'unknown ({test.unknown_count})':13} elapsed time ({('%.10s' % (datetime.now() - self.total_start_time))})")
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
@@ -250,7 +253,7 @@ class RunRegression:
                 f"{test.full_name:<{name_size}} {test.status:<10} {test.start_time:<15} {test.endtime:<15} {test.duration:<13} {test.passed:<8} {test.seed:<10}\n"
             )
         f.write(
-            f"\n\nTotal: ({test.passed_count})passed ({test.failed_count})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})time consumed "
+            f"\n\nTotal: {f'passed ({test.passed_count})':12} {f'failed ({test.failed_count})':12} {f'unknown ({test.unknown_count})':13} elapsed time ({('%.10s' % (datetime.now() - self.total_start_time))})"
         )
         f.close()
 

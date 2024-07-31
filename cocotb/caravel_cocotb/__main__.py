@@ -102,6 +102,8 @@ def main():
         action="store_true",
         help="don't run gen_gpio_defaults script",
     )
+    parser.add_argument("--progress", action="store_true", help=argparse.SUPPRESS)   # used only for external CI to run docker in non interactive mode
+    parser.add_argument("--compile_only", action="store_true", help=argparse.SUPPRESS)   # used to only compile without running
     # Add a --version option
     parser.add_argument(
         "--version", action="version", version="%(prog)s " + __version__
