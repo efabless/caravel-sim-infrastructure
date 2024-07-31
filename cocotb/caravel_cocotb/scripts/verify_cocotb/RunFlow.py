@@ -70,7 +70,7 @@ class RunFLow:
             self.args.tag = f'run_{datetime.now().strftime("%d_%b_%H_%M_%S_%f")[:-4]}'
         Path(f"{self.paths.SIM_PATH}").mkdir(parents=True, exist_ok=True)
         # check if scratch disk exists
-        if os.path.exists("/mnt/scratch/"):
+        if os.path.exists("/mnt/scratch/") and not self.args.no_scratch:
             if os.path.lexists(f"{self.paths.SIM_PATH}/{self.args.tag}"):
                 if os.path.islink(f"{self.paths.SIM_PATH}/{self.args.tag}"):
                     os.unlink(f"{self.paths.SIM_PATH}/{self.args.tag}")
@@ -252,7 +252,11 @@ class CocotbArgs:
         compile=False,
         run_defaults=False,
         CI=False,
-        no_gen_defaults=False,
+        sdfs_dir=None,
+        progress=False,
+        compile_only=False,
+        no_scratch=False,
+        no_gen_defaults=False
     ) -> None:
         self.test = test
         self.sim = sim
@@ -279,7 +283,10 @@ class CocotbArgs:
         self.no_docker = no_docker
         self.compile = compile
         self.run_defaults = run_defaults
-        self.CI = CI
+        self.sdfs_dir = sdfs_dir
+        self.progress = progress
+        self.compile_only = compile_only
+        self.no_scratch = no_scratch
         self.no_gen_defaults = no_gen_defaults
 
     def argparse_to_CocotbArgs(self, args):
@@ -306,4 +313,8 @@ class CocotbArgs:
         self.compile = args.compile
         self.run_defaults = args.run_defaults
         self.CI = args.CI
+        self.sdfs_dir = args.sdfs_dir
+        self.progress = args.progress
+        self.compile_only = args.compile_only
+        self.no_scratch = args.no_scratch
         self.no_gen_defaults = args.no_gen_defaults

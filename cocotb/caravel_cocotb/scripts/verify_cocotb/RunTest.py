@@ -17,7 +17,8 @@ class RunTest:
     def run_test(self):
         if self.hex_generate() == "hex_generated":  # run test only if hex is generated
             self.runTest()
-        self.test.end_of_test()
+        if not self.args.compile_only:
+            self.test.end_of_test()
 
     def docker_command_str(
         self,
@@ -32,7 +33,7 @@ class RunTest:
 
     def hex_riscv_command_gen(self):
         GCC_PATH = "/opt/riscv/bin/"
-        GCC_PREFIX = "riscv32-unknown-linux-gnu"
+        GCC_PREFIX = "riscv32-unknown-elf"
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
         SOURCE_FILES = (
             f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
@@ -147,7 +148,8 @@ class RunTest:
             or self.args.compile
         ):
             self.iverilog_compile()
-        self.iverilog_run()
+        if not self.args.compile_only:
+            self.iverilog_run()
 
     def write_iverilog_includes_file(self):
         self.iverilog_dirs = " "
@@ -216,7 +218,8 @@ class RunTest:
         os.environ["MODULE"] = "module_trail"
         if not os.path.isfile(f"{self.test.compilation_dir}/simv") or self.args.compile:
             self.vcs_compile()
-        self.vcs_run()
+        if not self.args.compile_only:
+            self.vcs_run()
 
     def write_vcs_includes_file(self):
         # self.vcs_dirs = f'+incdir+\\"{self.paths.PDK_ROOT}/{self.paths.PDK}\\" '

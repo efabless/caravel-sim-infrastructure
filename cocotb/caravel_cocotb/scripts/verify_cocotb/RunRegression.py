@@ -22,7 +22,8 @@ from caravel_cocotb.scripts.test_defaults.test_defaults import TestDefaults
 from rich.live import Live
 from rich.table import Table
 from rich.console import Console
-
+import glob
+import subprocess
 
 class RunRegression:
     def __init__(self, args, paths, logger) -> None:
@@ -130,16 +131,14 @@ class RunRegression:
                 self.get_testlist(testlist)
             if len(self.tests) == 0:
                 raise RuntimeError(
-                    "test list {self.args.testlist} doesn't have any valid tests please review the format of the yalm file"
+                    "test list {self.args.testlist} doesn't have any valid tests please review the format of the yaml file"
                 )
         if len(self.tests) == 0:
             raise RuntimeError("There is no test provided to run")
         self.update_run_log()
 
     def add_new_test(self, test_name, sim_type, corner, macros=None):
-        self.tests.append(
-            Test(test_name, sim_type, corner, self.args, self.paths, macros)
-        )
+        self.tests.append(Test(test_name, sim_type, corner, self.args, self.paths, self.logger, macros))
 
     def get_testlist(self, testlist_f):
         directory = os.path.dirname(testlist_f)
@@ -216,27 +215,34 @@ class RunRegression:
                 self.logger.error(e)
 
     def run_all_tests(self):
-        for test in self.tests:
-            if self.args.iverilog:  # threading
-                # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
-                # threads.append(x)
-                # x.start()
-                # time.sleep(10)
-                self.test_run_function(test)
-            else:
-                self.test_run_function(test)
-            # run defaults
-            if self.args.run_defaults:
-                self.args.compile = True
-                TestDefaults(self.args, self.paths, self.test_run_function, self.tests)
+        if self.args.compile_only:  # run only the first test to compile
+            self.test_run_function(self.tests[0])
+        else:
+            for test in self.tests:
+                if self.args.iverilog:  # threading
+                    # x = threading.Thread(target=self.test_run_function,args=(test,sim_type,corner))
+                    # threads.append(x)
+                    # x.start()
+                    # time.sleep(10)
+                    self.test_run_function(test)
+                else:
+                    self.test_run_function(test)
+                # run defaults
+                if self.args.run_defaults:
+                    self.args.compile = True
+                    TestDefaults(self.args, self.paths, self.test_run_function, self.tests, self.logger)
 
     def test_run_function(self, test):
         test.start_of_test()
-        self.update_run_log()
-        self.update_live_table()
+        if not self.args.compile_only:
+            self.update_run_log()
+            self.update_live_table()
         RunTest(self.args, self.paths, test, self.logger).run_test()
-        self.update_run_log()
-        self.update_live_table()
+        if not self.args.compile_only:
+            self.update_run_log()
+            self.update_live_table()
+        if self.args.progress:
+            self.logger.info(f"Total: {f'passed ({test.passed_count})':12} {f'failed ({test.failed_count})':12} {f'unknown ({test.unknown_count})':13} elapsed time ({('%.10s' % (datetime.now() - self.total_start_time))})")
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
@@ -250,7 +256,7 @@ class RunRegression:
                 f"{test.full_name:<{name_size}} {test.status:<10} {test.start_time:<15} {test.endtime:<15} {test.duration:<13} {test.passed:<8} {test.seed:<10}\n"
             )
         f.write(
-            f"\n\nTotal: ({test.passed_count})passed ({test.failed_count})failed ({test.unknown_count})unknown  ({('%.10s' % (datetime.now() - self.total_start_time))})time consumed "
+            f"\n\nTotal: {f'passed ({test.passed_count})':12} {f'failed ({test.failed_count})':12} {f'unknown ({test.unknown_count})':13} elapsed time ({('%.10s' % (datetime.now() - self.total_start_time))})"
         )
         f.close()
 
@@ -485,45 +491,22 @@ class RunRegression:
             corners = [self.args.corner]
         else:
             corners = self.args.corner
-
+        
+        # keep caravel sdf dir
         sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        user_project_name = "user_project_wrapper"
-        sdf_user_project = (
-            f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
-        )
-        if not os.path.exists(
-            sdf_user_project
-        ):  # so special case for openframe maybe change it in the future
-            user_project_name = "openframe_project_wrapper"
-            sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
-
-        # check if user sdf dir exists
-        if (
-            os.path.exists(sdf_user_dir)
-            and os.path.isdir(sdf_user_dir)
-            and len(os.listdir(sdf_user_dir)) > 0
-        ):
-            sdf_dir = sdf_user_dir
-
+        if self.args.sdfs_dir is None:
+            pass
+        else:
+            sdf_dir = self.args.sdfs_dir
+        
+        if isinstance(sdf_dir, list):
+            gz_files = []
+            for dir in sdf_dir:
+                gz_files += glob.glob(f"{dir}/**/*.gz")
+        else:
+            gz_files = glob.glob(f"{sdf_dir}/**/*.gz")
+        
+        for gz_file in gz_files:
+            subprocess.run(f"gzip {gz_file} -d".split())
         self.args.macros.append(f'SDF_PATH=\\"{sdf_dir}\\"')
-        for corner in corners:
-            start_time = time.time()
-            sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
-            sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [
-                f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",
-                f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf",
-            ]
-            for output_file in output_files:
-                compress_file = output_file + ".gz"
-                # delete output file if exists
-                if os.path.exists(output_file):
-                    os.remove(output_file)
-                # compress the file
-                os.system(f"gzip -dc {compress_file} > {output_file}")
-                end_time = time.time()
-                execution_time = end_time - start_time
-                self.logger.info(
-                    f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds"
-                )
+        

@@ -53,15 +53,15 @@ def merge_fun_cov(path, reports_path=None):
     logger = logging.getLogger("example_logger")
     cov_files = []
     for dirpath, dirnames, filenames in os.walk(path):
-        for filename in [f for f in filenames if f == "coverage.yalm"]:
+        for filename in [f for f in filenames if f == "coverage.yaml"]:
             cov_files.append(os.path.join(dirpath, filename))
             # print(os.path.join(dirpath, filename))
-    merge_coverage(logger.info, f"{path}/merged.yalm", *cov_files)
+    merge_coverage(logger.info, f"{path}/merged.yaml", *cov_files)
     if reports_path is None:
         reports_path = f"{path}/coverageReports"
     Path(f"{reports_path}").mkdir(parents=True, exist_ok=True)
 
-    with open(f"{path}/merged.yalm") as file:
+    with open(f"{path}/merged.yaml") as file:
         # The FullLoader parameter handles the conversion from YAML
         # scalar values to Python the dictionary format
         yaml_file_object = yaml.load(file, Loader=yaml.FullLoader)
@@ -90,7 +90,7 @@ def merge_fun_cov(path, reports_path=None):
                 new_list = bins[: i + 1]
                 result_string = ".".join(new_list)
                 html_header += (
-                    f"<a href='{reports_path}/{result_string}.html'>{bins[i]}</a>."
+                    f"<a href='{result_string}.html'>{bins[i]}</a>."
                 )
 
             # Remove the last '.' character from the HTML code
@@ -107,7 +107,7 @@ def merge_fun_cov(path, reports_path=None):
                 for child in tree[key].children:
                     prettyTable.add_row(
                         [
-                            f'<a href="{reports_path}/{child.key}.html"> {child.name}</a>',
+                            f'<a href="{child.key}.html"> {child.name}</a>',
                             yaml_file_object[child.key]["size"],
                             yaml_file_object[child.key]["coverage"],
                             yaml_file_object[child.key]["cover_percentage"],
