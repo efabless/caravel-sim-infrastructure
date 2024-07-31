@@ -234,14 +234,15 @@ class RunRegression:
 
     def test_run_function(self, test):
         test.start_of_test()
-        self.update_run_log()
-        self.update_live_table()
+        if not self.args.compile_only:
+            self.update_run_log()
+            self.update_live_table()
         RunTest(self.args, self.paths, test, self.logger).run_test()
         if not self.args.compile_only:
             self.update_run_log()
             self.update_live_table()
-            if self.args.progress:
-                self.logger.info(f"Total: {f'passed ({test.passed_count})':12} {f'failed ({test.failed_count})':12} {f'unknown ({test.unknown_count})':13} elapsed time ({('%.10s' % (datetime.now() - self.total_start_time))})")
+        if self.args.progress:
+            self.logger.info(f"Total: {f'passed ({test.passed_count})':12} {f'failed ({test.failed_count})':12} {f'unknown ({test.unknown_count})':13} elapsed time ({('%.10s' % (datetime.now() - self.total_start_time))})")
 
     def update_run_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/runs.log"
