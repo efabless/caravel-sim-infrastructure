@@ -102,6 +102,12 @@ def main():
         action="store_true",
         help="don't run gen_gpio_defaults script",
     )
+    parser.add_argument(
+        "-sdfs_dir",
+        "-sdfs",
+        nargs="+",
+        help="directory where sdf files exists, script should unzip files in these directories",
+    )
     parser.add_argument("--progress", action="store_true", help=argparse.SUPPRESS)   # used only for external CI to run docker in non interactive mode
     parser.add_argument("--compile_only", action="store_true", help=argparse.SUPPRESS)   # used to only compile without running
     # Add a --version option

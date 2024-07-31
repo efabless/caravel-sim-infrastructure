@@ -107,7 +107,7 @@ def merge_fun_cov(path, reports_path=None):
                 for child in tree[key].children:
                     prettyTable.add_row(
                         [
-                            f'<a href="{reports_path}/{child.key}.html"> {child.name}</a>',
+                            f'<a href="{child.key}.html"> {child.name}</a>',
                             yaml_file_object[child.key]["size"],
                             yaml_file_object[child.key]["coverage"],
                             yaml_file_object[child.key]["cover_percentage"],

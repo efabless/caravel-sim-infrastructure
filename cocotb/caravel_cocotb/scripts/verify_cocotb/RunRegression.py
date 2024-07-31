@@ -22,7 +22,8 @@ from caravel_cocotb.scripts.test_defaults.test_defaults import TestDefaults
 from rich.live import Live
 from rich.table import Table
 from rich.console import Console
-
+import glob
+import subprocess
 
 class RunRegression:
     def __init__(self, args, paths, logger) -> None:
@@ -489,45 +490,22 @@ class RunRegression:
             corners = [self.args.corner]
         else:
             corners = self.args.corner
-
+        
+        # keep caravel sdf dir
         sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        sdf_user_dir = f"{self.paths.USER_PROJECT_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
-        user_project_name = "user_project_wrapper"
-        sdf_user_project = (
-            f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
-        )
-        if not os.path.exists(
-            sdf_user_project
-        ):  # so special case for openframe maybe change it in the future
-            user_project_name = "openframe_project_wrapper"
-            sdf_user_project = f"{self.paths.USER_PROJECT_ROOT}/signoff/{user_project_name}/primetime/sdf"
-
-        # check if user sdf dir exists
-        if (
-            os.path.exists(sdf_user_dir)
-            and os.path.isdir(sdf_user_dir)
-            and len(os.listdir(sdf_user_dir)) > 0
-        ):
-            sdf_dir = sdf_user_dir
-
+        if self.args.sdfs_dir is None:
+            pass
+        else:
+            sdf_dir = self.args.sdfs_dir
+        
+        if isinstance(sdf_dir, list):
+            gz_files = []
+            for dir in sdf_dir:
+                gz_files += glob.glob(f"{dir}/**/*.gz")
+        else:
+            gz_files = glob.glob(f"{sdf_dir}/**/*.gz")
+        
+        for gz_file in gz_files:
+            subprocess.run(f"gzip {gz_file} -d".split())
         self.args.macros.append(f'SDF_PATH=\\"{sdf_dir}\\"')
-        for corner in corners:
-            start_time = time.time()
-            sdf_prefix1 = f"{corner[-1]}{corner[-1]}"
-            sdf_prefix2 = f"{corner[0:3]}"
-            output_files = [
-                f"{sdf_dir}/{sdf_prefix1}/{'caravan' if self.args.caravan else 'caravel'}.{sdf_prefix2}.sdf",
-                f"{sdf_user_project}/{sdf_prefix1}/{user_project_name}.{sdf_prefix2}.sdf",
-            ]
-            for output_file in output_files:
-                compress_file = output_file + ".gz"
-                # delete output file if exists
-                if os.path.exists(output_file):
-                    os.remove(output_file)
-                # compress the file
-                os.system(f"gzip -dc {compress_file} > {output_file}")
-                end_time = time.time()
-                execution_time = end_time - start_time
-                self.logger.info(
-                    f"unzip {compress_file} into {output_file} in {execution_time :.2f} seconds"
-                )
+        
