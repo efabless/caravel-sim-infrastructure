@@ -30,5 +30,5 @@ setup(
         "Operating System :: MacOS :: MacOS X",
     ],
     entry_points={"console_scripts": ["caravel_cocotb = caravel_cocotb.__main__:main"]},
-    python_requires=">3.6",
+    python_requires=">3.7",
 )
