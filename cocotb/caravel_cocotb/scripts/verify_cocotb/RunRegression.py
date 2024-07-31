@@ -237,7 +237,7 @@ class RunRegression:
         self.update_run_log()
         self.update_live_table()
         RunTest(self.args, self.paths, test, self.logger).run_test()
-        if not self.compile_only:
+        if not self.args.compile_only:
             self.update_run_log()
             self.update_live_table()
             if self.args.progress:
