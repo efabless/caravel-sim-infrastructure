@@ -1,0 +1,45 @@
+name: Publish Python Package to PyPI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - cocotb/caravel_cocotb/version.py  # Trigger the workflow only if the VERSION file changes
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.7
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade setuptools wheel twine
+
+    - name: Read version number
+      id: read_version
+      run: |
+        VERSION_FILE=cocotb/caravel_cocotb/version.py
+        NEW_VERSION=$(cat $VERSION_FILE)
+        echo "New version: $NEW_VERSION"
+        echo "version=$NEW_VERSION" >> $GITHUB_ENV
+
+    - name: Build package
+      run: |
+        cd cocotb
+        python setup.py sdist bdist_wheel
+
+    - name: Publish
+      if: ${{ env.NEW_TAG != 'NO_NEW_TAG' }}
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
+        packages-dir: cocotb
