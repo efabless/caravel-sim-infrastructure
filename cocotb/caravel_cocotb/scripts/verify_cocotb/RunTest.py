@@ -17,7 +17,7 @@ class RunTest:
     def run_test(self):
         if self.hex_generate() == "hex_generated":  # run test only if hex is generated
             self.runTest()
-        if self.args.compile_only:
+        if not self.args.compile_only:
             self.test.end_of_test()
 
     def docker_command_str(
