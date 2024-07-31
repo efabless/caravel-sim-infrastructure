@@ -33,7 +33,7 @@ class RunTest:
 
     def hex_riscv_command_gen(self):
         GCC_PATH = "/opt/riscv/bin/"
-        GCC_PREFIX = "riscv32-unknown-linux-gnu"
+        GCC_PREFIX = "riscv32-unknown-elf"
         GCC_COMPILE = f"{GCC_PATH}/{GCC_PREFIX}"
         SOURCE_FILES = (
             f"{self.paths.FIRMWARE_PATH}/crt0_vex.S {self.paths.FIRMWARE_PATH}/isr.c"
