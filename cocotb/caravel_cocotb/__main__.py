@@ -103,6 +103,10 @@ def main():
         help="don't run gen_gpio_defaults script",
     )
     parser.add_argument(
+        "-gen_defaults_dir",
+        help="directory to run gen_gpio_defaults script <dir>/scripts/gen_gpio_defaults.py default is caravel_root",
+    )
+    parser.add_argument(
         "-sdfs_dir",
         "-sdfs",
         nargs="+",
