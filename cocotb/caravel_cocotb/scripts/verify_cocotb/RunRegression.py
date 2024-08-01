@@ -175,7 +175,11 @@ class RunRegression:
         if self.args.no_gen_defaults:
             return
         current_dir = os.getcwd()
-        os.chdir(f"{self.paths.CARAVEL_ROOT}/")
+        if self.args.gen_defaults_dir is None:
+            root_script = f"{self.paths.CARAVEL_ROOT}/"
+        else:
+            root_script = self.args.gen_defaults_dir
+        os.chdir(root_script)
         self.logger.info("Running gen_gpio_defaults script")
         os.system(
             f"python3 scripts/gen_gpio_defaults.py {self.paths.USER_PROJECT_ROOT}"
@@ -498,14 +502,13 @@ class RunRegression:
             pass
         else:
             sdf_dir = self.args.sdfs_dir
-        
         if isinstance(sdf_dir, list):
             gz_files = []
             for dir in sdf_dir:
-                gz_files += glob.glob(f"{dir}/**/*.gz")
+                gz_files += glob.glob(f"{dir}/**/*.gz".replace('"', ''), recursive=True)
         else:
-            gz_files = glob.glob(f"{sdf_dir}/**/*.gz")
-        
+            gz_files = glob.glob(f"{sdf_dir}/**/*.gz".replace('"', ''), recursive=True)
+        print("unzipping files {}".format(gz_files))
         for gz_file in gz_files:
             subprocess.run(f"gzip {gz_file} -d".split())
         self.args.macros.append(f'SDF_PATH=\\"{sdf_dir}\\"')

@@ -244,6 +244,7 @@ class CocotbArgs:
         sdf_setup=None,
         macros=None,
         sim_path=None,
+        gen_defaults_dir=None,
         run_path=".",
         verbosity="normal",
         check_commits=False,
@@ -272,6 +273,7 @@ class CocotbArgs:
         self.clk = clk
         self.macros = macros
         self.sim_path = sim_path
+        self.gen_defaults_dir = gen_defaults_dir
         self.run_path = run_path
         self.verbosity = verbosity
         # dev only
@@ -304,6 +306,7 @@ class CocotbArgs:
         self.clk = args.clk
         self.macros = args.macros
         self.sim_path = args.sim_path
+        self.gen_defaults_dir = args.gen_defaults_dir
         self.lint = args.lint
         self.run_path = os.getcwd()
         self.verbosity = args.verbosity
