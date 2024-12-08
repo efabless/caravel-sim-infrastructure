@@ -10,6 +10,7 @@ import hashlib
 
 class RunTest:
     COMPILE_LOCK = set()
+
     def __init__(self, args, paths, test, logger) -> None:
         self.args = args
         self.paths = paths
@@ -157,7 +158,7 @@ class RunTest:
         else:
             if f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
                 print(f"{bcolors.OKCYAN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
-        RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/sim.vvp") # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
+        RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/sim.vvp")  # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
         if not self.args.compile_only:
             self.iverilog_run()
 
@@ -238,7 +239,7 @@ class RunTest:
         else:
             if f"{self.test.compilation_dir}/simv" not in RunTest.COMPILE_LOCK:
                 print(f"{bcolors.OKCYAN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
-        RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/simv") # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
+        RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/simv")  # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
         if not self.args.compile_only:
             self.vcs_run()
 
@@ -359,7 +360,6 @@ class RunTest:
             f.write(new_hash)
         return new_hash == old_hash
 
-        
 
 class bcolors:
     HEADER = "\033[95m"
