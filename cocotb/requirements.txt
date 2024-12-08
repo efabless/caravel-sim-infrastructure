@@ -10,3 +10,4 @@ ruamel.yaml>=0.18.6
 volare>=0.18.0
 tabulate
 setuptools
+hashlib 
