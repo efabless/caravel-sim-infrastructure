@@ -5,9 +5,11 @@ from caravel_cocotb.scripts.verify_cocotb.read_defines import GetDefines
 import re
 import logging
 import caravel_cocotb
+import hashlib
 
 
 class RunTest:
+    COMPILE_LOCK = set()
     def __init__(self, args, paths, test, logger) -> None:
         self.args = args
         self.paths = paths
@@ -139,15 +141,23 @@ class RunTest:
     def runTest_iverilog(self):
         if self.test.sim == "GL_SDF":
             raise RuntimeError(
-                f"iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc"
+                f"{bcolors.FAIL}iverilog can't run SDF for test {self.test.name} Please use anothor simulator like cvc{bcolors.ENDC}"
             )
             return
         self.write_iverilog_includes_file()
-        if (
-            not os.path.isfile(f"{self.test.compilation_dir}/sim.vvp")
-            or self.args.compile
-        ):
+        if not os.path.isfile(f"{self.test.compilation_dir}/sim.vvp"):
+            print(f"{bcolors.OKCYAN}Compiling as sim.vvp not found{bcolors.ENDC}")
             self.iverilog_compile()
+        elif self.args.compile:
+            print(f"{bcolors.OKCYAN}Compiling as compile flag is set{bcolors.ENDC}")
+            self.iverilog_compile()
+        elif not self.is_same_hash(self.test.netlist) and f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
+            print(f"{bcolors.OKCYAN}Compiling since netlist has has changed{bcolors.ENDC}")
+            self.iverilog_compile()
+        else:
+            if f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
+                print(f"{bcolors.OKCYAN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
+        RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/sim.vvp") # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
         if not self.args.compile_only:
             self.iverilog_run()
 
@@ -216,8 +226,19 @@ class RunTest:
             self.vcs_coverage_command = "-cm line+tgl+cond+fsm+branch+assert "
         os.environ["TESTCASE"] = f"{self.test.name}"
         os.environ["MODULE"] = "module_trail"
-        if not os.path.isfile(f"{self.test.compilation_dir}/simv") or self.args.compile:
+        if not os.path.isfile(f"{self.test.compilation_dir}/simv"):
+            print(f"{bcolors.OKCYAN}Compiling as simv not found{bcolors.ENDC}")
             self.vcs_compile()
+        elif self.args.compile:
+            print(f"{bcolors.OKCYAN}Compiling as compile flag is set{bcolors.ENDC}")
+            self.vcs_compile()
+        elif not self.is_same_hash(self.test.netlist) and f"{self.test.compilation_dir}/simv" not in RunTest.COMPILE_LOCK:
+            print(f"{bcolors.OKCYAN}Compiling since netlist has has changed{bcolors.ENDC}")
+            self.vcs_compile()
+        else:
+            if f"{self.test.compilation_dir}/simv" not in RunTest.COMPILE_LOCK:
+                print(f"{bcolors.OKCYAN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
+        RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/simv") # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
         if not self.args.compile_only:
             self.vcs_run()
 
@@ -241,7 +262,7 @@ class RunTest:
         )
         lint = "+lint=all" if self.args.lint else ""
         ignored_errors = " -error=noZMMCM "
-        vcs_cmd = f"cd {self.test.compilation_dir};  vcs {lint} -negdelay {self.vcs_coverage_command} {ignored_errors}-debug_access+all +error+50 +vcs+loopreport+1000000 -diag=sdf:verbose +sdfverbose +neg_tchk -debug_access -full64  -l {self.test.compilation_dir}/test_compilation.log  caravel_top -Mdir={self.test.compilation_dir}/csrc -o {self.test.compilation_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)"
+        vcs_cmd = f"cd {self.test.compilation_dir};  vcs {lint} -negdelay {self.vcs_coverage_command} {ignored_errors} -debug_access+all +error+50 +vcs+loopreport+1000000 -diag=sdf:verbose +sdfverbose +neg_tchk -full64  -l {self.test.compilation_dir}/test_compilation.log  caravel_top -Mdir={self.test.compilation_dir}/csrc -o {self.test.compilation_dir}/simv +vpi -P pli.tab -load $(cocotb-config --lib-name-path vpi vcs)"
         self.run_command_write_to_file(
             vcs_cmd,
             self.test.compilation_log,
@@ -309,6 +330,36 @@ class RunTest:
 
         return process.returncode
 
+    @staticmethod
+    def calculate_netlist_hash(netlist, hash_algorithm="sha256"):
+        """Calculate a combined hash of multiple files ignoring the order."""
+        hash_func = getattr(hashlib, hash_algorithm)()
+        try:
+            for file_path in sorted(netlist):  # Ensure consistent order
+                with open(file_path, "rb") as f:
+                    while chunk := f.read(8192):
+                        hash_func.update(chunk)
+            return hash_func.hexdigest()
+        except FileNotFoundError as e:
+            return f"File not found: {e.filename}"
+        except PermissionError as e:
+            return f"Permission denied: {e.filename}"
+
+    def is_same_hash(self, netlist):
+        # read old hash if exists
+        try:
+            with open(self.test.hash_log, "r") as f:
+                old_hash = f.read().strip()
+        except FileNotFoundError:
+            old_hash = 0
+        # calculate new hash
+        new_hash = self.calculate_netlist_hash(netlist)
+        # write new hash
+        with open(self.test.hash_log, "w") as f:
+            f.write(new_hash)
+        return new_hash == old_hash
+
+        
 
 class bcolors:
     HEADER = "\033[95m"
