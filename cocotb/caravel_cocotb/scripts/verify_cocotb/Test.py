@@ -31,6 +31,7 @@ class Test:
         )
         self.include_dirs = set()
         self.init_test()
+        self.netlist = set()
 
     def init_test(self):
         self.start_time = "-"
@@ -148,6 +149,7 @@ class Test:
         # self.test_log=open(test_log, "w")
         self.compilation_log = f"{self.compilation_dir}/compilation.log"
         self.hex_log = f"{self.test_dir}/firmware.log"
+        self.hash_log = f"{self.compilation_dir}/hash.txt"
         # self.full_terminal = open(self.compilation_log, "w")
 
     def create_lint_log(self):
@@ -337,8 +339,10 @@ class Test:
                         if "*" in file_path:
                             for wild_match in glob.glob(file_path):
                                 paths += f'`include "{wild_match}"\n'
+                                self.netlist.add(wild_match)
                         else:
                             paths += f'`include "{file_path}"\n'
+                            self.netlist.add(file_path)
                         # Add Includes to Set
                         include_indices = [
                             i for i, flag in enumerate(split_line) if flag == "-I"

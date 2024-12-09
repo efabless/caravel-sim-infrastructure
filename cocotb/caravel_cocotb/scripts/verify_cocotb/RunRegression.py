@@ -16,7 +16,6 @@ from email.mime.text import MIMEText
 import smtplib
 import socket
 import yaml
-import time
 from caravel_cocotb.scripts.merge_coverage import merge_fun_cov
 from caravel_cocotb.scripts.test_defaults.test_defaults import TestDefaults
 from rich.live import Live
@@ -490,12 +489,6 @@ class RunRegression:
                 return
         elif self.args.sim != "GL_SDF":
             return
-        # make corners list in case in is n't
-        if not isinstance(self.args.corner, list):
-            corners = [self.args.corner]
-        else:
-            corners = self.args.corner
-        
         # keep caravel sdf dir
         sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         if self.args.sdfs_dir is None:
@@ -512,4 +505,3 @@ class RunRegression:
         for gz_file in gz_files:
             subprocess.run(f"gzip {gz_file} -d".split())
         self.args.macros.append(f'SDF_PATH=\\"{sdf_dir}\\"')
-        

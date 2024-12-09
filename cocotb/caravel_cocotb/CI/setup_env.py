@@ -29,7 +29,7 @@ class SetupEnv(BaseClass):
             depth=1,
             branch="main",
         )
-        self.download_sky130_pdk("e3b630d9b7c0e23615367d52c4f78b2d2ede58ac")
+        self.download_sky130_pdk("a918dc7c8e474a99b68c85eb3546b4ed91fe9e7b")
 
     def pull_cocotb_docker(self):
         image_name = "efabless/dv"
