@@ -149,9 +149,11 @@ class RunTest:
         if not os.path.isfile(f"{self.test.compilation_dir}/sim.vvp"):
             print(f"{bcolors.OKCYAN}Compiling as sim.vvp not found{bcolors.ENDC}")
             self.iverilog_compile()
+            self.write_hash(self.test.netlist)
         elif self.args.compile:
             print(f"{bcolors.OKCYAN}Compiling as compile flag is set{bcolors.ENDC}")
             self.iverilog_compile()
+            self.write_hash(self.test.netlist)
         elif not self.is_same_hash(self.test.netlist) and f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
             print(f"{bcolors.OKCYAN}Compiling since netlist has has changed{bcolors.ENDC}")
             self.iverilog_compile()
@@ -230,9 +232,11 @@ class RunTest:
         if not os.path.isfile(f"{self.test.compilation_dir}/simv"):
             print(f"{bcolors.OKCYAN}Compiling as simv not found{bcolors.ENDC}")
             self.vcs_compile()
+            self.write_hash(self.test.netlist)
         elif self.args.compile:
             print(f"{bcolors.OKCYAN}Compiling as compile flag is set{bcolors.ENDC}")
             self.vcs_compile()
+            self.write_hash(self.test.netlist)
         elif not self.is_same_hash(self.test.netlist) and f"{self.test.compilation_dir}/simv" not in RunTest.COMPILE_LOCK:
             print(f"{bcolors.OKCYAN}Compiling since netlist has has changed{bcolors.ENDC}")
             self.vcs_compile()
@@ -354,12 +358,14 @@ class RunTest:
         except FileNotFoundError:
             old_hash = 0
         # calculate new hash
-        new_hash = self.calculate_netlist_hash(netlist)
-        # write new hash
-        with open(self.test.hash_log, "w") as f:
-            f.write(new_hash)
+        new_hash = self.write_hash(netlist)
         return new_hash == old_hash
 
+    def write_hash(self, netlist):
+        new_hash = self.calculate_netlist_hash(netlist)
+        with open(self.test.hash_log, "w") as f:
+            f.write(new_hash)
+        return new_hash
 
 class bcolors:
     HEADER = "\033[95m"
