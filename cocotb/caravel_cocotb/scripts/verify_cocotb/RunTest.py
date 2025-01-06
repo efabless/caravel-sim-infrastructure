@@ -120,6 +120,8 @@ class RunTest:
 
     def get_ips_fw(self, flag_type="-I"):
         fw_list = []
+        if not os.path.exists(f"{self.paths.USER_PROJECT_ROOT}/ip"):
+            return fw_list
         for file in os.listdir(f"{self.paths.USER_PROJECT_ROOT}/ip"):
             if os.path.isdir(f"{self.paths.USER_PROJECT_ROOT}/ip/{file}"):
                 for f in os.listdir(f"{self.paths.USER_PROJECT_ROOT}/ip/{file}"):
@@ -236,6 +238,8 @@ class RunTest:
 
     def find_symbolic_links(self, directory):
         sym_links = []
+        if not os.path.exists(directory):
+            return sym_links
         for root, dirs, files in os.walk(directory):
             for dir_name in dirs:
                 dir_path = os.path.join(root, dir_name)
