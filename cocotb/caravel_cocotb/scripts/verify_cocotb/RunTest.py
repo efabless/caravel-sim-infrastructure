@@ -166,11 +166,11 @@ class RunTest:
             self.iverilog_compile()
             self.write_hash(self.test.netlist)
         elif not self.is_same_hash(self.test.netlist) and f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
-            print(f"{bcolors.OKCYAN}Compiling since netlist has has changed{bcolors.ENDC}")
+            print(f"{bcolors.OKCYAN}Compiling since netlist has changed{bcolors.ENDC}")
             self.iverilog_compile()
         else:
             if f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
-                print(f"{bcolors.OKCYAN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
+                print(f"{bcolors.OKGREEN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
         RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/sim.vvp")  # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
         if not self.args.compile_only:
             self.iverilog_run()
