@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - cocotb/caravel_cocotb/version.py  # Trigger the workflow only if the VERSION file changes
+      - cocotb/caravel_cocotb/__version__.py  # Trigger the workflow only if the VERSION file changes
 
 jobs:
   publish:
@@ -28,7 +28,7 @@ jobs:
     - name: Read version number
       id: read_version
       run: |
-        VERSION_FILE=cocotb/caravel_cocotb/version.py
+        VERSION_FILE=cocotb/caravel_cocotb/__version__.py
         NEW_VERSION=$(cat $VERSION_FILE)
         echo "New version: $NEW_VERSION"
         echo "version=$NEW_VERSION" >> $GITHUB_ENV

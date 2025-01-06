@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from caravel_cocotb.scripts.verify_cocotb.RunFlow import RunFLow, CocotbArgs
 import argparse
-from caravel_cocotb.version import __version__
+from caravel_cocotb.__version__ import __version__
 
 
 def main():

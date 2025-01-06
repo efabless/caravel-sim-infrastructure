@@ -46,7 +46,7 @@ class RunTest:
         CPUFLAGS = "-O2 -g -march=rv32i_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         # CPUFLAGS = "-O2 -g -march=rv32imc_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.FIRMWARE_PATH}/APIs -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
-        includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb "
+        includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb {' '.join([f'-I{ip}' for ip in self.get_ips_fw()])}"
         elf_command = (
             f"{GCC_COMPILE}-gcc  {includes} {CPUFLAGS} {LINKER_SCRIPT}"
             f" -o {self.hex_dir}/{self.test.name}.elf {SOURCE_FILES} {self.c_file}"
@@ -84,7 +84,7 @@ class RunTest:
         else:
             command = self.hex_riscv_command_gen()
 
-        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} "
+        docker_dir = f"-v {self.hex_dir}:{self.hex_dir} -v {self.paths.RUN_PATH}:{self.paths.RUN_PATH} -v {self.paths.CARAVEL_ROOT}:{self.paths.CARAVEL_ROOT} -v {self.paths.MCW_ROOT}:{self.paths.MCW_ROOT} -v {self.test.test_dir}:{self.test.test_dir} {' '.join([f'-v {link}:{link} ' for link in self.get_ips_fw()])} "
         docker_dir = (
             docker_dir
             + f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
@@ -117,6 +117,19 @@ class RunTest:
             f"{self.test.test_dir}/firmware.hex",
         )
         return "hex_generated"
+
+    def get_ips_fw(self, flag_type="-I"):
+        fw_list = []
+        if not os.path.exists(f"{self.paths.USER_PROJECT_ROOT}/ip"):
+            return fw_list
+        for file in os.listdir(f"{self.paths.USER_PROJECT_ROOT}/ip"):
+            if os.path.isdir(f"{self.paths.USER_PROJECT_ROOT}/ip/{file}"):
+                for f in os.listdir(f"{self.paths.USER_PROJECT_ROOT}/ip/{file}"):
+                    if f == "fw":
+                        fw_list.append(os.path.realpath(f"{self.paths.USER_PROJECT_ROOT}/ip/{file}/{f}"))
+        # send it as string
+        # ips_fw = f"{flag_type}" + f" {flag_type}".join(fw_list)
+        return fw_list
 
     def test_path(self, test_name=None):
         if test_name is None:
@@ -155,11 +168,11 @@ class RunTest:
             self.iverilog_compile()
             self.write_hash(self.test.netlist)
         elif not self.is_same_hash(self.test.netlist) and f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
-            print(f"{bcolors.OKCYAN}Compiling since netlist has has changed{bcolors.ENDC}")
+            print(f"{bcolors.OKCYAN}Compiling since netlist has changed{bcolors.ENDC}")
             self.iverilog_compile()
         else:
             if f"{self.test.compilation_dir}/sim.vvp" not in RunTest.COMPILE_LOCK:
-                print(f"{bcolors.OKCYAN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
+                print(f"{bcolors.OKGREEN}Skipping compilation as netlist has not changed{bcolors.ENDC}")
         RunTest.COMPILE_LOCK.add(f"{self.test.compilation_dir}/sim.vvp")  # locked means if it is copiled for the first time then it will not be compiled again even if netlist changes
         if not self.args.compile_only:
             self.iverilog_run()
@@ -209,6 +222,8 @@ class RunTest:
         docker_dir += (
             f"-v {self.paths.USER_PROJECT_ROOT}:{self.paths.USER_PROJECT_ROOT}"
         )
+        docker_dir += " ".join([f' -v {link}:{link} ' for link in self.find_symbolic_links(self.paths.USER_PROJECT_ROOT)])
+        print(docker_dir)
         if os.path.exists("/mnt/scratch/"):
             docker_dir += " -v /mnt/scratch/cocotb_runs/:/mnt/scratch/cocotb_runs/ "
         display = " -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/.Xauthority --network host --security-opt seccomp=unconfined "
@@ -220,6 +235,17 @@ class RunTest:
             command=command,
         )
         return command
+
+    def find_symbolic_links(self, directory):
+        sym_links = []
+        if not os.path.exists(directory):
+            return sym_links
+        for root, dirs, files in os.walk(directory):
+            for dir_name in dirs:
+                dir_path = os.path.join(root, dir_name)
+                if os.path.islink(dir_path):
+                    sym_links.append(dir_path)
+        return sym_links
 
     # vcs function
     def runTest_vcs(self):
