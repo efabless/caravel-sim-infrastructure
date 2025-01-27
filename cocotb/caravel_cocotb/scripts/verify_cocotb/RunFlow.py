@@ -88,23 +88,13 @@ class RunFLow:
         self.logger.info(f"Run tag: {self.args.tag} ")
 
     def set_paths(self, design_info):
-        if not os.path.exists(design_info["CARAVEL_ROOT"]) or not os.path.exists(
-            design_info["MCW_ROOT"]
-        ):
-            raise NotADirectoryError(
-                f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}"
-            )
-        if self.args.check_commits:
-            GitRepoChecker(
-                design_info["CARAVEL_ROOT"]
-            )  # check repo synced with last commit
-            GitRepoChecker(
-                design_info["MCW_ROOT"]
-            )  # check repo synced with last commit
-        if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
-            raise NotADirectoryError(
-                f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}"
-            )
+        RUN_PATH = self.args.run_path
+        SIM_PATH = (
+            f"{RUN_PATH}/sim"
+            if self.args.sim_path is None
+            else f"{self.args.sim_path}/sim"
+        )
+        VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
         if not os.path.exists(design_info["USER_PROJECT_ROOT"]):
             raise NotADirectoryError(
                 f"USER_PROJECT_ROOT is not a directory USER_PROJECT_ROOT:{design_info['USER_PROJECT_ROOT']}"
@@ -114,36 +104,76 @@ class RunFLow:
                 GitRepoChecker(
                     design_info["USER_PROJECT_ROOT"]
                 )  # check repo synced with last commit
-        Paths = namedtuple(
-            "Paths",
-            "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH RUN_PATH USER_PROJECT_ROOT SIM_PATH",
-        )
-        CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
-        VERILOG_PATH = f"{design_info['MCW_ROOT']}/verilog"
-        CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
+        if not os.path.exists(f'{design_info["PDK_ROOT"]}/{design_info["PDK"]}'):
+            raise NotADirectoryError(
+                f"PDK_ROOT/PDK is not a directory PDK_ROOT:{design_info['PDK_ROOT']}/{design_info['PDK']}"
+            )
         if os.path.exists(f"{design_info['MCW_ROOT']}/verilog/dv/fw"):
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/fw"
         else:
             FIRMWARE_PATH = f"{design_info['MCW_ROOT']}/verilog/dv/firmware"
-        RUN_PATH = self.args.run_path
-        SIM_PATH = (
-            f"{RUN_PATH}/sim"
-            if self.args.sim_path is None
-            else f"{self.args.sim_path}/sim"
-        )
-        self.paths = Paths(
-            design_info["CARAVEL_ROOT"],
-            design_info["MCW_ROOT"],
-            design_info["PDK_ROOT"],
-            design_info["PDK"],
-            CARAVEL_VERILOG_PATH,
-            VERILOG_PATH,
-            CARAVEL_PATH,
-            FIRMWARE_PATH,
-            RUN_PATH,
-            design_info["USER_PROJECT_ROOT"],
-            SIM_PATH,
-        )
+
+        if "CARAVEL_ROOT" in design_info:
+            if not os.path.exists(design_info["CARAVEL_ROOT"]) or not os.path.exists(
+                design_info["MCW_ROOT"]
+            ):
+                raise NotADirectoryError(
+                    f"CARAVEL_ROOT or MCW_ROOT not a correct directory CARAVEL_ROOT:{design_info['CARAVEL_ROOT']} MCW_ROOT:{design_info['MCW_ROOT']}"
+                )
+            if self.args.check_commits:
+                GitRepoChecker(
+                    design_info["CARAVEL_ROOT"]
+                )  # check repo synced with last commit
+                GitRepoChecker(
+                    design_info["MCW_ROOT"]
+                )  # check repo synced with last commit
+            Paths = namedtuple(
+                "Paths",
+                "CARAVEL_ROOT MCW_ROOT PDK_ROOT PDK CARAVEL_VERILOG_PATH VERILOG_PATH CARAVEL_PATH FIRMWARE_PATH RUN_PATH USER_PROJECT_ROOT SIM_PATH",
+            )
+            CARAVEL_VERILOG_PATH = f"{design_info['CARAVEL_ROOT']}/verilog"
+            CARAVEL_PATH = f"{CARAVEL_VERILOG_PATH}"
+            self.paths = Paths(
+                design_info["CARAVEL_ROOT"],
+                design_info["MCW_ROOT"],
+                design_info["PDK_ROOT"],
+                design_info["PDK"],
+                CARAVEL_VERILOG_PATH,
+                VERILOG_PATH,
+                CARAVEL_PATH,
+                FIRMWARE_PATH,
+                RUN_PATH,
+                design_info["USER_PROJECT_ROOT"],
+                SIM_PATH,
+            )
+        elif "CHEETAH_ROOT" in design_info: 
+            Paths = namedtuple(
+                "Paths",
+                "CHEETAH_ROOT MCW_ROOT PDK_ROOT PDK RUN_PATH VERILOG_PATH FIRMWARE_PATH USER_PROJECT_ROOT SIM_PATH",
+            )
+            if not os.path.exists(design_info["CHEETAH_ROOT"]):
+                raise NotADirectoryError(
+                    f"CHEETAH_ROOT is not a correct directory CHEETAH_ROOT:{design_info['CHEETAH_ROOT']}"
+                )
+            if not os.path.exists(design_info["MCW_ROOT"]):
+                raise NotADirectoryError(
+                    f"MCW_ROOT is not a correct directory MCW_ROOT:{design_info['MCW_ROOT']}"
+                )
+            self.paths = Paths(
+                design_info["CHEETAH_ROOT"],
+                design_info["MCW_ROOT"],
+                design_info["PDK_ROOT"],
+                design_info["PDK"],
+                RUN_PATH,
+                VERILOG_PATH,
+                FIRMWARE_PATH,
+                design_info["USER_PROJECT_ROOT"],
+                SIM_PATH,
+            )
+            
+
+
+
 
     def set_cpu_type(self):
         def_h_file = f"{self.paths.FIRMWARE_PATH}/defs.h"
@@ -208,13 +238,22 @@ class RunFLow:
         design_configs = dict(
             clock=self.args.clk, max_err=self.args.maxerr, PDK=self.args.pdk
         )
-        design_configs.update(
-            dict(
-                CARAVEL_ROOT=self.paths.CARAVEL_ROOT,
-                MCW_ROOT=self.paths.MCW_ROOT,
-                PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}',
+        if "CARAVEL_ROOT" in self.paths._fields:
+            design_configs.update(
+                dict(
+                    CARAVEL_ROOT=self.paths.CARAVEL_ROOT,
+                    MCW_ROOT=self.paths.MCW_ROOT,
+                    PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}',
+                )
             )
-        )
+        elif "CHEETAH_ROOT" in self.paths._fields:
+            design_configs.update(
+                dict(
+                    CHEETAH_ROOT=self.paths.CHEETAH_ROOT,
+                    MCW_ROOT=self.paths.MCW_ROOT,
+                    PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}',
+                )
+            )
         with open(new_config_path, "w") as file:
             yaml.dump(design_configs, file)
 
