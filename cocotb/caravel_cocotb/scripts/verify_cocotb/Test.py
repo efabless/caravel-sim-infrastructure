@@ -78,7 +78,7 @@ class Test:
             )  # using debug register in this test isn't needed
 
     def set_user_project(self):
-        project = "caravel" if "CARAVEL_ROOT" in self.paths._fields else "cheetah" if  "CHEETAH_ROOT" in self.paths._fields else None
+        project = "caravel" if "CARAVEL_ROOT" in self.paths._fields else "cheetah" if "CHEETAH_ROOT" in self.paths._fields else None
         if self.sim == "RTL":
             user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.{project}_user_project"
         else:

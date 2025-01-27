@@ -146,7 +146,7 @@ class RunFLow:
                 design_info["USER_PROJECT_ROOT"],
                 SIM_PATH,
             )
-        elif "CHEETAH_ROOT" in design_info: 
+        elif "CHEETAH_ROOT" in design_info:
             Paths = namedtuple(
                 "Paths",
                 "CHEETAH_ROOT MCW_ROOT PDK_ROOT PDK RUN_PATH VERILOG_PATH FIRMWARE_PATH USER_PROJECT_ROOT SIM_PATH",
@@ -170,10 +170,6 @@ class RunFLow:
                 design_info["USER_PROJECT_ROOT"],
                 SIM_PATH,
             )
-            
-
-
-
 
     def set_cpu_type(self):
         def_h_file = f"{self.paths.FIRMWARE_PATH}/defs.h"
