@@ -188,8 +188,8 @@ class RunTest:
         macros = " -D" + " -D".join(self.test.macros)
         compile_command = (
             f"cd {self.test.compilation_dir} &&"
-            f"iverilog -g2012 -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
-            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v -s caravel_top"
+            f"iverilog -g2012 -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp -s caravel_top"
+            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v"
         )
         docker_compilation_command = self._iverilog_docker_command_str(compile_command)
         self.run_command_write_to_file(
