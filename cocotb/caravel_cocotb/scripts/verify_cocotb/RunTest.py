@@ -186,6 +186,10 @@ class RunTest:
 
     def iverilog_compile(self):
         macros = " -D" + " -D".join(self.test.macros)
+        # Remove all content in the directory
+        shutil.rmtree(self.test.compilation_dir)
+        # Recreate the directory
+        os.makedirs(self.test.compilation_dir)
         compile_command = (
             f"cd {self.test.compilation_dir} &&"
             f"iverilog -g2012 -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
@@ -283,6 +287,10 @@ class RunTest:
         self.test.set_user_project()
 
     def vcs_compile(self):
+        # Remove all content in the directory
+        shutil.rmtree(self.test.compilation_dir)
+        # Recreate the directory
+        os.makedirs(self.test.compilation_dir)
         macros = " +define+" + " +define+".join(self.test.macros)
         vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
         self.run_command_write_to_file(
