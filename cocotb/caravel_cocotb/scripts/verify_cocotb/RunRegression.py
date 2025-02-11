@@ -47,10 +47,13 @@ class RunRegression:
         paths_macros = [
             f'RUN_PATH=\\"{self.paths.RUN_PATH}\\"',
             f'TAG=\\"{self.args.tag}\\"',
-            f'CARAVEL_ROOT=\\"{self.paths.CARAVEL_ROOT}\\"',
             f'MCW_ROOT=\\"{self.paths.MCW_ROOT}\\"',
             f'USER_PROJECT_ROOT=\\"{self.paths.USER_PROJECT_ROOT}\\"',
         ]
+        if "CARAVEL_ROOT" in self.paths._fields:
+            paths_macros += [f'CARAVEL_ROOT=\\"{self.paths.CARAVEL_ROOT}\\"']
+        elif "FRIGATE_ROOT" in self.paths._fields:
+            paths_macros += [f'FRIGATE_ROOT=\\"{self.paths.FRIGATE_ROOT}\\"']
 
         paths_macros.append(f'SIM_PATH=\\"{self.paths.SIM_PATH}/\\"')
         if self.args.pdk != "gf180":
@@ -327,21 +330,22 @@ class RunRegression:
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/repos_info.log"
         f = open(file_name, "w")
         f.write(f"{'#'*4} Caravel repo info {'#'*4}\n")
-        url = "https://github.com/" + f"{run(f'cd {self.paths.CARAVEL_ROOT};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
+        ROOT_REPO = self.paths.CARAVEL_ROOT if "CARAVEL_ROOT" in self.paths._fields else self.paths.FRIGATE_ROOT if "FRIGATE_ROOT" in self.paths._fields else None
+        url = "https://github.com/" + f"{run(f'cd {ROOT_REPO};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
             "git@github.com:", ""
         ).replace(
             ".git", ""
         )
-        repo = f"Repo: {run(f'cd {self.paths.CARAVEL_ROOT};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(
+        repo = f"Repo: {run(f'cd {ROOT_REPO};basename -s .git `git config --get remote.origin.url`', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout} ({url})".replace(
             "\n", " "
         )
         f.write(f"{repo}\n")
         f.write(
-            f"Branch name: {run(f'cd {self.paths.CARAVEL_ROOT};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}"
+            f"Branch name: {run(f'cd {ROOT_REPO};git symbolic-ref --short HEAD', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}"
         )
         f.write(
             run(
-                f"cd {self.paths.CARAVEL_ROOT};git show --quiet HEAD",
+                f"cd {ROOT_REPO};git show --quiet HEAD",
                 stdout=PIPE,
                 stderr=PIPE,
                 universal_newlines=True,
@@ -490,9 +494,8 @@ class RunRegression:
         elif self.args.sim != "GL_SDF":
             return
         # keep caravel sdf dir
-        sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         if self.args.sdfs_dir is None:
-            pass
+            sdf_dir = f"{self.paths.CARAVEL_ROOT}/signoff/{'caravan' if self.args.caravan else 'caravel'}/primetime/sdf"
         else:
             sdf_dir = self.args.sdfs_dir
         if isinstance(sdf_dir, list):

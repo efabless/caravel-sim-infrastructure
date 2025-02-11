@@ -78,10 +78,11 @@ class Test:
             )  # using debug register in this test isn't needed
 
     def set_user_project(self):
+        project = "caravel" if "CARAVEL_ROOT" in self.paths._fields else "frigate" if  "FRIGATE_ROOT" in self.paths._fields else None
         if self.sim == "RTL":
-            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.caravel_user_project"
+            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.{project}_user_project"
         else:
-            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.caravel_user_project"
+            user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.gl.{project}_user_project"
         user_project = f" -f {user_include}"
         self.write_includes_file(user_include)
         return user_project.replace("\n", "")
@@ -212,9 +213,14 @@ class Test:
             "replace by cocotb path", self.paths.RUN_PATH
         )
         rerun_script = rerun_script.replace("replace by mgmt Root", self.paths.MCW_ROOT)
-        rerun_script = rerun_script.replace(
-            "replace by caravel Root", self.paths.CARAVEL_ROOT
-        )
+        if "CARAVEL_ROOT" in self.paths._fields:
+            rerun_script = rerun_script.replace(
+                "replace by caravel Root", self.paths.CARAVEL_ROOT
+            )
+        elif "FRIGATE_ROOT" in self.paths._fields:
+            rerun_script = rerun_script.replace(
+                "replace by caravel Root", self.paths.FRIGATE_ROOT
+            )
         rerun_script = rerun_script.replace(
             "replace by orignal rerun script", f"{self.test_dir}/rerun.py"
         )
@@ -280,17 +286,18 @@ class Test:
         paths = self.convert_list_to_include(file)
         # write to include file in the top of the file
         self.includes_file = f"{self.compilation_dir}/includes.v"
-        if self.sim == "RTL":
+        self.sim_to_include = {
+            "RTL": "rtl",
+            "GL_SDF": "gl+sdf",
+            "GL": "gl",
+        }
+        if "CARAVEL_ROOT" in self.paths._fields: # when caravel include file from caravel mgmt
             includes = self.convert_list_to_include(
-                f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel"
+                f"{self.paths.VERILOG_PATH}/includes/includes.{self.sim_to_include[self.sim]}.caravel"
             )
-        elif self.sim == "GL_SDF":
+        elif "FRIGATE_ROOT" in self.paths._fields: # when caravel include file from frigate
             includes = self.convert_list_to_include(
-                f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel"
-            )
-        elif self.sim == "GL":
-            includes = self.convert_list_to_include(
-                f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel"
+                f"{self.paths.FRIGATE_ROOT}/verilog/includes/includes.{self.sim_to_include[self.sim]}.frigate"
             )
         includes = paths + includes
         open(self.includes_file, "w").write(includes)
@@ -298,17 +305,13 @@ class Test:
         # copy includes used also
         paths = open(file, "r").read()
         self.includes_list = f"{self.compilation_dir}/includes"
-        if self.sim == "RTL":
+        if "CARAVEL_ROOT" in self.paths._fields: # when caravel include file from caravel mgmt
             includes = open(
-                f"{self.paths.VERILOG_PATH}/includes/includes.rtl.caravel", "r"
+                f"{self.paths.VERILOG_PATH}/includes/includes.{self.sim_to_include[self.sim]}.caravel", "r"
             ).read()
-        elif self.sim == "GL_SDF":
+        elif "FRIGATE_ROOT" in self.paths._fields: # when caravel include file from frigate
             includes = open(
-                f"{self.paths.VERILOG_PATH}/includes/includes.gl+sdf.caravel", "r"
-            ).read()
-        elif self.sim == "GL":
-            includes = open(
-                f"{self.paths.VERILOG_PATH}/includes/includes.gl.caravel", "r"
+                f"{self.paths.FRIGATE_ROOT}/verilog/includes/includes.{self.sim_to_include[self.sim]}.frigate", "r"
             ).read()
         includes = paths + includes
         open(self.includes_list, "w").write(includes)
@@ -324,7 +327,10 @@ class Test:
                 if line and not line.startswith("#"):
                     # Replace $(VERILOG_PATH) with actual path
                     line = line.replace("$(VERILOG_PATH)", self.paths.VERILOG_PATH)
-                    line = line.replace("$(CARAVEL_PATH)", self.paths.CARAVEL_PATH)
+                    if "CARAVEL_ROOT" in self.paths._fields:
+                        line = line.replace("$(CARAVEL_PATH)", self.paths.CARAVEL_PATH)
+                    elif "FRIGATE_ROOT" in self.paths._fields:
+                        line = line.replace("$(FRIGATE_VERILOG)", f"{self.paths.FRIGATE_ROOT}/verilog")
                     line = line.replace(
                         "$(USER_PROJECT_VERILOG)",
                         f"{self.paths.USER_PROJECT_ROOT}/verilog",
