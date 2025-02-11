@@ -78,7 +78,7 @@ class Test:
             )  # using debug register in this test isn't needed
 
     def set_user_project(self):
-        project = "caravel" if "CARAVEL_ROOT" in self.paths._fields else "frigate" if  "FRIGATE_ROOT" in self.paths._fields else None
+        project = "caravel" if "CARAVEL_ROOT" in self.paths._fields else "frigate" if "FRIGATE_ROOT" in self.paths._fields else None
         if self.sim == "RTL":
             user_include = f"{self.paths.USER_PROJECT_ROOT}/verilog/includes/includes.rtl.{project}_user_project"
         else:
@@ -291,11 +291,11 @@ class Test:
             "GL_SDF": "gl+sdf",
             "GL": "gl",
         }
-        if "CARAVEL_ROOT" in self.paths._fields: # when caravel include file from caravel mgmt
+        if "CARAVEL_ROOT" in self.paths._fields:  # when caravel include file from caravel mgmt
             includes = self.convert_list_to_include(
                 f"{self.paths.VERILOG_PATH}/includes/includes.{self.sim_to_include[self.sim]}.caravel"
             )
-        elif "FRIGATE_ROOT" in self.paths._fields: # when caravel include file from frigate
+        elif "FRIGATE_ROOT" in self.paths._fields:  # when caravel include file from frigate
             includes = self.convert_list_to_include(
                 f"{self.paths.FRIGATE_ROOT}/verilog/includes/includes.{self.sim_to_include[self.sim]}.frigate"
             )
@@ -305,11 +305,11 @@ class Test:
         # copy includes used also
         paths = open(file, "r").read()
         self.includes_list = f"{self.compilation_dir}/includes"
-        if "CARAVEL_ROOT" in self.paths._fields: # when caravel include file from caravel mgmt
+        if "CARAVEL_ROOT" in self.paths._fields:  # when caravel include file from caravel mgmt
             includes = open(
                 f"{self.paths.VERILOG_PATH}/includes/includes.{self.sim_to_include[self.sim]}.caravel", "r"
             ).read()
-        elif "FRIGATE_ROOT" in self.paths._fields: # when caravel include file from frigate
+        elif "FRIGATE_ROOT" in self.paths._fields:  # when caravel include file from frigate
             includes = open(
                 f"{self.paths.FRIGATE_ROOT}/verilog/includes/includes.{self.sim_to_include[self.sim]}.frigate", "r"
             ).read()
