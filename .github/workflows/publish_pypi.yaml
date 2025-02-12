@@ -6,41 +6,34 @@ on:
     branches:
       - main
     paths:
-      - cocotb/caravel_cocotb/__version__.py  # Trigger the workflow only if the VERSION file changes
+      - cocotb/pyproject.toml # Trigger the workflow only if the VERSION file changes
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.8
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
 
-    - name: Install dependencies
-      run: |
-        pip install --upgrade setuptools wheel twine
+      - name: Read version number
+        id: read_version
+        run: |
+          echo "version=$(python3 cocotb/caravel_cocotb/__version__.py)" >> $GITHUB_ENV
 
-    - name: Read version number
-      id: read_version
-      run: |
-        VERSION_FILE=cocotb/caravel_cocotb/__version__.py
-        NEW_VERSION=$(cat $VERSION_FILE)
-        echo "New version: $NEW_VERSION"
-        echo "version=$NEW_VERSION" >> $GITHUB_ENV
+      - name: Build package
+        run: |
+          cd cocotb
+          make dist
 
-    - name: Build package
-      run: |
-        cd cocotb
-        python setup.py sdist bdist_wheel
-
-    - name: Publish
-      if: ${{ env.NEW_TAG != 'NO_NEW_TAG' }}
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.PYPI_API_TOKEN }}
-        packages-dir: cocotb/dist
+      - name: Publish
+        if: ${{ env.NEW_TAG != 'NO_NEW_TAG' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+          packages-dir: cocotb/dist
