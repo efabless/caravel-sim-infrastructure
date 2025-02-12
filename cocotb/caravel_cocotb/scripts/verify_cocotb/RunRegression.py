@@ -329,7 +329,7 @@ class RunRegression:
     def write_git_log(self):
         file_name = f"{self.paths.SIM_PATH}/{self.args.tag}/repos_info.log"
         f = open(file_name, "w")
-        f.write(f"{'#'*4} Caravel repo info {'#'*4}\n")
+        f.write(f"{'#'*4} {'Caravel' if 'CARAVEL_ROOT' in self.paths._fields else 'frigate' if 'FRIGATE_ROOT' in self.paths._fields else None} repo info {'#'*4}\n")
         ROOT_REPO = self.paths.CARAVEL_ROOT if "CARAVEL_ROOT" in self.paths._fields else self.paths.FRIGATE_ROOT if "FRIGATE_ROOT" in self.paths._fields else None
         url = "https://github.com/" + f"{run(f'cd {ROOT_REPO};git ls-remote --get-url', stdout=PIPE, stderr=PIPE, universal_newlines=True, shell=True).stdout}".replace(
             "git@github.com:", ""
