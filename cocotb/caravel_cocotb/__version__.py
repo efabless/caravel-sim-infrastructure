@@ -23,8 +23,8 @@ def __get_version():
         import re
 
         rx = re.compile(r"version\s*=\s*\"([^\"]+)\"")
-        openlane_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        pyproject_path = os.path.join(openlane_directory, "pyproject.toml")
+        script_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        pyproject_path = os.path.join(script_directory, "pyproject.toml")
         try:
             match = rx.search(open(pyproject_path, encoding="utf8").read())
             assert match is not None, "pyproject.toml found, but without a version"
