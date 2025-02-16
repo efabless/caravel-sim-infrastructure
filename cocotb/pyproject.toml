@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "caravel_cocotb"
-version = "1.4.0"
+version = "1.5.0"
 
 description = "Efabless Caravel cocotb Verification Flow(s)"
 readme = "README.md"
