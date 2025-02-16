@@ -11,40 +11,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v1
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-    - name: Install dependencies
-      run: |
-        cd $GITHUB_WORKSPACE/cocotb
-        python3 -m pip install --upgrade pip
-        pip install -r requirements.txt
-        python3 -m pip install --upgrade --no-cache-dir volare
-        pip install flake8
+      - name: Install dependencies
+        run: |
+          cd $GITHUB_WORKSPACE/cocotb
+          make venv
 
-    - name: Run Flake8
-      run: flake8 $GITHUB_WORKSPACE/cocotb --config $GITHUB_WORKSPACE/cocotb/.flake8
+      - name: Run Flake8
+        run: |
+          cd $GITHUB_WORKSPACE/cocotb
+          make lint
 
-    - name: download docker
-      run: |
-        docker pull efabless/dv:cocotb
+      - name: download docker
+        run: |
+          docker pull efabless/dv:cocotb
 
-    - name: Install caravel_cocotb
-      run: |
-        cd $GITHUB_WORKSPACE/cocotb
-        pip install .
+      - name: Install caravel_cocotb
+        run: |
+          cd $GITHUB_WORKSPACE/cocotb
+          pip install .
 
-    - name: Run main.py
-      run: |
-        cd $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI
-        python3 main.py
+      - name: Run main.py
+        run: |
+          cd $GITHUB_WORKSPACE/cocotb/caravel_cocotb/CI
+          python3 main.py
