@@ -146,21 +146,21 @@ class RunFLow:
                 design_info["USER_PROJECT_ROOT"],
                 SIM_PATH,
             )
-        elif "CHEETAH_ROOT" in design_info:
+        elif "FRIGATE_ROOT" in design_info:
             Paths = namedtuple(
                 "Paths",
-                "CHEETAH_ROOT MCW_ROOT PDK_ROOT PDK RUN_PATH VERILOG_PATH FIRMWARE_PATH USER_PROJECT_ROOT SIM_PATH",
+                "FRIGATE_ROOT MCW_ROOT PDK_ROOT PDK RUN_PATH VERILOG_PATH FIRMWARE_PATH USER_PROJECT_ROOT SIM_PATH",
             )
-            if not os.path.exists(design_info["CHEETAH_ROOT"]):
+            if not os.path.exists(design_info["FRIGATE_ROOT"]):
                 raise NotADirectoryError(
-                    f"CHEETAH_ROOT is not a correct directory CHEETAH_ROOT:{design_info['CHEETAH_ROOT']}"
+                    f"FRIGATE_ROOT is not a correct directory FRIGATE_ROOT:{design_info['FRIGATE_ROOT']}"
                 )
             if not os.path.exists(design_info["MCW_ROOT"]):
                 raise NotADirectoryError(
                     f"MCW_ROOT is not a correct directory MCW_ROOT:{design_info['MCW_ROOT']}"
                 )
             self.paths = Paths(
-                design_info["CHEETAH_ROOT"],
+                design_info["FRIGATE_ROOT"],
                 design_info["MCW_ROOT"],
                 design_info["PDK_ROOT"],
                 design_info["PDK"],
@@ -242,10 +242,10 @@ class RunFLow:
                     PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}',
                 )
             )
-        elif "CHEETAH_ROOT" in self.paths._fields:
+        elif "FRIGATE_ROOT" in self.paths._fields:
             design_configs.update(
                 dict(
-                    CHEETAH_ROOT=self.paths.CHEETAH_ROOT,
+                    FRIGATE_ROOT=self.paths.FRIGATE_ROOT,
                     MCW_ROOT=self.paths.MCW_ROOT,
                     PDK_ROOT=f'{self.paths.PDK_ROOT}/{design_info["PDK"]}',
                 )

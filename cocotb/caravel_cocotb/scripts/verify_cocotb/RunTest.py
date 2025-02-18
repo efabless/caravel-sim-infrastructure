@@ -45,6 +45,16 @@ class RunTest:
         LINKER_SCRIPT = f"-Wl,-Bstatic,-T,{self.test.linker_script_file},--strip-debug "
         CPUFLAGS = "-O2 -g -march=rv32i_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
         # CPUFLAGS = "-O2 -g -march=rv32imc_zicsr -mabi=ilp32 -D__vexriscv__ -ffreestanding -nostdlib"
+        includes = [
+            f"-I{ip}" for ip in self.get_ips_fw()
+        ] + [
+            f"-I{self.paths.FIRMWARE_PATH}",
+            f"-I{self.paths.FIRMWARE_PATH}/APIs",
+            f"-I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb",
+            f"-I{self.paths.VERILOG_PATH}/dv/generated",
+            f"-I{self.paths.VERILOG_PATH}/dv/",
+            f"-I{self.paths.VERILOG_PATH}/common/",
+        ]
         includes = f" -I{self.paths.FIRMWARE_PATH} -I{self.paths.FIRMWARE_PATH}/APIs -I{self.paths.VERILOG_PATH}/dv/generated  -I{self.paths.VERILOG_PATH}/dv/ -I{self.paths.VERILOG_PATH}/common"
         includes += f" -I{self.paths.USER_PROJECT_ROOT}/verilog/dv/cocotb {' '.join([f'-I{ip}' for ip in self.get_ips_fw()])}"
         elf_command = (
@@ -185,11 +195,13 @@ class RunTest:
             self.iverilog_dirs += f" -I {include_dir}"
 
     def iverilog_compile(self):
+        if os.path.isfile(f"{self.test.compilation_dir}/sim.vvp"):
+            os.remove(f"{self.test.compilation_dir}/sim.vvp")
         macros = " -D" + " -D".join(self.test.macros)
         compile_command = (
             f"cd {self.test.compilation_dir} &&"
-            f"iverilog -g2012 -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp"
-            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v -s caravel_top"
+            f"iverilog -g2012 -Ttyp {macros} {self.iverilog_dirs} -o {self.test.compilation_dir}/sim.vvp -s caravel_top"
+            f" {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v"
         )
         docker_compilation_command = self._iverilog_docker_command_str(compile_command)
         self.run_command_write_to_file(
@@ -238,8 +250,6 @@ class RunTest:
 
     def find_symbolic_links(self, directory):
         sym_links = []
-        if not os.path.exists(directory):
-            return sym_links
         for root, dirs, files in os.walk(directory):
             for dir_name in dirs:
                 dir_path = os.path.join(root, dir_name)
@@ -283,6 +293,8 @@ class RunTest:
         self.test.set_user_project()
 
     def vcs_compile(self):
+        if os.path.isfile(f"{self.test.compilation_dir}/simv"):
+            os.remove(f"{self.test.compilation_dir}/simv")
         macros = " +define+" + " +define+".join(self.test.macros)
         vlogan_cmd = f"cd {self.test.compilation_dir}; vlogan -full64 -sverilog +error+30 {self.paths.CARAVEL_VERILOG_PATH}/rtl/toplevel_cocotb.v {self.vcs_dirs}  {macros}   -l {self.test.compilation_dir}/analysis.log -o {self.test.compilation_dir} "
         self.run_command_write_to_file(

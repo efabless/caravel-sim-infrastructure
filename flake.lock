@@ -1,0 +1,66 @@
+{
+  "nodes": {
+    "nix-eda": {
+      "inputs": {
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1737037357,
+        "narHash": "sha256-eiRHpmaA4S+avTHPbcCUMlra+ARjVoS5ve+TOY8+e+8=",
+        "owner": "efabless",
+        "repo": "nix-eda",
+        "rev": "3d8f596ec8831538acdd61889d056378b5bea16b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "efabless",
+        "repo": "nix-eda",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1733120037,
+        "narHash": "sha256-En+gSoVJ3iQKPDU1FHrR6zIxSLXKjzKY+pnh9tt+Yts=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "f9f0d5c5380be0a599b1fb54641fa99af8281539",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nix-eda": "nix-eda",
+        "volare": "volare"
+      }
+    },
+    "volare": {
+      "inputs": {
+        "nix-eda": [
+          "nix-eda"
+        ]
+      },
+      "locked": {
+        "lastModified": 1738058944,
+        "narHash": "sha256-9mb2ZzNGFJgnl2CNVWWhzcNe9BVJ30CupGJRk/rB2w4=",
+        "owner": "efabless",
+        "repo": "volare",
+        "rev": "19de4648e033819732232f218837c0007508bafa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "efabless",
+        "repo": "volare",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
